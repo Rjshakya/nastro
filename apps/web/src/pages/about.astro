@@ -1,0 +1,25 @@
+---
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import MainLayout from "@/layouts/main.astro";
+---
+
+<MainLayout content="About">
+  <main class="">
+    <div class="max-w-3xl mx-auto min-h-dvh flex items-center justify-center">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Shadcn Card in Astro</CardTitle>
+          <CardDescription>Hi there is astro and shadcn</CardDescription>
+        </CardHeader>
+      </Card>
+    </div>
+  </main>
+</MainLayout>

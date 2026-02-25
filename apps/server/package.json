@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "exports": {
+    "./hc": {
+      "default": "./dist/hc.js",
+      "types": "./dist/hc.d.ts",
+      "import": "./dist/hc.js"
+    }
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.6",
+    "@mikemajara/notion-cms": "^0.2.6",
+    "@notionhq/client": "^5.9.0",
+    "better-auth": "^1.4.19",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "effect": "4.0.0-beta.14",
+    "hono": "^4.12.2",
+    "pg": "^8.18.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.9",
+    "tsx": "^4.21.0",
+    "wrangler": "^4.4.0"
+  }
+}
