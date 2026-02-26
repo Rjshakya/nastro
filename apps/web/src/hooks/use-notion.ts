@@ -3,9 +3,14 @@ import useSWR from "swr";
 export const useNotionPages = () => {
   const fetcher = () => getNotionPages();
 
-  const { data, error, isLoading } = useSWR("/notion/pages", fetcher);
+  const swr = useSWR("/notion/pages", fetcher);
 
-  return { data: data?.data, error, isLoading };
+  return {
+    data: swr.data?.data,
+    error: swr.error,
+    isLoading: swr.isLoading,
+    mutate: swr.mutate,
+  };
 };
 
 const getNotionPages = async () => {

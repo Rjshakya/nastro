@@ -16,6 +16,8 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
     "@tabler/icons-react": "^3.37.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-table": "^8.21.3",
@@ -35,6 +37,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-notion-x": "^7.8.2",
     "recharts": "2.15.4",
     "server": "workspace:*",
     "sonner": "^2.0.7",
@@ -42,7 +45,8 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.1.18",
     "vaul": "^1.1.2",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@types/pg": "^8.16.0",

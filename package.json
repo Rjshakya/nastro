@@ -16,5 +16,10 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@mikemajara/notion-cms@0.2.6": "patches/@mikemajara__notion-cms@0.2.6.patch"
+    }
   }
 }

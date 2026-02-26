@@ -1,6 +1,7 @@
 import {
   blocksToHtml,
   blocksToMarkdown,
+  convertRecordToAdvanced,
   NotionCMS,
 } from "@mikemajara/notion-cms";
 import { Data, Effect } from "effect";
@@ -49,14 +50,33 @@ export class NotionCMSService {
   getNotionPageRecord(pageId: string) {
     return Effect.tryPromise({
       try: async () => {
-        const page = await this.cms.getRecord(pageId);
-        return page;
+        const record = await this.cms.getRecord(pageId);
+        const { archived, cover, icon, url } = record;
+        const simpleRecord = await convertRecordToAdvanced(record);
+        simpleRecord["archived"] = archived;
+        simpleRecord["cover"] = cover;
+        simpleRecord["icon"] = icon;
+        simpleRecord["notionUrl"] = url;
+        return simpleRecord;
       },
       catch: (e) =>
         new NotionCMSServiceError({
           message:
             e instanceof Error ? e.message : ("getNotionPageRecord" as const),
         }),
+    });
+  }
+
+  getNotionPage(pageId: string) {
+    const page = Effect.all(
+      [this.getNotionPageRecord(pageId), this.getNotionPageMarkdown(pageId)],
+      { concurrency: "unbounded" },
+    );
+
+    return Effect.gen(function* () {
+      const [record, md] = yield* page;
+      record["content"] = { markdown: md };
+      return record;
     });
   }
 }

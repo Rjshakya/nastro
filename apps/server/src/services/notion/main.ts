@@ -1,83 +1,67 @@
-import { getDB } from "@/db";
-import { account } from "@/db/schema/auth-schema";
 import { getAccessToken } from "@/lib/tokens";
-import { NotionCMS } from "@mikemajara/notion-cms";
-import {
-  Client,
-  GetPageParameters,
-  GetPagePropertyParameters,
-  type SearchParameters,
-} from "@notionhq/client";
-import { eq } from "drizzle-orm";
 import { Data, Effect } from "effect";
-import { NotionCMSService } from "./cms";
 
-//  1 - getPages: () => NotionPages
-//  2 - getNotionDatabases : () => NotionDB(s)
+const NOTION_API_URL = "https://api.notion.com/v1";
+const NOTION_API_VERSION = "2025-09-03";
+import type {
+  DataSourceObjectResponse,
+  PageObjectResponse,
+  PartialDataSourceObjectResponse,
+  PartialPageObjectResponse,
+} from "@notionhq/client";
 
-// class Notion extends Context
+type GetPages = (
+  | PageObjectResponse
+  | PartialPageObjectResponse
+  | PartialDataSourceObjectResponse
+  | DataSourceObjectResponse
+)[];
 
 class NotionError extends Data.TaggedError("NotionError")<{
   message: string;
 }> {}
 
 export class NotionService {
-  client: Client;
+  auth: string;
 
-  constructor(client: Client) {
-    this.client = client;
+  constructor(auth: string) {
+    this.auth = auth;
+  }
+
+  private async request<T>(endpoint: string, body: unknown): Promise<T> {
+    const response = await fetch(`${NOTION_API_URL}${endpoint}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.auth}`,
+        "Notion-Version": NOTION_API_VERSION,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const error = (await response.json().catch(() => ({}))) as {
+        message?: string;
+      };
+      throw new Error(error.message || `Notion API error: ${response.status}`);
+    }
+
+    return response.json();
   }
 
   getPages() {
     return Effect.tryPromise({
       try: async () => {
-        const pages = await this.client.search({
+        const result = await this.request<{
+          results: GetPages;
+        }>("/search", {
           query: "",
           page_size: 50,
         });
 
-        return pages.results;
+        return result.results;
       },
-      catch: (e) =>
-        new NotionError({
-          message: e instanceof Error ? e.message : "NotionError",
-        }),
-    });
-  }
-
-  getPage(params: GetPageParameters) {
-    return Effect.tryPromise({
-      try: async () => {
-        const page = await this.client.pages.retrieve(params);
-        return page;
-      },
-      catch: (e) =>
-        new NotionError({
-          message: e instanceof Error ? e.message : "NotionError",
-        }),
-    });
-  }
-
-  getPageProperties(params: GetPagePropertyParameters) {
-    return Effect.tryPromise({
-      try: async () => {
-        const props = await this.client.pages.properties.retrieve(params);
-        return props;
-      },
-      catch: (e) =>
-        new NotionError({
-          message: e instanceof Error ? e.message : "NotionError",
-        }),
-    });
-  }
-
-  getDataSource(params: GetPagePropertyParameters) {
-    return Effect.tryPromise({
-      try: async () => {
-        const props = await this.client;
-        return props;
-      },
-      catch: (e) =>
+      catch: (e: unknown) =>
         new NotionError({
           message: e instanceof Error ? e.message : "NotionError",
         }),
@@ -89,23 +73,8 @@ export const getUserNotionPages = (userId: string) => {
   return Effect.gen(function* () {
     const { accessToken } = yield* getAccessToken(userId, "notion");
 
-    const client = getNotionClient(accessToken as string);
-    const notion = new NotionService(client);
-
-    const pages = yield* notion.getPages();
-    const cms = getNotionCms(accessToken as string);
-    const notionCmsService = new NotionCMSService(cms);
-    // const effects = pages.map((page) => {
-    //   return notion.getPage({ page_id: page.id });
-    // });
-
-    // const allEffects = yield* Effect.all(effects);
-
-    return pages
+    const notion = new NotionService(accessToken as string);
+    const notionPages = yield* notion.getPages();
+    return notionPages;
   });
 };
-
-export const getNotionClient = (auth: string) =>
-  new Client({ auth, fetch: fetch.bind(globalThis) });
-
-export const getNotionCms = (token: string) => new NotionCMS(token);
