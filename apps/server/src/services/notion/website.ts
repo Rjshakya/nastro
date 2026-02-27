@@ -16,14 +16,17 @@ export class NotionWebsiteService {
   getPage(pageId: string) {
     return Effect.tryPromise({
       try: async () => {
+
         const page = await this.client.getPage(pageId);
         return page as ExtendedRecordMap;
       },
-      catch: (e) =>
-        new NotionRendererError({
+      catch: (e) => {
+        console.log(e);
+        return new NotionRendererError({
           message:
             e instanceof Error ? e.message : "NotionRenderer : getPage error",
-        }),
+        });
+      },
     });
   }
 }

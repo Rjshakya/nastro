@@ -1,0 +1,10 @@
+@import "react-notion-x/src/styles.css";
+
+@theme inline {
+  --font-sans: "Geist Sans", sans-serif;
+  --font-mono: "Geist Mono Variable", monospace;
+}
+
+.notion {
+  font-family: var(--font-mono);
+}

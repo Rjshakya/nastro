@@ -146,7 +146,7 @@ export function NotionPages({
   }
 
   return (
-    <ItemGroup className="p-1">
+    <ItemGroup className=" gap-1">
       {data.map((page) => (
         <PageItem key={page.id} page={page} />
       ))}

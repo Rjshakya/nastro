@@ -1,0 +1,14 @@
+---
+import MainLayout from "@/layouts/main.astro";
+import { Protected } from "@/layouts/protected";
+import { SiteEditor } from "@/components/site-editor";
+export const prerender = false;
+const siteId = Astro.params?.siteId as string;
+const pageId = Astro.url.searchParams.get("pageId") ?? "";
+---
+
+<MainLayout content="Site Editor">
+  <Protected client:load>
+    <SiteEditor client:load siteId={siteId} pageId={pageId} />
+  </Protected>
+</MainLayout>

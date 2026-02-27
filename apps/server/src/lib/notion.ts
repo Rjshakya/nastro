@@ -15,5 +15,5 @@ export const getNotionCms = (token: string) => new NotionCMS(token);
  *  Notion api client for rendering notion content
  *  - for notion - page as website service
  */
-export const getNotionRendererClient = (token: string) =>
-  new NotionAPI({ authToken: token });
+export const getNotionRendererClient = (token?: string, accountId?: string) =>
+  new NotionAPI({ authToken: token, activeUser: accountId });
