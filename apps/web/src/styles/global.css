@@ -82,6 +82,80 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* notion */
+
+  --notion-custom-page-bg: oklch(1 0 0);
+  --notion-custom-text: oklch(0.145 0 0);
+  --notion-custom-border: oklch(0.922 0 0);
+
+  --custom-notion-select-color-0: oklch(0.685 0.169 237.323);
+  --custom-notion-select-color-1: oklch(0.391 0.09 240.876);
+  --custom-notion-select-color-2: oklch(0.951 0.026 236.824);
+
+  --custom-notion-red: oklch(56.62% 0.177 25.8);
+  --custom-notion-pink: oklch(45.42% 0.166 344.4);
+  --custom-notion-blue: oklch(47.92% 0.101 240.2);
+  --custom-notion-purple: oklch(45.61% 0.146 298.6);
+  --custom-notion-teal: oklch(44.51% 0.016 184.2);
+  --custom-notion-yellow: oklch(72.82% 0.166 82.5);
+  --custom-notion-orange: oklch(61.54% 0.176 56.2);
+  --custom-notion-brown: oklch(39.73% 0.046 48.7);
+  --custom-notion-gray: oklch(66.83% 0.005 70.4);
+
+  --custom-notion-item-blue: oklch(89.47% 0.023 233.2);
+  --custom-notion-item-orange: oklch(90.67% 0.041 68.61);
+  --custom-notion-item-green: oklch(91.75% 0.021 144.35);
+  --custom-notion-item-pink: oklch(90.9% 0.023 3.65);
+  --custom-notion-item-brown: oklch(90.17% 0.018 45.42);
+  --custom-notion-item-red: oklch(91.86% 0.034 23.3);
+  --custom-notion-item-yellow: oklch(93.63% 0.045 83.33);
+  --custom-notion-item-purple: oklch(90.03% 0.022 301.88);
+  --custom-notion-item-gray: oklch(90.34% 0.001 71.43);
+  --custom-notion-item-default: oklch(90.34% 0.001 71.43 / 0.5);
+
+  --custom-notion-property-select-item-blue: oklch(0.379 0.146 265.522);
+
+  /* notion-card */
+
+  --notion-collection-card: oklch(1 0 0);
+  --notion-collection-card-border: oklch(0.922 0 0);
+  --notion-collection-card-text: oklch(0.145 0 0);
+  --notion-collection-card-hover: oklch(0.97 0 0);
+
+  /* notion-button */
+
+  --notion-default-btn-bg: oklch(0.145 0 0);
+  --notion-default-btn-text: oklch(1 0 0);
+  --notion-default-btn-border: oklch(0.552 0.016 285.938);
+  --notion-default-btn-hover: oklch(0.145 0 0);
+
+  /* notion  background */
+
+  /* Background Fills */
+  --custom-notion-red_background: oklch(92.48% 0.024 24.3);
+  --custom-notion-pink_background: oklch(91.24% 0.025 354.5);
+  --custom-notion-blue_background: oklch(92.83% 0.018 232.1);
+  --custom-notion-purple_background: oklch(91.52% 0.02 294.6);
+  --custom-notion-teal_background: oklch(92.81% 0.015 172.5);
+  --custom-notion-yellow_background: oklch(96.11% 0.031 88.3);
+  --custom-notion-orange_background: oklch(94.13% 0.025 65.5);
+  --custom-notion-brown_background: oklch(91.64% 0.006 58.7);
+  --custom-notion-gray_background: oklch(93.3% 0.002 241.6);
+
+  /* size */
+
+  --notion-page-title: 2.6em;
+  --notion-page-title-align: left;
+  --notion-h1: 1.875em;
+  --notion-h2: 1.5em;
+  --notion-h3: 1.25em;
+  --base-font-size: 1em;
+
+  /* notion -  font */
+
+  --notion-primary-font: "Geist Sans", sans-serif;
+  --notion-secondary-font: "Geist Sans", sans-serif;
 }
 
 .dark {
@@ -116,6 +190,68 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* notion */
+
+  --notion-custom-page-bg: oklch(0.145 0 0);
+  --notion-custom-text: oklch(0.985 0 0);
+  --notion-custom-border: oklch(1 0 0 / 10%);
+
+  --custom-notion-select-color-0: oklch(0.685 0.169 237.323);
+  --custom-notion-select-color-1: oklch(0.391 0.09 240.876);
+  --custom-notion-select-color-2: oklch(0.951 0.026 236.824);
+
+  --custom-notion-red: oklch(72% 0.14 25.8);
+  --custom-notion-pink: oklch(68% 0.13 344.4);
+  --custom-notion-blue: oklch(70% 0.08 240.2);
+  --custom-notion-purple: oklch(68% 0.11 298.6);
+  --custom-notion-teal: oklch(65% 0.02 184.2);
+  --custom-notion-yellow: oklch(85% 0.13 82.5);
+  --custom-notion-orange: oklch(78% 0.14 56.2);
+  --custom-notion-brown: oklch(60% 0.04 48.7);
+  --custom-notion-gray: oklch(75% 0.005 70.4);
+
+  --custom-notion-item-blue: oklch(34.1% 0.031 234.3);
+  --custom-notion-item-orange: oklch(34.8% 0.047 55.4);
+  --custom-notion-item-green: oklch(34.6% 0.028 152.1);
+  --custom-notion-item-pink: oklch(31.2% 0.043 355.2);
+  --custom-notion-item-brown: oklch(32.4% 0.027 46.2);
+  --custom-notion-item-red: oklch(32.1% 0.054 26.3);
+  --custom-notion-item-yellow: oklch(38.2% 0.044 76.5);
+  --custom-notion-item-purple: oklch(31.8% 0.046 295.5);
+  --custom-notion-item-gray: oklch(33.5% 0.005 240.5);
+  --custom-notion-item-default: oklch(24.5% 0.005 240.5);
+
+  --custom-notion-property-select-item-blue: oklch(0.932 0.032 255.585);
+
+  --custom-notion-collection-card-text: var(--foreground);
+  /* notion-card */
+
+  --notion-collection-card: oklch(1 0 0);
+  --notion-collection-card-border: oklch(0.922 0 0);
+  --notion-collection-card-text: oklch(0.145 0 0);
+  --notion-collection-card-hover: oklch(0.97 0 0);
+
+  /* notion-button */
+
+  --notion-default-btn-bg: oklch(1 0 0);
+  --notion-default-btn-text: oklch(0.145 0 0);
+  --notion-default-btn-border: oklch(0.552 0.016 285.938);
+  --notion-default-btn-hover: oklch(1 0 0);
+
+  /* notion  background */
+
+  --custom-notion-red_background: oklch(32% 0.05 25.8);
+  --custom-notion-pink_background: oklch(30% 0.05 344.4);
+  --custom-notion-blue_background: oklch(33% 0.04 240.2);
+  --custom-notion-purple_background: oklch(31% 0.04 298.6);
+  --custom-notion-teal_background: oklch(32% 0.02 184.2);
+  --custom-notion-yellow_background: oklch(38% 0.05 82.5);
+  --custom-notion-orange_background: oklch(35% 0.05 56.2);
+  --custom-notion-brown_background: oklch(30% 0.02 48.7);
+  --custom-notion-gray_background: oklch(28% 0.005 70.4);
+
+  /* size */
 }
 
 @layer base {

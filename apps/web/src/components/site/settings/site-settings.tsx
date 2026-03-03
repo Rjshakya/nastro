@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,10 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUpdateSite } from "@/hooks/use-sites";
-import type { Site, SiteSetting } from "@/hooks/use-sites";
+import type { Site, SiteSetting } from "@/types/site";
+import { SiteTheme } from "./site-theme";
+import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
+import { FontPicker } from "@/components/font-picker";
 
 interface SiteSettingsProps {
   site: Site;
@@ -25,13 +28,17 @@ export function SiteSettings({ site, open, onOpenChange }: SiteSettingsProps) {
   const { updateSite, isLoading } = useUpdateSite();
   const [settings, setSettings] = useState<SiteSetting>(site.siteSetting ?? {});
   const [siteName, setSiteName] = useState(site.siteName);
+  const { customization, updateStore } = useNotionCustomizationStore();
 
   const handleSave = async () => {
     await updateSite({
       siteId: site.id,
       input: {
         siteName,
-        siteSetting: settings,
+        siteSetting: {
+          ...settings,
+          notionCustomization: customization ?? undefined,
+        },
       },
     });
     onOpenChange(false);
@@ -65,7 +72,7 @@ export function SiteSettings({ site, open, onOpenChange }: SiteSettingsProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-100 overflow-y-auto px-4 py-2">
+      <SheetContent className="sm:max-w-100 overflow-y-auto px-4 py-2 z-999">
         <SheetHeader className="px-0">
           <SheetTitle className=" font-medium">Site Settings</SheetTitle>
           <SheetDescription>
@@ -74,10 +81,19 @@ export function SiteSettings({ site, open, onOpenChange }: SiteSettingsProps) {
         </SheetHeader>
 
         <Tabs defaultValue="general" className="mt-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="theme">Theme</TabsTrigger>
-            <TabsTrigger value="seo">SEO</TabsTrigger>
+          <TabsList className=" w-full ">
+            <TabsTrigger className=" cursor-pointer" value="general">
+              General
+            </TabsTrigger>
+            <TabsTrigger className=" cursor-pointer" value="theme">
+              Theme
+            </TabsTrigger>
+            <TabsTrigger className=" cursor-pointer" value="font">
+              Font
+            </TabsTrigger>
+            <TabsTrigger className=" cursor-pointer" value="seo">
+              SEO
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-4 mt-4">
@@ -135,70 +151,29 @@ export function SiteSettings({ site, open, onOpenChange }: SiteSettingsProps) {
           </TabsContent>
 
           <TabsContent value="theme" className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Label htmlFor="primaryColor">Primary Color</Label>
-              <div className="flex gap-2">
-                <Input
-                  type="color"
-                  id="primaryColor"
-                  value={settings.theme?.primaryColor ?? "#000000"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("primaryColor", e.target.value)
-                  }
-                  className="w-12 h-10 p-1"
-                />
-                <Input
-                  value={settings.theme?.primaryColor ?? "#000000"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("primaryColor", e.target.value)
-                  }
-                  placeholder="#000000"
-                />
-              </div>
-            </div>
+            <SiteTheme />
+          </TabsContent>
 
-            <div className="space-y-2">
-              <Label htmlFor="backgroundColor">Background Color</Label>
-              <div className="flex gap-2">
-                <Input
-                  type="color"
-                  id="backgroundColor"
-                  value={settings.theme?.backgroundColor ?? "#ffffff"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("backgroundColor", e.target.value)
-                  }
-                  className="w-12 h-10 p-1"
-                />
-                <Input
-                  value={settings.theme?.backgroundColor ?? "#ffffff"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("backgroundColor", e.target.value)
-                  }
-                  placeholder="#ffffff"
-                />
-              </div>
+          <TabsContent value="font" className=" space-y-4">
+            <div className="grid gap-2">
+              <Label>Primary font</Label>
+              <FontPicker
+                onChange={(font) => {
+                  const curr = customization?.fonts;
+                  updateStore({ fonts: { ...curr, primary: font } });
+                }}
+                value={customization?.fonts?.primary || "primary font"}
+              />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="textColor">Text Color</Label>
-              <div className="flex gap-2">
-                <Input
-                  type="color"
-                  id="textColor"
-                  value={settings.theme?.textColor ?? "#000000"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("textColor", e.target.value)
-                  }
-                  className="w-12 h-10 p-1"
-                />
-                <Input
-                  value={settings.theme?.textColor ?? "#000000"}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateThemeSetting("textColor", e.target.value)
-                  }
-                  placeholder="#000000"
-                />
-              </div>
+            <div className="grid gap-2">
+              <Label>Secondary font</Label>
+              <FontPicker
+                onChange={(font) => {
+                  const curr = customization?.fonts;
+                  updateStore({ fonts: { ...curr, secondary: font } });
+                }}
+                value={customization?.fonts?.secondary || "secondary font"}
+              />
             </div>
           </TabsContent>
 
@@ -244,11 +219,15 @@ export function SiteSettings({ site, open, onOpenChange }: SiteSettingsProps) {
         </Tabs>
 
         <div className="mt-6 flex gap-2 justify-end">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
+          <Button size={"sm"} onClick={handleSave} disabled={isLoading}>
             {isLoading ? "Saving..." : "Save Changes"}
+          </Button>
+          <Button
+            size={"sm"}
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
           </Button>
         </div>
       </SheetContent>

@@ -3,7 +3,8 @@ type Env = import("../worker-configuration").Env;
 
 interface ImportMetaEnv {
   readonly PUBLIC_API_URL: string;
-  readonly PUBLIC_CLIENT_URL:string
+  readonly PUBLIC_CLIENT_URL: string;
+  readonly PUBLIC_GOOGLE_FONTS_API_KEY: string;
 }
 
 interface ImportMeta {

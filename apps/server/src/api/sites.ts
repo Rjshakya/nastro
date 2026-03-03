@@ -18,6 +18,10 @@ const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
 });
 
+const getSiteQuerySchema = z.object({
+  pageId: z.string().min(1, "Page ID is required"),
+});
+
 const siteThemeSchema = z.object({
   primaryColor: z.string().optional(),
   backgroundColor: z.string().optional(),
@@ -69,26 +73,6 @@ const updateSiteSchema = z.object({
 type CreateSiteInput = z.infer<typeof createSiteSchema>;
 type UpdateSiteInput = z.infer<typeof updateSiteSchema>;
 
-interface SiteResponse {
-  id: string;
-  userId: string;
-  pageId: string | null;
-  databaseId: string | null;
-  shortId: string;
-  siteName: string;
-  siteSetting: SiteSetting | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-function toSiteResponse(site: SiteResponse): SiteResponse {
-  return {
-    ...site,
-    createdAt: new Date(site.createdAt).toISOString(),
-    updatedAt: new Date(site.updatedAt).toISOString(),
-  };
-}
-
 const sitesApp = new Hono<{ Variables: Vars }>()
   .use(authMiddleWare())
   .get("/", async (c) => {
@@ -98,7 +82,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     return c.json(
       ApiResponse({
-        data: sites.map((s) => toSiteResponse(s as unknown as SiteResponse)),
+        data: sites,
         message: "Sites fetched successfully",
       }),
     );
@@ -117,24 +101,28 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     return c.json(
       ApiResponse({
-        data: toSiteResponse(site as unknown as SiteResponse),
+        data: site,
         message: "Site created successfully",
       }),
     );
   })
-  .get("/:id", zValidator("param", siteParamsSchema), async (c) => {
-    // const userId = c.get("user")?.id;
-    const { id } = c.req.valid("param");
+  .get(
+    "/:id",
+    zValidator("param", siteParamsSchema),
+    zValidator("query", getSiteQuerySchema),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const { pageId } = c.req.valid("query");
+      const result = await Effect.runPromise(getSiteById(id, pageId));
 
-    const site = await Effect.runPromise(getSiteById(id));
-
-    return c.json(
-      ApiResponse({
-        data: site,
-        message: "Site fetched successfully",
-      }),
-    );
-  })
+      return c.json(
+        ApiResponse({
+          data: { ...result },
+          message: "Site fetched successfully",
+        }),
+      );
+    },
+  )
   .patch(
     "/:id",
     zValidator("param", siteParamsSchema),
@@ -152,7 +140,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
       return c.json(
         ApiResponse({
-          data: toSiteResponse(site as unknown as SiteResponse),
+          data: site,
           message: "Site updated successfully",
         }),
       );

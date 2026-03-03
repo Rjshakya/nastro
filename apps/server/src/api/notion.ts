@@ -42,7 +42,6 @@ const notionApp = new Hono<{ Variables: Vars }>()
 
     const notionClient = getNotionRendererClient(accessToken as string);
     const notionService = new NotionWebsiteService(notionClient);
-
     const pageContent = await Effect.runPromise(notionService.getPage(pageId));
 
     return c.json(

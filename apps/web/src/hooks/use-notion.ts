@@ -1,4 +1,5 @@
 import { client } from "@/lib/api-client";
+import type { NotionPages } from "@/types/notion";
 import useSWR from "swr";
 export const useNotionPages = () => {
   const fetcher = () => getNotionPages();
@@ -6,7 +7,7 @@ export const useNotionPages = () => {
   const swr = useSWR("/notion/pages", fetcher);
 
   return {
-    data: swr.data?.data,
+    data: swr.data?.data as NotionPages,
     error: swr.error,
     isLoading: swr.isLoading,
     mutate: swr.mutate,
@@ -18,7 +19,6 @@ const getNotionPages = async () => {
   if (!res.ok) {
     throw new Error("failed to get Notion pages");
   }
-
   const data = await res.json();
 
   return data;

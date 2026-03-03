@@ -16,7 +16,6 @@ export class NotionWebsiteService {
   getPage(pageId: string) {
     return Effect.tryPromise({
       try: async () => {
-
         const page = await this.client.getPage(pageId);
         return page as ExtendedRecordMap;
       },

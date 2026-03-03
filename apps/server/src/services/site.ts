@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { NotionWebsiteService } from "./notion/website";
 import { getNotionRendererClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
+import { RequestTimeoutError } from "@notionhq/client";
 
 type Site = typeof sites.$inferSelect;
 
@@ -78,9 +79,9 @@ class SiteService {
       siteSetting: input.siteSetting ?? null,
     };
 
-    const result = await db.insert(sites).values(newSite).returning();
+    const [result] = await db.insert(sites).values(newSite).returning();
 
-    return this.transformSite(result[0]!);
+    return this.transformSite(result);
   }
 
   async getSitesByUser(userId: string): Promise<SiteSelect[]> {
@@ -97,13 +98,13 @@ class SiteService {
   async getSiteById(siteId: string): Promise<SiteSelect | null> {
     const db = await getDB();
 
-    const result = await db.select().from(sites).where(eq(sites.id, siteId));
+    const [result] = await db.select().from(sites).where(eq(sites.id, siteId));
 
-    if (!result[0]) {
+    if (!result) {
       return null;
     }
 
-    return this.transformSite(result[0]!);
+    return this.transformSite(result);
   }
 
   async getSiteByShortId(shortId: string): Promise<SiteSelect | null> {
@@ -129,33 +130,32 @@ class SiteService {
 
     const updateData: Partial<typeof sites.$inferInsert> = {};
 
-    if (input.siteName !== undefined) {
+    if (input.siteName) {
       updateData.siteName = input.siteName;
     }
 
-    if (input.siteSetting !== undefined) {
+    if (input.siteSetting) {
       updateData.siteSetting = input.siteSetting;
     }
 
-    const result = await db
+    const [result] = await db
       .update(sites)
       .set(updateData)
       .where(eq(sites.id, siteId))
       .returning();
 
-    if (!result[0]) {
+    if (!result) {
       throw new SiteError({
         message: "Site not found",
         code: "NOT_FOUND",
       });
     }
 
-    return this.transformSite(result[0]!);
+    return this.transformSite(result);
   }
 
   async deleteSite(siteId: string): Promise<void> {
     const db = await getDB();
-
     await db.delete(sites).where(eq(sites.id, siteId));
   }
 
@@ -181,9 +181,7 @@ export const createSite = (
   input: CreateSiteInput,
 ): Effect.Effect<SiteSelect, SiteError, never> =>
   Effect.tryPromise({
-    try: async () => {
-      return await siteService.createSite(userId, input);
-    },
+    try: async () => await siteService.createSite(userId, input),
     catch: (e): SiteError =>
       e instanceof SiteError
         ? e
@@ -209,44 +207,26 @@ export const getSitesByUser = (
     },
   });
 
-export const getSiteById = (siteId: string) =>
-  Effect.tryPromise({
-    try: async () => {
-      console.log("siteId", siteId);
-      const site = await siteService.getSiteById(siteId);
+export const getSiteById = (siteId: string, pageId: string) => {
+  const getSite = (siteId: string) =>
+    Effect.tryPromise(async () => siteService.getSiteById(siteId));
 
-      console.log("site", site);
+  return Effect.gen(function* () {
+    const site = yield* getSite(siteId);
+    if (!site) {
+      throw new SiteError({ code: "NOT_FOUND", message: "no site found" });
+    }
+    const { accessToken, accountId } = yield* getAccessToken(
+      site.userId,
+      "notion",
+    );
 
-      if (!site?.pageId || !site?.userId) {
-        throw new Error("No page id  for site");
-      }
-
-      const { accessToken, accountId } = await Effect.runPromise(
-        getAccessToken(site.userId, "notion"),
-      );
-
-      console.log("accesstoken", accessToken);
-      const notionApi = getNotionRendererClient(
-        accessToken as string,
-        accountId,
-      );
-      const websiteService = new NotionWebsiteService(notionApi);
-
-      const cleanPageId = site.pageId.replace(/-/g, "");
-      const page = await Effect.runPromise(websiteService.getPage(cleanPageId));
-      console.log("page", page);
-      return page;
-    },
-    catch: (e): SiteError => {
-      console.log(e);
-      return e instanceof SiteError
-        ? e
-        : new SiteError({
-            message: e instanceof Error ? e.message : "Failed to get site",
-            code: "UNKNOWN",
-          });
-    },
+    const notionApi = getNotionRendererClient(accessToken as string, accountId);
+    const websiteService = new NotionWebsiteService(notionApi);
+    const page = yield* websiteService.getPage(pageId);
+    return { page, site };
   });
+};
 
 export const getSiteByShortId = (
   shortId: string,

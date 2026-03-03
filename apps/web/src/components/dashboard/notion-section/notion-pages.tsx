@@ -17,7 +17,7 @@ import {
   ItemHeader,
   ItemMedia,
   ItemTitle,
-} from "./ui/item";
+} from "../../ui/item";
 
 interface NotionPage {
   id: string;
@@ -59,9 +59,9 @@ function PageItem({ page }: { page: NotionPage }) {
       className=""
     >
       <Item className="bg-background" variant={"muted"}>
-         <Button size={"icon-sm"} variant={"secondary"}>
+        <Button size={"icon-sm"} variant={"secondary"}>
           <IconFileDescription className="size-5" />
-         </Button>
+        </Button>
         <ItemContent>
           <ItemTitle className="">{title}</ItemTitle>
         </ItemContent>

@@ -14,10 +14,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SiteCard } from "@/components/site-card";
 import { useNotionPages } from "@/hooks/use-notion";
 import { useCreateSite } from "@/hooks/use-sites";
-import type { Site } from "@/hooks/use-sites";
+import type { Site } from "@/types/site";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -47,7 +46,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     });
 
     if (result?.data) {
-      onSuccess?.(result.data);
+      onSuccess?.({ ...(result?.data as Site) });
       setOpen(false);
       setSiteName("");
       setSelectedPageId(null);
@@ -96,7 +95,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
             </div>
           </div>
 
-          <div className="border rounded-md max-h-[300px] overflow-y-auto">
+          <div className="border rounded-md max-h-75 overflow-y-auto">
             {isLoadingPages ? (
               <div className="p-4 space-y-2">
                 {Array.from({ length: 4 }).map((_, i) => (

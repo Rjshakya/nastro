@@ -1,14 +1,23 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardHome } from "./home";
+import { SiteEditor } from "./site-editor";
 
-export default function DashboardComp() {
+interface SiteEditorProps {
+  siteId: string;
+  pageId: string;
+}
+
+export default function SiteEditorDashboard({
+  siteId,
+  pageId,
+}: SiteEditorProps) {
+
   return (
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--sidebar-width": "calc(var(--spacing) * 62)",
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
@@ -16,7 +25,7 @@ export default function DashboardComp() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <DashboardHome />
+        <SiteEditor pageId={pageId} siteId={siteId} />
       </SidebarInset>
     </SidebarProvider>
   );

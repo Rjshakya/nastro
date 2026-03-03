@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Site } from "@/hooks/use-sites";
+import type { Site } from "@/types/site";
 
 interface SiteCardProps {
   site: Site;
