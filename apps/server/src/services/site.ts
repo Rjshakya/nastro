@@ -6,7 +6,6 @@ import { nanoid } from "nanoid";
 import { NotionWebsiteService } from "./notion/website";
 import { getNotionRendererClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
-import { RequestTimeoutError } from "@notionhq/client";
 
 type Site = typeof sites.$inferSelect;
 
@@ -17,35 +16,7 @@ class SiteError extends Data.TaggedError("SiteError")<{
   code: "NOT_FOUND" | "ALREADY_EXISTS" | "INVALID_INPUT" | "UNKNOWN";
 }> {}
 
-interface SiteTheme {
-  primaryColor?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  fontFamily?: string;
-}
-
-interface SiteSEO {
-  title?: string;
-  description?: string;
-  ogImage?: string;
-}
-
-interface SiteHeader {
-  show: boolean;
-  customNavLinks?: Array<{ label: string; url: string }>;
-}
-
-interface SiteFooter {
-  show: boolean;
-  content?: string;
-}
-
-export interface SiteSetting {
-  theme?: SiteTheme;
-  seo?: SiteSEO;
-  header?: SiteHeader;
-  footer?: SiteFooter;
-}
+export type SiteSetting = Record<string, any>;
 
 interface CreateSiteInput {
   pageId: string;

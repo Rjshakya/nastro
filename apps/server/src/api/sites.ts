@@ -22,42 +22,7 @@ const getSiteQuerySchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
 });
 
-const siteThemeSchema = z.object({
-  primaryColor: z.string().optional(),
-  backgroundColor: z.string().optional(),
-  textColor: z.string().optional(),
-  fontFamily: z.string().optional(),
-});
-
-const siteSeoSchema = z.object({
-  title: z.string().optional(),
-  description: z.string().optional(),
-  ogImage: z.string().optional(),
-});
-
-const siteHeaderSchema = z.object({
-  show: z.boolean(),
-  customNavLinks: z
-    .array(
-      z.object({
-        label: z.string(),
-        url: z.string(),
-      }),
-    )
-    .optional(),
-});
-
-const siteFooterSchema = z.object({
-  show: z.boolean(),
-  content: z.string().optional(),
-});
-
-const siteSettingSchema = z.object({
-  theme: siteThemeSchema.optional(),
-  seo: siteSeoSchema.optional(),
-  header: siteHeaderSchema.optional(),
-  footer: siteFooterSchema.optional(),
-});
+const siteSettingSchema = z.object().optional();
 
 const createSiteSchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),

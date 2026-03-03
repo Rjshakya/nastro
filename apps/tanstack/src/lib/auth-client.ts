@@ -1,14 +1,15 @@
 import { createAuthClient } from "better-auth/react";
+import { Env } from "env";
 
 export const authClient = createAuthClient({
-  baseURL: import.meta.env.PUBLIC_API_URL,
+  baseURL: Env.apiUrl,
 });
 
 export const login = async () => {
   try {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: import.meta.env.PUBLIC_CLIENT_URL + "/dashboard",
+      callbackURL: Env.clientUrl + "/dashboard",
     });
   } catch (e) {
     console.error("failed to signin");

@@ -3,13 +3,14 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
 import { IconArrowLeft, IconSettings } from "@tabler/icons-react";
+import {  useRouter } from "@tanstack/react-router";
 
 export function SiteHeader() {
   const { togglePanel } = useNotionCustomizationStore((s) => s);
+  const router = useRouter()
 
   const handleBack = () => {
-    const history = window.history;
-    history.back();
+    router.history.back()
   };
 
   return (
