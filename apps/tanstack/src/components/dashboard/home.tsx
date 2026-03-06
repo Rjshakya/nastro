@@ -17,11 +17,10 @@ export const DashboardHome = () => {
             </div>
           </div>
 
-          {/* Notion Section */}
-          <DashboardNotionSection />
-
           {/* Sites Section */}
           <DashboardSitesSection />
+          {/* Notion Section */}
+          <DashboardNotionSection />
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          <Button>
+          <Button size={"sm"}>
             <IconPlus className="mr-2 h-4 w-4" />
             New Site
           </Button>

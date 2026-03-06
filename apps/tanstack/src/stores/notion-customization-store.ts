@@ -43,9 +43,6 @@ export const notionCustomizationComps: SectionConfig[] = [
     fields: [
       { type: "color", key: "pageBackground", label: "Page Background" },
       { type: "color", key: "textColor", label: "Text Color" },
-      // { type: "color", key: "textLightColor", label: "Light Text" },
-      // { type: "color", key: "borderColor", label: "Border Color" },
-      // { type: "color", key: "hoverBackground", label: "Hover Background" },
       {
         type: "color",
         key: "checkboxBackground",
@@ -54,7 +51,7 @@ export const notionCustomizationComps: SectionConfig[] = [
     ],
   },
   {
-    id: "navbar",
+    id: "header",
     label: "Navbar",
     fields: [
       { type: "color", key: "textColor", label: "Text Color" },
@@ -96,7 +93,6 @@ export const notionCustomizationComps: SectionConfig[] = [
       { type: "color", key: "cardBorder", label: "Card Border" },
     ],
   },
-
   {
     id: "defaultButton",
     label: "Default Button",
@@ -238,12 +234,12 @@ export const computeCustomStyles = (
       customization.main.checkboxBackground;
   }
 
-  if (customization.navbar) {
-    styles["--notion-custom-navbar-text"] = customization.navbar.textColor;
-    styles["--notion-custom-navbar-bg"] = customization.navbar.background;
-    styles["--notion-custom-navbar-btn-text"] = customization.navbar.buttonText;
+  if (customization.header) {
+    styles["--notion-custom-navbar-text"] = customization.header.textColor;
+    styles["--notion-custom-navbar-bg"] = customization.header.background;
+    styles["--notion-custom-navbar-btn-text"] = customization.header.buttonText;
     styles["--notion-custom-navbar-btn-bg"] =
-      customization.navbar.buttonBackground;
+      customization.header.buttonBackground;
   }
 
   if (customization.footer) {

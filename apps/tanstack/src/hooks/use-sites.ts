@@ -3,6 +3,7 @@ import useSWR, { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 
 import type { Site, SiteSetting } from "@/types/site";
+import type { NotionPageSettings } from "#/types/customization";
 
 interface CreateSiteInput {
   pageId: string;
@@ -12,7 +13,7 @@ interface CreateSiteInput {
 
 interface UpdateSiteInput {
   siteName?: string;
-  siteSetting?: SiteSetting;
+  siteSetting?: NotionPageSettings;
 }
 
 export const useSites = () => {

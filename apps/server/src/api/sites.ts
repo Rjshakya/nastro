@@ -22,7 +22,7 @@ const getSiteQuerySchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
 });
 
-const siteSettingSchema = z.object().optional();
+const siteSettingSchema = z.object({}).loose().optional();
 
 const createSiteSchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
@@ -39,6 +39,23 @@ type CreateSiteInput = z.infer<typeof createSiteSchema>;
 type UpdateSiteInput = z.infer<typeof updateSiteSchema>;
 
 const sitesApp = new Hono<{ Variables: Vars }>()
+  .get(
+    "/:id",
+    zValidator("param", siteParamsSchema),
+    zValidator("query", getSiteQuerySchema),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const { pageId } = c.req.valid("query");
+      const result = await Effect.runPromise(getSiteById(id, pageId));
+
+      return c.json(
+        ApiResponse({
+          data: { ...result },
+          message: "Site fetched successfully",
+        }),
+      );
+    },
+  )
   .use(authMiddleWare())
   .get("/", async (c) => {
     const userId = c.get("user")?.id;
@@ -71,23 +88,6 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       }),
     );
   })
-  .get(
-    "/:id",
-    zValidator("param", siteParamsSchema),
-    zValidator("query", getSiteQuerySchema),
-    async (c) => {
-      const { id } = c.req.valid("param");
-      const { pageId } = c.req.valid("query");
-      const result = await Effect.runPromise(getSiteById(id, pageId));
-
-      return c.json(
-        ApiResponse({
-          data: { ...result },
-          message: "Site fetched successfully",
-        }),
-      );
-    },
-  )
   .patch(
     "/:id",
     zValidator("param", siteParamsSchema),

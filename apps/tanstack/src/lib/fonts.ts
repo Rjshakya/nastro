@@ -42,6 +42,10 @@ export async function loadFont(
   variant = "regular",
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    if (!fontFamily) {
+      return resolve();
+    }
+
     if (loadedFont.has(fontFamily)) {
       resolve();
       return;

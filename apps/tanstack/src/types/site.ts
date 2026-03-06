@@ -1,10 +1,12 @@
-import type { NotionCustomization } from "./customization";
+import type { NotionCustomization, NotionPageSettings } from "./customization";
 
 export interface SiteSetting {
   seo?: {
     title?: string;
     description?: string;
     ogImage?: string;
+    pageUrl?: string;
+    pageTitle?: string;
   };
   header?: {
     show: boolean;
@@ -24,7 +26,7 @@ export interface Site {
   databaseId: string | null;
   shortId: string;
   siteName: string;
-  siteSetting: SiteSetting | null;
+  siteSetting: NotionPageSettings | null;
   createdAt: string;
   updatedAt: string;
 }

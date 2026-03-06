@@ -11,29 +11,23 @@ export const DashboardSitesSection = () => {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
 
   return (
-    <div className="rounded-lg border bg-card p-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-lg border bg-card p-1.5 grid gap-4">
+      <div className="flex items-center justify-between  pt-1">
         <div className="flex items-center gap-3">
-          <Button size={"icon"} variant={"secondary"}>
+          <Button size={"icon-sm"} variant={"secondary"}>
             <IconWorld className="size-5" />
           </Button>
-          <div>
-            <h3 className="font-medium">Sites</h3>
-            <p className="text-sm text-muted-foreground">
-              {sites?.length ?? 0} sites created
-            </p>
-          </div>
+          <h3 className="font-medium">Sites</h3>
         </div>
         <CreateSiteDialog />
       </div>
 
       {sites && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3  rounded-md p-1">
           {sites?.map((site) => (
             <SiteCard
               key={site.id}
               site={site as Site}
-              onEdit={(updatedSite) => {}}
               handleDelete={(id) => {
                 deleteSite(id);
               }}

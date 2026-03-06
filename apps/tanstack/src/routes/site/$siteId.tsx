@@ -1,9 +1,16 @@
 import { getSite } from "#/hooks/use-sites";
 import type { Site } from "#/types/site";
-import { createFileRoute } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "#/components/site/editor/site-editor";
+import {
+  computeCustomStyles,
+  useNotionCustomizationStore,
+} from "#/stores/notion-customization-store";
+import { loadFont } from "#/lib/fonts";
+import { useNotionSettingsStore } from "#/stores/notion-settings";
+import { getNotionPageSeo } from "#/lib/utils";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -19,7 +26,18 @@ export const Route = createFileRoute("/site/$siteId")({
     const { siteId } = params;
     const { pageId } = deps;
     const { data } = await getSite(siteId, pageId);
-    return { site: data.site as Site, page: data.page as ExtendedRecordMap };
+    const site = data?.site as Site;
+    const page = data?.page as ExtendedRecordMap;
+    const seo = getNotionPageSeo({ page, site, pageId });
+    const settings = site?.siteSetting;
+    useNotionSettingsStore.getState().updateSettings({ ...settings, seo });
+    if (settings?.typography?.fonts) {
+      Promise.all([
+        loadFont(settings?.typography?.fonts?.primary as string),
+        loadFont(settings?.typography?.fonts?.secondary as string),
+      ]);
+    }
+    return { site, page, seo };
   },
 });
 

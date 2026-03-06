@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getRouteApi, Outlet } from "@tanstack/react-router";
-import { SiteHeader } from "../site-header";
+import { SiteEditorHeader } from "../site-editor-header";
 
 export const siteApi = getRouteApi("/site/$siteId");
 export default function SiteEditorLayout() {
@@ -16,7 +16,7 @@ export default function SiteEditorLayout() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader/>
+        <SiteEditorHeader />
         <Outlet />
       </SidebarInset>
     </SidebarProvider>

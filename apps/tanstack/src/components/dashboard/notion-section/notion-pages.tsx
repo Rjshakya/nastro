@@ -1,6 +1,5 @@
 import {
   IconFileDescription,
-  IconRefresh,
   IconNotebook,
   IconExternalLink,
 } from "@tabler/icons-react";
@@ -16,6 +15,7 @@ import {
   ItemGroup,
   ItemTitle,
 } from "../../ui/item";
+import { ScrollArea, ScrollBar } from "#/components/ui/scroll-area";
 
 interface NotionPage {
   id: string;
@@ -54,7 +54,7 @@ function PageItem({ page }: { page: NotionPage }) {
       rel="noopener noreferrer"
       className=""
     >
-      <Item className="bg-background" variant={"muted"}>
+      <Item className="p-1" variant={"muted"}>
         <Button size={"icon-sm"} variant={"secondary"}>
           <IconFileDescription className="size-5" />
         </Button>
@@ -104,10 +104,13 @@ export function NotionPages({ data }: NotionPagesProps) {
   }
 
   return (
-    <ItemGroup className=" gap-1">
-      {data.map((page) => (
-        <PageItem key={page.id} page={page} />
-      ))}
-    </ItemGroup>
+    <ScrollArea className={"h-80 rounded-md"}>
+      <ItemGroup className=" gap-1  ">
+        {data.map((page) => (
+          <PageItem key={page.id} page={page} />
+        ))}
+      </ItemGroup>
+      <ScrollBar />
+    </ScrollArea>
   );
 }

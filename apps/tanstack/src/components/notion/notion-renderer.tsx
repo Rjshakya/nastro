@@ -5,21 +5,33 @@ import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
 import { type CSSProperties } from "react";
-import { mutate } from "swr";
-import { Link } from "@tanstack/react-router";
+import {
+  getRouteApi,
+  Link,
+  useLocation,
+  useRouter,
+} from "@tanstack/react-router";
+import type { SiteSetting } from "#/types/site";
+import { SiteHeader } from "../site/site-header";
+import { useNotionSettingsStore } from "#/stores/notion-settings";
+import type { NotionPageSettings } from "#/types/customization";
+import { SiteFooter } from "../site/site-footer";
 
 interface NotionRendererProps {
   pageId: string;
   recordMap: any;
   siteId: string;
+  seo?: NotionPageSettings["seo"];
 }
 
 export function NotionRenderer({
   pageId,
   recordMap,
   siteId,
+  seo,
 }: NotionRendererProps) {
-  const { customStyles } = useNotionCustomizationStore((s) => s);
+  const { styles } = useNotionSettingsStore((s) => s);
+  const pathname = useLocation({ select: ({ pathname }) => pathname });
 
   if (!recordMap) {
     return (
@@ -31,17 +43,23 @@ export function NotionRenderer({
     );
   }
 
+  const handlePageUrl = (pageId: string) => {
+    if (pathname === `/${siteId}`) {
+      return `/${siteId}?pageId=${pageId}`;
+    }
+
+    return `/site/${siteId}?pageId=${pageId}`;
+  };
+
   return (
     <div
-      style={{ ...customStyles } as CSSProperties & Record<string, any>}
-      className="notion-renderer tracking-tighter "
+      style={{ ...styles } as CSSProperties & Record<string, any>}
+      className="notion-renderer tracking-tighter"
     >
       <NotionRendererLib
         fullPage={true}
         recordMap={recordMap}
-        // darkMode={isDark}
         rootPageId={pageId}
-        // showTableOfContents={true}
         components={{
           Button,
           Code,
@@ -54,12 +72,12 @@ export function NotionRenderer({
               </Link>
             );
           },
+          Header: SiteHeader,
         }}
+        mapPageUrl={handlePageUrl}
+        footer={<SiteFooter />}
+        header={<SiteHeader />}
         disableHeader
-        rootDomain=""
-        mapPageUrl={(pageId: string) => {
-          return `/site/${siteId}?pageId=${pageId}`;
-        }}
       />
     </div>
   );

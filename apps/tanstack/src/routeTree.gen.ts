@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as SiteIdRouteImport } from './routes/$siteId'
 import { Route as SiteRouteRouteImport } from './routes/site/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ const LoginRoute = LoginRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteIdRoute = SiteIdRouteImport.update({
+  id: '/$siteId',
+  path: '/$siteId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiteRouteRoute = SiteRouteRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/site': typeof SiteRouteRouteWithChildren
+  '/$siteId': typeof SiteIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/site/$siteId': typeof SiteSiteIdRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/site': typeof SiteRouteRouteWithChildren
+  '/$siteId': typeof SiteIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/site/$siteId': typeof SiteSiteIdRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/site': typeof SiteRouteRouteWithChildren
+  '/$siteId': typeof SiteIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/site/$siteId': typeof SiteSiteIdRoute
@@ -86,17 +95,26 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/site'
+    | '/$siteId'
     | '/about'
     | '/login'
     | '/site/$siteId'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/site' | '/about' | '/login' | '/site/$siteId' | '/dashboard'
+  to:
+    | '/'
+    | '/site'
+    | '/$siteId'
+    | '/about'
+    | '/login'
+    | '/site/$siteId'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/site'
+    | '/$siteId'
     | '/about'
     | '/login'
     | '/site/$siteId'
@@ -107,6 +125,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SiteRouteRoute: typeof SiteRouteRouteWithChildren
+  SiteIdRoute: typeof SiteIdRoute
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
 }
@@ -125,6 +144,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$siteId': {
+      id: '/$siteId'
+      path: '/$siteId'
+      fullPath: '/$siteId'
+      preLoaderRoute: typeof SiteIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/site': {
@@ -193,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SiteRouteRoute: SiteRouteRouteWithChildren,
+  SiteIdRoute: SiteIdRoute,
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
 }

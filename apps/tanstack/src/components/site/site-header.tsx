@@ -1,45 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
-import { IconArrowLeft, IconSettings } from "@tabler/icons-react";
-import {  useRouter } from "@tanstack/react-router";
 
-export function SiteHeader() {
-  const { togglePanel } = useNotionCustomizationStore((s) => s);
-  const router = useRouter()
+import type { ExtendedRecordMap } from "notion-types";
 
-  const handleBack = () => {
-    router.history.back()
-  };
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useNotionSettingsStore } from "#/stores/notion-settings";
+
+export const SiteHeader = () => {
+  const { settings } = useNotionSettingsStore((s) => s);
 
   return (
-    <header
-      className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) sticky
-     top-0 inset-x-0 z-50 bg-background "
-    >
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <Button size={"icon-xs"} variant={"secondary"} onClick={handleBack}>
-          <IconArrowLeft />
-        </Button>
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
+    <header className="">
+      <div className="flex gap-1 items-center p-2">
+        <Avatar className={"size-5"}>
+          <AvatarImage
+            className={"rounded-sm"}
+            src={settings?.seo?.pageIcon || ""}
+          />
+          <AvatarFallback />
+        </Avatar>
 
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        <h1 className="text-base font-medium">Nastro</h1>
-        <div className="ml-auto flex items-center gap-2"></div>
-
-        <Button variant="outline" size="sm" onClick={() => togglePanel(true)}>
-          <IconSettings className="mr-2 h-4 w-4" />
-          Settings
-        </Button>
+        <p className="">{settings?.seo?.pageTitle || "Header"}</p>
       </div>
     </header>
   );
-}
+};
