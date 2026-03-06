@@ -10,7 +10,6 @@ export const authMiddleWare: () => MiddlewareHandler = () => {
       c.set("user", null);
       c.set("session", null);
 
-      console.log("no auth");
       return c.json(
         ApiResponse({
           data: null,

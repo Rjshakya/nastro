@@ -45,7 +45,6 @@ export const computeCustomStyles = (
   const theme = computeTheme(settings?.theme);
   const typography = computeTypography(settings?.typography);
 
-  console.log(theme);
 
   return { ...styles, ...theme, ...typography };
 };

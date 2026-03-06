@@ -14,13 +14,12 @@ export const getAccessToken = (userId: string, providerId: string) => {
           and(eq(account.userId, userId), eq(account.providerId, providerId)),
         );
 
-      const {
-        accessToken,
-        refreshToken,
-        providerId: provider,
-        accountId,
-      } = acc;
-      return { accessToken, refreshToken, provider, accountId };
+      return {
+        accessToken: acc?.accessToken,
+        refreshToken: acc?.refreshToken,
+        provider: acc?.providerId,
+        accountId: acc?.accountId,
+      };
     },
     catch: (e) => {
       console.log(e);

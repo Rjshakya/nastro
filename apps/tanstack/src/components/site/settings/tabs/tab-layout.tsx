@@ -255,7 +255,6 @@ function ListComponent({
         itemFields={linksItemFields}
         value={listLinks}
         onChange={(links) => {
-          console.log(links);
           setListLinks(links);
         }}
       />
@@ -299,7 +298,6 @@ export function TabLayout({ sections }: TabLayoutProps) {
       },
     });
 
-    console.log(settings);
   };
 
   const handleLinksChange = (
@@ -321,7 +319,6 @@ export function TabLayout({ sections }: TabLayoutProps) {
       },
     });
 
-    console.log(settings);
   };
 
   // const handleListTextChange = (

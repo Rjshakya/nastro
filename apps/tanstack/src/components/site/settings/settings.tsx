@@ -225,13 +225,12 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
       siteId,
       input: { siteName: settings?.general?.siteName, siteSetting: settings },
     });
-    console.log("Saving settings:", settings);
     onOpenChange(false);
   };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md overflow-y-auto px-4 py-2 z-50">
+      <SheetContent className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50">
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
           <SheetDescription>

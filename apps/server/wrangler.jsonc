@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "server",
+  "name": "nastro-api",
   "main": "src/app.ts",
   "compatibility_date": "2026-02-24",
   "compatibility_flags": ["nodejs_compat"],
@@ -29,11 +29,18 @@
   // "ai": {
   //   "binding": "AI"
   // },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "6f48b19ec8ed4ca3b5c3310531995d9c",
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5444/postgres",
+    },
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,
   },
   "dev": {
-    "port": 8000
-  }
+    "port": 8000,
+  },
 }

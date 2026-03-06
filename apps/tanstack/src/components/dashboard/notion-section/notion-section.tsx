@@ -4,6 +4,7 @@ import { Button } from "../../ui/button";
 import { authClient } from "@/lib/auth-client";
 import { NotionPages as NotionPagesComp } from "./notion-pages";
 import { dashboardHomeApi } from "../home";
+import { Env } from "env";
 
 export const DashboardNotionSection = () => {
   const { pages: notionPages } = dashboardHomeApi.useLoaderData();
@@ -15,7 +16,7 @@ export const DashboardNotionSection = () => {
   const handleConnect = async () => {
     await authClient.linkSocial({
       provider: "notion",
-      callbackURL: import.meta.env.PUBLIC_CLIENT_URL + "/dashboard",
+      callbackURL: Env.clientUrl + "/dashboard",
     });
   };
 

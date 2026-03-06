@@ -43,7 +43,6 @@ export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
             to="/site/$siteId"
             params={{ siteId: site.id }}
             search={{ pageId: site.pageId || "" }}
-            target="_blank"
           >
             <Button variant="ghost" size="icon-sm" className="">
               <IconSettings className="h-4 w-4" />
@@ -54,6 +53,7 @@ export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
             to="/$siteId"
             params={{ siteId: site.id }}
             search={{ pageId: site.pageId || "" }}
+            target="_blank"
           >
             <Button
               variant="secondary"

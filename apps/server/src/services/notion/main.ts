@@ -72,9 +72,16 @@ export class NotionService {
 export const getUserNotionPages = (userId: string) => {
   return Effect.gen(function* () {
     const { accessToken } = yield* getAccessToken(userId, "notion");
-
     const notion = new NotionService(accessToken as string);
     const notionPages = yield* notion.getPages();
     return notionPages;
-  });
+  }).pipe(
+    Effect.catchTag("NotionError", (e) => {
+      if (e.message.includes("API token is invalid.")) {
+        return Effect.succeed([]);
+      }
+
+      return Effect.fail(e);
+    }),
+  );
 };
