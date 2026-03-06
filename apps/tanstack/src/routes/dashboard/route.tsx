@@ -1,6 +1,6 @@
 import DashboardLayout from "#/components/dashboard/layout";
-import { getNotionPages } from "#/hooks/use-notion";
-import { getSites } from "#/hooks/use-sites";
+import { getNotionPages } from "#/lib/notion";
+import { getSites } from "#/lib/site";
 import type { NotionPages } from "#/types/notion";
 import type { Site } from "#/types/site";
 import { createFileRoute } from "@tanstack/react-router";

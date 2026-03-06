@@ -3,7 +3,10 @@ import { account } from "@/db/schema/auth-schema";
 import { and, eq } from "drizzle-orm";
 import { Effect } from "effect";
 
-export const getAccessToken = (userId: string, providerId: string) => {
+export const getAccessToken = (
+  userId: string,
+  providerId: "notion" | "google",
+) => {
   return Effect.tryPromise({
     try: async () => {
       const db = await getDB();

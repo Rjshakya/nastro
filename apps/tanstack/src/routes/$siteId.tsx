@@ -1,12 +1,10 @@
 import { LiveSite } from "#/components/site/live";
-import { getSite } from "#/hooks/use-sites";
+import { getSite } from "#/lib/site";
 import type { Site } from "#/types/site";
-import { createFileRoute } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import type { ExtendedRecordMap } from "notion-types";
 import z from "zod";
 import { getNotionPageSeo } from "#/lib/utils";
-import { useNotionSettingsStore } from "#/stores/notion-settings";
-import { loadFont } from "#/lib/fonts";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -20,18 +18,10 @@ export const Route = createFileRoute("/$siteId")({
   loader: async ({ params, deps }) => {
     const { siteId } = params;
     const { pageId } = deps;
-    const { data } = await getSite(siteId, pageId);
+    const { data } = await getSite({ pageId, siteId });
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
-    const settings = site?.siteSetting;
-    useNotionSettingsStore.getState().updateSettings({ ...settings, seo });
-    if (settings?.typography?.fonts) {
-      Promise.all([
-        loadFont(settings?.typography?.fonts?.primary as string),
-        loadFont(settings?.typography?.fonts?.secondary as string),
-      ]);
-    }
     return { site, page, seo };
   },
   component: RouteComponent,
@@ -62,9 +52,12 @@ export const Route = createFileRoute("/$siteId")({
       ],
     };
   },
-  ssr: false,
 });
 
 function RouteComponent() {
-  return <LiveSite />;
+  return (
+    <ClientOnly fallback={null}>
+      <LiveSite />
+    </ClientOnly>
+  );
 }

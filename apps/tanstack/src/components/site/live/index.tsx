@@ -9,22 +9,22 @@ const liveSiteRoute = getRouteApi("/$siteId");
 export const LiveSite = () => {
   const { page, site, seo } = liveSiteRoute.useLoaderData();
 
-  // useEffect(() => {
-  //   if (!page || !site) return;
+  useEffect(() => {
+    if (!page || !site) return;
 
-  //   const run = () => {
-  //     const settings = site?.siteSetting;
-  //     useNotionSettingsStore.getState().updateSettings({ ...settings, seo });
-  //     if (settings?.typography?.fonts) {
-  //       Promise.all([
-  //         loadFont(settings?.typography?.fonts?.primary as string),
-  //         loadFont(settings?.typography?.fonts?.secondary as string),
-  //       ]);
-  //     }
-  //   };
+    const run = () => {
+      const settings = site?.siteSetting;
+      useNotionSettingsStore.getState().updateSettings({ ...settings, seo });
+      if (settings?.typography?.fonts) {
+        Promise.all([
+          loadFont(settings?.typography?.fonts?.primary as string),
+          loadFont(settings?.typography?.fonts?.secondary as string),
+        ]);
+      }
+    };
 
-  //   run();
-  // }, [page, site]);
+    run();
+  }, [page, site]);
 
   return (
     <main>

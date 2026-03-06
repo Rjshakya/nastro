@@ -9,6 +9,9 @@ import type {
   PartialDataSourceObjectResponse,
   PartialPageObjectResponse,
 } from "@notionhq/client";
+import { KeyManager, withCache } from "@/lib/cache";
+import { getNotionRendererClient } from "@/lib/notion";
+import { NotionWebsiteService } from "./website";
 
 type GetPages = (
   | PageObjectResponse
@@ -73,15 +76,36 @@ export const getUserNotionPages = (userId: string) => {
   return Effect.gen(function* () {
     const { accessToken } = yield* getAccessToken(userId, "notion");
     const notion = new NotionService(accessToken as string);
-    const notionPages = yield* notion.getPages();
+    const notionPages = yield* withCache({
+      execute: notion.getPages(),
+      key: KeyManager.getUserNotionPages(userId),
+      ttl: 60,
+    });
     return notionPages;
   }).pipe(
     Effect.catchTag("NotionError", (e) => {
       if (e.message.includes("API token is invalid.")) {
-        return Effect.succeed([]);
+        return Effect.succeed<any[]>([]);
       }
 
       return Effect.fail(e);
     }),
   );
+};
+
+export const getNotionPageContent = (userId: string, pageId: string) => {
+  return Effect.gen(function* () {
+    const { accessToken } = yield* getAccessToken(userId as string, "notion");
+
+    if (!accessToken) {
+      yield* Effect.fail(
+        new NotionError({ message: "NOTION AUTHENTICATION FAIL" }),
+      );
+    }
+
+    const notionClient = getNotionRendererClient(accessToken as string);
+    const notionService = new NotionWebsiteService(notionClient);
+    const pageContent = yield* notionService.getPage(pageId);
+    return pageContent;
+  });
 };

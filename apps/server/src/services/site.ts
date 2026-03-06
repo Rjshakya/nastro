@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { NotionWebsiteService } from "./notion/website";
 import { getNotionRendererClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
+import { KeyManager } from "@/lib/cache";
 
 type Site = typeof sites.$inferSelect;
 
@@ -27,6 +28,7 @@ interface CreateSiteInput {
 interface UpdateSiteInput {
   siteName?: string;
   siteSetting?: SiteSetting;
+  pageId: string;
 }
 
 type SiteSelect = Omit<Site, "createdAt" | "updatedAt"> & {
@@ -147,10 +149,7 @@ class SiteService {
 
 const siteService = new SiteService();
 
-export const createSite = (
-  userId: string,
-  input: CreateSiteInput,
-): Effect.Effect<SiteSelect, SiteError, never> =>
+export const createSite = (userId: string, input: CreateSiteInput) =>
   Effect.tryPromise({
     try: async () => await siteService.createSite(userId, input),
     catch: (e): SiteError =>
@@ -162,9 +161,7 @@ export const createSite = (
           }),
   });
 
-export const getSitesByUser = (
-  userId: string,
-): Effect.Effect<SiteSelect[], SiteError, never> =>
+export const getSitesByUser = (userId: string) =>
   Effect.tryPromise({
     try: async () => {
       return await siteService.getSitesByUser(userId);
@@ -184,6 +181,7 @@ export const getSiteById = (siteId: string, pageId: string) => {
 
   return Effect.gen(function* () {
     const site = yield* getSite(siteId);
+
     if (!site) {
       throw new SiteError({ code: "NOT_FOUND", message: "no site found" });
     }
@@ -199,9 +197,7 @@ export const getSiteById = (siteId: string, pageId: string) => {
   });
 };
 
-export const getSiteByShortId = (
-  shortId: string,
-): Effect.Effect<SiteSelect, SiteError, never> =>
+export const getSiteByShortId = (shortId: string) =>
   Effect.tryPromise({
     try: async () => {
       const site = await siteService.getSiteByShortId(shortId);
@@ -222,13 +218,12 @@ export const getSiteByShortId = (
           }),
   });
 
-export const updateSite = (
-  siteId: string,
-  input: UpdateSiteInput,
-): Effect.Effect<SiteSelect, SiteError, never> =>
+export const updateSite = (siteId: string, input: UpdateSiteInput) =>
   Effect.tryPromise({
     try: async () => {
-      return await siteService.updateSite(siteId, input);
+      const res = await siteService.updateSite(siteId, input);
+      KeyManager.delete.getSiteById(siteId, input.pageId);
+      return res;
     },
     catch: (e): SiteError =>
       e instanceof SiteError
@@ -239,12 +234,11 @@ export const updateSite = (
           }),
   });
 
-export const deleteSite = (
-  siteId: string,
-): Effect.Effect<void, SiteError, never> =>
+export const deleteSite = (siteId: string, pageId: string) =>
   Effect.tryPromise({
     try: async () => {
       await siteService.deleteSite(siteId);
+      KeyManager.delete.getSiteById(siteId, pageId);
     },
     catch: (e): SiteError =>
       new SiteError({

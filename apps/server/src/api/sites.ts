@@ -1,4 +1,5 @@
 import { ApiResponse } from "@/lib/api";
+import { KeyManager, withCache } from "@/lib/cache";
 import { Vars } from "@/lib/hono-types";
 import { authMiddleWare } from "@/middlewares/auth";
 import {
@@ -20,6 +21,7 @@ const siteParamsSchema = z.object({
 
 const getSiteQuerySchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
+  fresh: z.boolean().optional().default(false),
 });
 
 const siteSettingSchema = z.object({}).loose().optional();
@@ -33,6 +35,7 @@ const createSiteSchema = z.object({
 const updateSiteSchema = z.object({
   siteName: z.string().min(1).max(100).optional(),
   siteSetting: siteSettingSchema.optional(),
+  pageId: z.string().min(1),
 });
 
 type CreateSiteInput = z.infer<typeof createSiteSchema>;
@@ -45,8 +48,15 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("query", getSiteQuerySchema),
     async (c) => {
       const { id } = c.req.valid("param");
-      const { pageId } = c.req.valid("query");
-      const result = await Effect.runPromise(getSiteById(id, pageId));
+      const { pageId, fresh } = c.req.valid("query");
+      const result = await Effect.runPromise(
+        withCache({
+          execute: getSiteById(id, pageId),
+          key: KeyManager.getSiteById(id, pageId),
+          forceFresh: fresh,
+          ttl: 60 * 60,
+        }),
+      );
 
       return c.json(
         ApiResponse({
@@ -59,7 +69,6 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   .use(authMiddleWare())
   .get("/", async (c) => {
     const userId = c.get("user")?.id;
-    console.log("userId", userId);
     const sites = await Effect.runPromise(getSitesByUser(userId as string));
 
     return c.json(
@@ -95,13 +104,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     async (c) => {
       const { id } = c.req.valid("param");
       const input = c.req.valid("json") as UpdateSiteInput;
-
-      const site = await Effect.runPromise(
-        updateSite(id, {
-          siteName: input.siteName,
-          siteSetting: input.siteSetting as SiteSetting | undefined,
-        }),
-      );
+      const site = await Effect.runPromise(updateSite(id, input));
 
       return c.json(
         ApiResponse({
@@ -111,16 +114,22 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       );
     },
   )
-  .delete("/:id", zValidator("param", siteParamsSchema), async (c) => {
-    const { id } = c.req.valid("param");
-    await Effect.runPromise(deleteSite(id));
+  .delete(
+    "/:id",
+    zValidator("param", siteParamsSchema),
+    zValidator("query", z.object({ pageId: z.string() })),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const { pageId } = c.req.valid("query");
+      await Effect.runPromise(deleteSite(id, pageId));
 
-    return c.json(
-      ApiResponse({
-        data: null,
-        message: "Site deleted successfully",
-      }),
-    );
-  });
+      return c.json(
+        ApiResponse({
+          data: null,
+          message: "Site deleted successfully",
+        }),
+      );
+    },
+  );
 
 export { sitesApp };

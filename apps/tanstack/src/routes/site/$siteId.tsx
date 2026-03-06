@@ -1,4 +1,4 @@
-import { getSite } from "#/hooks/use-sites";
+import { getSite } from "#/lib/site";
 import type { Site } from "#/types/site";
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/site/$siteId")({
   loader: async ({ params, deps }) => {
     const { siteId } = params;
     const { pageId } = deps;
-    const { data } = await getSite(siteId, pageId);
+    const { data } = await getSite({ siteId, pageId });
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });

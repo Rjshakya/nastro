@@ -18,7 +18,7 @@ import { TabTheme, type TabThemeProps } from "./tabs/tab-theme";
 import { TabTypo, type TabTypoProps } from "./tabs/tab-typo";
 import { TabLayout, type TabLayoutProps } from "./tabs/tab-layout";
 import { useUpdateSite } from "#/hooks/use-sites";
-import { useParams } from "@tanstack/react-router";
+import { useParams, useSearch } from "@tanstack/react-router";
 
 interface SettingsV2Props {
   open: boolean;
@@ -216,6 +216,7 @@ const layoutSections: TabLayoutProps["sections"] = [
 
 export function Settings({ open, onOpenChange }: SettingsV2Props) {
   const { siteId } = useParams({ from: "/site/$siteId" });
+  const { pageId } = useSearch({ from: "/site/$siteId" });
   const { settings } = useNotionSettingsStore();
   const tabKeys = Object.keys(tabNames) as Array<keyof NotionPageSettings>;
   const { updateSite, isLoading } = useUpdateSite();
@@ -223,7 +224,11 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
   const handleSave = async () => {
     await updateSite({
       siteId,
-      input: { siteName: settings?.general?.siteName, siteSetting: settings },
+      input: {
+        siteName: settings?.general?.siteName,
+        siteSetting: settings,
+        pageId,
+      },
     });
     onOpenChange(false);
   };

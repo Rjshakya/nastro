@@ -1,3 +1,5 @@
+import { getNotionCms } from "@/lib/notion";
+import { getAccessToken } from "@/lib/tokens";
 import {
   blocksToHtml,
   blocksToMarkdown,
@@ -80,3 +82,73 @@ export class NotionCMSService {
     });
   }
 }
+
+export const getNotionPageHTML = Effect.fn("getNotionPageHTML")((
+  pageId: string,
+  notionToken: string,
+) => {
+  return Effect.gen(function* () {
+    const cms = getNotionCms(notionToken);
+    const cmsService = new NotionCMSService(cms);
+    return yield* cmsService.getNotionPageHTML(pageId);
+  });
+});
+
+export const getNotionPageMarkdown = Effect.fn("getNotionPageMarkdown")((
+  pageId: string,
+  notionToken: string,
+) => {
+  return Effect.gen(function* () {
+    const cms = getNotionCms(notionToken);
+    const cmsService = new NotionCMSService(cms);
+    return yield* cmsService.getNotionPageMarkdown(pageId);
+  });
+});
+
+export const getNotionPageRecord = Effect.fn("getNotionPageRecord")((
+  pageId: string,
+  notionToken: string,
+) => {
+  return Effect.gen(function* () {
+    const cms = getNotionCms(notionToken);
+    const cmsService = new NotionCMSService(cms);
+    return yield* cmsService.getNotionPageRecord(pageId);
+  });
+});
+
+export const getNotionPageFullContent = Effect.fn("getNotionPageFullContent")((
+  pageId: string,
+  notionToken: string,
+) => {
+  return Effect.gen(function* () {
+    const cms = getNotionCms(notionToken);
+    const cmsService = new NotionCMSService(cms);
+    return yield* cmsService.getNotionPage(pageId);
+  });
+});
+
+const formatMap = {
+  html: getNotionPageHTML,
+  md: getNotionPageMarkdown,
+  full: getNotionPageFullContent,
+};
+
+export const getNotionPageFromCMS = Effect.fn("getNotionPageFromCMS")(({
+  format,
+  pageId,
+  userId,
+}: {
+  format: "html" | "md" | "full";
+  pageId: string;
+  userId: string;
+}) => {
+  return Effect.gen(function* () {
+    const { accessToken } = yield* getAccessToken(userId, "notion");
+    if (!accessToken) {
+      yield* Effect.fail(new Error("NO ACCESS TOKEN FOR NOTION"));
+    }
+
+    const effect = formatMap[format];
+    return yield* effect(pageId, accessToken!);
+  });
+});

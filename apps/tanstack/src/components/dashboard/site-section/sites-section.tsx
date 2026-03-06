@@ -29,7 +29,7 @@ export const DashboardSitesSection = () => {
               key={site.id}
               site={site as Site}
               handleDelete={(id) => {
-                deleteSite(id);
+                deleteSite({ siteId: id, pageId: "" });
               }}
               isDeleting={isDeleting}
             />

@@ -7,35 +7,31 @@ import { create } from "zustand";
 
 interface NotionSettingsStore {
   styles?: CustomStyles;
-  settings: NotionPageSettings ;
+  settings: NotionPageSettings;
   updateSettings: (settings: NotionPageSettings) => void;
 }
 
-export const useNotionSettingsStore = create<NotionSettingsStore>(
-  (set, get) => ({
-    settings: {
-      typography: {
-        fonts: { primary: "Geist Sans", secondary: "Geist Sans" },
-        sizes: {
-          pageTitle: Math.floor(2.6 * 16),
-          heading1: Math.floor(1.8 * 16),
-          heading2: Math.floor(1.5 * 16),
-          heading3: Math.floor(1.25 * 16),
-          base: 16,
-        },
+export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
+  settings: {
+    typography: {
+      fonts: { primary: "Geist Sans", secondary: "Geist Sans" },
+      sizes: {
+        pageTitle: Math.floor(2.6 * 16),
+        heading1: Math.floor(1.8 * 16),
+        heading2: Math.floor(1.5 * 16),
+        heading3: Math.floor(1.25 * 16),
+        base: 16,
       },
     },
-    updateSettings(settings) {
-
-      
-      set({ settings, styles: computeCustomStyles(settings) });
-    },
-    styles: {
-      "--notion-primary-font": "Geist Sans",
-      "--notion-secondary-font": "Geist Sans",
-    },
-  }),
-);
+  },
+  updateSettings(settings) {
+    set({ settings, styles: computeCustomStyles(settings) });
+  },
+  styles: {
+    "--notion-primary-font": "Geist Sans",
+    "--notion-secondary-font": "Geist Sans",
+  },
+}));
 
 export const computeCustomStyles = (
   settings: NotionPageSettings | null,
@@ -44,7 +40,6 @@ export const computeCustomStyles = (
 
   const theme = computeTheme(settings?.theme);
   const typography = computeTypography(settings?.typography);
-
 
   return { ...styles, ...theme, ...typography };
 };

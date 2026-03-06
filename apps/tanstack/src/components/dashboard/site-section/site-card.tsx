@@ -12,15 +12,15 @@ import { Link, useRouter } from "@tanstack/react-router";
 
 interface SiteCardProps {
   site: Site;
-  handleDelete: (siteId: string) => Promise<void> | void;
+  handleDelete: (siteId: string, pageId: string) => Promise<void> | void;
   isDeleting?: boolean;
 }
 
 export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
   const router = useRouter();
 
-  const _handleDelete = async (id: string) => {
-    await handleDelete(id);
+  const _handleDelete = async (id: string, pageId: string) => {
+    await handleDelete(id, pageId);
     await router.invalidate({ sync: true });
   };
 
@@ -33,7 +33,7 @@ export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
             variant="ghost"
             size="icon-sm"
             className="text-destructive"
-            onClick={() => _handleDelete(site.id)}
+            onClick={() => _handleDelete(site.id, site.pageId as string)}
             disabled={isDeleting}
           >
             <IconTrash className="h-4 w-4" />

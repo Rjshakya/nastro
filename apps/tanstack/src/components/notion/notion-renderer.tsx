@@ -28,7 +28,6 @@ export function NotionRenderer({
   pageId,
   recordMap,
   siteId,
-  seo,
 }: NotionRendererProps) {
   const { styles } = useNotionSettingsStore((s) => s);
   const pathname = useLocation({ select: ({ pathname }) => pathname });
