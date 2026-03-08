@@ -183,7 +183,9 @@ export const getSiteById = (siteId: string, pageId: string) => {
     const site = yield* getSite(siteId);
 
     if (!site) {
-      throw new SiteError({ code: "NOT_FOUND", message: "no site found" });
+      return yield* Effect.fail(
+        new SiteError({ code: "NOT_FOUND", message: "no site found" }),
+      );
     }
     const { accessToken, accountId } = yield* getAccessToken(
       site.userId,

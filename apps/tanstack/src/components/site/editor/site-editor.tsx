@@ -5,7 +5,7 @@ import { siteApi } from ".";
 import { Settings } from "../settings/settings";
 
 export function SiteEditor() {
-  const { page, site } = siteApi.useLoaderData();
+  const { page, site , seo } = siteApi.useLoaderData();
   const { pageId } = siteApi.useLoaderDeps();
   const { isPanelOpen, togglePanel } = useNotionCustomizationStore((s) => s);
 

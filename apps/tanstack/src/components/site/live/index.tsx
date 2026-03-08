@@ -1,5 +1,5 @@
 import { NotionRenderer } from "#/components/notion/notion-renderer";
-import { getRouteApi } from "@tanstack/react-router";
+import { ClientOnly, getRouteApi } from "@tanstack/react-router";
 import "@/styles/notion.css";
 import { useEffect } from "react";
 import { loadFont } from "#/lib/fonts";
@@ -7,6 +7,16 @@ import { useNotionSettingsStore } from "#/stores/notion-settings";
 
 const liveSiteRoute = getRouteApi("/$siteId");
 export const LiveSite = () => {
+  return (
+    <ClientOnly fallback={null}>
+      <main>
+        <LiveSiteNotionRenderer />
+      </main>
+    </ClientOnly>
+  );
+};
+
+export const LiveSiteNotionRenderer = () => {
   const { page, site, seo } = liveSiteRoute.useLoaderData();
 
   useEffect(() => {
@@ -27,12 +37,10 @@ export const LiveSite = () => {
   }, [page, site]);
 
   return (
-    <main>
-      <NotionRenderer
-        pageId={site.pageId as string}
-        siteId={site.id}
-        recordMap={page}
-      />
-    </main>
+    <NotionRenderer
+      pageId={site.pageId as string}
+      siteId={site.id}
+      recordMap={page}
+    />
   );
 };

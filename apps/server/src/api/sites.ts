@@ -21,7 +21,12 @@ const siteParamsSchema = z.object({
 
 const getSiteQuerySchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
-  fresh: z.boolean().optional().default(false),
+  fresh: z
+    .preprocess((v) => {
+      if (v === "true") return true;
+      return false;
+    }, z.boolean())
+    .optional(),
 });
 
 const siteSettingSchema = z.object({}).loose().optional();
@@ -57,6 +62,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
           ttl: 60 * 60,
         }),
       );
+
+      
 
       return c.json(
         ApiResponse({

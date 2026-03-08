@@ -36,6 +36,8 @@ export const withCache = Effect.fn("withCache")(<T, E>({
             expirationTtl: ttl,
           }),
       );
+
+      
       return res;
     }
 
