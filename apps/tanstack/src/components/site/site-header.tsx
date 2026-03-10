@@ -30,9 +30,9 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
         <div className="p-2 flex items-center gap-1.5">
           {header?.list &&
             header.list?.length > 0 &&
-            header.list.map((l) => {
+            header.list.map((l , i) => {
               return (
-                <DropdownMenu>
+                <DropdownMenu key={i}>
                   <DropdownMenuTrigger
                     render={
                       <Button
@@ -62,9 +62,9 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
 
           {header?.links &&
             header.links?.length > 0 &&
-            header.links.map((l) => {
+            header.links.map((l , i) => {
               return (
-                <Link target="_blank" to={l?.url}>
+                <Link key={i} target="_blank" to={l?.url}>
                   <Button
                     variant={l.variant}
                     className={"notion-header-btn"}

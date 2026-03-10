@@ -8,40 +8,42 @@ import { useEffect } from "react";
 import { getNotionPageIcon, getNotionPageTitle } from "#/lib/utils";
 
 export function SiteEditor() {
-  const { page, site, seo } = siteApi.useLoaderData();
+  const { page, site } = siteApi.useLoaderData();
   const { pageId } = siteApi.useLoaderDeps();
   const { isPanelOpen, togglePanel } = useNotionCustomizationStore((s) => s);
   const { settings } = useNotionSettingsStore((s) => s);
 
-  useEffect(() => {
-    const run = () => {
-      const defaultPageIcon = getNotionPageIcon(page, pageId);
-      const defaultPageTitle = getNotionPageTitle(page);
+  // useEffect(() => {
+  //   const run = () => {
+  //     const defaultPageIcon = getNotionPageIcon(page, pageId);
+  //     const defaultPageTitle = getNotionPageTitle(page);
 
-      const settings = site.siteSetting;
+  //     useNotionSettingsStore.setState({
+  //       settings: {
+  //         general: {
+  //           ...settings?.general,
+  //           pageWidth: settings?.general?.pageWidth || 65,
+  //         },
+  //         layout: {
+  //           ...settings?.layout,
+  //           header: settings?.layout?.header || {
+  //             text: defaultPageTitle || "",
+  //             logo: defaultPageIcon || "",
+  //             width: 100,
+  //           },
+  //           footer: settings?.layout?.footer || {
+  //             text: defaultPageTitle || "",
+  //             logo: defaultPageIcon || "",
+  //             width: 100,
+  //           },
+  //         },
+  //         theme: settings?.theme || { ...site?.siteSetting?.theme },
+  //       },
+  //     });
+  //   };
 
-      useNotionSettingsStore.setState({
-        settings: {
-          general: settings?.general || { siteName: site.siteName },
-          layout: settings?.layout || {
-            header: settings?.layout?.header || {
-              text: defaultPageTitle || "",
-              logo: defaultPageIcon || "",
-              width: 100,
-            },
-            footer: settings?.layout?.footer || {
-              text: defaultPageTitle || "",
-              logo: defaultPageIcon || "",
-              width: 100,
-            },
-          },
-          theme: settings?.theme || { ...site?.siteSetting?.theme },
-        },
-      });
-    };
-
-    run();
-  }, []);
+  //   run();
+  // }, []);
 
   if (!site) {
     return (
@@ -53,13 +55,12 @@ export function SiteEditor() {
 
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
-      <div contentEditable={false} className="pb-24 z-0 ">
+      <div contentEditable={false} className=" z-0 ">
         <NotionRenderer
           siteId={site.id}
           pageId={pageId}
           recordMap={page}
-          header={settings?.layout?.header}
-          footer={settings?.layout?.footer}
+          settings={settings}
         />
       </div>
 

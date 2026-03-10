@@ -37,8 +37,9 @@ export const computeCustomStyles = (
   const theme = computeTheme(settings?.theme);
   const typography = computeTypography(settings?.typography);
   const layout = computeLayout(settings?.layout);
+  const general = computeGeneral(settings?.general);
 
-  return { ...styles, ...theme, ...typography, ...layout };
+  return { ...styles, ...theme, ...typography, ...layout, ...general };
 };
 
 export const computeTheme = (
@@ -165,6 +166,18 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
   if (layout?.sidebar) {
     styles["--notion-sidebar-height"] = layout.sidebar?.height + "px";
     styles["--notion-sidebar-width"] = layout.sidebar?.width + "%";
+  }
+
+  return styles;
+};
+
+export const computeGeneral = (general: NotionPageSettings["general"]) => {
+  const styles: CustomStyles = {};
+
+  if (!general) return styles;
+
+  if (general.pageWidth) {
+    styles["--notion-max-width"] = general.pageWidth + "%";
   }
 
   return styles;

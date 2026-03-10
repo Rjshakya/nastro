@@ -31,9 +31,8 @@ export function NotionRenderer({
   pageId,
   recordMap,
   siteId,
-  header,
-  footer,
-}: NotionRendererProps & { header?: LayoutHeaderUI; footer?: LayoutFooterUI }) {
+  settings,
+}: NotionRendererProps & { settings?: NotionPageSettings }) {
   const { styles } = useNotionSettingsStore((s) => s);
   const pathname = useLocation({ select: ({ pathname }) => pathname });
 
@@ -58,7 +57,7 @@ export function NotionRenderer({
   return (
     <div
       style={{ ...styles } as CSSProperties & Record<string, any>}
-      className="notion-renderer tracking-tighter"
+      className="notion-renderer tracking-tighter relative"
     >
       <NotionRendererLib
         fullPage={true}
@@ -79,8 +78,16 @@ export function NotionRenderer({
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
-        footer={<SiteFooter footer={footer} />}
-        header={<SiteHeader header={header} />}
+        footer={
+          settings?.general?.footer && (
+            <SiteFooter footer={settings?.layout?.footer} />
+          )
+        }
+        header={
+          settings?.general?.header && (
+            <SiteHeader header={settings?.layout?.header} />
+          )
+        }
         disableHeader
       />
     </div>

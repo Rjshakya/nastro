@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/customization";
-import { TabGeneral } from "./tabs/tab-general";
+import { TabGeneral, type TabGeneralProps } from "./tabs/tab-general";
 import { TabTheme, type TabThemeProps } from "./tabs/tab-theme";
 import { TabTypo, type TabTypoProps } from "./tabs/tab-typo";
 import { TabLayout, type TabLayoutProps } from "./tabs/tab-layout";
@@ -32,6 +32,13 @@ const tabNames: Record<keyof NotionPageSettings, string> = {
   typography: "Typography",
   layout: "Layout",
   seo: "Seo",
+};
+
+const generalSections: TabGeneralProps = {
+  siteName: { label: "Site Name", type: "text" },
+  header: { label: "Header", type: "boolean" },
+  footer: { label: "Footer", type: "boolean" },
+  pageWidth: { label: "Page width", type: "number", min: 20, max: 100 },
 };
 
 // Theme sections configuration - defines what renders in TabTheme
@@ -175,10 +182,12 @@ const layoutSections: TabLayoutProps["sections"] = [
     height: {
       key: "height",
       label: "Height",
+      type: "number",
     },
     width: {
       key: "width",
       label: "Width",
+      type: "number",
     },
   },
   {
@@ -269,13 +278,13 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
               {key === "theme" ? (
                 <TabTheme sections={themeSections} />
               ) : key === "general" ? (
-                <TabGeneral />
+                <TabGeneral tabProps={generalSections} />
               ) : key === "typography" ? (
                 <TabTypo sections={typoSections} />
               ) : key === "layout" ? (
                 <TabLayout sections={layoutSections} />
               ) : key === "seo" ? (
-                <TabsContent value={"seo"}>seo</TabsContent>
+                <div>seo</div>
               ) : null}
             </TabsContent>
           ))}

@@ -167,6 +167,9 @@ export interface CustomStyles {
   "--notion-footer-btn-color"?: string;
   "--notion-footer-height"?: string;
   "--notion-footer-width"?: string;
+
+  // width
+  "--notion-max-width"?: string;
 }
 
 // Site Settings
@@ -252,6 +255,13 @@ export type TypoFontsUI = {
   secondary?: string;
 };
 
+export interface GeneralSettingsUI {
+  siteName?: string;
+  pageWidth?: number;
+  header?: boolean;
+  footer?: boolean;
+}
+
 export interface TypoSettingsUI {
   sizes?: TypoSizesUI;
   fonts?: TypoFontsUI;
@@ -303,7 +313,7 @@ export interface SEO {
 }
 
 export interface NotionPageSettings {
-  general?: { siteName?: string };
+  general?: GeneralSettingsUI;
   theme?: ThemeSettingsUI;
   typography?: TypoSettingsUI;
   layout?: LayoutSettingsUI;

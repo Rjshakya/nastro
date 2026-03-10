@@ -10,7 +10,11 @@ import {
 } from "#/stores/notion-customization-store";
 import { loadFont } from "#/lib/fonts";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import { getNotionPageSeo } from "#/lib/utils";
+import {
+  getNotionPageIcon,
+  getNotionPageSeo,
+  getNotionPageTitle,
+} from "#/lib/utils";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -30,11 +34,29 @@ export const Route = createFileRoute("/site/$siteId")({
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
     const settings = site?.siteSetting;
+    const defaultPageIcon = getNotionPageIcon(page, pageId);
+    const defaultPageTitle = getNotionPageTitle(page);
     useNotionSettingsStore.getState().updateSettings({
       ...useNotionSettingsStore.getState().settings,
       ...settings,
       seo,
-      general: settings?.general || { siteName: site.siteName },
+      general: {
+        ...settings?.general,
+        pageWidth: settings?.general?.pageWidth || 65,
+      },
+      layout: {
+        ...settings?.layout,
+        header: settings?.layout?.header || {
+          text: defaultPageTitle || "",
+          logo: defaultPageIcon || "",
+          width: 100,
+        },
+        footer: settings?.layout?.footer || {
+          text: defaultPageTitle || "",
+          logo: defaultPageIcon || "",
+          width: 100,
+        },
+      },
     });
 
     if (settings?.typography?.fonts) {

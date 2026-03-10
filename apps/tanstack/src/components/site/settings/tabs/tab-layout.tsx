@@ -63,8 +63,8 @@ interface LayoutSection {
   fields: LayoutField[];
   links?: LayoutLinksItem;
   list?: LayoutListItem;
-  height?: { key: string; label: string };
-  width?: { key: string; label: string };
+  height?: { key: string; label: string; type: string };
+  width?: { key: string; label: string; type: string };
 }
 
 export interface TabLayoutProps {
@@ -137,7 +137,7 @@ function LinksComponent({
           />
           <PopoverContent side="left" className="w-72 z-9">
             <div className="space-y-3">
-              {itemFields.map((field) => {
+              {itemFields.map((field , i) => {
                 if (field.key === "variant") {
                   return (
                     <LinkVariantSelector
@@ -146,6 +146,7 @@ function LinksComponent({
                       onChange={(v) => {
                         setNewLink({ ...newLink, variant: v as any });
                       }}
+                      key={i}
                     />
                   );
                 }
@@ -521,7 +522,7 @@ export function TabLayout({ sections }: TabLayoutProps) {
               {section?.height && (
                 <SliderInput
                   label={section.height.label}
-                  value={sectionData[section.height.key] || 45}
+                  value={sectionData?.[section.height.key] || 45}
                   onChange={(v) => handleHeightChange(section.id, v)}
                   max={100}
                   min={0}
@@ -568,7 +569,7 @@ function LinkVariantSelector({
       </SelectTrigger>
       <SelectContent className={"z-99999"}>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
+          <SelectLabel>Variants</SelectLabel>
           {items &&
             items?.length > 0 &&
             items.map((item) => (

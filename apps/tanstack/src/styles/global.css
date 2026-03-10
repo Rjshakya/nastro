@@ -44,6 +44,7 @@
   --font-mono: "Geist Mono Variable", monospace;
 
   /* notion */
+  --notion-max-width: 100%;
 
   --notion-custom-page-bg: oklch(1 0 0);
   --notion-custom-text: oklch(0.145 0 0);
@@ -318,30 +319,6 @@ body,
     color: var(--foreground);
     font-family: var(--font-sans);
   }
-
-  /* .notion-header {
-    @apply bg-(--notion-header-bg) text-(--notion-header-text-color);
-
-    .notion-header-btn {
-      @apply bg--(--notion-header-btn-bg) text-(--notion-header-btn-color);
-    }
-  }
-
-  .notion-sidebar {
-    @apply bg-(--notion-sidebar-bg) text-(--notion-sidebar-text-color);
-
-    .notion-sidebar-btn {
-      @apply bg--(--notion-sidebar-btn-bg) text-(--notion-sidebar-btn-color);
-    }
-  }
-
-  .notion-footer {
-    @apply bg-(--notion-footer-bg) text-(--notion-footer-text-color);
-
-    .notion-footer-btn {
-      @apply bg--(--notion-footer-btn-bg) text-(--notion-footer-btn-color);
-    }
-  } */
 }
 
 @layer base {

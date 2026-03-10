@@ -1,18 +1,18 @@
 import { NotionRenderer } from "#/components/notion/notion-renderer";
 import { getRouteApi } from "@tanstack/react-router";
 import "@/styles/notion.css";
+import type { NotionPageSettings } from "#/types/customization";
 
 const liveSiteRoute = getRouteApi("/$siteId");
 export const LiveSite = () => {
-  const { page, site, seo } = liveSiteRoute.useLoaderData();
+  const { page, site } = liveSiteRoute.useLoaderData();
   return (
     <main>
       <NotionRenderer
-        pageId={site.pageId as string}
+        pageId={site.pageId ?? ""}
         siteId={site.id}
         recordMap={page}
-        header={site.siteSetting?.layout?.header}
-        footer={site.siteSetting?.layout?.footer}
+        settings={site.siteSetting as NotionPageSettings}
       />
     </main>
   );
