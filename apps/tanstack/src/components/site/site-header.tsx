@@ -1,24 +1,81 @@
-
 import type { ExtendedRecordMap } from "notion-types";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
+import type { LayoutHeaderUI } from "#/types/customization";
+import { Button } from "../ui/button";
+import { Link } from "@tanstack/react-router";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { IconChevronDown } from "@tabler/icons-react";
 
-export const SiteHeader = () => {
-  const { settings } = useNotionSettingsStore((s) => s);
-
+export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
   return (
-    <header className="">
-      <div className="flex gap-1 items-center p-2">
-        <Avatar className={"size-5"}>
-          <AvatarImage
-            className={"rounded-sm"}
-            src={settings?.seo?.pageIcon || ""}
-          />
-          <AvatarFallback />
-        </Avatar>
+    <header className="notion-header">
+      <div className="flex items-center justify-between gap-1">
+        <div className="flex gap-1 items-center p-2">
+          <Avatar className={"size-5"}>
+            <AvatarImage className={"rounded-sm"} src={header?.logo || ""} />
+            <AvatarFallback />
+          </Avatar>
 
-        <p className="">{settings?.seo?.pageTitle || "Header"}</p>
+          <p className="">{header?.text || "Header"}</p>
+        </div>
+
+        <div className="p-2 flex items-center gap-1.5">
+          {header?.list &&
+            header.list?.length > 0 &&
+            header.list.map((l) => {
+              return (
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        variant={"link"}
+                        className={"notion-header-btn"}
+                        size={"sm"}
+                      >
+                        {l?.text}
+                        <IconChevronDown stroke={1} />
+                      </Button>
+                    }
+                  />
+                  <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                      {l?.links &&
+                        l.links.length > 0 &&
+                        l.links.map((link) => {
+                          return (
+                            <DropdownMenuItem>{link.text}</DropdownMenuItem>
+                          );
+                        })}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              );
+            })}
+
+          {header?.links &&
+            header.links?.length > 0 &&
+            header.links.map((l) => {
+              return (
+                <Link target="_blank" to={l?.url}>
+                  <Button
+                    variant={l.variant}
+                    className={"notion-header-btn"}
+                    size={"sm"}
+                  >
+                    {l?.text}
+                  </Button>
+                </Link>
+              );
+            })}
+        </div>
       </div>
     </header>
   );

@@ -54,7 +54,6 @@ export function TabTheme({ sections }: TabThemeProps) {
         },
       },
     });
-
   };
 
   const getValue = (field: ThemeSectionField, section: ThemeSection) => {

@@ -53,17 +53,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("query", getSiteQuerySchema),
     async (c) => {
       const { id } = c.req.valid("param");
-      const { pageId, fresh } = c.req.valid("query");
-      const result = await Effect.runPromise(
-        withCache({
-          execute: getSiteById(id, pageId),
-          key: KeyManager.getSiteById(id, pageId),
-          forceFresh: fresh,
-          ttl: 60 * 60,
-        }),
-      );
-
-      
+      const { pageId } = c.req.valid("query");
+      const result = await Effect.runPromise(getSiteById(id, pageId));
 
       return c.json(
         ApiResponse({
@@ -76,7 +67,12 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   .use(authMiddleWare())
   .get("/", async (c) => {
     const userId = c.get("user")?.id;
-    const sites = await Effect.runPromise(getSitesByUser(userId as string));
+    const sites = await Effect.runPromise(
+      withCache({
+        execute: getSitesByUser(userId as string),
+        key: KeyManager.getUserSites(userId as string),
+      }),
+    );
 
     return c.json(
       ApiResponse({
@@ -96,6 +92,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
         siteSetting: input.siteSetting as SiteSetting | undefined,
       }),
     );
+    await KeyManager.delete.getUserSites(userId as string);
 
     return c.json(
       ApiResponse({
@@ -109,9 +106,11 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("param", siteParamsSchema),
     zValidator("json", updateSiteSchema),
     async (c) => {
+      const userId = c.get("user")?.id;
       const { id } = c.req.valid("param");
       const input = c.req.valid("json") as UpdateSiteInput;
       const site = await Effect.runPromise(updateSite(id, input));
+      await KeyManager.delete.getUserSites(userId as string);
 
       return c.json(
         ApiResponse({
@@ -126,9 +125,11 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("param", siteParamsSchema),
     zValidator("query", z.object({ pageId: z.string() })),
     async (c) => {
+      const userId = c.get("user")?.id;
       const { id } = c.req.valid("param");
       const { pageId } = c.req.valid("query");
       await Effect.runPromise(deleteSite(id, pageId));
+      await KeyManager.delete.getUserSites(userId as string);
 
       return c.json(
         ApiResponse({

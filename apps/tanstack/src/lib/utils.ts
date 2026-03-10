@@ -1,3 +1,4 @@
+import { computeCustomStyles } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/customization";
 import type { Site, SiteSetting } from "#/types/site";
 import type { ClassValue } from "clsx";
@@ -78,4 +79,35 @@ export function getNotionPageIcon(page: ExtendedRecordMap, pageId: string) {
   }
 
   return icon;
+}
+
+export function covertPageSettingsIntoStyles(
+  settings: NotionPageSettings | null,
+) {
+  if (!settings) return;
+  const styles = computeCustomStyles(settings);
+  const css = Object.entries(styles)
+    .filter(([_, v]) => !!v)
+    .map(([k, v]) => `${k}:${v};`)
+    .join("\n");
+
+  return `
+  :root {${css}}
+
+  .notion-page-icon-hero {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .notion-page-icon-hero.notion-page-icon-image {
+    width: 124px;
+    height: 124px;
+    margin-left: 16px;
+  }
+  
+  `;
 }

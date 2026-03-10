@@ -37,6 +37,7 @@ export function getFontUrl(font: GoogleFont, variant = "regular"): string {
 }
 
 const loadedFont = new Set();
+
 export async function loadFont(
   fontFamily: string,
   variant = "regular",
@@ -69,6 +70,13 @@ export async function loadFont(
 
     document.head.appendChild(link);
   });
+}
+
+export function getFontLink(fontFamily?: string, variant = "regular") {
+  if (!fontFamily) return;
+  const href = getFontUrl({ family: fontFamily } as GoogleFont, variant);
+  const rel = "stylesheet";
+  return { href, rel };
 }
 
 export interface FontPickerProps {

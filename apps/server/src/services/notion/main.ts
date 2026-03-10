@@ -79,7 +79,7 @@ export const getUserNotionPages = (userId: string) => {
     const notionPages = yield* withCache({
       execute: notion.getPages(),
       key: KeyManager.getUserNotionPages(userId),
-      ttl: 60,
+      ttl: 120,
     });
     return notionPages;
   }).pipe(

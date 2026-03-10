@@ -14,21 +14,26 @@ import {
 import type { SiteSetting } from "#/types/site";
 import { SiteHeader } from "../site/site-header";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type { NotionPageSettings } from "#/types/customization";
+import type {
+  LayoutFooterUI,
+  LayoutHeaderUI,
+  NotionPageSettings,
+} from "#/types/customization";
 import { SiteFooter } from "../site/site-footer";
 
 interface NotionRendererProps {
   pageId: string;
   recordMap: any;
   siteId: string;
-  seo?: NotionPageSettings["seo"];
 }
 
 export function NotionRenderer({
   pageId,
   recordMap,
   siteId,
-}: NotionRendererProps) {
+  header,
+  footer,
+}: NotionRendererProps & { header?: LayoutHeaderUI; footer?: LayoutFooterUI }) {
   const { styles } = useNotionSettingsStore((s) => s);
   const pathname = useLocation({ select: ({ pathname }) => pathname });
 
@@ -74,8 +79,8 @@ export function NotionRenderer({
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
-        footer={<SiteFooter />}
-        header={<SiteHeader />}
+        footer={<SiteFooter footer={footer} />}
+        header={<SiteHeader header={header} />}
         disableHeader
       />
     </div>

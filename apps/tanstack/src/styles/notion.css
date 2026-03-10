@@ -243,3 +243,34 @@
   height: 124px;
   margin-left: 16px;
 }
+
+.notion-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  width: var(--notion-header-width);
+  /* max-width: 100vw; */
+  overflow: hidden;
+  height: var(--notion-header-height);
+  min-height: var(--notion-header-height);
+  background: var(--notion-header-bg);
+  color: var(--notion-header-text-color);
+  margin-inline: auto;
+}
+
+.notion-footer {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  width: var(--notion-footer-width);
+  /* max-width: 100vw; */
+  overflow: hidden;
+  height: var(--notion-footer-height);
+  min-height: var(--notion-footer-height);
+  background: var(--notion-footer-bg);
+  color: var(--notion-footer-text-color);
+}

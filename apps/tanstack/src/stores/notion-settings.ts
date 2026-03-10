@@ -14,7 +14,6 @@ interface NotionSettingsStore {
 export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
   settings: {
     typography: {
-      fonts: { primary: "Geist Sans", secondary: "Geist Sans" },
       sizes: {
         pageTitle: Math.floor(2.6 * 16),
         heading1: Math.floor(1.8 * 16),
@@ -27,10 +26,7 @@ export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
   updateSettings(settings) {
     set({ settings, styles: computeCustomStyles(settings) });
   },
-  styles: {
-    "--notion-primary-font": "Geist Sans",
-    "--notion-secondary-font": "Geist Sans",
-  },
+  styles: {},
 }));
 
 export const computeCustomStyles = (
@@ -40,8 +36,9 @@ export const computeCustomStyles = (
 
   const theme = computeTheme(settings?.theme);
   const typography = computeTypography(settings?.typography);
+  const layout = computeLayout(settings?.layout);
 
-  return { ...styles, ...theme, ...typography };
+  return { ...styles, ...theme, ...typography, ...layout };
 };
 
 export const computeTheme = (
@@ -58,16 +55,13 @@ export const computeTheme = (
   }
 
   if (customization.header) {
-    styles["--notion-custom-navbar-text"] = customization.header.textColor;
-    styles["--notion-custom-navbar-bg"] = customization.header.background;
-    styles["--notion-custom-navbar-btn-text"] = customization.header.buttonText;
-    styles["--notion-custom-navbar-btn-bg"] =
-      customization.header.buttonBackground;
+    styles["--notion-header-bg"] = customization.header.background;
+    styles["--notion-header-text-color"] = customization.header.textColor;
   }
 
   if (customization.footer) {
-    styles["--notion-custom-footer-text"] = customization.footer.textColor;
-    styles["--notion-custom-footer-bg"] = customization.footer.background;
+    styles["--notion-footer-bg"] = customization.footer.background;
+    styles["--notion-footer-text-color"] = customization.footer.textColor;
   }
 
   if (customization.notion) {
@@ -150,6 +144,27 @@ export const computeTypography = (
   if (typography.fonts) {
     styles["--notion-primary-font"] = typography.fonts?.primary;
     styles["--notion-secondary-font"] = typography.fonts?.secondary;
+  }
+
+  return styles;
+};
+
+export const computeLayout = (layout: NotionPageSettings["layout"]) => {
+  const styles: CustomStyles = {};
+
+  if (layout?.header) {
+    styles["--notion-header-height"] = layout.header.height + "px";
+    styles["--notion-header-width"] = (layout.header?.width || 100) + "%";
+  }
+
+  if (layout?.footer) {
+    styles["--notion-footer-height"] = layout.footer.height + "px";
+    styles["--notion-footer-width"] = (layout.footer?.width || 100) + "%";
+  }
+
+  if (layout?.sidebar) {
+    styles["--notion-sidebar-height"] = layout.sidebar?.height + "px";
+    styles["--notion-sidebar-width"] = layout.sidebar?.width + "%";
   }
 
   return styles;

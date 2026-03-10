@@ -30,7 +30,13 @@ export const Route = createFileRoute("/site/$siteId")({
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
     const settings = site?.siteSetting;
-    useNotionSettingsStore.getState().updateSettings({ ...settings, seo });
+    useNotionSettingsStore.getState().updateSettings({
+      ...useNotionSettingsStore.getState().settings,
+      ...settings,
+      seo,
+      general: settings?.general || { siteName: site.siteName },
+    });
+
     if (settings?.typography?.fonts) {
       Promise.all([
         loadFont(settings?.typography?.fonts?.primary as string),

@@ -21,7 +21,7 @@ export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
 
   const _handleDelete = async (id: string, pageId: string) => {
     await handleDelete(id, pageId);
-    await router.invalidate({ sync: true });
+    // await router.invalidate({ sync: true });
   };
 
   return (

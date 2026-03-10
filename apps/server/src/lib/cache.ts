@@ -36,8 +36,6 @@ export const withCache = Effect.fn("withCache")(<T, E>({
             expirationTtl: ttl,
           }),
       );
-
-      
       return res;
     }
 
@@ -75,13 +73,19 @@ const deleteKeyFromCache = (key: string) =>
 export const KeyManager = {
   getUserNotionPages: (userId: string) => `notion:pages:${userId}`,
   getPageContent: (pageId: string) => `notion:page:content:${pageId}`,
-  getSiteById: (siteId: string, pageId: string) =>
-    `notion:site:${siteId}:${pageId}`,
+  getSiteById: (siteId: string) => `notion:site:${siteId}`,
+  getUserSites: (userId: string) => `notion:sites:${userId}`,
 
   delete: {
-    getSiteById: (siteId: string, pageId: string) =>
+    getSiteById: (siteId: string) =>
+      Effect.runPromise(deleteKeyFromCache(KeyManager.getSiteById(siteId))),
+    getPageContent: (pageId: string) =>
+      Effect.runPromise(deleteKeyFromCache(KeyManager.getPageContent(pageId))),
+    getUserNotionPages: (userId: string) =>
       Effect.runPromise(
-        deleteKeyFromCache(KeyManager.getSiteById(siteId, pageId)),
+        deleteKeyFromCache(KeyManager.getUserNotionPages(userId)),
       ),
+    getUserSites: (userId: string) =>
+      Effect.runPromise(deleteKeyFromCache(KeyManager.getUserSites(userId))),
   },
 };

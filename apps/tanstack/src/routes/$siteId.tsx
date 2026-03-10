@@ -1,10 +1,12 @@
 import { LiveSite } from "#/components/site/live";
 import { getSite } from "#/lib/site";
 import type { Site } from "#/types/site";
-import { ClientOnly, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import type { ExtendedRecordMap } from "notion-types";
 import z from "zod";
-import { getNotionPageSeo } from "#/lib/utils";
+import { covertPageSettingsIntoStyles, getNotionPageSeo } from "#/lib/utils";
+import { getFontLink, loadFont } from "#/lib/fonts";
+import type { NotionPageSettings } from "#/types/customization";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -22,7 +24,22 @@ export const Route = createFileRoute("/$siteId")({
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
-    return { site, page, seo };
+    const settings = { ...site.siteSetting } as NotionPageSettings;
+    const styles = covertPageSettingsIntoStyles(settings);
+    const fonts = {
+      primary: getFontLink(settings?.typography?.fonts?.primary),
+      secondary: getFontLink(settings?.typography?.fonts?.secondary),
+    };
+
+    return {
+      site,
+      page,
+      seo,
+      css: {
+        styles,
+        fonts,
+      },
+    };
   },
   component: RouteComponent,
   head: ({ loaderData }) => {
@@ -50,14 +67,26 @@ export const Route = createFileRoute("/$siteId")({
           content: loaderData?.seo?.ogImage,
         },
       ],
+      styles: [
+        {
+          type: "text/css",
+          children: loaderData?.css.styles,
+        },
+      ],
+      links: [
+        {
+          rel: loaderData?.css.fonts.primary?.rel,
+          href: loaderData?.css.fonts.primary?.href,
+        },
+        {
+          rel: loaderData?.css.fonts.secondary?.rel,
+          href: loaderData?.css.fonts.secondary?.href,
+        },
+      ],
     };
   },
 });
 
 function RouteComponent() {
-  return (
-    <ClientOnly fallback={null}>
-      <LiveSite />
-    </ClientOnly>
-  );
+  return <LiveSite />;
 }

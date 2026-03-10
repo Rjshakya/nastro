@@ -50,7 +50,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
       setOpen(false);
       setSiteName("");
       setSelectedPageId(null);
-      await router.invalidate({ sync: true });
+      // await router.invalidate({ sync: true });
     }
   };
 

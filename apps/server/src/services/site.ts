@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { NotionWebsiteService } from "./notion/website";
 import { getNotionRendererClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
-import { KeyManager } from "@/lib/cache";
+import { KeyManager, withCache } from "@/lib/cache";
 
 type Site = typeof sites.$inferSelect;
 
@@ -180,7 +180,11 @@ export const getSiteById = (siteId: string, pageId: string) => {
     Effect.tryPromise(async () => siteService.getSiteById(siteId));
 
   return Effect.gen(function* () {
-    const site = yield* getSite(siteId);
+    const site = yield* withCache({
+      execute: getSite(siteId),
+      key: KeyManager.getSiteById(siteId),
+      ttl: 60 * 60,
+    });
 
     if (!site) {
       return yield* Effect.fail(
@@ -194,7 +198,11 @@ export const getSiteById = (siteId: string, pageId: string) => {
 
     const notionApi = getNotionRendererClient(accessToken as string, accountId);
     const websiteService = new NotionWebsiteService(notionApi);
-    const page = yield* websiteService.getPage(pageId);
+    const page = yield* withCache({
+      execute: websiteService.getPage(pageId),
+      key: KeyManager.getPageContent(pageId),
+      ttl: 60 * 60,
+    });
     return { page, site };
   });
 };
@@ -224,7 +232,8 @@ export const updateSite = (siteId: string, input: UpdateSiteInput) =>
   Effect.tryPromise({
     try: async () => {
       const res = await siteService.updateSite(siteId, input);
-      KeyManager.delete.getSiteById(siteId, input.pageId);
+      KeyManager.delete.getSiteById(siteId);
+      KeyManager.delete.getPageContent(input.pageId);
       return res;
     },
     catch: (e): SiteError =>
@@ -240,7 +249,8 @@ export const deleteSite = (siteId: string, pageId: string) =>
   Effect.tryPromise({
     try: async () => {
       await siteService.deleteSite(siteId);
-      KeyManager.delete.getSiteById(siteId, pageId);
+      KeyManager.delete.getSiteById(siteId);
+      KeyManager.delete.getPageContent(pageId);
     },
     catch: (e): SiteError =>
       new SiteError({

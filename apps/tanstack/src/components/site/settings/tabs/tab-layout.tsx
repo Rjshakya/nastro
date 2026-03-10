@@ -20,6 +20,24 @@ import {
 } from "@/components/ui/popover";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "#/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuTrigger,
+} from "#/components/ui/dropdown-menu";
+import { SliderInput } from "#/components/ui/slider-input";
 
 interface LayoutField {
   key: string;
@@ -45,11 +63,22 @@ interface LayoutSection {
   fields: LayoutField[];
   links?: LayoutLinksItem;
   list?: LayoutListItem;
+  height?: { key: string; label: string };
+  width?: { key: string; label: string };
 }
 
 export interface TabLayoutProps {
   sections: LayoutSection[];
 }
+
+const btnVariants = [
+  { label: "Default", value: "default" },
+  { label: "Outline", value: "outline" },
+  { label: "Secondary", value: "secondary" },
+  { label: "Ghost", value: "ghost" },
+  { label: "Destructive", value: "destructive" },
+  { label: "Link", value: "link" },
+];
 
 function LinksComponent({
   label,
@@ -63,12 +92,27 @@ function LinksComponent({
   onChange: (links: HeaderLink[]) => void;
 }) {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [newLink, setNewLink] = useState({ text: "", url: "" });
+  const [newLink, setNewLink] = useState<{
+    text?: string;
+    url?: string;
+    variant?:
+      | "default"
+      | "outline"
+      | "secondary"
+      | "ghost"
+      | "destructive"
+      | "link"
+      | undefined;
+  }>({
+    text: "",
+    url: "",
+    variant: "link",
+  });
 
   const handleAdd = () => {
     if (newLink.text && newLink.url) {
       onChange([...value, newLink]);
-      setNewLink({ text: "", url: "" });
+      setNewLink({ text: "", url: "", variant: "link" });
       setPopoverOpen(false);
     }
   };
@@ -81,7 +125,8 @@ function LinksComponent({
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
         <Label className="text-xs text-muted-foreground">{label}</Label>
-        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+
+        <Popover modal={true} open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger
             render={
               <Button variant="outline" size="xs" className="">
@@ -90,20 +135,37 @@ function LinksComponent({
               </Button>
             }
           />
-          <PopoverContent side="left" className="">
+          <PopoverContent side="left" className="w-72 z-9">
             <div className="space-y-3">
-              {itemFields.map((field) => (
-                <div key={field.key} className="space-y-1">
-                  <Label>{field.label}</Label>
-                  <Input
-                    value={newLink[field.key as keyof typeof newLink]}
-                    onChange={(e) =>
-                      setNewLink({ ...newLink, [field.key]: e.target.value })
-                    }
-                    placeholder={field.label}
-                  />
-                </div>
-              ))}
+              {itemFields.map((field) => {
+                if (field.key === "variant") {
+                  return (
+                    <LinkVariantSelector
+                      items={btnVariants}
+                      value={newLink?.variant}
+                      onChange={(v) => {
+                        setNewLink({ ...newLink, variant: v as any });
+                      }}
+                    />
+                  );
+                }
+
+                return (
+                  <div key={field.key} className="space-y-1">
+                    <Label>{field.label}</Label>
+                    <Input
+                      value={newLink[field.key as keyof typeof newLink]}
+                      onChange={(e) =>
+                        setNewLink({
+                          ...newLink,
+                          [field.key]: e.target.value,
+                        })
+                      }
+                      placeholder={field.label}
+                    />
+                  </div>
+                );
+              })}
               <Button onClick={handleAdd} className="w-full">
                 Add
               </Button>
@@ -297,7 +359,6 @@ export function TabLayout({ sections }: TabLayoutProps) {
         },
       },
     });
-
   };
 
   const handleLinksChange = (
@@ -318,7 +379,28 @@ export function TabLayout({ sections }: TabLayoutProps) {
         },
       },
     });
+  };
 
+  const handleHeightChange = (sectionId: any, h?: number) => {
+    const sectionData = settings?.layout?.[sectionId as keyof LayoutSettingsUI];
+    updateSettings({
+      ...settings,
+      layout: {
+        ...settings?.layout,
+        [sectionId]: { ...sectionData, height: h },
+      },
+    });
+  };
+
+  const handleWidthChange = (sectionId: any, w?: number) => {
+    const sectionData = settings.layout?.[sectionId as keyof LayoutSettingsUI];
+    updateSettings({
+      ...settings,
+      layout: {
+        ...settings?.layout,
+        [sectionId]: { ...sectionData, width: w },
+      },
+    });
   };
 
   // const handleListTextChange = (
@@ -435,10 +517,67 @@ export function TabLayout({ sections }: TabLayoutProps) {
                   }
                 />
               )}
+
+              {section?.height && (
+                <SliderInput
+                  label={section.height.label}
+                  value={sectionData[section.height.key] || 45}
+                  onChange={(v) => handleHeightChange(section.id, v)}
+                  max={100}
+                  min={0}
+                />
+              )}
+
+              {section.width && (
+                <SliderInput
+                  label={section.width.label}
+                  value={sectionData[section.width.key] || 100}
+                  onChange={(v) => handleWidthChange(section.id, v)}
+                  max={100}
+                  min={0}
+                />
+              )}
             </CollapsibleContent>
           </Collapsible>
         );
       })}
     </div>
+  );
+}
+
+function LinkVariantSelector({
+  value,
+  onChange,
+  items,
+}: {
+  value?: string;
+  onChange?: (value: string) => void;
+  items?: {
+    label: string;
+    value: string;
+  }[];
+}) {
+  return (
+    <Select
+      value={value}
+      onValueChange={(v) => onChange?.(v || "link")}
+      items={items}
+    >
+      <SelectTrigger className="w-full max-w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className={"z-99999"}>
+        <SelectGroup>
+          <SelectLabel>Fruits</SelectLabel>
+          {items &&
+            items?.length > 0 &&
+            items.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }

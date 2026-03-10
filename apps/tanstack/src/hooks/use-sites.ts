@@ -3,9 +3,15 @@ import useSWR, { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 
 import type { Site } from "@/types/site";
-import { getSites, createSite, getSite, updateSite, deleteSite } from "#/lib/site";
-
-
+import {
+  getSites,
+  createSite,
+  getSite,
+  updateSite,
+  deleteSite,
+  type CreateSiteInput,
+} from "#/lib/site";
+import { useRouter } from "@tanstack/react-router";
 
 export const useSites = () => {
   const fetcher = () => getSites();
@@ -20,8 +26,8 @@ export const useSites = () => {
   };
 };
 
-export const useSite = (siteId: string, pageId: string , fresh?:boolean) => {
-  const fetcher = () => getSite({pageId , siteId , fresh});
+export const useSite = (siteId: string, pageId: string, fresh?: boolean) => {
+  const fetcher = () => getSite({ pageId, siteId, fresh });
 
   const swr = useSWR(siteId ? `/sites/${pageId}` : null, fetcher);
 
@@ -34,9 +40,14 @@ export const useSite = (siteId: string, pageId: string , fresh?:boolean) => {
 };
 
 export const useCreateSite = () => {
+  const router = useRouter();
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/sites",
-    createSite,
+    async (_key: string, { arg }: { arg: CreateSiteInput }) => {
+      const site = await createSite(_key, { arg });
+      router.invalidate({ sync: true });
+      return site;
+    },
   );
 
   return {
@@ -62,9 +73,16 @@ export const useUpdateSite = () => {
 };
 
 export const useDeleteSite = () => {
+  const router = useRouter();
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/sites",
-    deleteSite,
+    async (
+      _key: string,
+      { arg }: { arg: { siteId: string; pageId: string } },
+    ) => {
+      await deleteSite(_key, { arg });
+      await router.invalidate({ sync: true });
+    },
   );
 
   return {
@@ -74,5 +92,3 @@ export const useDeleteSite = () => {
     reset,
   };
 };
-
-

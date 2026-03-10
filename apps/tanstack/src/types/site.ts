@@ -30,3 +30,5 @@ export interface Site {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Header {}

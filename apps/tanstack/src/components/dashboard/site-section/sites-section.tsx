@@ -28,8 +28,8 @@ export const DashboardSitesSection = () => {
             <SiteCard
               key={site.id}
               site={site as Site}
-              handleDelete={(id) => {
-                deleteSite({ siteId: id, pageId: "" });
+              handleDelete={async (id) => {
+                await deleteSite({ siteId: id, pageId: "" });
               }}
               isDeleting={isDeleting}
             />

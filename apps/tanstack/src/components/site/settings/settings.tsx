@@ -161,6 +161,7 @@ const layoutSections: TabLayoutProps["sections"] = [
       itemFields: [
         { key: "text", label: "Link Text", type: "text" },
         { key: "url", label: "URL", type: "text" },
+        { key: "variant", label: "Variant", type: "text" },
       ],
     },
     list: {
@@ -170,6 +171,14 @@ const layoutSections: TabLayoutProps["sections"] = [
         { key: "text", label: "List Text", type: "text" },
         { key: "links", label: "List Links", type: "links" },
       ],
+    },
+    height: {
+      key: "height",
+      label: "Height",
+    },
+    width: {
+      key: "width",
+      label: "Width",
     },
   },
   {
@@ -235,7 +244,10 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50">
+      <SheetContent
+        overlayClassName="supports-backdrop-filter:backdrop-blur-none  "
+        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50 "
+      >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
           <SheetDescription>
@@ -262,6 +274,8 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
                 <TabTypo sections={typoSections} />
               ) : key === "layout" ? (
                 <TabLayout sections={layoutSections} />
+              ) : key === "seo" ? (
+                <TabsContent value={"seo"}>seo</TabsContent>
               ) : null}
             </TabsContent>
           ))}

@@ -93,16 +93,6 @@ export interface CustomStyles {
   "--notion-custom-border"?: string;
   "--custom-notion-select-color-0"?: string;
 
-  // navbar
-  "--notion-custom-navbar-text"?: string;
-  "--notion-custom-navbar-bg"?: string;
-  "--notion-custom-navbar-btn-text"?: string;
-  "--notion-custom-navbar-btn-bg"?: string;
-
-  // footer
-  "--notion-custom-footer-text"?: string;
-  "--notion-custom-footer-bg"?: string;
-
   // notion colors (text)
   "--notion-gray"?: string;
   "--notion-brown"?: string;
@@ -150,6 +140,33 @@ export interface CustomStyles {
 
   "--notion-primary-font"?: string;
   "--notion-secondary-font"?: string;
+
+  // header
+
+  "--notion-header-bg"?: string;
+  "--notion-header-text-color"?: string;
+  "--notion-header-btn-bg"?: string;
+  "--notion-header-btn-color"?: string;
+  "--notion-header-height"?: string;
+  "--notion-header-width"?: string;
+
+  // sidebar
+
+  "--notion-sidebar-bg"?: string;
+  "--notion-sidebar-text-color"?: string;
+  "--notion-sidebar-btn-bg"?: string;
+  "--notion-sidebar-btn-color"?: string;
+  "--notion-sidebar-height"?: string;
+  "--notion-sidebar-width"?: string;
+
+  // footer
+
+  "--notion-footer-bg"?: string;
+  "--notion-footer-text-color"?: string;
+  "--notion-footer-btn-bg"?: string;
+  "--notion-footer-btn-color"?: string;
+  "--notion-footer-height"?: string;
+  "--notion-footer-width"?: string;
 }
 
 // Site Settings
@@ -240,7 +257,17 @@ export interface TypoSettingsUI {
   fonts?: TypoFontsUI;
 }
 
-export type HeaderLink = { text?: string; url?: string };
+export type HeaderLink = {
+  text?: string;
+  url?: string;
+  variant?:
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "destructive"
+    | "link";
+};
 export type LayoutHeaderUI = {
   text?: string;
   logo?: string;
@@ -249,12 +276,16 @@ export type LayoutHeaderUI = {
     text?: string;
     links?: HeaderLink[];
   }[];
+  height?: number;
+  width?: number;
 };
 
 export type LayoutFooterUI = {
   text?: string;
   logo?: string;
   links?: HeaderLink[];
+  height?: number;
+  width?: number;
 };
 export interface LayoutSettingsUI {
   header?: LayoutHeaderUI;
@@ -268,7 +299,7 @@ export interface SEO {
   ogImage?: string;
   pageUrl?: string;
   pageTitle?: string;
-  pageIcon?:string;
+  pageIcon?: string;
 }
 
 export interface NotionPageSettings {

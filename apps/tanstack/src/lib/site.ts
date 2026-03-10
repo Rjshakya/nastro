@@ -87,6 +87,7 @@ export const deleteSite = async (
   if (!res.ok) {
     throw new Error("Failed to delete site");
   }
+  
 
   return res.json();
 };
