@@ -2,6 +2,8 @@ import { client } from "./api-client";
 
 import type { Site, SiteSetting } from "@/types/site";
 import type { NotionPageSettings } from "#/types/customization";
+import type { ExtendedRecordMap } from "notion-types";
+import { Env } from "env";
 
 export interface CreateSiteInput {
   pageId: string;
@@ -32,6 +34,17 @@ export const getSite = async ({
   pageId: string;
   fresh?: boolean;
 }) => {
+  // const url = client.api.sites[":id"].$url({
+  //   param: { id: siteId },
+  //   query: { pageId, fresh },
+  // });
+
+  // const url = new URL(Env.apiUrl + `/api/sites/${siteId}`);
+  // url.searchParams.set("pageId", pageId);
+  // url.searchParams.set("fresh", `${fresh}`);
+
+  // const res = await fetch(url, { credentials: "include" });
+
   const res = await client.api.sites[":id"].$get({
     param: { id: siteId },
     query: { pageId, fresh },
@@ -39,7 +52,9 @@ export const getSite = async ({
   if (!res.ok) {
     throw new Error("Failed to fetch site");
   }
-  return await res.json();
+  return (await res.json()) as {
+    data: { site: Site; page: ExtendedRecordMap };
+  };
 };
 
 export const createSite = async (
@@ -51,6 +66,8 @@ export const createSite = async (
     json: { pageId, siteName, siteSetting: siteSetting as any },
   });
   if (!res.ok) {
+    const error = await res.json();
+    console.log(error);
     throw new Error("Failed to create site");
   }
 
@@ -87,7 +104,6 @@ export const deleteSite = async (
   if (!res.ok) {
     throw new Error("Failed to delete site");
   }
-  
 
   return res.json();
 };

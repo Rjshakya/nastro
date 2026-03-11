@@ -1,11 +1,12 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ThemeProvider } from "@/components/theme-provider";
+import { getThemeServerFn } from "@/lib/theme";
 
 import appCss from "../styles/global.css?url";
-import rcp from  "react-color-palette/css?url";
+import rcp from "react-color-palette/css?url";
 import { Link } from "@tanstack/react-router";
-// const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`;
 
 export const Route = createRootRoute({
   head: () => ({
@@ -27,11 +28,12 @@ export const Route = createRootRoute({
         href: appCss,
       },
       {
-        rel:"stylesheet",
-        href:rcp
-      }
+        rel: "stylesheet",
+        href: rcp,
+      },
     ],
   }),
+  loader: () => getThemeServerFn(),
   shellComponent: RootDocument,
   notFoundComponent(props) {
     return (
@@ -44,13 +46,14 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const theme = Route.useLoaderData();
   return (
-    <html className="" lang="en" suppressHydrationWarning>
+    <html className={theme} lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere">
-        {children}
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
         <TanStackDevtools
           config={{
             position: "bottom-right",

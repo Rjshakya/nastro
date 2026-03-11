@@ -94,15 +94,26 @@ export interface CustomStyles {
   "--custom-notion-select-color-0"?: string;
 
   // notion colors (text)
-  "--notion-gray"?: string;
-  "--notion-brown"?: string;
-  "--notion-orange"?: string;
-  "--notion-yellow"?: string;
-  "--notion-teal"?: string;
-  "--notion-blue"?: string;
-  "--notion-purple"?: string;
-  "--notion-pink"?: string;
-  "--notion-red"?: string;
+  "--custom-notion-gray"?: string;
+  "--custom-notion-brown"?: string;
+  "--custom-notion-orange"?: string;
+  "--custom-notion-yellow"?: string;
+  "--custom-notion-teal"?: string;
+  "--custom-notion-blue"?: string;
+  "--custom-notion-purple"?: string;
+  "--custom-notion-pink"?: string;
+  "--custom-notion-red"?: string;
+
+  // notion background colors
+  "--custom-notion-gray_background"?: string;
+  "--custom-notion-brown_background"?: string;
+  "--custom-notion-orange_background"?: string;
+  "--custom-notion-yellow_background"?: string;
+  "--custom-notion-teal_background"?: string;
+  "--custom-notion-blue_background"?: string;
+  "--custom-notion-purple_background"?: string;
+  "--custom-notion-pink_background"?: string;
+  "--custom-notion-red_background"?: string;
 
   // card
   "--notion-collection-card"?: string;
@@ -206,6 +217,18 @@ export type ThemeSettingsNotionSection = {
   red?: string;
 };
 
+export type ThemeSettingsNotionBackgroundSection = {
+  gray?: string;
+  brown?: string;
+  orange?: string;
+  yellow?: string;
+  teal?: string;
+  blue?: string;
+  purple?: string;
+  pink?: string;
+  red?: string;
+};
+
 export type ThemeSettingsCardSection = {
   cardBackground?: string;
   cardHover?: string;
@@ -237,6 +260,7 @@ export interface ThemeSettingsUI {
   header?: ThemeSettingsHeaderSection;
   footer?: ThemeSettingsFooterSection;
   notion?: ThemeSettingsNotionSection;
+  notionBackground?: ThemeSettingsNotionBackgroundSection;
   card?: ThemeSettingsCardSection;
   buttons?: ThemeSettingsButtonsSection;
   defaultButton?: ThemeSettingsDefaultButtonSection;
@@ -308,7 +332,6 @@ export interface SEO {
   description?: string;
   ogImage?: string;
   pageUrl?: string;
-  pageTitle?: string;
   pageIcon?: string;
 }
 

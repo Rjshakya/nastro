@@ -7,6 +7,7 @@ import z from "zod";
 import { covertPageSettingsIntoStyles, getNotionPageSeo } from "#/lib/utils";
 import { getFontLink, loadFont } from "#/lib/fonts";
 import type { NotionPageSettings } from "#/types/customization";
+import { createServerFn } from "@tanstack/react-start";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/$siteId")({
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
-    const settings = { ...site.siteSetting } as NotionPageSettings;
+    const settings = { ...site?.siteSetting } as NotionPageSettings;
     const styles = covertPageSettingsIntoStyles(settings);
     const fonts = {
       primary: getFontLink(settings?.typography?.fonts?.primary),
@@ -85,6 +86,7 @@ export const Route = createFileRoute("/$siteId")({
       ],
     };
   },
+  ssr: false,
 });
 
 function RouteComponent() {

@@ -159,10 +159,12 @@
   transition: all 300ms ease-in-out;
   border-color: var(--notion-default-btn-border);
 }
+
 .notion-button.notion-default:hover {
   background-color: var(--notion-default-btn-hover);
   filter: brightness(0.8);
 }
+
 .notion-button.notion-default:active {
   transform: scale(0.98);
 }
@@ -275,8 +277,3 @@
   color: var(--notion-footer-text-color);
   margin-inline: auto;
 }
-
-
-/* .notion-page{
-  height: 100dvh;
-} */

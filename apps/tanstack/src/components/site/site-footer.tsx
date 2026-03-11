@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 
 export const SiteFooter = ({ footer }: { footer?: LayoutFooterUI }) => {
   return (
-    <footer className="w-full notion-footer p-4 ">
+    <footer className="w-full bottom-0 notion-footer p-4 ">
       <div className=" max-w-4xl mx-auto grid gap-4">
         <div className="w-full flex items-center justify-center">
           {footer?.links &&

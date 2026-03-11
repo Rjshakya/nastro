@@ -13,7 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useCreateSite } from "@/hooks/use-sites";
+import { useCreateSite } from "#/components/hooks/use-sites";
 import type { Site } from "@/types/site";
 import { useRouter } from "@tanstack/react-router";
 import { dashboardHomeApi } from "../home";

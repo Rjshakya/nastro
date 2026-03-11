@@ -1,12 +1,13 @@
+import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
 import { IconArrowLeft, IconSettings } from "@tabler/icons-react";
 import { useRouter } from "@tanstack/react-router";
+import { ThemeToggle } from "../ThemeToggle";
 
 export function SiteEditorHeader() {
-  const { togglePanel } = useNotionCustomizationStore((s) => s);
+  const { togglePanel } = useNotionSettingsStore((s) => s);
   const router = useRouter();
 
   const handleBack = () => {
@@ -22,6 +23,7 @@ export function SiteEditorHeader() {
         <Button size={"icon-xs"} variant={"secondary"} onClick={handleBack}>
           <IconArrowLeft />
         </Button>
+        <ThemeToggle/>
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"

@@ -137,7 +137,7 @@ function LinksComponent({
           />
           <PopoverContent side="left" className="w-72 z-9">
             <div className="space-y-3">
-              {itemFields.map((field , i) => {
+              {itemFields.map((field, i) => {
                 if (field.key === "variant") {
                   return (
                     <LinkVariantSelector
@@ -286,7 +286,7 @@ function ListComponent({
   }, [layout, listText]);
 
   return (
-    <div className="space-y-3 rounded-md border-4 border-dashed p-2">
+    <div className="space-y-3  rounded-md border-muted-foreground border-2 border-dashed p-4">
       <div className="space-y-1">
         <Label className="text-xs text-muted-foreground">{label}</Label>
         {currentListData &&
@@ -322,8 +322,14 @@ function ListComponent({
         }}
       />
 
-      <div>
-        <Button onClick={() => handleAddList(listLinks)}>Add List</Button>
+      <div className="w-full ">
+        <Button
+          className={"w-full"}
+          size={"sm"}
+          onClick={() => handleAddList(listLinks)}
+        >
+          Add List
+        </Button>
       </div>
     </div>
   );
@@ -403,52 +409,6 @@ export function TabLayout({ sections }: TabLayoutProps) {
       },
     });
   };
-
-  // const handleListTextChange = (
-  //   sectionId: keyof LayoutSettingsUI,
-  //   text: string,
-  // ) => {
-  //   const currentLayoutSettings = settings?.layout;
-  //   const currentSection = currentLayoutSettings?.[sectionId] as
-  //     | Record<string, unknown>
-  //     | undefined;
-  //   const currentList = (currentSection?.list as { text?: string }) || {};
-  //   updateSettings({
-  //     ...settings,
-  //     layout: {
-  //       ...layoutSettings,
-  //       [sectionId]: {
-  //         ...currentSection,
-  //         list: [...(currentSection?.list as []), { text }],
-  //       },
-  //     },
-  //   });
-
-  //   // updateSettings({ layout: { header: { list: [{ text }] } } });
-  // };
-
-  // const handleListLinksChange = (
-  //   sectionId: keyof LayoutSettingsUI,
-  //   links: HeaderLink[],
-  // ) => {
-  //   const currentLayoutSettings = settings?.layout;
-  //   const currentSection = currentLayoutSettings?.[sectionId] as
-  //     | Record<string, unknown>
-  //     | undefined;
-  //   const currentList =
-  //     (currentSection?.list as { links?: HeaderLink[] }) || {};
-
-  //   updateSettings({
-  //     ...settings,
-  //     layout: {
-  //       ...currentLayoutSettings,
-  //       [sectionId]: {
-  //         ...currentSection,
-  //         list: { ...currentList, links },
-  //       },
-  //     },
-  //   });
-  // };
 
   return (
     <div className="space-y-4">

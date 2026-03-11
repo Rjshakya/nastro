@@ -17,7 +17,8 @@ import { TabGeneral, type TabGeneralProps } from "./tabs/tab-general";
 import { TabTheme, type TabThemeProps } from "./tabs/tab-theme";
 import { TabTypo, type TabTypoProps } from "./tabs/tab-typo";
 import { TabLayout, type TabLayoutProps } from "./tabs/tab-layout";
-import { useUpdateSite } from "#/hooks/use-sites";
+import { TabSeo, type TabSeoProps } from "./tabs/tab-seo";
+import { useUpdateSite } from "#/components/hooks/use-sites";
 import { useParams, useSearch } from "@tanstack/react-router";
 
 interface SettingsV2Props {
@@ -113,6 +114,21 @@ const themeSections: TabThemeProps["sections"] = [
     ],
   },
   {
+    id: "notionBackground",
+    label: "Notion Background",
+    fields: [
+      { key: "gray", label: "Gray Background" },
+      { key: "brown", label: "Brown Background" },
+      { key: "orange", label: "Orange Background" },
+      { key: "yellow", label: "Yellow Background" },
+      { key: "teal", label: "Teal Background" },
+      { key: "blue", label: "Blue Background" },
+      { key: "purple", label: "Purple Background" },
+      { key: "pink", label: "Pink Background" },
+      { key: "red", label: "Red Background" },
+    ],
+  },
+  {
     id: "defaultButton",
     label: "Default Button",
     fields: [
@@ -152,7 +168,13 @@ const typoSections: TabTypoProps["sections"] = [
   },
 ];
 
-const SeoSections = [];
+const seoSections: TabSeoProps = {
+  title: { label: "Page Title", type: "text" },
+  description: { label: "Description", type: "text" },
+  ogImage: { label: "OG Image URL", type: "text" },
+  pageUrl: { label: "Page URL", type: "text" },
+  pageIcon: { label: "Page Icon URL", type: "text" },
+};
 
 const layoutSections: TabLayoutProps["sections"] = [
   {
@@ -284,7 +306,7 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
               ) : key === "layout" ? (
                 <TabLayout sections={layoutSections} />
               ) : key === "seo" ? (
-                <div>seo</div>
+                <TabSeo tabProps={seoSections} />
               ) : null}
             </TabsContent>
           ))}

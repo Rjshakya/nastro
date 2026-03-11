@@ -20,8 +20,12 @@
   ],
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1,
-    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    // "head_sampling_rate": 1,
+    "logs": { 
+      "enabled": true, 
+      // "head_sampling_rate": 1 
+    },
+
   },
   "dev": {
     "port": 8000,

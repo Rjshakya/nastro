@@ -51,8 +51,7 @@ export function getNotionPageSeo({
     title: seo?.title || pageTitle || "",
     description: seo?.description || site.siteName,
     ogImage: seo?.ogImage || ogImgUrl,
-    pageUrl: `${Env.clientUrl}/${site.id}?pageId=${pageId}`,
-    pageTitle: seo?.pageTitle || pageTitle || "",
+    pageUrl: seo?.pageUrl || `${Env.clientUrl}/${site.id}?pageId=${pageId}`,
     pageIcon: seo?.pageIcon || pageIcon || "",
   } satisfies NotionPageSettings["seo"];
 }
@@ -85,7 +84,10 @@ export function covertPageSettingsIntoStyles(
   settings: NotionPageSettings | null,
 ) {
   if (!settings) return;
+
+  // get styles from settings
   const styles = computeCustomStyles(settings);
+
   const css = Object.entries(styles)
     .filter(([_, v]) => !!v)
     .map(([k, v]) => `${k}:${v};`)

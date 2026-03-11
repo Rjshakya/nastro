@@ -3,3 +3,5 @@ export const Env = {
   clientUrl: import.meta.env.VITE_PUBLIC_CLIENT_URL as string,
   googleFontApiKey: import.meta.env.VITE_PUBLIC_GOOGLE_FONTS_API_KEY as string,
 };
+
+// export const Env = serverEnv;

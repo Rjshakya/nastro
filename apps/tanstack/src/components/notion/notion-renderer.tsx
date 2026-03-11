@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Code } from "react-notion-x/build/third-party/code";
 import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
-import { useNotionCustomizationStore } from "@/stores/notion-customization-store";
 import { type CSSProperties } from "react";
 import {
   getRouteApi,
@@ -60,6 +59,7 @@ export function NotionRenderer({
       className="notion-renderer tracking-tighter relative"
     >
       <NotionRendererLib
+        className=""
         fullPage={true}
         recordMap={recordMap}
         rootPageId={pageId}
@@ -78,11 +78,11 @@ export function NotionRenderer({
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
-        footer={
-          settings?.general?.footer && (
-            <SiteFooter footer={settings?.layout?.footer} />
-          )
-        }
+        // footer={
+        //   settings?.general?.footer && (
+        //     <SiteFooter footer={settings?.layout?.footer} />
+        //   )
+        // }
         header={
           settings?.general?.header && (
             <SiteHeader header={settings?.layout?.header} />
@@ -90,6 +90,9 @@ export function NotionRenderer({
         }
         disableHeader
       />
+      {settings?.general?.footer && (
+        <SiteFooter footer={settings?.layout?.footer} />
+      )}
     </div>
   );
 }

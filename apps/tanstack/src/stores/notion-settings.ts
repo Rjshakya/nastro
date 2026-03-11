@@ -1,3 +1,4 @@
+import { defaultThemeSettings } from "#/lib/settings-defaults";
 import type {
   CustomStyles,
   NotionPageSettings,
@@ -9,31 +10,24 @@ interface NotionSettingsStore {
   styles?: CustomStyles;
   settings: NotionPageSettings;
   updateSettings: (settings: NotionPageSettings) => void;
+  isPanelOpen: boolean;
+  togglePanel: (v: boolean) => void;
 }
 
 export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
-  settings: {
-    typography: {
-      sizes: {
-        pageTitle: Math.floor(2.6 * 16),
-        heading1: Math.floor(1.8 * 16),
-        heading2: Math.floor(1.5 * 16),
-        heading3: Math.floor(1.25 * 16),
-        base: 16,
-      },
-    },
-  },
+  settings: {},
   updateSettings(settings) {
     set({ settings, styles: computeCustomStyles(settings) });
   },
   styles: {},
+  isPanelOpen: false,
+  togglePanel: (v) => set({ isPanelOpen: v }),
 }));
 
 export const computeCustomStyles = (
   settings: NotionPageSettings | null,
 ): CustomStyles => {
   const styles: CustomStyles = {};
-
   const theme = computeTheme(settings?.theme);
   const typography = computeTypography(settings?.typography);
   const layout = computeLayout(settings?.layout);
@@ -81,7 +75,28 @@ export const computeTheme = (
     colorMap.forEach((color) => {
       const colorData = customization.notion?.[color];
       if (colorData) {
-        styles[`--notion-${color}`] = colorData;
+        styles[`--custom-notion-${color}`] = colorData;
+      }
+    });
+  }
+
+  if (customization.notionBackground) {
+    const bgColorMap = [
+      "gray",
+      "brown",
+      "orange",
+      "yellow",
+      "teal",
+      "blue",
+      "purple",
+      "pink",
+      "red",
+    ] as const;
+
+    bgColorMap.forEach((color) => {
+      const colorData = customization.notionBackground?.[color];
+      if (colorData) {
+        styles[`--custom-notion-${color}_background`] = colorData;
       }
     });
   }

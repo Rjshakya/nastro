@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Site } from "@/types/site";
 import { IconWorld } from "@tabler/icons-react";
 import { CreateSiteDialog } from "./create-site";
-import { useDeleteSite } from "#/hooks/use-sites";
+import { useDeleteSite } from "#/components/hooks/use-sites";
 import { dashboardHomeApi } from "../home";
 
 export const DashboardSitesSection = () => {
@@ -23,7 +23,7 @@ export const DashboardSitesSection = () => {
       </div>
 
       {sites && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3  rounded-md p-1">
+        <div className="grid gap-2  rounded-md p-1">
           {sites?.map((site) => (
             <SiteCard
               key={site.id}

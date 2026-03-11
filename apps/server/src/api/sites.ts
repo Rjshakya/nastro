@@ -55,7 +55,6 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const { id } = c.req.valid("param");
       const { pageId } = c.req.valid("query");
       const result = await Effect.runPromise(getSiteById(id, pageId));
-
       return c.json(
         ApiResponse({
           data: { ...result },
