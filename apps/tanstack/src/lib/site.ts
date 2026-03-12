@@ -3,7 +3,6 @@ import { client } from "./api-client";
 import type { Site, SiteSetting } from "@/types/site";
 import type { NotionPageSettings } from "#/types/customization";
 import type { ExtendedRecordMap } from "notion-types";
-import { Env } from "env";
 
 export interface CreateSiteInput {
   pageId: string;
@@ -39,16 +38,16 @@ export const getSite = async ({
   //   query: { pageId, fresh },
   // });
 
-  // const url = new URL(Env.apiUrl + `/api/sites/${siteId}`);
-  // url.searchParams.set("pageId", pageId);
-  // url.searchParams.set("fresh", `${fresh}`);
+  const url = new URL(process.env.API_URL + `/api/sites/${siteId}`);
+  url.searchParams.set("pageId", pageId);
+  url.searchParams.set("fresh", `${fresh}`);
 
-  // const res = await fetch(url, { credentials: "include" });
+  const res = await fetch(url);
 
-  const res = await client.api.sites[":id"].$get({
-    param: { id: siteId },
-    query: { pageId, fresh },
-  });
+  // const res = await client.api.sites[":id"].$get({
+  //   param: { id: siteId },
+  //   query: { pageId, fresh },
+  // });
   if (!res.ok) {
     throw new Error("Failed to fetch site");
   }
@@ -57,10 +56,7 @@ export const getSite = async ({
   };
 };
 
-export const createSite = async (
-  _key: string,
-  { arg }: { arg: CreateSiteInput },
-) => {
+export const createSite = async (_key: string, { arg }: { arg: CreateSiteInput }) => {
   const { pageId, siteName, siteSetting } = arg;
   const res = await client.api.sites.$post({
     json: { pageId, siteName, siteSetting: siteSetting as any },

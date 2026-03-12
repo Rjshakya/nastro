@@ -1,17 +1,12 @@
 import { getSite } from "#/lib/site";
 import type { Site } from "#/types/site";
-import { ClientOnly, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "#/components/site/editor/site-editor";
 import { loadFont } from "#/lib/fonts";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { applyDefaultSettings } from "#/lib/settings-defaults";
-import {
-  getNotionPageIcon,
-  getNotionPageSeo,
-  getNotionPageTitle,
-} from "#/lib/utils";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -38,7 +33,6 @@ export const Route = createFileRoute("/site/$siteId")({
       site,
     });
 
-    console.log(defaultSettings);
     useNotionSettingsStore.getState().updateSettings({
       ...defaultSettings,
     });

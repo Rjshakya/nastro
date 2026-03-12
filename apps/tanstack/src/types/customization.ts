@@ -284,6 +284,7 @@ export interface GeneralSettingsUI {
   pageWidth?: number;
   header?: boolean;
   footer?: boolean;
+  isDark?: boolean;
 }
 
 export interface TypoSettingsUI {
@@ -338,6 +339,7 @@ export interface SEO {
 export interface NotionPageSettings {
   general?: GeneralSettingsUI;
   theme?: ThemeSettingsUI;
+  darkTheme?: ThemeSettingsUI;
   typography?: TypoSettingsUI;
   layout?: LayoutSettingsUI;
   seo?: SEO;

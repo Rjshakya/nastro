@@ -30,6 +30,7 @@ interface SettingsV2Props {
 const tabNames: Record<keyof NotionPageSettings, string> = {
   general: "General",
   theme: "Theme",
+  darkTheme: "Dark Theme",
   typography: "Typography",
   layout: "Layout",
   seo: "Seo",
@@ -40,6 +41,7 @@ const generalSections: TabGeneralProps = {
   header: { label: "Header", type: "boolean" },
   footer: { label: "Footer", type: "boolean" },
   pageWidth: { label: "Page width", type: "number", min: 20, max: 100 },
+  isDark: { label: "Dark Mode", type: "boolean" },
 };
 
 // Theme sections configuration - defines what renders in TabTheme
@@ -257,11 +259,14 @@ const layoutSections: TabLayoutProps["sections"] = [
 export function Settings({ open, onOpenChange }: SettingsV2Props) {
   const { siteId } = useParams({ from: "/site/$siteId" });
   const { pageId } = useSearch({ from: "/site/$siteId" });
-  const { settings } = useNotionSettingsStore();
-  const tabKeys = Object.keys(tabNames) as Array<keyof NotionPageSettings>;
+  const { settings } = useNotionSettingsStore((s) => s);
+  const tabKeys = Object.keys(tabNames).filter(
+    (key) => key !== "darkTheme",
+  ) as Array<keyof NotionPageSettings>;
   const { updateSite, isLoading } = useUpdateSite();
 
   const handleSave = async () => {
+    console.log(settings)
     await updateSite({
       siteId,
       input: {

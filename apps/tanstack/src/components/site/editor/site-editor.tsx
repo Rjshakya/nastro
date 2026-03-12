@@ -3,8 +3,6 @@ import "@/styles/notion.css";
 import { siteApi } from ".";
 import { Settings } from "../settings/settings";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import { useEffect } from "react";
-import { getNotionPageIcon, getNotionPageTitle } from "#/lib/utils";
 
 export function SiteEditor() {
   const { page, site } = siteApi.useLoaderData();
@@ -23,12 +21,7 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer
-          siteId={site.id}
-          pageId={pageId}
-          recordMap={page}
-          settings={settings}
-        />
+        <NotionRenderer siteId={site.id} pageId={pageId} recordMap={page} settings={settings} />
       </div>
 
       <Settings open={isPanelOpen} onOpenChange={togglePanel} />

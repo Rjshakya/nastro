@@ -13,6 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { IconChevronDown } from "@tabler/icons-react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
+import { clientThemeToggle } from "#/lib/utils";
 
 export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
   return (
@@ -30,16 +33,12 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
         <div className="p-2 flex items-center gap-1.5">
           {header?.list &&
             header.list?.length > 0 &&
-            header.list.map((l , i) => {
+            header.list.map((l, i) => {
               return (
                 <DropdownMenu key={i}>
                   <DropdownMenuTrigger
                     render={
-                      <Button
-                        variant={"link"}
-                        className={"notion-header-btn"}
-                        size={"sm"}
-                      >
+                      <Button variant={"link"} className={"notion-header-btn"} size={"sm"}>
                         {l?.text}
                         <IconChevronDown stroke={1} />
                       </Button>
@@ -50,9 +49,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
                       {l?.links &&
                         l.links.length > 0 &&
                         l.links.map((link) => {
-                          return (
-                            <DropdownMenuItem>{link.text}</DropdownMenuItem>
-                          );
+                          return <DropdownMenuItem>{link.text}</DropdownMenuItem>;
                         })}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
@@ -62,21 +59,35 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
 
           {header?.links &&
             header.links?.length > 0 &&
-            header.links.map((l , i) => {
+            header.links.map((l, i) => {
               return (
                 <Link key={i} target="_blank" to={l?.url}>
-                  <Button
-                    variant={l.variant}
-                    className={"notion-header-btn"}
-                    size={"sm"}
-                  >
+                  <Button variant={l.variant} className={"notion-header-btn"} size={"sm"}>
                     {l?.text}
                   </Button>
                 </Link>
               );
             })}
+
+          <ThemeToggle />
         </div>
       </div>
     </header>
   );
 };
+
+function ThemeToggle() {
+  const { setIsDark, settings } = useNotionSettingsStore();
+
+  function toggleTheme() {
+    const bool = !settings?.general?.isDark;
+    clientThemeToggle(bool);
+    setIsDark(bool);
+  }
+
+  return (
+    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+      {settings?.general?.isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+    </Button>
+  );
+}

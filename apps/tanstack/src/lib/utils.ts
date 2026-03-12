@@ -80,21 +80,27 @@ export function getNotionPageIcon(page: ExtendedRecordMap, pageId: string) {
   return icon;
 }
 
-export function covertPageSettingsIntoStyles(
-  settings: NotionPageSettings | null,
-) {
+export function covertPageSettingsIntoStyles(settings: NotionPageSettings | null) {
   if (!settings) return;
 
   // get styles from settings
   const styles = computeCustomStyles(settings);
+  const darkStyles = computeCustomStyles(settings, true);
 
   const css = Object.entries(styles)
     .filter(([_, v]) => !!v)
     .map(([k, v]) => `${k}:${v};`)
     .join("\n");
 
+  const darkCss = Object.entries(darkStyles)
+    .filter(([_, v]) => !!v)
+    .map(([k, v]) => `${k}:${v};`)
+    .join("\n");
+
   return `
-  :root {${css}}
+  :root {${css}};
+  .dark {${darkCss}};
+
 
   .notion-page-icon-hero {
     position: absolute;
@@ -110,6 +116,12 @@ export function covertPageSettingsIntoStyles(
     height: 124px;
     margin-left: 16px;
   }
-  
+
   `;
 }
+
+export const clientThemeToggle = (bool: boolean) => {
+  const doc = window.document.documentElement;
+  doc.classList.forEach((c) => doc.classList.remove(c));
+  doc.classList.add(bool ? "dark" : "light");
+};

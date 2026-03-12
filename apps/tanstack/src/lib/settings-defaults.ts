@@ -108,11 +108,89 @@ export const defaultLayoutSettings = (
   },
 });
 
+export const defaultDarkThemeSettings = (
+  darkThemeSettings: NotionPageSettings["darkTheme"],
+) => {
+  return {
+    main: {
+      pageBackground: "#0a0a0a",
+      textColor: "#f5f5f5",
+      checkboxBackground: "#2eaadc",
+      ...darkThemeSettings?.main,
+    },
+    header: {
+      background: "#0f0f10",
+      textColor: "#f5f5f5",
+      buttonText: "#a1a1aa",
+      buttonBackground: "#f4f4f5",
+      ...darkThemeSettings?.header,
+    },
+    footer: {
+      background: "#0f0f10",
+      textColor: "#f5f5f5",
+      buttonText: "#a1a1aa",
+      buttonBackground: "#f4f4f5",
+      ...darkThemeSettings?.footer,
+    },
+    notion: {
+      gray: "#9ca3af",
+      brown: "#8b7355",
+      orange: "#f97316",
+      yellow: "#eab308",
+      teal: "#14b8a6",
+      blue: "#3b82f6",
+      purple: "#a855f7",
+      pink: "#ec4899",
+      red: "#ef4444",
+      ...darkThemeSettings?.notion,
+    },
+    notionBackground: {
+      gray: "#27272a",
+      brown: "#451a03",
+      orange: "#7c2d12",
+      yellow: "#713f12",
+      teal: "#134e4a",
+      blue: "#1e3a8a",
+      purple: "#581c87",
+      pink: "#831843",
+      red: "#7f1d1d",
+      ...darkThemeSettings?.notionBackground,
+    },
+    card: {
+      cardBackground: "#18181b",
+      cardHover: "#27272a",
+      cardText: "#f5f5f5",
+      cardBorder: "#27272a",
+      ...darkThemeSettings?.card,
+    },
+    buttons: {
+      gray: "#3f3f46",
+      brown: "#57534e",
+      orange: "#9a3412",
+      yellow: "#854d0e",
+      teal: "#115e59",
+      blue: "#1e40af",
+      purple: "#6b21a8",
+      pink: "#9d174d",
+      red: "#991b1b",
+      ...darkThemeSettings?.buttons,
+    },
+    defaultButton: {
+      background: "#ffffff",
+      textColor: "#0a0a0a",
+      borderColor: "#71717a",
+      hoverBackground: "#ffffff",
+      ...darkThemeSettings?.defaultButton,
+    },
+  };
+};
+
 export const defaultGeneralSettings: NotionPageSettings["general"] = {
   siteName: "",
   pageWidth: 65,
   header: true,
   footer: true,
+  isDark: false,
 };
 
 export const applyDefaultSettings = ({
@@ -132,15 +210,34 @@ export const applyDefaultSettings = ({
     theme: {
       ...defaultThemeSettings(existingSettings?.theme),
     },
+    darkTheme: {
+      ...defaultDarkThemeSettings(existingSettings?.darkTheme),
+    },
     typography: {
       ...defaultTypographySettings,
       ...existingSettings?.typography,
+      sizes: {
+        ...defaultTypographySettings.sizes,
+        ...existingSettings?.typography?.sizes,
+      },
     },
     layout: {
       ...defaultLayoutSettings(seo?.title, seo?.pageIcon),
       ...existingSettings?.layout,
+      header: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.header,
+        ...existingSettings?.layout?.header,
+      },
+      footer: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.footer,
+        ...existingSettings?.layout?.footer,
+      },
     },
-    general: { ...defaultGeneralSettings, ...existingSettings?.general },
+    general: {
+      ...defaultGeneralSettings,
+      ...existingSettings?.general,
+      isDark: existingSettings?.general?.isDark ?? false,
+    },
     seo,
   };
 };

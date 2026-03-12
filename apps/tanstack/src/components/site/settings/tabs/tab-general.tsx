@@ -1,3 +1,4 @@
+import { useTheme } from "#/components/theme-provider";
 import { Checkbox } from "#/components/ui/checkbox";
 import { SliderInput } from "#/components/ui/slider-input";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
@@ -10,10 +11,12 @@ export interface TabGeneralProps {
   pageWidth?: { type: string; label: string; min: number; max: number };
   header?: { type: string; label: string };
   footer?: { type: string; label: string };
+  isDark?: { type: string; label: string };
 }
 
 export function TabGeneral({ tabProps }: { tabProps: TabGeneralProps }) {
   const { settings, updateSettings } = useNotionSettingsStore();
+  const { setTheme } = useTheme();
 
   return (
     <div className="space-y-4">
@@ -75,6 +78,12 @@ export function TabGeneral({ tabProps }: { tabProps: TabGeneralProps }) {
                     ...settings,
                     general: { ...settings?.general, [k]: e },
                   });
+
+                  if (k === "isDark") {
+                    const doc = window.document.documentElement;
+                    doc.classList.forEach((c) => doc.classList.remove(c));
+                    doc.classList.add(e ? "dark" : "light");
+                  }
                 }}
               />
             </div>

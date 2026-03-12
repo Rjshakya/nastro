@@ -1,4 +1,3 @@
-import { defaultThemeSettings } from "#/lib/settings-defaults";
 import type {
   CustomStyles,
   NotionPageSettings,
@@ -12,12 +11,30 @@ interface NotionSettingsStore {
   updateSettings: (settings: NotionPageSettings) => void;
   isPanelOpen: boolean;
   togglePanel: (v: boolean) => void;
+  // isDark: boolean;
+  setIsDark: (isDark: boolean) => void;
 }
 
-export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
+export const useNotionSettingsStore = create<NotionSettingsStore>((set, get) => ({
   settings: {},
+  // isDark: false,
   updateSettings(settings) {
-    set({ settings, styles: computeCustomStyles(settings) });
+    const isDark = settings.general?.isDark ?? false;
+    set({ settings, styles: computeCustomStyles(settings, isDark) });
+  },
+  setIsDark(isDark) {
+    const { settings } = get();
+    const updatedSettings = {
+      ...settings,
+      general: {
+        ...settings.general,
+        isDark,
+      },
+    };
+    set({
+      settings: updatedSettings,
+      styles: computeCustomStyles(updatedSettings, isDark),
+    });
   },
   styles: {},
   isPanelOpen: false,
@@ -26,27 +43,34 @@ export const useNotionSettingsStore = create<NotionSettingsStore>((set) => ({
 
 export const computeCustomStyles = (
   settings: NotionPageSettings | null,
+  isDark: boolean = false,
 ): CustomStyles => {
   const styles: CustomStyles = {};
-  const theme = computeTheme(settings?.theme);
+
+  const themeSettings = isDark ? settings?.darkTheme : settings?.theme;
+
+  const theme = computeTheme(themeSettings);
   const typography = computeTypography(settings?.typography);
   const layout = computeLayout(settings?.layout);
   const general = computeGeneral(settings?.general);
 
-  return { ...styles, ...theme, ...typography, ...layout, ...general };
+  return {
+    ...styles,
+    ...theme,
+    ...typography,
+    ...layout,
+    ...general,
+  };
 };
 
-export const computeTheme = (
-  customization: NotionPageSettings["theme"] | undefined,
-) => {
+export const computeTheme = (customization: NotionPageSettings["theme"] | undefined) => {
   const styles: CustomStyles = {};
   if (!customization) return {};
 
   if (customization.main) {
     styles["--notion-custom-page-bg"] = customization.main.pageBackground;
     styles["--notion-custom-text"] = customization.main.textColor;
-    styles["--custom-notion-select-color-0"] =
-      customization.main.checkboxBackground;
+    styles["--custom-notion-select-color-0"] = customization.main.checkboxBackground;
   }
 
   if (customization.header) {
@@ -123,29 +147,22 @@ export const computeTheme = (
     buttons.forEach((btn) => {
       const btnData = customization.buttons;
       if (btnData) {
-        styles[`--custom-notion-item-${btn}`] =
-          btnData[btn as keyof ThemeSettingsButtonsSection];
+        styles[`--custom-notion-item-${btn}`] = btnData[btn as keyof ThemeSettingsButtonsSection];
       }
     });
   }
 
   if (customization.defaultButton) {
-    styles["--notion-default-btn-bg"] =
-      customization?.defaultButton?.background;
-    styles["--notion-default-btn-text"] =
-      customization?.defaultButton?.textColor;
-    styles["--notion-default-btn-hover"] =
-      customization?.defaultButton?.hoverBackground;
-    styles["--notion-default-btn-border"] =
-      customization?.defaultButton?.borderColor;
+    styles["--notion-default-btn-bg"] = customization?.defaultButton?.background;
+    styles["--notion-default-btn-text"] = customization?.defaultButton?.textColor;
+    styles["--notion-default-btn-hover"] = customization?.defaultButton?.hoverBackground;
+    styles["--notion-default-btn-border"] = customization?.defaultButton?.borderColor;
   }
 
   return styles;
 };
 
-export const computeTypography = (
-  typography: NotionPageSettings["typography"],
-) => {
+export const computeTypography = (typography: NotionPageSettings["typography"]) => {
   const styles: CustomStyles = {};
   if (!typography) return {};
 

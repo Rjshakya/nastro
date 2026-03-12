@@ -4,20 +4,11 @@ import { Code } from "react-notion-x/build/third-party/code";
 import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import { type CSSProperties } from "react";
-import {
-  getRouteApi,
-  Link,
-  useLocation,
-  useRouter,
-} from "@tanstack/react-router";
+import { ClientOnly, getRouteApi, Link, useLocation, useRouter } from "@tanstack/react-router";
 import type { SiteSetting } from "#/types/site";
 import { SiteHeader } from "../site/site-header";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type {
-  LayoutFooterUI,
-  LayoutHeaderUI,
-  NotionPageSettings,
-} from "#/types/customization";
+import type { LayoutFooterUI, LayoutHeaderUI, NotionPageSettings } from "#/types/customization";
 import { SiteFooter } from "../site/site-footer";
 
 interface NotionRendererProps {
@@ -78,21 +69,10 @@ export function NotionRenderer({
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
-        // footer={
-        //   settings?.general?.footer && (
-        //     <SiteFooter footer={settings?.layout?.footer} />
-        //   )
-        // }
-        header={
-          settings?.general?.header && (
-            <SiteHeader header={settings?.layout?.header} />
-          )
-        }
+        header={settings?.general?.header && <SiteHeader header={settings?.layout?.header} />}
         disableHeader
       />
-      {settings?.general?.footer && (
-        <SiteFooter footer={settings?.layout?.footer} />
-      )}
+      {settings?.general?.footer && <SiteFooter footer={settings?.layout?.footer} />}
     </div>
   );
 }

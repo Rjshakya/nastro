@@ -43,10 +43,11 @@ export function TabTheme({ sections }: TabThemeProps) {
     fieldKey: string,
     color: string,
   ) => {
-    const currentTheme = settings?.theme;
+    const themeKey = settings?.general?.isDark ? "darkTheme" : "theme";
+    const currentTheme = settings?.[themeKey];
     updateSettings({
       ...settings,
-      theme: {
+      [themeKey]: {
         ...currentTheme,
         [sectionId]: {
           ...currentTheme?.[sectionId],
@@ -57,7 +58,8 @@ export function TabTheme({ sections }: TabThemeProps) {
   };
 
   const getValue = (field: ThemeSectionField, section: ThemeSection) => {
-    const theme = settings?.theme as ThemeSettingsUI;
+    const themeKey = settings?.general?.isDark ? "darkTheme" : "theme";
+    const theme = settings?.[themeKey] as ThemeSettingsUI;
     const value =
       theme?.[section?.id]?.[
         field?.key as keyof ThemeSettingsUI[keyof ThemeSettingsUI]
