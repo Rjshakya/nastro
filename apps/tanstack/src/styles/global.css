@@ -44,6 +44,10 @@
   --font-mono: "Geist Mono Variable", monospace;
 
   /* notion */
+  --notion-letter-spacing: -0.05rem;
+  --notion-heading-letter-spacing: -0.08rem;
+  --notion-text-line-height: 1.8rem;
+  --notion-font-weight: 400;
   --notion-max-width: 100%;
 
   --notion-custom-page-bg: oklch(1 0 0);
@@ -81,8 +85,29 @@
 
   --notion-collection-card: oklch(1 0 0);
   --notion-collection-card-border: oklch(0.922 0 0);
+  --notion-collection-card-border-size: 1px;
   --notion-collection-card-text: oklch(0.145 0 0);
   --notion-collection-card-hover: oklch(0.97 0 0);
+
+  --notion-collection-card-padding-y: 0px;
+  --notion-collection-card-padding-x: 0px;
+  --notion-collection-card-margin-x: 0px;
+  --notion-collection-card-margin-x: 0px;
+
+  /* updates for notion - card */
+  --notion-gallery-grid-gap: 16px;
+
+  --notion-collection-card-cover-padding-y: 0px;
+  --notion-collection-card-cover-padding-x: 0px;
+  --notion-collection-card-cover-margin-x: 0px;
+  --notion-collection-card-cover-margin-x: 0px;
+  --notion-collection-card-cover-height: 200px;
+  --notion-collection-card-cover-radius: 0.625rem;
+
+  --notion-collection-card-body-padding-x: 12px;
+  --notion-collection-card-body-padding-y: 12px;
+  --notion-collection-card-body-margin-x: 0px;
+  --notion-collection-card-body-margin-x: 0px;
 
   /* notion-button */
 

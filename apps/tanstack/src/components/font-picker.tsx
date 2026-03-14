@@ -236,9 +236,9 @@ export const FontPicker: FC<FontPickerProps> = ({ onChange, value }) => {
         render={
           <Button
             ref={triggerBtnRef}
-            variant="outline"
+            variant="secondary"
             role="combobox"
-            className="justify-between w-full"
+            className="justify-between w-full ring ring-muted-foreground"
           >
             {value}
             <ChevronsUpDown className="ml-auto" />

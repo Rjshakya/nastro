@@ -15,31 +15,33 @@ interface NotionSettingsStore {
   setIsDark: (isDark: boolean) => void;
 }
 
-export const useNotionSettingsStore = create<NotionSettingsStore>((set, get) => ({
-  settings: {},
-  // isDark: false,
-  updateSettings(settings) {
-    const isDark = settings.general?.isDark ?? false;
-    set({ settings, styles: computeCustomStyles(settings, isDark) });
-  },
-  setIsDark(isDark) {
-    const { settings } = get();
-    const updatedSettings = {
-      ...settings,
-      general: {
-        ...settings.general,
-        isDark,
-      },
-    };
-    set({
-      settings: updatedSettings,
-      styles: computeCustomStyles(updatedSettings, isDark),
-    });
-  },
-  styles: {},
-  isPanelOpen: false,
-  togglePanel: (v) => set({ isPanelOpen: v }),
-}));
+export const useNotionSettingsStore = create<NotionSettingsStore>(
+  (set, get) => ({
+    settings: {},
+    // isDark: false,
+    updateSettings(settings) {
+      const isDark = settings.general?.isDark ?? false;
+      set({ settings, styles: computeCustomStyles(settings, isDark) });
+    },
+    setIsDark(isDark) {
+      const { settings } = get();
+      const updatedSettings = {
+        ...settings,
+        general: {
+          ...settings.general,
+          isDark,
+        },
+      };
+      set({
+        settings: updatedSettings,
+        styles: computeCustomStyles(updatedSettings, isDark),
+      });
+    },
+    styles: {},
+    isPanelOpen: false,
+    togglePanel: (v) => set({ isPanelOpen: v }),
+  }),
+);
 
 export const computeCustomStyles = (
   settings: NotionPageSettings | null,
@@ -63,14 +65,17 @@ export const computeCustomStyles = (
   };
 };
 
-export const computeTheme = (customization: NotionPageSettings["theme"] | undefined) => {
+export const computeTheme = (
+  customization: NotionPageSettings["theme"] | undefined,
+) => {
   const styles: CustomStyles = {};
   if (!customization) return {};
 
   if (customization.main) {
     styles["--notion-custom-page-bg"] = customization.main.pageBackground;
     styles["--notion-custom-text"] = customization.main.textColor;
-    styles["--custom-notion-select-color-0"] = customization.main.checkboxBackground;
+    styles["--custom-notion-select-color-0"] =
+      customization.main.checkboxBackground;
   }
 
   if (customization.header) {
@@ -147,22 +152,29 @@ export const computeTheme = (customization: NotionPageSettings["theme"] | undefi
     buttons.forEach((btn) => {
       const btnData = customization.buttons;
       if (btnData) {
-        styles[`--custom-notion-item-${btn}`] = btnData[btn as keyof ThemeSettingsButtonsSection];
+        styles[`--custom-notion-item-${btn}`] =
+          btnData[btn as keyof ThemeSettingsButtonsSection];
       }
     });
   }
 
   if (customization.defaultButton) {
-    styles["--notion-default-btn-bg"] = customization?.defaultButton?.background;
-    styles["--notion-default-btn-text"] = customization?.defaultButton?.textColor;
-    styles["--notion-default-btn-hover"] = customization?.defaultButton?.hoverBackground;
-    styles["--notion-default-btn-border"] = customization?.defaultButton?.borderColor;
+    styles["--notion-default-btn-bg"] =
+      customization?.defaultButton?.background;
+    styles["--notion-default-btn-text"] =
+      customization?.defaultButton?.textColor;
+    styles["--notion-default-btn-hover"] =
+      customization?.defaultButton?.hoverBackground;
+    styles["--notion-default-btn-border"] =
+      customization?.defaultButton?.borderColor;
   }
 
   return styles;
 };
 
-export const computeTypography = (typography: NotionPageSettings["typography"]) => {
+export const computeTypography = (
+  typography: NotionPageSettings["typography"],
+) => {
   const styles: CustomStyles = {};
   if (!typography) return {};
 
@@ -177,6 +189,24 @@ export const computeTypography = (typography: NotionPageSettings["typography"]) 
   if (typography.fonts) {
     styles["--notion-primary-font"] = typography.fonts?.primary;
     styles["--notion-secondary-font"] = typography.fonts?.secondary;
+  }
+
+  if (typography.spacing) {
+    if (typography.spacing.lineHeight) {
+      styles["--notion-text-line-height"] =
+        typography.spacing.lineHeight.toString();
+    }
+    if (typography.spacing.letterSpacing) {
+      styles["--notion-letter-spacing"] =
+        typography.spacing.letterSpacing + "px";
+    }
+    if (typography.spacing.headingLetterSpacing) {
+      styles["--notion-heading-letter-spacing"] =
+        typography.spacing.headingLetterSpacing + "px";
+    }
+    if (typography.spacing.fontWeight) {
+      styles["--notion-font-weight"] = typography.spacing.fontWeight.toString();
+    }
   }
 
   return styles;
@@ -200,6 +230,63 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
     styles["--notion-sidebar-width"] = layout.sidebar?.width + "%";
   }
 
+  // checking undefined rather than
+  //  just if(foo) ,
+  //  because foo can be zero here , which is falsy value.
+
+  // Gallery Grid Gap
+  if (layout?.gallery?.gridGap !== undefined) {
+    styles["--notion-gallery-grid-gap"] = layout.gallery.gridGap + "px";
+  }
+
+  // Card Border Size
+  if (layout?.card?.borderSize !== undefined) {
+    styles["--notion-collection-card-border-size"] =
+      layout.card.borderSize + "px";
+  }
+
+  // Card Cover Settings
+  if (layout?.cardCover) {
+    const cover = layout.cardCover;
+    if (cover.height !== undefined) {
+      styles["--notion-collection-card-cover-height"] = cover.height + "px";
+    }
+    if (cover.radius !== undefined) {
+      styles["--notion-collection-card-cover-radius"] = cover.radius + "px";
+    }
+    if (cover.paddingX !== undefined) {
+      styles["--notion-collection-card-cover-padding-x"] =
+        cover.paddingX + "px";
+    }
+    if (cover.paddingY !== undefined) {
+      styles["--notion-collection-card-cover-padding-y"] =
+        cover.paddingY + "px";
+    }
+    if (cover.marginX !== undefined) {
+      styles["--notion-collection-card-cover-margin-x"] = cover.marginX + "px";
+    }
+    if (cover.marginY !== undefined) {
+      styles["--notion-collection-card-cover-margin-y"] = cover.marginY + "px";
+    }
+  }
+
+  // Card Body Settings
+  if (layout?.cardBody) {
+    const body = layout.cardBody;
+    if (body.paddingX !== undefined) {
+      styles["--notion-collection-card-body-padding-x"] = body.paddingX + "px";
+    }
+    if (body.paddingY !== undefined) {
+      styles["--notion-collection-card-body-padding-y"] = body.paddingY + "px";
+    }
+    if (body.marginX !== undefined) {
+      styles["--notion-collection-card-body-margin-x"] = body.marginX + "px";
+    }
+    if (body.marginY !== undefined) {
+      styles["--notion-collection-card-body-margin-y"] = body.marginY + "px";
+    }
+  }
+
   return styles;
 };
 
@@ -209,7 +296,11 @@ export const computeGeneral = (general: NotionPageSettings["general"]) => {
   if (!general) return styles;
 
   if (general.pageWidth) {
-    styles["--notion-max-width"] = general.pageWidth + "%";
+    if (general.pageWidth === 1334) {
+      styles["--notion-max-width"] = "100%";
+    } else {
+      styles["--notion-max-width"] = general.pageWidth + "px";
+    }
   }
 
   return styles;

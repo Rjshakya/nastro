@@ -88,6 +88,12 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
     heading3: 20,
     base: 16,
   },
+  spacing: {
+    lineHeight: 1.8,
+    letterSpacing: -0.8,
+    headingLetterSpacing: -1.3,
+    fontWeight: 400,
+  },
 };
 
 export const defaultLayoutSettings = (
@@ -105,6 +111,26 @@ export const defaultLayoutSettings = (
     logo: pageIcon,
     width: 100,
     height: 45,
+  },
+  gallery: {
+    gridGap: 16,
+  },
+  card: {
+    borderSize: 1,
+  },
+  cardCover: {
+    height: 200,
+    radius: 10,
+    paddingX: 0,
+    paddingY: 0,
+    marginX: 0,
+    marginY: 0,
+  },
+  cardBody: {
+    paddingX: 12,
+    paddingY: 12,
+    marginX: 0,
+    marginY: 0,
   },
 });
 
@@ -185,13 +211,13 @@ export const defaultDarkThemeSettings = (
   };
 };
 
-export const defaultGeneralSettings: NotionPageSettings["general"] = {
-  siteName: "",
+export const defaultGeneralSettings = (siteName?: string) => ({
+  siteName,
   pageWidth: 65,
   header: true,
   footer: true,
   isDark: false,
-};
+});
 
 export const applyDefaultSettings = ({
   existingSettings,
@@ -220,6 +246,10 @@ export const applyDefaultSettings = ({
         ...defaultTypographySettings.sizes,
         ...existingSettings?.typography?.sizes,
       },
+      spacing: {
+        ...defaultTypographySettings.spacing,
+        ...existingSettings?.typography?.spacing,
+      },
     },
     layout: {
       ...defaultLayoutSettings(seo?.title, seo?.pageIcon),
@@ -232,9 +262,25 @@ export const applyDefaultSettings = ({
         ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.footer,
         ...existingSettings?.layout?.footer,
       },
+      gallery: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.gallery,
+        ...existingSettings?.layout?.gallery,
+      },
+      card: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.card,
+        ...existingSettings?.layout?.card,
+      },
+      cardCover: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.cardCover,
+        ...existingSettings?.layout?.cardCover,
+      },
+      cardBody: {
+        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.cardBody,
+        ...existingSettings?.layout?.cardBody,
+      },
     },
     general: {
-      ...defaultGeneralSettings,
+      ...defaultGeneralSettings(seo?.title || ""),
       ...existingSettings?.general,
       isDark: existingSettings?.general?.isDark ?? false,
     },

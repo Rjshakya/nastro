@@ -22,7 +22,7 @@ export class NotionCMSService {
   getNotionPageHTML(pageId: string) {
     return Effect.tryPromise({
       try: async () => {
-        const page = await this.cms.getPageContent(pageId);
+        const page = await this.cms.getPageContent(pageId, { recursive: true });
         const html = blocksToHtml(page);
         return html;
       },
@@ -37,7 +37,7 @@ export class NotionCMSService {
   getNotionPageMarkdown(pageId: string) {
     return Effect.tryPromise({
       try: async () => {
-        const page = await this.cms.getPageContent(pageId);
+        const page = await this.cms.getPageContent(pageId, { recursive: true });
         const md = blocksToMarkdown(page);
         return md;
       },
@@ -53,7 +53,7 @@ export class NotionCMSService {
     return Effect.tryPromise({
       try: async () => {
         const record = await this.cms.getRecord(pageId);
-        const { archived, cover, icon, url } = record;
+        const { archived, cover, icon, url  } = record;
         const simpleRecord = await convertRecordToAdvanced(record);
         simpleRecord["archived"] = archived;
         simpleRecord["cover"] = cover;

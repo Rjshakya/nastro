@@ -1,12 +1,13 @@
 import { LiveSite } from "#/components/site/live";
 import type { Site } from "#/types/site";
-import { createFileRoute } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import type { ExtendedRecordMap } from "notion-types";
 import z from "zod";
-import { clientThemeToggle, covertPageSettingsIntoStyles, getNotionPageSeo } from "#/lib/utils";
+import { covertPageSettingsIntoStyles, getNotionPageSeo } from "#/lib/utils";
 import { getFontLink } from "#/lib/fonts";
 import type { NotionPageSettings } from "#/types/customization";
 import { createServerFn } from "@tanstack/react-start";
+import { getSite } from "#/lib/site";
 
 const siteSearchSchema = z.object({
   pageId: z.string(),
@@ -40,23 +41,11 @@ const executor = createServerFn()
 
     const { pageId, siteId } = input;
     const { data } = await getSite({ pageId, siteId });
-    return data;
-  });
-
-export const Route = createFileRoute("/$siteId")({
-  validateSearch: siteSearchSchema,
-  loaderDeps({ search: { pageId } }) {
-    return { pageId };
-  },
-  loader: async ({ params, deps }) => {
-    const { siteId } = params;
-    const { pageId } = deps;
-    const res = await executor({ data: { pageId, siteId } });
-    const site = res?.site as Site;
-    const page = res?.page as ExtendedRecordMap;
+    const site = data?.site as Site;
+    const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });
     const settings = { ...site?.siteSetting } as NotionPageSettings;
-    const styles = covertPageSettingsIntoStyles(settings);
+    // const styles = covertPageSettingsIntoStyles(settings);
     const fonts = {
       primary: getFontLink(settings?.typography?.fonts?.primary),
       secondary: getFontLink(settings?.typography?.fonts?.secondary),
@@ -67,10 +56,42 @@ export const Route = createFileRoute("/$siteId")({
       page,
       seo,
       css: {
-        styles,
+        // styles,
         fonts,
       },
     };
+  });
+
+export const Route = createFileRoute("/$siteId")({
+  validateSearch: siteSearchSchema,
+  loaderDeps({ search: { pageId } }) {
+    return { pageId };
+  },
+  loader: async ({ params, deps }) => {
+    const { siteId } = params;
+    const { pageId } = deps;
+    // const { data } = await getSite({ pageId, siteId });
+    // const site = data?.site as Site;
+    // const page = data?.page as ExtendedRecordMap;
+    // const seo = getNotionPageSeo({ page, site, pageId });
+    // const settings = { ...site?.siteSetting } as NotionPageSettings;
+    // // const styles = covertPageSettingsIntoStyles(settings);
+    // const fonts = {
+    //   primary: getFontLink(settings?.typography?.fonts?.primary),
+    //   secondary: getFontLink(settings?.typography?.fonts?.secondary),
+    // };
+
+    // return {
+    //   site,
+    //   page,
+    //   seo,
+    //   css: {
+    //     // styles,
+    //     fonts,
+    //   },
+    // };
+
+    return await executor({ data: { pageId, siteId } });
   },
   component: RouteComponent,
   head: ({ loaderData }) => {
@@ -96,12 +117,6 @@ export const Route = createFileRoute("/$siteId")({
         {
           name: "twitter:image",
           content: loaderData?.seo?.ogImage,
-        },
-      ],
-      styles: [
-        {
-          type: "text/css",
-          children: loaderData?.css.styles,
         },
       ],
       links: [
@@ -130,5 +145,9 @@ export const Route = createFileRoute("/$siteId")({
 });
 
 function RouteComponent() {
-  return <LiveSite />;
+  return (
+    <ClientOnly fallback={null}>
+      <LiveSite />
+    </ClientOnly>
+  );
 }

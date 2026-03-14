@@ -33,30 +33,24 @@ export const getSite = async ({
   pageId: string;
   fresh?: boolean;
 }) => {
-  // const url = client.api.sites[":id"].$url({
-  //   param: { id: siteId },
-  //   query: { pageId, fresh },
-  // });
-
-  const url = new URL(process.env.API_URL + `/api/sites/${siteId}`);
-  url.searchParams.set("pageId", pageId);
-  url.searchParams.set("fresh", `${fresh}`);
-
-  const res = await fetch(url);
-
-  // const res = await client.api.sites[":id"].$get({
-  //   param: { id: siteId },
-  //   query: { pageId, fresh },
-  // });
+  const res = await client.api.sites[":id"].$get({
+    param: { id: siteId },
+    query: { pageId, fresh },
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch site");
   }
-  return (await res.json()) as {
+
+  const json = await res.json();
+  return json as {
     data: { site: Site; page: ExtendedRecordMap };
   };
 };
 
-export const createSite = async (_key: string, { arg }: { arg: CreateSiteInput }) => {
+export const createSite = async (
+  _key: string,
+  { arg }: { arg: CreateSiteInput },
+) => {
   const { pageId, siteName, siteSetting } = arg;
   const res = await client.api.sites.$post({
     json: { pageId, siteName, siteSetting: siteSetting as any },

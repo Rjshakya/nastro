@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -40,7 +38,7 @@ const generalSections: TabGeneralProps = {
   siteName: { label: "Site Name", type: "text" },
   header: { label: "Header", type: "boolean" },
   footer: { label: "Footer", type: "boolean" },
-  pageWidth: { label: "Page width", type: "number", min: 20, max: 100 },
+  pageWidth: { label: "Page width", type: "number", min: 436, max: 1334 },
   isDark: { label: "Dark Mode", type: "boolean" },
 };
 
@@ -168,6 +166,44 @@ const typoSections: TabTypoProps["sections"] = [
       { key: "secondary", label: "Secondary Font", type: "font" },
     ],
   },
+  {
+    id: "spacing",
+    label: "Spacing & Weight",
+    fields: [
+      {
+        key: "lineHeight",
+        label: "Line Height",
+        type: "number",
+        min: 1,
+        max: 10,
+        step: 0.1,
+      },
+      {
+        key: "letterSpacing",
+        label: "Letter Spacing",
+        type: "number",
+        min: -10,
+        max: 10,
+        step: 0.1,
+      },
+      {
+        key: "headingLetterSpacing",
+        label: "Heading Letter Spacing",
+        type: "number",
+        min: -10,
+        max: 10,
+        step: 0.1,
+      },
+      {
+        key: "fontWeight",
+        label: "Font Weight",
+        type: "number",
+        min: 100,
+        max: 900,
+        step: 100,
+      },
+    ],
+  },
 ];
 
 const seoSections: TabSeoProps = {
@@ -254,6 +290,126 @@ const layoutSections: TabLayoutProps["sections"] = [
       ],
     },
   },
+  {
+    id: "gallery",
+    label: "Gallery Grid",
+    fields: [
+      {
+        key: "gridGap",
+        label: "Grid Gap (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+    ],
+  },
+  {
+    id: "card",
+    label: "Card Border",
+    fields: [
+      {
+        key: "borderSize",
+        label: "Border Size (px)",
+        type: "number",
+        min: 0,
+        max: 10,
+        step: 1,
+      },
+    ],
+  },
+  {
+    id: "cardCover",
+    label: "Card Cover",
+    fields: [
+      {
+        key: "height",
+        label: "Height (px)",
+        type: "number",
+        min: 50,
+        max: 500,
+        step: 10,
+      },
+      {
+        key: "radius",
+        label: "Border Radius (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "paddingX",
+        label: "Padding X (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "paddingY",
+        label: "Padding Y (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "marginX",
+        label: "Margin X (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "marginY",
+        label: "Margin Y (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+    ],
+  },
+  {
+    id: "cardBody",
+    label: "Card Body",
+    fields: [
+      {
+        key: "paddingX",
+        label: "Padding X (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "paddingY",
+        label: "Padding Y (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "marginX",
+        label: "Margin X (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+      {
+        key: "marginY",
+        label: "Margin Y (px)",
+        type: "number",
+        min: 0,
+        max: 50,
+        step: 1,
+      },
+    ],
+  },
 ];
 
 export function Settings({ open, onOpenChange }: SettingsV2Props) {
@@ -266,7 +422,7 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
   const { updateSite, isLoading } = useUpdateSite();
 
   const handleSave = async () => {
-    console.log(settings)
+    console.log(settings);
     await updateSite({
       siteId,
       input: {

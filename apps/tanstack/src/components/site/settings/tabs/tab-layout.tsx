@@ -42,7 +42,10 @@ import { SliderInput } from "#/components/ui/slider-input";
 interface LayoutField {
   key: string;
   label: string;
-  type: "text";
+  type: "text" | "number";
+  max?: number;
+  min?: number;
+  step?: number;
 }
 
 interface LayoutLinksItem {
@@ -347,10 +350,10 @@ export function TabLayout({ sections }: TabLayoutProps) {
     );
   };
 
-  const handleTextChange = (
+  const handleFieldChange = (
     sectionId: keyof LayoutSettingsUI,
     fieldKey: string,
-    fieldValue: string,
+    fieldValue: string | number | undefined,
   ) => {
     const currentLayoutSettings = settings?.layout;
     const currentSection = currentLayoutSettings?.[sectionId] as
@@ -439,20 +442,37 @@ export function TabLayout({ sections }: TabLayoutProps) {
             />
 
             <CollapsibleContent className="bg-muted px-4 mt-2  rounded-md  space-y-4 py-4">
-              {section.fields.map((field) => (
-                <div key={field.key} className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">
-                    {field.label}
-                  </Label>
-                  <Input
-                    value={sectionData?.[field.key] ?? ""}
-                    onChange={(e) =>
-                      handleTextChange(section.id, field.key, e.target.value)
-                    }
-                    placeholder={field.label}
-                  />
-                </div>
-              ))}
+              {section.fields.map((field) => {
+                if (field.type === "number") {
+                  return (
+                    <SliderInput
+                      key={field.key}
+                      label={field.label}
+                      value={sectionData?.[field.key] ?? field.min ?? 0}
+                      onChange={(v) =>
+                        handleFieldChange(section.id, field.key, v)
+                      }
+                      min={field.min ?? 0}
+                      max={field.max ?? 100}
+                      step={field.step ?? 1}
+                    />
+                  );
+                }
+                return (
+                  <div key={field.key} className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">
+                      {field.label}
+                    </Label>
+                    <Input
+                      value={sectionData?.[field.key] ?? ""}
+                      onChange={(e) =>
+                        handleFieldChange(section.id, field.key, e.target.value)
+                      }
+                      placeholder={field.label}
+                    />
+                  </div>
+                );
+              })}
 
               {section.links && (
                 <LinksComponent

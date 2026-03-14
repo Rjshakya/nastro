@@ -152,6 +152,13 @@ export interface CustomStyles {
   "--notion-primary-font"?: string;
   "--notion-secondary-font"?: string;
 
+  // spacing
+
+  "--notion-letter-spacing"?: string;
+  "--notion-heading-letter-spacing"?: string;
+  "--notion-text-line-height"?: string;
+  "--notion-font-weight"?: string;
+
   // header
 
   "--notion-header-bg"?: string;
@@ -181,6 +188,26 @@ export interface CustomStyles {
 
   // width
   "--notion-max-width"?: string;
+
+  // gallery
+  "--notion-gallery-grid-gap"?: string;
+
+  // card border
+  "--notion-collection-card-border-size"?: string;
+
+  // card cover
+  "--notion-collection-card-cover-height"?: string;
+  "--notion-collection-card-cover-radius"?: string;
+  "--notion-collection-card-cover-padding-x"?: string;
+  "--notion-collection-card-cover-padding-y"?: string;
+  "--notion-collection-card-cover-margin-x"?: string;
+  "--notion-collection-card-cover-margin-y"?: string;
+
+  // card body
+  "--notion-collection-card-body-padding-x"?: string;
+  "--notion-collection-card-body-padding-y"?: string;
+  "--notion-collection-card-body-margin-x"?: string;
+  "--notion-collection-card-body-margin-y"?: string;
 }
 
 // Site Settings
@@ -279,6 +306,13 @@ export type TypoFontsUI = {
   secondary?: string;
 };
 
+export type TypoSpacingUI = {
+  lineHeight?: number;
+  letterSpacing?: number;
+  headingLetterSpacing?: number;
+  fontWeight?: number;
+};
+
 export interface GeneralSettingsUI {
   siteName?: string;
   pageWidth?: number;
@@ -290,6 +324,7 @@ export interface GeneralSettingsUI {
 export interface TypoSettingsUI {
   sizes?: TypoSizesUI;
   fonts?: TypoFontsUI;
+  spacing?: TypoSpacingUI;
 }
 
 export type HeaderLink = {
@@ -322,10 +357,43 @@ export type LayoutFooterUI = {
   height?: number;
   width?: number;
 };
+
+// NEW: Gallery Grid Settings
+export type LayoutGalleryUI = {
+  gridGap?: number;
+};
+
+// NEW: Card Border Settings
+export type LayoutCardUI = {
+  borderSize?: number;
+};
+
+// NEW: Card Cover (Image) Settings
+export type LayoutCardCoverUI = {
+  height?: number;
+  radius?: number;
+  paddingX?: number;
+  paddingY?: number;
+  marginX?: number;
+  marginY?: number;
+};
+
+// NEW: Card Body (Content) Settings
+export type LayoutCardBodyUI = {
+  paddingX?: number;
+  paddingY?: number;
+  marginX?: number;
+  marginY?: number;
+};
+
 export interface LayoutSettingsUI {
   header?: LayoutHeaderUI;
   footer?: LayoutFooterUI;
   sidebar?: LayoutHeaderUI;
+  gallery?: LayoutGalleryUI;
+  card?: LayoutCardUI;
+  cardCover?: LayoutCardCoverUI;
+  cardBody?: LayoutCardBodyUI;
 }
 
 export interface SEO {
@@ -339,6 +407,11 @@ export interface SEO {
 export interface NotionPageSettings {
   general?: GeneralSettingsUI;
   theme?: ThemeSettingsUI;
+  /**
+   * if general.isDark is true
+   * then all the changes will saved in
+   * darkTheme
+   */
   darkTheme?: ThemeSettingsUI;
   typography?: TypoSettingsUI;
   layout?: LayoutSettingsUI;

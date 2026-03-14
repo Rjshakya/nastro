@@ -4,9 +4,10 @@ import { eq } from "drizzle-orm";
 import { Data, Effect } from "effect";
 import { nanoid } from "nanoid";
 import { NotionWebsiteService } from "./notion/website";
-import { getNotionRendererClient } from "@/lib/notion";
+import { getNotionCms, getNotionRendererClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
 import { KeyManager, withCache } from "@/lib/cache";
+import { NotionCMSService } from "./notion/cms";
 
 type Site = typeof sites.$inferSelect;
 
@@ -203,6 +204,7 @@ export const getSiteById = (siteId: string, pageId: string) => {
       key: KeyManager.getPageContent(pageId),
       ttl: 60 * 60,
     });
+
     return { page, site };
   });
 };

@@ -80,6 +80,7 @@ export const getUserNotionPages = (userId: string) => {
       execute: notion.getPages(),
       key: KeyManager.getUserNotionPages(userId),
       ttl: 120,
+      
     });
     return notionPages;
   }).pipe(

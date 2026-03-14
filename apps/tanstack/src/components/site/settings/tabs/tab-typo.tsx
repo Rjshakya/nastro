@@ -18,6 +18,7 @@ interface TypoSectionField {
   type: "number" | "font";
   min?: number;
   max?: number;
+  step?: number;
 }
 
 interface TypoSection {
@@ -120,6 +121,7 @@ export function TabTypo({ sections }: TabTypoProps) {
                     }
                     min={field.min}
                     max={field.max}
+                    step={field.step || 1}
                   />
                 );
               }
