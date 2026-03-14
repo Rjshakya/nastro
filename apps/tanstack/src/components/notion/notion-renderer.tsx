@@ -65,7 +65,15 @@ export function NotionRenderer({
           PageLink: ({ href, children, ...props }: any) => {
             const block = children?.props?.block as Block;
             if (block?.type === "page") {
-              if (block.parent_table !== "block") return null;
+
+              if (block.parent_table !== "block") {
+                return (
+                  <Link to={href} {...props}>
+                    {children}
+                  </Link>
+                );
+              }
+              
               const title = block.properties?.title?.[0] || "";
               return (
                 <Link {...props} to={href}>
@@ -121,7 +129,7 @@ export function NotionRenderer({
             }
 
             return (
-              <Link className={""} to={href} {...props}>
+              <Link to={href} {...props}>
                 {children}
               </Link>
             );

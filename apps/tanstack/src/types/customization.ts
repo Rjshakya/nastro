@@ -409,7 +409,7 @@ export interface NotionPageSettings {
   theme?: ThemeSettingsUI;
   /**
    * if general.isDark is true
-   * then all the changes will saved in
+   * then all the changes will be saved in
    * darkTheme
    */
   darkTheme?: ThemeSettingsUI;

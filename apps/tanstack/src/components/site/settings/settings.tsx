@@ -422,7 +422,6 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
   const { updateSite, isLoading } = useUpdateSite();
 
   const handleSave = async () => {
-    console.log(settings);
     await updateSite({
       siteId,
       input: {

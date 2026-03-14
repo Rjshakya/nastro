@@ -92,7 +92,7 @@
   --notion-collection-card-padding-y: 0px;
   --notion-collection-card-padding-x: 0px;
   --notion-collection-card-margin-x: 0px;
-  --notion-collection-card-margin-x: 0px;
+  --notion-collection-card-margin-y: 0px;
 
   /* updates for notion - card */
   --notion-gallery-grid-gap: 16px;
@@ -100,14 +100,16 @@
   --notion-collection-card-cover-padding-y: 0px;
   --notion-collection-card-cover-padding-x: 0px;
   --notion-collection-card-cover-margin-x: 0px;
-  --notion-collection-card-cover-margin-x: 0px;
+  --notion-collection-card-cover-margin-y: 0px;
   --notion-collection-card-cover-height: 200px;
   --notion-collection-card-cover-radius: 0.625rem;
 
   --notion-collection-card-body-padding-x: 12px;
   --notion-collection-card-body-padding-y: 12px;
+  --notion-collection-card-body-padding-x: 12px;
+  --notion-collection-card-body-padding-y: 12px;
   --notion-collection-card-body-margin-x: 0px;
-  --notion-collection-card-body-margin-x: 0px;
+  --notion-collection-card-body-margin-y: 0px;
 
   /* notion-button */
 

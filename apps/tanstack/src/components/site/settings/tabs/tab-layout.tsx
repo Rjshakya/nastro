@@ -444,11 +444,14 @@ export function TabLayout({ sections }: TabLayoutProps) {
             <CollapsibleContent className="bg-muted px-4 mt-2  rounded-md  space-y-4 py-4">
               {section.fields.map((field) => {
                 if (field.type === "number") {
+                  const currentValue = sectionData?.[field.key];
+                  const displayValue = currentValue ?? field.min ?? 0;
+
                   return (
                     <SliderInput
                       key={field.key}
                       label={field.label}
-                      value={sectionData?.[field.key] ?? field.min ?? 0}
+                      value={displayValue}
                       onChange={(v) =>
                         handleFieldChange(section.id, field.key, v)
                       }
