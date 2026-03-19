@@ -1,8 +1,5 @@
 import { client } from "@/lib/api-client";
 
-
-
-
 export const getNotionPages = async () => {
   const res = await client.api.notion.pages.$get();
   if (!res.ok) {
@@ -10,5 +7,5 @@ export const getNotionPages = async () => {
   }
   const data = await res.json();
 
-  return data
-}
+  return data;
+};

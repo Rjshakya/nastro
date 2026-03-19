@@ -10,8 +10,10 @@ import {
   updateSite,
   deleteSite,
   type CreateSiteInput,
+  type GetSiteInput,
 } from "#/lib/site";
 import { useRouter } from "@tanstack/react-router";
+import { useState } from "react";
 
 export const useSites = () => {
   const fetcher = () => getSites();
@@ -26,10 +28,10 @@ export const useSites = () => {
   };
 };
 
-export const useSite = (siteId: string, pageId: string, fresh?: boolean) => {
-  const fetcher = () => getSite({ pageId, siteId, fresh });
+export const useSite = (input: GetSiteInput) => {
+  const fetcher = () => getSite(input);
 
-  const swr = useSWR(siteId ? `/sites/${pageId}` : null, fetcher);
+  const swr = useSWR(input.slug ? `/sites/${input.pageId}` : null, fetcher);
 
   return {
     data: swr.data?.data,
@@ -41,12 +43,17 @@ export const useSite = (siteId: string, pageId: string, fresh?: boolean) => {
 
 export const useCreateSite = () => {
   const router = useRouter();
+  const [input, setInput] = useState<CreateSiteInput>({
+    pageId: "",
+    siteName: "",
+    slug: "",
+  });
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/sites",
     async (_key: string, { arg }: { arg: CreateSiteInput }) => {
       const site = await createSite(_key, { arg });
       router.invalidate({ sync: true });
-      return site;
+      return site.data[0];
     },
   );
 
@@ -55,6 +62,8 @@ export const useCreateSite = () => {
     isLoading: isMutating,
     error,
     reset,
+    input,
+    setInput,
   };
 };
 

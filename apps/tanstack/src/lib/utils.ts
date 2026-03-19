@@ -1,15 +1,19 @@
 import { computeCustomStyles } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/customization";
-import type { Site, SiteSetting } from "#/types/site";
+import type { Site } from "#/types/site";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
 import { Env } from "env";
-import type { Block, ExtendedRecordMap } from "notion-types";
-import { defaultMapImageUrl, getPageTitle, getBlockIcon } from "notion-utils";
+import type { ExtendedRecordMap } from "notion-types";
+import { defaultMapImageUrl, getPageTitle } from "notion-utils";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function createSlugUrl(slug: string) {
+  return new URL(slug, Env.clientUrl).href;
 }
 
 export function defaultNotionOgImage(page: ExtendedRecordMap, pageId: string) {

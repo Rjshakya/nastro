@@ -1,40 +1,38 @@
 import { client } from "./api-client";
 import type { Site, SiteSetting } from "@/types/site";
-import type { NotionPageSettings } from "#/types/customization";
 import type { ExtendedRecordMap } from "notion-types";
 
 export interface CreateSiteInput {
+  slug: string;
   pageId: string;
   siteName: string;
   siteSetting?: SiteSetting;
 }
 
 export interface UpdateSiteInput {
-  siteName?: string;
-  siteSetting?: NotionPageSettings;
+  slug: string;
   pageId: string;
+  siteName: string;
+  siteSetting?: SiteSetting;
+}
+
+export interface GetSiteInput {
+  slug: string;
+  pageId: string;
+  fresh?: "true" | "false";
 }
 
 export const getSites = async () => {
-  const res = await client.api.sites.$get({});
+  const res = await client.api.site.all.$get({});
   if (!res.ok) {
     throw new Error("Failed to fetch sites hc");
   }
   return await res.json();
 };
 
-export const getSite = async ({
-  pageId,
-  siteId,
-  fresh,
-}: {
-  siteId: string;
-  pageId: string;
-  fresh?: boolean;
-}) => {
-  const res = await client.api.sites[":id"].$get({
-    param: { id: siteId },
-    query: { pageId, fresh },
+export const getSite = async ({ pageId, slug, fresh }: GetSiteInput) => {
+  const res = await client.api.site.$get({
+    query: { pageId, fresh, slug },
   });
   if (!res.ok) {
     throw new Error("Failed to fetch site");
@@ -50,9 +48,8 @@ export const createSite = async (
   _key: string,
   { arg }: { arg: CreateSiteInput },
 ) => {
-  const { pageId, siteName, siteSetting } = arg;
-  const res = await client.api.sites.$post({
-    json: { pageId, siteName, siteSetting: siteSetting as any },
+  const res = await client.api.site.$post({
+    json: arg,
   });
   if (!res.ok) {
     const error = await res.json();
@@ -67,13 +64,9 @@ export const updateSite = async (
   _key: string,
   { arg }: { arg: { siteId: string; input: UpdateSiteInput } },
 ) => {
-  const res = await client.api.sites[":id"].$patch({
+  const res = await client.api.site[":id"].$patch({
     param: { id: arg.siteId },
-    json: {
-      siteName: arg.input.siteName,
-      siteSetting: arg.input.siteSetting as any,
-      pageId: arg.input.pageId,
-    },
+    json: arg.input,
   });
   if (!res.ok) {
     throw new Error("Failed to update site");
@@ -85,8 +78,8 @@ export const updateSite = async (
 export const deleteSite = async (
   _key: string,
   { arg }: { arg: { siteId: string; pageId: string } },
-): Promise<{ data: null }> => {
-  const res = await client.api.sites[":id"].$delete({
+) => {
+  const res = await client.api.site[":id"].$delete({
     param: { id: arg.siteId },
     query: { pageId: arg.pageId },
   });

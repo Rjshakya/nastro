@@ -39,7 +39,9 @@ export const withCache = Effect.fn("withCache")(<T, E, R>({
       return res;
     }
 
-    const cached = yield* Effect.tryPromise(async () => await env.NASTRO_KV.get<string>(key));
+    const cached = yield* Effect.tryPromise(
+      async () => await env.NASTRO_KV.get<string>(key),
+    );
 
     if (cached) {
       return yield* Effect.sync<T>(() => JSON.parse(cached));
@@ -64,7 +66,8 @@ export const withCache = Effect.fn("withCache")(<T, E, R>({
 const deleteKeyFromCache = (key: string) =>
   Effect.tryPromise({
     try: async () => await env.NASTRO_KV.delete(key),
-    catch: (e) => new CacheError({ message: "failed to delete :" + key, error: e }),
+    catch: (e) =>
+      new CacheError({ message: "failed to delete :" + key, error: e }),
   });
 
 export const KeyManager = {
@@ -79,7 +82,9 @@ export const KeyManager = {
     getPageContent: (pageId: string) =>
       Effect.runPromise(deleteKeyFromCache(KeyManager.getPageContent(pageId))),
     getUserNotionPages: (userId: string) =>
-      Effect.runPromise(deleteKeyFromCache(KeyManager.getUserNotionPages(userId))),
+      Effect.runPromise(
+        deleteKeyFromCache(KeyManager.getUserNotionPages(userId)),
+      ),
     getUserSites: (userId: string) =>
       Effect.runPromise(deleteKeyFromCache(KeyManager.getUserSites(userId))),
   },

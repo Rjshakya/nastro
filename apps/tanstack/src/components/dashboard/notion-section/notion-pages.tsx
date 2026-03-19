@@ -1,20 +1,10 @@
-import {
-  IconFileDescription,
-  IconNotebook,
-  IconExternalLink,
-} from "@tabler/icons-react";
+import { IconFileDescription, IconNotebook, IconExternalLink } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMemo } from "react";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemGroup,
-  ItemTitle,
-} from "../../ui/item";
+import { Item, ItemActions, ItemContent, ItemGroup, ItemTitle } from "../../ui/item";
 import { ScrollArea, ScrollBar } from "#/components/ui/scroll-area";
 
 interface NotionPage {
@@ -48,12 +38,7 @@ function PageItem({ page }: { page: NotionPage }) {
   const title = useMemo(() => getPageTitle(page), [page]);
 
   return (
-    <a
-      href={page.url ?? "#"}
-      target="_blank"
-      rel="noopener noreferrer"
-      className=""
-    >
+    <a href={page.url ?? "#"} target="_blank" rel="noopener noreferrer" className="">
       <Item className="p-1" variant={"muted"}>
         <Button size={"icon-sm"} variant={"secondary"}>
           <IconFileDescription className="size-5" />

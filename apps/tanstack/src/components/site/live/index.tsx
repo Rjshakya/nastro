@@ -2,24 +2,25 @@ import { NotionRenderer } from "#/components/notion/notion-renderer";
 import { ClientOnly, getRouteApi } from "@tanstack/react-router";
 import "@/styles/notion.css";
 import type { NotionPageSettings } from "#/types/customization";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { applyDefaultSettings } from "#/lib/settings-defaults";
 import { clientThemeToggle } from "#/lib/utils";
 
-const liveSiteRoute = getRouteApi("/$siteId");
+const liveSiteRoute = getRouteApi("/$pageId");
 export const LiveSite = () => {
   const data = liveSiteRoute.useLoaderData();
   const site = data?.site;
   const page = data?.page;
-  const { pageId } = liveSiteRoute.useLoaderDeps();
-  useEffect(() => {
+  const { slug } = liveSiteRoute.useLoaderDeps();
+  const { pageId } = liveSiteRoute.useParams({});
+  useLayoutEffect(() => {
     if (site?.siteSetting && page) {
       const defaultSettings = applyDefaultSettings({
         existingSettings: site?.siteSetting,
         page,
-        pageId,
         site,
+        pageId,
       });
 
       clientThemeToggle(!!site?.siteSetting?.general?.isDark);
@@ -29,11 +30,11 @@ export const LiveSite = () => {
     }
   }, [site?.siteSetting, page]);
   return (
-      <NotionRenderer
-        pageId={site?.pageId ?? ""}
-        siteId={site?.id || ""}
-        recordMap={page}
-        settings={site?.siteSetting || ({} as NotionPageSettings)}
-      />
+    <NotionRenderer
+      pageId={pageId}
+      slug={slug}
+      recordMap={page}
+      settings={site?.siteSetting || ({} as NotionPageSettings)}
+    />
   );
 };

@@ -15,13 +15,13 @@ import { Button as ShadBtn } from "#/components/ui/button";
 interface NotionRendererProps {
   pageId: string;
   recordMap: any;
-  siteId: string;
+  slug: string;
 }
 
 export function NotionRenderer({
   pageId,
   recordMap,
-  siteId,
+  slug,
   settings,
 }: NotionRendererProps & { settings?: NotionPageSettings }) {
   const { styles } = useNotionSettingsStore((s) => s);
@@ -38,13 +38,12 @@ export function NotionRenderer({
   }
 
   const handlePageUrl = (pageId: string) => {
-    if (pathname === `/${siteId}`) {
-      return `/${siteId}?pageId=${pageId}`;
+    if (!pathname.includes("/site")) {
+      return `/${pageId}?slug=${slug}`;
     }
 
-    return `/site/${siteId}?pageId=${pageId}`;
+    return `/site/${pageId}?slug=${slug}`;
   };
-
 
   return (
     <div
@@ -76,9 +75,7 @@ export function NotionRenderer({
               return (
                 <Link {...props} to={href}>
                   <ShadBtn
-                    className={
-                      "w-full flex justify-start rounded-xs px-2"
-                    }
+                    className={"w-full flex justify-start rounded-xs px-2"}
                     variant={"ghost"}
                     size={"sm"}
                   >

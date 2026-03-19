@@ -3,7 +3,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getRouteApi, Outlet } from "@tanstack/react-router";
 import { SiteEditorHeader } from "../site-editor-header";
 
-export const siteApi = getRouteApi("/site/$siteId");
+export const siteApi = getRouteApi("/site/$pageId");
 export default function SiteEditorLayout() {
   return (
     <SidebarProvider

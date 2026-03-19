@@ -14,7 +14,6 @@ import {
 } from "../ui/dropdown-menu";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
 import { clientThemeToggle } from "#/lib/utils";
 
 export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {

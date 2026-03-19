@@ -1,12 +1,13 @@
 import { ApiResponse } from "@/lib/api";
 import { Vars } from "@/lib/hono-types";
 import { authMiddleWare } from "@/middlewares/auth";
-import { getNotionClient } from "@/lib/notion";
+import { NotionClientLive } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
 import { zValidator } from "@hono/zod-validator";
 import { Effect } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
+import { NotionService, NotionServiceLive } from "@/services/notion/main";
 
 const pageParamsSchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
@@ -16,33 +17,26 @@ const notionApp = new Hono<{ Variables: Vars }>()
   .use(authMiddleWare())
   .get("/pages", async (c) => {
     const userId = c.get("user")?.id;
-    const pages = await Effect.runPromise(getUserNotionPages(userId as string));
+
+    const program = Effect.gen(function* () {
+      const notion = yield* NotionService;
+      return yield* notion.getNotionPages();
+    }).pipe(
+      Effect.provide(NotionServiceLive(getAccessToken(userId as string, "notion"))),
+      Effect.provide(NotionClientLive),
+    );
+
+    const pages = await Effect.runPromise(program);
+
     return c.json(ApiResponse({ data: pages, message: "success" }));
   })
   .get("/pages/:pageId", zValidator("param", pageParamsSchema), async (c) => {
-    const userId = c.get("user")?.id;
-    const { pageId } = c.req.valid("param");
-
-    const { accessToken } = await Effect.runPromise(getAccessToken(userId as string, "notion"));
-
-    if (!accessToken) {
-      return c.json(
-        ApiResponse({
-          data: null,
-          error: "Notion not connected",
-          message: "Please connect your Notion account",
-        }),
-        401,
-      );
-    }
-
-    const notionClient = getNotionClient(accessToken as string);
-    const notionService = new NotionWebsiteService(notionClient);
-    const pageContent = await Effect.runPromise(notionService.getPage(pageId));
+    // const userId = c.get("user")?.id;
+    // const { pageId } = c.req.valid("param");
 
     return c.json(
       ApiResponse({
-        data: pageContent,
+        data: {},
         message: "Page content fetched successfully",
       }),
     );

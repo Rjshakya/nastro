@@ -16,8 +16,9 @@ import { TabTheme, type TabThemeProps } from "./tabs/tab-theme";
 import { TabTypo, type TabTypoProps } from "./tabs/tab-typo";
 import { TabLayout, type TabLayoutProps } from "./tabs/tab-layout";
 import { TabSeo, type TabSeoProps } from "./tabs/tab-seo";
-import { useUpdateSite } from "#/components/hooks/use-sites";
+import { useUpdateSite } from "#/hooks/use-sites";
 import { useParams, useSearch } from "@tanstack/react-router";
+import { siteApi } from "../editor";
 
 interface SettingsV2Props {
   open: boolean;
@@ -36,6 +37,7 @@ const tabNames: Record<keyof NotionPageSettings, string> = {
 
 const generalSections: TabGeneralProps = {
   siteName: { label: "Site Name", type: "text" },
+  slug: { label: "Slug", type: "text" },
   header: { label: "Header", type: "boolean" },
   footer: { label: "Footer", type: "boolean" },
   pageWidth: { label: "Page width", type: "number", min: 436, max: 1334 },
@@ -413,8 +415,9 @@ const layoutSections: TabLayoutProps["sections"] = [
 ];
 
 export function Settings({ open, onOpenChange }: SettingsV2Props) {
-  const { siteId } = useParams({ from: "/site/$siteId" });
-  const { pageId } = useSearch({ from: "/site/$siteId" });
+  const { pageId } = useParams({ from: "/site/$pageId" });
+  const { slug } = useSearch({ from: "/site/$pageId" });
+  const { site } = siteApi.useLoaderData();
   const { settings } = useNotionSettingsStore((s) => s);
   const tabKeys = Object.keys(tabNames).filter(
     (key) => key !== "darkTheme",
@@ -423,11 +426,12 @@ export function Settings({ open, onOpenChange }: SettingsV2Props) {
 
   const handleSave = async () => {
     await updateSite({
-      siteId,
+      siteId: site.id,
       input: {
-        siteName: settings?.general?.siteName,
+        siteName: settings?.general?.siteName ?? "",
         siteSetting: settings,
         pageId,
+        slug: settings.general?.slug || slug,
       },
     });
     onOpenChange(false);

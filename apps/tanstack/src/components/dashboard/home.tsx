@@ -1,5 +1,4 @@
 import { DashboardSitesSection } from "./site-section/sites-section";
-import { DashboardNotionSection } from "./notion-section/notion-section";
 import { getRouteApi } from "@tanstack/react-router";
 
 export const dashboardHomeApi = getRouteApi("/dashboard");

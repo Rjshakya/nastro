@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as SiteIdRouteImport } from './routes/$siteId'
+import { Route as PageIdRouteImport } from './routes/$pageId'
 import { Route as SiteRouteRouteImport } from './routes/site/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as SiteSiteIdRouteImport } from './routes/site/$siteId'
+import { Route as SitePageIdRouteImport } from './routes/site/$pageId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -28,9 +28,9 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SiteIdRoute = SiteIdRouteImport.update({
-  id: '/$siteId',
-  path: '/$siteId',
+const PageIdRoute = PageIdRouteImport.update({
+  id: '/$pageId',
+  path: '/$pageId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiteRouteRoute = SiteRouteRouteImport.update({
@@ -53,9 +53,9 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const SiteSiteIdRoute = SiteSiteIdRouteImport.update({
-  id: '/$siteId',
-  path: '/$siteId',
+const SitePageIdRoute = SitePageIdRouteImport.update({
+  id: '/$pageId',
+  path: '/$pageId',
   getParentRoute: () => SiteRouteRoute,
 } as any)
 
@@ -63,19 +63,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/site': typeof SiteRouteRouteWithChildren
-  '/$siteId': typeof SiteIdRoute
+  '/$pageId': typeof PageIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
-  '/site/$siteId': typeof SiteSiteIdRoute
+  '/site/$pageId': typeof SitePageIdRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/site': typeof SiteRouteRouteWithChildren
-  '/$siteId': typeof SiteIdRoute
+  '/$pageId': typeof PageIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
-  '/site/$siteId': typeof SiteSiteIdRoute
+  '/site/$pageId': typeof SitePageIdRoute
   '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -83,10 +83,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/site': typeof SiteRouteRouteWithChildren
-  '/$siteId': typeof SiteIdRoute
+  '/$pageId': typeof PageIdRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
-  '/site/$siteId': typeof SiteSiteIdRoute
+  '/site/$pageId': typeof SitePageIdRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
@@ -95,29 +95,29 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/site'
-    | '/$siteId'
+    | '/$pageId'
     | '/about'
     | '/login'
-    | '/site/$siteId'
+    | '/site/$pageId'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/site'
-    | '/$siteId'
+    | '/$pageId'
     | '/about'
     | '/login'
-    | '/site/$siteId'
+    | '/site/$pageId'
     | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/site'
-    | '/$siteId'
+    | '/$pageId'
     | '/about'
     | '/login'
-    | '/site/$siteId'
+    | '/site/$pageId'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -125,7 +125,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SiteRouteRoute: typeof SiteRouteRouteWithChildren
-  SiteIdRoute: typeof SiteIdRoute
+  PageIdRoute: typeof PageIdRoute
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
 }
@@ -146,11 +146,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$siteId': {
-      id: '/$siteId'
-      path: '/$siteId'
-      fullPath: '/$siteId'
-      preLoaderRoute: typeof SiteIdRouteImport
+    '/$pageId': {
+      id: '/$pageId'
+      path: '/$pageId'
+      fullPath: '/$pageId'
+      preLoaderRoute: typeof PageIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/site': {
@@ -181,11 +181,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/site/$siteId': {
-      id: '/site/$siteId'
-      path: '/$siteId'
-      fullPath: '/site/$siteId'
-      preLoaderRoute: typeof SiteSiteIdRouteImport
+    '/site/$pageId': {
+      id: '/site/$pageId'
+      path: '/$pageId'
+      fullPath: '/site/$pageId'
+      preLoaderRoute: typeof SitePageIdRouteImport
       parentRoute: typeof SiteRouteRoute
     }
   }
@@ -204,11 +204,11 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 )
 
 interface SiteRouteRouteChildren {
-  SiteSiteIdRoute: typeof SiteSiteIdRoute
+  SitePageIdRoute: typeof SitePageIdRoute
 }
 
 const SiteRouteRouteChildren: SiteRouteRouteChildren = {
-  SiteSiteIdRoute: SiteSiteIdRoute,
+  SitePageIdRoute: SitePageIdRoute,
 }
 
 const SiteRouteRouteWithChildren = SiteRouteRoute._addFileChildren(
@@ -219,7 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SiteRouteRoute: SiteRouteRouteWithChildren,
-  SiteIdRoute: SiteIdRoute,
+  PageIdRoute: PageIdRoute,
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
 }

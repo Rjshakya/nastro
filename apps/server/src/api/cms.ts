@@ -1,7 +1,6 @@
 import { ApiResponse } from "@/lib/api";
 import { Vars } from "@/lib/hono-types";
 import { authMiddleWare } from "@/middlewares/auth";
-import { getNotionPageFromCMS } from "@/services/notion/cms";
 import { zValidator } from "@hono/zod-validator";
 import { Effect } from "effect";
 import { Hono } from "hono";
@@ -21,10 +20,7 @@ export const notionCmsApi = new Hono<{ Variables: Vars }>()
       const { format } = c.req.valid("json");
       const { pageId } = c.req.valid("param");
       const user = c.get("user");
-      const res = await Effect.runPromise(
-        getNotionPageFromCMS({ format, pageId, userId: user?.id as string }),
-      );
 
-      return c.json(ApiResponse({ data: res, message: "Success" }), 200);
+      return c.json(ApiResponse({ data: {}, message: "Success" }), 200);
     },
   );

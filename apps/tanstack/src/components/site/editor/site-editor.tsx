@@ -6,7 +6,8 @@ import { useNotionSettingsStore } from "#/stores/notion-settings";
 
 export function SiteEditor() {
   const { page, site } = siteApi.useLoaderData();
-  const { pageId } = siteApi.useLoaderDeps();
+  const { pageId } = siteApi.useParams();
+  const { slug } = siteApi.useLoaderDeps({});
   const { isPanelOpen, togglePanel } = useNotionSettingsStore((s) => s);
   const { settings } = useNotionSettingsStore((s) => s);
 
@@ -21,7 +22,7 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer siteId={site.id} pageId={pageId} recordMap={page} settings={settings} />
+        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
       </div>
 
       <Settings open={isPanelOpen} onOpenChange={togglePanel} />

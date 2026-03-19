@@ -319,6 +319,7 @@ export interface GeneralSettingsUI {
   header?: boolean;
   footer?: boolean;
   isDark?: boolean;
+  slug?: string;
 }
 
 export interface TypoSettingsUI {

@@ -8,17 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Site } from "@/types/site";
-import { Link, useRouter } from "@tanstack/react-router";
-import { useDeleteSite } from "#/components/hooks/use-sites";
+import { Link } from "@tanstack/react-router";
+import { useDeleteSite } from "#/hooks/use-sites";
+import { createSlugUrl } from "#/lib/utils";
+import { Env } from "env";
 
 interface SiteCardProps {
   site: Site;
-  isDeleting?: boolean;
 }
 
 export function SiteCard({ site }: SiteCardProps) {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
-
+  const url = Env.isDev
+    ? "/$pageId"
+    : createSlugUrl(site.slug) + "/" + site.pageId;
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.pageId || "", siteId: site.id });
   };
@@ -39,9 +42,9 @@ export function SiteCard({ site }: SiteCardProps) {
           </Button>
 
           <Link
-            to="/site/$siteId"
-            params={{ siteId: site.id }}
-            search={{ pageId: site.pageId || "" }}
+            to="/site/$pageId"
+            params={{ pageId: site.pageId || "" }}
+            search={{ slug: site.slug }}
           >
             <Button variant="ghost" size="icon-sm" className="">
               <IconSettings className="h-4 w-4" />
@@ -49,9 +52,9 @@ export function SiteCard({ site }: SiteCardProps) {
           </Link>
 
           <Link
-            to="/$siteId"
-            params={{ siteId: site.id }}
-            search={{ pageId: site.pageId || "" }}
+            to={url}
+            params={{ pageId: site.pageId || "" }}
+            search={{ slug: site.slug }}
             target="_blank"
           >
             <Button

@@ -9,19 +9,19 @@ import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { applyDefaultSettings } from "#/lib/settings-defaults";
 
 const siteSearchSchema = z.object({
-  pageId: z.string(),
+  slug: z.string(),
 });
 
-export const Route = createFileRoute("/site/$siteId")({
+export const Route = createFileRoute("/site/$pageId")({
   validateSearch: siteSearchSchema,
-  loaderDeps({ search: { pageId } }) {
-    return { pageId };
+  loaderDeps({ search: { slug } }) {
+    return { slug };
   },
   component: RouteComponent,
   loader: async ({ params, deps }) => {
-    const { siteId } = params;
-    const { pageId } = deps;
-    const { data } = await getSite({ siteId, pageId });
+    const { pageId } = params;
+    const { slug } = deps;
+    const { data } = await getSite({ slug, pageId });
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     // const seo = getNotionPageSeo({ page, site, pageId });

@@ -8,11 +8,11 @@ import type {
   PartialDataSourceObjectResponse,
   PartialPageObjectResponse,
 } from "@notionhq/client";
-import { KeyManager, withCache } from "@/lib/cache";
 import { NotionClient } from "@/lib/notion";
 import { ExtendedRecordMap } from "notion-types";
+import { type GetAccessTokenResult } from "@/lib/tokens";
 
-type GetPages = (
+export type GetPages = (
   | PageObjectResponse
   | PartialPageObjectResponse
   | PartialDataSourceObjectResponse
@@ -27,28 +27,41 @@ class NotionError extends Data.TaggedError("NotionError")<{
 export class NotionService extends ServiceMap.Service<
   NotionService,
   {
-    readonly getPageOfSite: (pageId: string) => Effect.Effect<ExtendedRecordMap, NotionError>;
+    readonly getPageOfSite: (
+      pageId: string,
+    ) => Effect.Effect<ExtendedRecordMap, NotionError>;
     readonly getNotionPages: () => Effect.Effect<GetPages, NotionError, never>;
   }
 >()("services/notion/notionService") {}
 
-export const NotionServiceLive = (accessToken?: string) =>
+export const NotionServiceLive = (
+  accessToken?: string | GetAccessTokenResult,
+) =>
   Layer.effect(
     NotionService,
     Effect.gen(function* () {
       const getNotionClient = yield* NotionClient;
-      const notionClient = getNotionClient.getClient();
-      const _request = <T>({ endpoint, body }: { endpoint: string; body: unknown }) =>
+      const resolvedAccessToken = yield* resolveAccessToken(accessToken);
+      const notionClient = getNotionClient.getClient(resolvedAccessToken);
+      const _request = <T>({
+        endpoint,
+        body,
+      }: {
+        endpoint: string;
+        body: unknown;
+      }) =>
         Effect.tryPromise({
           try: async () => {
             if (!accessToken) {
-              throw new NotionError({ message: "NOTION ACCESS TOKEN NOT PROVIDED" });
+              throw new NotionError({
+                message: "NOTION ACCESS TOKEN NOT PROVIDED",
+              });
             }
 
             const response = await fetch(`${NOTION_API_URL}${endpoint}`, {
               method: "POST",
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${resolvedAccessToken}`,
                 "Notion-Version": NOTION_API_VERSION,
                 "Content-Type": "application/json",
               },
@@ -61,7 +74,10 @@ export const NotionServiceLive = (accessToken?: string) =>
 
             return (await response.json()) as T;
           },
-          catch: () => new NotionError({ message: "NOTION REQUEST FAILED" }),
+          catch: (e) => {
+            console.error(e);
+            return new NotionError({ message: "NOTION REQUEST FAILED" });
+          },
         });
 
       return NotionService.of({
@@ -71,7 +87,8 @@ export const NotionServiceLive = (accessToken?: string) =>
               const page = await notionClient.getPage(pageId);
               return page;
             },
-            catch: (e) => new NotionError({ message: "NOTION PAGE NOT FOUND", error: e }),
+            catch: (e) =>
+              new NotionError({ message: "NOTION PAGE NOT FOUND", error: e }),
           }),
         getNotionPages: () =>
           Effect.gen(function* () {
@@ -87,3 +104,15 @@ export const NotionServiceLive = (accessToken?: string) =>
       });
     }),
   );
+
+function resolveAccessToken(
+  accessToken?: string | GetAccessTokenResult,
+): Effect.Effect<string | undefined, "getAccessTokenError", never> {
+  return Effect.gen(function* () {
+    if (Effect.isEffect(accessToken)) {
+      const result = yield* accessToken;
+      return result.accessToken || undefined;
+    }
+    return accessToken;
+  });
+}

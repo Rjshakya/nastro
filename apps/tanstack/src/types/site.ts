@@ -21,14 +21,15 @@ export interface SiteSetting {
 
 export interface Site {
   id: string;
+  createdAt: string;
+  updatedAt: string;
   userId: string;
   pageId: string | null;
+  slug: string;
   databaseId: string | null;
   shortId: string;
   siteName: string;
   siteSetting: NotionPageSettings | null;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface Header {}

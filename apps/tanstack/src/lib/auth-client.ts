@@ -12,7 +12,7 @@ export const login = async () => {
       callbackURL: Env.clientUrl + "/dashboard",
     });
   } catch (e) {
-    console.error("failed to signin");
+    console.error("failed to signin", e);
   }
 };
 

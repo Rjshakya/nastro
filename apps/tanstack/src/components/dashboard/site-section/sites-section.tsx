@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import type { Site } from "@/types/site";
 import { IconWorld } from "@tabler/icons-react";
 import { CreateSiteDialog } from "./create-site";
-import { useDeleteSite } from "#/components/hooks/use-sites";
 import { dashboardHomeApi } from "../home";
 
 export const DashboardSitesSection = () => {

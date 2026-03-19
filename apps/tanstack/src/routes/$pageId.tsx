@@ -11,18 +11,18 @@ import { liveSiteLoader } from "#/lib/live-site";
 import { getSite } from "#/lib/site";
 
 const siteSearchSchema = z.object({
-  pageId: z.string(),
+  slug: z.string(),
 });
 
-export const Route = createFileRoute("/$siteId")({
+export const Route = createFileRoute("/$pageId")({
   validateSearch: siteSearchSchema,
-  loaderDeps({ search: { pageId } }) {
-    return { pageId };
+  loaderDeps({ search: { slug } }) {
+    return { slug };
   },
   loader: async ({ params, deps }) => {
-    const { siteId } = params;
-    const { pageId } = deps;
-    const { data } = await getSite({ pageId, siteId });
+    const { pageId } = params;
+    const { slug } = deps;
+    const { data } = await getSite({ pageId, slug });
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
     const seo = getNotionPageSeo({ page, site, pageId });

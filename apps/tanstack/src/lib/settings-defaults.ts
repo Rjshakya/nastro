@@ -4,7 +4,7 @@ import type { ExtendedRecordMap } from "notion-types";
 import { getNotionPageSeo } from "./utils";
 
 export const defaultThemeSettings = (
-  themeSettings: NotionPageSettings["theme"],
+  themeSettings?: NotionPageSettings["theme"],
 ) => {
   return {
     main: {
@@ -98,7 +98,7 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
 
 export const defaultLayoutSettings = (
   pageTitle: string,
-  pageIcon: string,
+  pageIcon?: string,
 ): NotionPageSettings["layout"] => ({
   header: {
     text: pageTitle,
@@ -135,7 +135,7 @@ export const defaultLayoutSettings = (
 });
 
 export const defaultDarkThemeSettings = (
-  darkThemeSettings: NotionPageSettings["darkTheme"],
+  darkThemeSettings?: NotionPageSettings["darkTheme"],
 ) => {
   return {
     main: {
@@ -211,12 +211,13 @@ export const defaultDarkThemeSettings = (
   };
 };
 
-export const defaultGeneralSettings = (siteName?: string) => ({
+export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   siteName,
   pageWidth: 768,
   header: true,
   footer: true,
   isDark: false,
+  slug: slug,
 });
 
 export const applyDefaultSettings = ({
@@ -280,10 +281,58 @@ export const applyDefaultSettings = ({
       },
     },
     general: {
-      ...defaultGeneralSettings(seo?.title || ""),
+      ...defaultGeneralSettings(seo?.title || "", site.slug),
       ...existingSettings?.general,
       isDark: existingSettings?.general?.isDark ?? true,
     },
     seo,
+  };
+};
+
+export const defaultNotionSettings = (
+  title: string,
+  slug: string,
+): NotionPageSettings => {
+  return {
+    theme: {
+      ...defaultThemeSettings(),
+    },
+    darkTheme: {
+      ...defaultDarkThemeSettings(),
+    },
+    typography: {
+      ...defaultTypographySettings,
+      sizes: {
+        ...defaultTypographySettings.sizes,
+      },
+      spacing: {
+        ...defaultTypographySettings.spacing,
+      },
+    },
+    layout: {
+      ...defaultLayoutSettings(title),
+      header: {
+        ...defaultLayoutSettings(title)?.header,
+      },
+      footer: {
+        ...defaultLayoutSettings(title)?.footer,
+      },
+      gallery: {
+        ...defaultLayoutSettings(title)?.gallery,
+      },
+      card: {
+        ...defaultLayoutSettings(title)?.card,
+      },
+      cardCover: {
+        ...defaultLayoutSettings(title)?.cardCover,
+      },
+      cardBody: {
+        ...defaultLayoutSettings(title)?.cardBody,
+      },
+    },
+    general: {
+      ...defaultGeneralSettings(title, slug),
+      isDark: true,
+    },
   };
 };

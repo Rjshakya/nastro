@@ -12,11 +12,11 @@ export interface TabGeneralProps {
   header?: { type: string; label: string };
   footer?: { type: string; label: string };
   isDark?: { type: string; label: string };
+  slug?: { type: string; label: string };
 }
 
 export function TabGeneral({ tabProps }: { tabProps: TabGeneralProps }) {
   const { settings, updateSettings } = useNotionSettingsStore();
-  const { setTheme } = useTheme();
 
   return (
     <div className="space-y-4">
@@ -24,7 +24,7 @@ export function TabGeneral({ tabProps }: { tabProps: TabGeneralProps }) {
         if (v.type === "text") {
           return (
             <div className="space-y-2">
-              <Label htmlFor="siteName">Site Name</Label>
+              <Label htmlFor="siteName">{v?.label}</Label>
               <Input
                 id="siteName"
                 value={

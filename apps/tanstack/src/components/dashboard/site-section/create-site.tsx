@@ -1,21 +1,13 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { IconPlus, IconSearch } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { useCreateSite } from "#/components/hooks/use-sites";
+
+import { useCreateSite } from "#/hooks/use-sites";
 import type { Site } from "@/types/site";
-import { useRouter } from "@tanstack/react-router";
+// import { useRouter } from "@tanstack/react-router";
 import { dashboardHomeApi } from "../home";
 import {
   Dialog,
@@ -33,16 +25,10 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "#/components/ui/popover";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemHeader,
-  ItemTitle,
-} from "#/components/ui/item";
+import { Item, ItemContent, ItemGroup, ItemTitle } from "#/components/ui/item";
 import { ScrollArea } from "#/components/ui/scroll-area";
 import { parsePageId } from "notion-utils";
+import { defaultNotionSettings } from "#/lib/settings-defaults";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -50,38 +36,44 @@ interface CreateSiteDialogProps {
 
 export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const [open, setOpen] = useState(false);
-  const [siteName, setSiteName] = useState("");
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { pages } = dashboardHomeApi.useLoaderData();
-  const { createSite, isLoading: isCreating } = useCreateSite();
-  const router = useRouter();
+  const {
+    createSite,
+    isLoading: isCreating,
+    input,
+    setInput,
+  } = useCreateSite();
   const [openPopover, setOpenPopver] = useState(false);
   const popoverTriggerRef = useRef<HTMLDivElement>(null);
 
-  const filteredPages = pages?.filter((page) => {
-    if (!searchQuery) return true;
-    const title = getPageTitle(page);
-    return title.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const filteredPages = useMemo(() => {
+    return pages?.filter((page) => {
+      if (!searchQuery) return true;
+      const title = getPageTitle(page);
+      return title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [pages, searchQuery]);
 
   const handleCreate = async () => {
-    if (!selectedPageId || !siteName.trim()) return;
+    if (!input) return;
     const result = await createSite({
-      pageId: selectedPageId,
-      siteName: siteName.trim(),
+      ...input,
+      pageId: selectedPageId ?? "",
+      siteSetting: defaultNotionSettings(input.siteName, input.slug),
     });
 
-    if (result?.data) {
-      onSuccess?.({ ...(result?.data as Site) });
+    if (result) {
+      onSuccess?.({ ...(result as Site) });
       setOpen(false);
-      setSiteName("");
       setSelectedPageId(null);
-      // await router.invalidate({ sync: true });
+      setInput({ pageId: "", siteName: "", slug: "" });
+      setSelectedPageId("");
     }
   };
 
-  const isValid = selectedPageId && siteName.trim().length > 0;
+  const isValid = selectedPageId && input.siteName.trim().length > 0;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -107,9 +99,21 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
             <Input
               id="siteName"
               placeholder="My Awesome Site"
-              value={siteName}
-              onChange={(e) => setSiteName(e.target.value)}
+              value={input?.siteName}
+              onChange={(e) => setInput({ ...input, siteName: e.target.value })}
             />
+          </div>
+
+          <div className="py-4 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="slug">Slug</Label>
+              <Input
+                id="slug"
+                placeholder="my-site"
+                value={input?.slug}
+                onChange={(e) => setInput({ ...input, slug: e.target.value })}
+              />
+            </div>
           </div>
 
           <Popover open={openPopover} onOpenChange={setOpenPopver}>
@@ -172,31 +176,6 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
               </ScrollArea>
             </PopoverContent>
           </Popover>
-
-          {/* <div className="border rounded-md max-h-75 overflow-y-auto">
-            {filteredPages && filteredPages?.length > 0 && (
-              <div className="p-2 space-y-2">
-                {filteredPages?.map((page) => (
-                  <button
-                    key={page.id}
-                    className={`w-full text-left p-3 rounded-md border transition-colors ${
-                      selectedPageId === page.id
-                        ? "border-primary bg-primary/10"
-                        : "hover:bg-accent"
-                    }`}
-                    onClick={() => setSelectedPageId(page.id)}
-                  >
-                    <div className="font-medium text-sm line-clamp-1">
-                      {getPageTitle(page)}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {page.id.slice(0, 8)}...
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div> */}
         </div>
 
         <DialogFooter>
@@ -217,7 +196,6 @@ function getPageTitle(page: any): string {
     return "Untitled";
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for (const key of Object.keys(page.properties)) {
     const prop = page.properties[key] as any;
     if (prop?.type === "title" && prop.title?.[0]?.plain_text) {
