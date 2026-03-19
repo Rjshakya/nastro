@@ -9,6 +9,7 @@ export const sites = pgTable("site", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   pageId: text(),
+  slug: text(),
   databaseId: text(),
   shortId: text("short_id").notNull().unique(),
   siteName: text("site_name").notNull(),
@@ -29,3 +30,6 @@ export const sitesRelations = relations(sites, ({ one }) => ({
 
 export const sitesInsertSchema = createInsertSchema(sites);
 export const sitesSelectSchema = createSelectSchema(sites);
+
+export type SiteSelect = typeof sites.$inferSelect;
+export type SiteInsert = typeof sites.$inferInsert;

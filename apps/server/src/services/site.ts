@@ -1,262 +1,46 @@
-import { getDB } from "@/db";
-import { sites } from "@/db/schema/site";
+import { SiteSelect } from "@/db/schema/site";
 import { eq } from "drizzle-orm";
 import { Data, Effect } from "effect";
 import { nanoid } from "nanoid";
-import { NotionWebsiteService } from "./notion/website";
-import { getNotionCms, getNotionRendererClient } from "@/lib/notion";
-import { getAccessToken } from "@/lib/tokens";
 import { KeyManager, withCache } from "@/lib/cache";
-import { NotionCMSService } from "./notion/cms";
-
-type Site = typeof sites.$inferSelect;
-
-const SITE_SHORT_ID_LENGTH = 10;
+import { ExtendedRecordMap } from "notion-types";
+import { SiteRepo } from "@/repo/site";
+import { NotionService } from "./notion/main";
 
 class SiteError extends Data.TaggedError("SiteError")<{
   message: string;
   code: "NOT_FOUND" | "ALREADY_EXISTS" | "INVALID_INPUT" | "UNKNOWN";
 }> {}
 
-export type SiteSetting = Record<string, any>;
+export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
+  Effect.gen(function* () {
+    const siteRepo = yield* SiteRepo();
+    const getSite = siteRepo.execute<SiteSelect | null, SiteError>((db, sites) =>
+      Effect.tryPromise({
+        try: async () => {
+          const result = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
+          return result.length ? result[0] : null;
+        },
+        catch: (e) => new SiteError({ code: "UNKNOWN", message: `${e}` }),
+      }),
+    );
 
-interface CreateSiteInput {
-  pageId: string;
-  siteName: string;
-  siteSetting?: SiteSetting;
-}
-
-interface UpdateSiteInput {
-  siteName?: string;
-  siteSetting?: SiteSetting;
-  pageId: string;
-}
-
-type SiteSelect = Omit<Site, "createdAt" | "updatedAt"> & {
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-class SiteService {
-  async createSite(
-    userId: string,
-    input: CreateSiteInput,
-  ): Promise<SiteSelect> {
-    const db = await getDB();
-
-    const newSite: typeof sites.$inferInsert = {
-      id: nanoid(),
-      userId,
-      pageId: input.pageId,
-      shortId: nanoid(SITE_SHORT_ID_LENGTH),
-      siteName: input.siteName,
-      siteSetting: input.siteSetting ?? null,
-    };
-
-    const [result] = await db.insert(sites).values(newSite).returning();
-
-    return this.transformSite(result);
-  }
-
-  async getSitesByUser(userId: string): Promise<SiteSelect[]> {
-    const db = await getDB();
-
-    const result = await db
-      .select()
-      .from(sites)
-      .where(eq(sites.userId, userId));
-
-    return result?.length > 0 ? result.map(this.transformSite) : [];
-  }
-
-  async getSiteById(siteId: string): Promise<SiteSelect | null> {
-    const db = await getDB();
-
-    const [result] = await db.select().from(sites).where(eq(sites.id, siteId));
-
-    if (!result) {
-      return null;
-    }
-
-    return this.transformSite(result);
-  }
-
-  async getSiteByShortId(shortId: string): Promise<SiteSelect | null> {
-    const db = await getDB();
-
-    const result = await db
-      .select()
-      .from(sites)
-      .where(eq(sites.shortId, shortId));
-
-    if (!result[0]) {
-      return null;
-    }
-
-    return this.transformSite(result[0]!);
-  }
-
-  async updateSite(
-    siteId: string,
-    input: UpdateSiteInput,
-  ): Promise<SiteSelect> {
-    const db = await getDB();
-
-    const updateData: Partial<typeof sites.$inferInsert> = {};
-
-    if (input.siteName) {
-      updateData.siteName = input.siteName;
-    }
-
-    if (input.siteSetting) {
-      updateData.siteSetting = input.siteSetting;
-    }
-
-    const [result] = await db
-      .update(sites)
-      .set(updateData)
-      .where(eq(sites.id, siteId))
-      .returning();
-
-    if (!result) {
-      throw new SiteError({
-        message: "Site not found",
-        code: "NOT_FOUND",
-      });
-    }
-
-    return this.transformSite(result);
-  }
-
-  async deleteSite(siteId: string): Promise<void> {
-    const db = await getDB();
-    await db.delete(sites).where(eq(sites.id, siteId));
-  }
-
-  private transformSite(site: Site): SiteSelect {
-    return {
-      id: site.id,
-      userId: site.userId,
-      pageId: site.pageId ?? null,
-      databaseId: site.databaseId ?? null,
-      shortId: site.shortId,
-      siteName: site.siteName,
-      siteSetting: site.siteSetting as SiteSetting | null,
-      createdAt: site.createdAt,
-      updatedAt: site.updatedAt,
-    };
-  }
-}
-
-const siteService = new SiteService();
-
-export const createSite = (userId: string, input: CreateSiteInput) =>
-  Effect.tryPromise({
-    try: async () => await siteService.createSite(userId, input),
-    catch: (e): SiteError =>
-      e instanceof SiteError
-        ? e
-        : new SiteError({
-            message: e instanceof Error ? e.message : "Failed to create site",
-            code: "UNKNOWN",
-          }),
-  });
-
-export const getSitesByUser = (userId: string) =>
-  Effect.tryPromise({
-    try: async () => {
-      return await siteService.getSitesByUser(userId);
-    },
-    catch: (e): SiteError => {
-      console.log(e);
-      return new SiteError({
-        message: e instanceof Error ? e.message : "Failed to get sites",
-        code: "UNKNOWN",
-      });
-    },
-  });
-
-export const getSiteById = (siteId: string, pageId: string) => {
-  const getSite = (siteId: string) =>
-    Effect.tryPromise(async () => siteService.getSiteById(siteId));
-
-  return Effect.gen(function* () {
     const site = yield* withCache({
-      execute: getSite(siteId),
-      key: KeyManager.getSiteById(siteId),
+      execute: getSite,
+      key: KeyManager.getSiteById(slug),
       ttl: 60 * 60,
     });
 
     if (!site) {
-      return yield* Effect.fail(
-        new SiteError({ code: "NOT_FOUND", message: "no site found" }),
-      );
+      return yield* new SiteError({ code: "NOT_FOUND", message: "no site found" });
     }
-    const { accessToken, accountId } = yield* getAccessToken(
-      site.userId,
-      "notion",
-    );
 
-    const notionApi = getNotionRendererClient(accessToken as string, accountId);
-    const websiteService = new NotionWebsiteService(notionApi);
+    const notion = yield* NotionService;
+    const getPage = notion.getPageOfSite(pageId);
     const page = yield* withCache({
-      execute: websiteService.getPage(pageId),
+      execute: getPage,
       key: KeyManager.getPageContent(pageId),
       ttl: 60 * 60,
     });
-
-    return { page, site };
-  });
-};
-
-export const getSiteByShortId = (shortId: string) =>
-  Effect.tryPromise({
-    try: async () => {
-      const site = await siteService.getSiteByShortId(shortId);
-      if (!site) {
-        throw new SiteError({
-          message: "Site not found",
-          code: "NOT_FOUND",
-        });
-      }
-      return site;
-    },
-    catch: (e): SiteError =>
-      e instanceof SiteError
-        ? e
-        : new SiteError({
-            message: e instanceof Error ? e.message : "Failed to get site",
-            code: "UNKNOWN",
-          }),
-  });
-
-export const updateSite = (siteId: string, input: UpdateSiteInput) =>
-  Effect.tryPromise({
-    try: async () => {
-      const res = await siteService.updateSite(siteId, input);
-      KeyManager.delete.getSiteById(siteId);
-      KeyManager.delete.getPageContent(input.pageId);
-      return res;
-    },
-    catch: (e): SiteError =>
-      e instanceof SiteError
-        ? e
-        : new SiteError({
-            message: e instanceof Error ? e.message : "Failed to update site",
-            code: "UNKNOWN",
-          }),
-  });
-
-export const deleteSite = (siteId: string, pageId: string) =>
-  Effect.tryPromise({
-    try: async () => {
-      await siteService.deleteSite(siteId);
-      KeyManager.delete.getSiteById(siteId);
-      KeyManager.delete.getPageContent(pageId);
-    },
-    catch: (e): SiteError =>
-      new SiteError({
-        message: e instanceof Error ? e.message : "Failed to delete site",
-        code: "UNKNOWN",
-      }),
-  });
+    return { site, page };
+  }).pipe(Effect.mapError((e) => new SiteError({ code: "UNKNOWN", message: `${e}` })));

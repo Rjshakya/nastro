@@ -1,5 +1,4 @@
-import { getAccessToken } from "@/lib/tokens";
-import { Data, Effect } from "effect";
+import { Data, Effect, Layer, ServiceMap } from "effect";
 
 const NOTION_API_URL = "https://api.notion.com/v1";
 const NOTION_API_VERSION = "2025-09-03";
@@ -10,8 +9,8 @@ import type {
   PartialPageObjectResponse,
 } from "@notionhq/client";
 import { KeyManager, withCache } from "@/lib/cache";
-import { getNotionRendererClient } from "@/lib/notion";
-import { NotionWebsiteService } from "./website";
+import { NotionClient } from "@/lib/notion";
+import { ExtendedRecordMap } from "notion-types";
 
 type GetPages = (
   | PageObjectResponse
@@ -22,91 +21,69 @@ type GetPages = (
 
 class NotionError extends Data.TaggedError("NotionError")<{
   message: string;
+  error?: unknown;
 }> {}
 
-export class NotionService {
-  auth: string;
-
-  constructor(auth: string) {
-    this.auth = auth;
+export class NotionService extends ServiceMap.Service<
+  NotionService,
+  {
+    readonly getPageOfSite: (pageId: string) => Effect.Effect<ExtendedRecordMap, NotionError>;
+    readonly getNotionPages: () => Effect.Effect<GetPages, NotionError, never>;
   }
+>()("services/notion/notionService") {}
 
-  private async request<T>(endpoint: string, body: unknown): Promise<T> {
-    const response = await fetch(`${NOTION_API_URL}${endpoint}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.auth}`,
-        "Notion-Version": NOTION_API_VERSION,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+export const NotionServiceLive = (accessToken?: string) =>
+  Layer.effect(
+    NotionService,
+    Effect.gen(function* () {
+      const getNotionClient = yield* NotionClient;
+      const notionClient = getNotionClient.getClient();
+      const _request = <T>({ endpoint, body }: { endpoint: string; body: unknown }) =>
+        Effect.tryPromise({
+          try: async () => {
+            if (!accessToken) {
+              throw new NotionError({ message: "NOTION ACCESS TOKEN NOT PROVIDED" });
+            }
 
-    if (!response.ok) {
-      const error = (await response.json().catch(() => ({}))) as {
-        message?: string;
-      };
-      throw new Error(error.message || `Notion API error: ${response.status}`);
-    }
+            const response = await fetch(`${NOTION_API_URL}${endpoint}`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Notion-Version": NOTION_API_VERSION,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            });
 
-    return response.json();
-  }
+            if (!response.ok) {
+              throw new NotionError({ message: "NOTION REQUEST FAILED" });
+            }
 
-  getPages() {
-    return Effect.tryPromise({
-      try: async () => {
-        const result = await this.request<{
-          results: GetPages;
-        }>("/search", {
-          query: "",
-          page_size: 50,
+            return (await response.json()) as T;
+          },
+          catch: () => new NotionError({ message: "NOTION REQUEST FAILED" }),
         });
 
-        return result.results;
-      },
-      catch: (e: unknown) =>
-        new NotionError({
-          message: e instanceof Error ? e.message : "NotionError",
-        }),
-    });
-  }
-}
-
-export const getUserNotionPages = (userId: string) => {
-  return Effect.gen(function* () {
-    const { accessToken } = yield* getAccessToken(userId, "notion");
-    const notion = new NotionService(accessToken as string);
-    const notionPages = yield* withCache({
-      execute: notion.getPages(),
-      key: KeyManager.getUserNotionPages(userId),
-      ttl: 120,
-      
-    });
-    return notionPages;
-  }).pipe(
-    Effect.catchTag("NotionError", (e) => {
-      if (e.message.includes("API token is invalid.")) {
-        return Effect.succeed<any[]>([]);
-      }
-
-      return Effect.fail(e);
+      return NotionService.of({
+        getPageOfSite: (pageId) =>
+          Effect.tryPromise({
+            try: async () => {
+              const page = await notionClient.getPage(pageId);
+              return page;
+            },
+            catch: (e) => new NotionError({ message: "NOTION PAGE NOT FOUND", error: e }),
+          }),
+        getNotionPages: () =>
+          Effect.gen(function* () {
+            const response = yield* _request<{ results: GetPages }>({
+              endpoint: "/search",
+              body: {
+                query: "",
+                page_size: 50,
+              },
+            });
+            return response?.results as GetPages;
+          }),
+      });
     }),
   );
-};
-
-export const getNotionPageContent = (userId: string, pageId: string) => {
-  return Effect.gen(function* () {
-    const { accessToken } = yield* getAccessToken(userId as string, "notion");
-
-    if (!accessToken) {
-      yield* Effect.fail(
-        new NotionError({ message: "NOTION AUTHENTICATION FAIL" }),
-      );
-    }
-
-    const notionClient = getNotionRendererClient(accessToken as string);
-    const notionService = new NotionWebsiteService(notionClient);
-    const pageContent = yield* notionService.getPage(pageId);
-    return pageContent;
-  });
-};

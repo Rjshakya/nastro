@@ -1,9 +1,7 @@
 import { ApiResponse } from "@/lib/api";
 import { Vars } from "@/lib/hono-types";
 import { authMiddleWare } from "@/middlewares/auth";
-import { getUserNotionPages } from "@/services/notion/main";
-import { NotionWebsiteService } from "@/services/notion/website";
-import { getNotionRendererClient } from "@/lib/notion";
+import { getNotionClient } from "@/lib/notion";
 import { getAccessToken } from "@/lib/tokens";
 import { zValidator } from "@hono/zod-validator";
 import { Effect } from "effect";
@@ -25,9 +23,7 @@ const notionApp = new Hono<{ Variables: Vars }>()
     const userId = c.get("user")?.id;
     const { pageId } = c.req.valid("param");
 
-    const { accessToken } = await Effect.runPromise(
-      getAccessToken(userId as string, "notion"),
-    );
+    const { accessToken } = await Effect.runPromise(getAccessToken(userId as string, "notion"));
 
     if (!accessToken) {
       return c.json(
@@ -40,7 +36,7 @@ const notionApp = new Hono<{ Variables: Vars }>()
       );
     }
 
-    const notionClient = getNotionRendererClient(accessToken as string);
+    const notionClient = getNotionClient(accessToken as string);
     const notionService = new NotionWebsiteService(notionClient);
     const pageContent = await Effect.runPromise(notionService.getPage(pageId));
 

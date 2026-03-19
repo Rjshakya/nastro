@@ -1,17 +1,16 @@
+import { DatabaseLive } from "@/db";
+import { sitesInsertSchema } from "@/db/schema/site";
 import { ApiResponse } from "@/lib/api";
-import { KeyManager, withCache } from "@/lib/cache";
+import { KeyManager } from "@/lib/cache";
 import { Vars } from "@/lib/hono-types";
+import { NotionClientLive } from "@/lib/notion";
 import { authMiddleWare } from "@/middlewares/auth";
-import {
-  createSite,
-  deleteSite,
-  getSiteById,
-  getSitesByUser,
-  updateSite,
-  type SiteSetting,
-} from "@/services/site";
+import { SiteRepo } from "@/repo/site";
+import { NotionServiceLive } from "@/services/notion/main";
+import { getSiteBySlugWithPage,  } from "@/services/site";
+
 import { zValidator } from "@hono/zod-validator";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -29,23 +28,6 @@ const getSiteQuerySchema = z.object({
     .optional(),
 });
 
-const siteSettingSchema = z.object({}).loose().optional();
-
-const createSiteSchema = z.object({
-  pageId: z.string().min(1, "Page ID is required"),
-  siteName: z.string().min(1, "Site name is required").max(100),
-  siteSetting: siteSettingSchema.optional(),
-});
-
-const updateSiteSchema = z.object({
-  siteName: z.string().min(1).max(100).optional(),
-  siteSetting: siteSettingSchema.optional(),
-  pageId: z.string().min(1),
-});
-
-type CreateSiteInput = z.infer<typeof createSiteSchema>;
-type UpdateSiteInput = z.infer<typeof updateSiteSchema>;
-
 const sitesApp = new Hono<{ Variables: Vars }>()
   .get(
     "/:id",
@@ -54,69 +36,87 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     async (c) => {
       const { id } = c.req.valid("param");
       const { pageId } = c.req.valid("query");
-      const result = await Effect.runPromise(getSiteById(id, pageId));
-      return c.json(
-        ApiResponse({
-          data: { ...result },
-          message: "Site fetched successfully",
-        }),
+
+      const program = pipe(
+        getSiteBySlugWithPage(id, pageId),
+        Effect.provide(DatabaseLive),
+        Effect.provide(NotionServiceLive()),
+        Effect.provide(NotionClientLive),
       );
+
+      return Effect.runPromise(program).then((site) => {
+        return c.json(
+          ApiResponse({
+            data: { ...site },
+            message: "Site fetched successfully",
+          }),
+        );
+      });
     },
   )
   .use(authMiddleWare())
   .get("/", async (c) => {
     const userId = c.get("user")?.id;
-    const sites = await Effect.runPromise(
-      withCache({
-        execute: getSitesByUser(userId as string),
-        key: KeyManager.getUserSites(userId as string),
-      }),
-    );
 
-    return c.json(
-      ApiResponse({
-        data: sites,
-        message: "Sites fetched successfully",
-      }),
-    );
+    const program = Effect.gen(function* () {
+      const repo = yield* SiteRepo();
+      const userSites = yield* repo.findById("userId", userId as string);
+      return userSites;
+    }).pipe(Effect.provide(DatabaseLive));
+
+    return Effect.runPromise(program).then((sites) => {
+      return c.json(
+        ApiResponse({
+          data: sites,
+          message: "Sites fetched successfully",
+        }),
+      );
+    });
   })
-  .post("/", zValidator("json", createSiteSchema), async (c) => {
+  .post("/", zValidator("json", sitesInsertSchema), async (c) => {
     const userId = c.get("user")?.id;
-    const input = c.req.valid("json") as CreateSiteInput;
+    const input = c.req.valid("json");
 
-    const site = await Effect.runPromise(
-      createSite(userId as string, {
-        pageId: input.pageId,
-        siteName: input.siteName,
-        siteSetting: input.siteSetting as SiteSetting | undefined,
-      }),
-    );
-    await KeyManager.delete.getUserSites(userId as string);
+    const program = Effect.gen(function* () {
+      const repo = yield* SiteRepo();
+      const site = yield* repo.insert(input);
+      return site.length ? site[0] : null;
+    }).pipe(Effect.provide(DatabaseLive));
 
-    return c.json(
-      ApiResponse({
-        data: site,
-        message: "Site created successfully",
-      }),
-    );
+    return Effect.runPromise(program).then((site) => {
+      KeyManager.delete.getUserSites(userId as string);
+      return c.json(
+        ApiResponse({
+          data: site,
+          message: "Site created successfully",
+        }),
+      );
+    });
   })
   .patch(
     "/:id",
     zValidator("param", siteParamsSchema),
-    zValidator("json", updateSiteSchema),
+    zValidator("json", sitesInsertSchema),
     async (c) => {
       const userId = c.get("user")?.id;
       const { id } = c.req.valid("param");
-      const input = c.req.valid("json") as UpdateSiteInput;
-      const site = await Effect.runPromise(updateSite(id, input));
-      await KeyManager.delete.getUserSites(userId as string);
+      const input = c.req.valid("json");
 
-      return c.json(
-        ApiResponse({
-          data: site,
-          message: "Site updated successfully",
-        }),
-      );
+      const program = Effect.gen(function* () {
+        const repo = yield* SiteRepo();
+        const site = yield* repo.updateById("id", id, input);
+        return site.length ? site[0] : null;
+      }).pipe(Effect.provide(DatabaseLive));
+
+      return Effect.runPromise(program).then((site) => {
+        KeyManager.delete.getUserSites(userId as string);
+        return c.json(
+          ApiResponse({
+            data: site,
+            message: "Site updated successfully",
+          }),
+        );
+      });
     },
   )
   .delete(
@@ -127,15 +127,24 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const userId = c.get("user")?.id;
       const { id } = c.req.valid("param");
       const { pageId } = c.req.valid("query");
-      await Effect.runPromise(deleteSite(id, pageId));
-      await KeyManager.delete.getUserSites(userId as string);
 
-      return c.json(
-        ApiResponse({
-          data: null,
-          message: "Site deleted successfully",
-        }),
-      );
+      const program = Effect.gen(function* () {
+        const repo = yield* SiteRepo();
+        const site = yield* repo.deleteById("id", id);
+        return site.length ? site[0] : null;
+      }).pipe(Effect.provide(DatabaseLive));
+
+      return Effect.runPromise(program).then((site) => {
+        KeyManager.delete.getUserSites(userId as string);
+        KeyManager.delete.getSiteById(id);
+        KeyManager.delete.getPageContent(pageId);
+        return c.json(
+          ApiResponse({
+            data: site,
+            message: "Site deleted successfully",
+          }),
+        );
+      });
     },
   );
 

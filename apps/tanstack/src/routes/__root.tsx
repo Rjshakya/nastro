@@ -54,7 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        <TanStackDevtools
+        {/* <TanStackDevtools
           config={{
             position: "bottom-right",
           }}
@@ -64,7 +64,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        /> */}
         <Scripts />
       </body>
     </html>

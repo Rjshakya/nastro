@@ -27,7 +27,7 @@ export const Route = createFileRoute("/site/$siteId")({
     // const seo = getNotionPageSeo({ page, site, pageId });
     const settings = site?.siteSetting;
     const defaultSettings = applyDefaultSettings({
-      existingSettings: settings,
+      existingSettings: settings || useNotionSettingsStore.getState().settings,
       page,
       pageId,
       site,

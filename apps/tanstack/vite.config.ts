@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import { devtools } from "@tanstack/devtools-vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -9,11 +8,13 @@ import tailwindcss from "@tailwindcss/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
 
 const config = defineConfig({
+  server: {
+    port: 3000,
+  },
   plugins: [
-    devtools(),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
-    tsconfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart(),
     viteReact(),
   ],

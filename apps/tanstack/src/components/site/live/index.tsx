@@ -9,10 +9,12 @@ import { clientThemeToggle } from "#/lib/utils";
 
 const liveSiteRoute = getRouteApi("/$siteId");
 export const LiveSite = () => {
-  const { page, site } = liveSiteRoute.useLoaderData();
+  const data = liveSiteRoute.useLoaderData();
+  const site = data?.site;
+  const page = data?.page;
   const { pageId } = liveSiteRoute.useLoaderDeps();
   useEffect(() => {
-    if (site?.siteSetting) {
+    if (site?.siteSetting && page) {
       const defaultSettings = applyDefaultSettings({
         existingSettings: site?.siteSetting,
         page,
@@ -25,15 +27,13 @@ export const LiveSite = () => {
         ...defaultSettings,
       });
     }
-  }, [site?.siteSetting]);
+  }, [site?.siteSetting, page]);
   return (
-    <main>
       <NotionRenderer
-        pageId={site.pageId ?? ""}
-        siteId={site.id}
+        pageId={site?.pageId ?? ""}
+        siteId={site?.id || ""}
         recordMap={page}
-        settings={site.siteSetting as NotionPageSettings}
+        settings={site?.siteSetting || ({} as NotionPageSettings)}
       />
-    </main>
   );
 };

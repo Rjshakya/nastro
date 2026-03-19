@@ -45,7 +45,6 @@ export function NotionRenderer({
     return `/site/${siteId}?pageId=${pageId}`;
   };
 
-  console.log(recordMap);
 
   return (
     <div
@@ -65,7 +64,6 @@ export function NotionRenderer({
           PageLink: ({ href, children, ...props }: any) => {
             const block = children?.props?.block as Block;
             if (block?.type === "page") {
-
               if (block.parent_table !== "block") {
                 return (
                   <Link to={href} {...props}>
@@ -73,13 +71,13 @@ export function NotionRenderer({
                   </Link>
                 );
               }
-              
+
               const title = block.properties?.title?.[0] || "";
               return (
                 <Link {...props} to={href}>
                   <ShadBtn
                     className={
-                      "w-full flex justify-start rounded-xs px-0 hover:scale-99 transition-all duration-300 ease-in-out"
+                      "w-full flex justify-start rounded-xs px-2"
                     }
                     variant={"ghost"}
                     size={"sm"}
@@ -87,10 +85,8 @@ export function NotionRenderer({
                     <span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
+                        className="size-5 fill-foreground"
                         viewBox="0 0 24 24"
-                        fill="#fff"
                       >
                         <g clipPath="url(#clip0_4418_4825)">
                           <path

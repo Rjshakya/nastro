@@ -8,7 +8,6 @@ import { dashboardHomeApi } from "../home";
 
 export const DashboardSitesSection = () => {
   const { sites } = dashboardHomeApi.useLoaderData();
-  const { deleteSite, isLoading: isDeleting } = useDeleteSite();
 
   return (
     <div className="rounded-lg border bg-card p-1.5 grid gap-4">
@@ -25,14 +24,7 @@ export const DashboardSitesSection = () => {
       {sites && (
         <div className="grid gap-2  rounded-md p-1">
           {sites?.map((site) => (
-            <SiteCard
-              key={site.id}
-              site={site as Site}
-              handleDelete={async (id) => {
-                await deleteSite({ siteId: id, pageId: "" });
-              }}
-              isDeleting={isDeleting}
-            />
+            <SiteCard key={site.id} site={site as Site} />
           ))}
         </div>
       )}

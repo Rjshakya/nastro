@@ -9,19 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Site } from "@/types/site";
 import { Link, useRouter } from "@tanstack/react-router";
+import { useDeleteSite } from "#/components/hooks/use-sites";
 
 interface SiteCardProps {
   site: Site;
-  handleDelete: (siteId: string, pageId: string) => Promise<void> | void;
   isDeleting?: boolean;
 }
 
-export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
-  const router = useRouter();
+export function SiteCard({ site }: SiteCardProps) {
+  const { deleteSite, isLoading: isDeleting } = useDeleteSite();
 
-  const _handleDelete = async (id: string, pageId: string) => {
-    await handleDelete(id, pageId);
-    // await router.invalidate({ sync: true });
+  const _handleDelete = async () => {
+    await deleteSite({ pageId: site.pageId || "", siteId: site.id });
   };
 
   return (
@@ -33,7 +32,7 @@ export function SiteCard({ site, handleDelete, isDeleting }: SiteCardProps) {
             variant="ghost"
             size="icon-sm"
             className="text-destructive"
-            onClick={() => _handleDelete(site.id, site.pageId as string)}
+            onClick={() => _handleDelete()}
             disabled={isDeleting}
           >
             <IconTrash className="h-4 w-4" />

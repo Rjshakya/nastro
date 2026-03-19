@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IconPlus, IconSearch } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,32 @@ import { useCreateSite } from "#/components/hooks/use-sites";
 import type { Site } from "@/types/site";
 import { useRouter } from "@tanstack/react-router";
 import { dashboardHomeApi } from "../home";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "#/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "#/components/ui/popover";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemHeader,
+  ItemTitle,
+} from "#/components/ui/item";
+import { ScrollArea } from "#/components/ui/scroll-area";
+import { parsePageId } from "notion-utils";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -30,6 +56,8 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const { pages } = dashboardHomeApi.useLoaderData();
   const { createSite, isLoading: isCreating } = useCreateSite();
   const router = useRouter();
+  const [openPopover, setOpenPopver] = useState(false);
+  const popoverTriggerRef = useRef<HTMLDivElement>(null);
 
   const filteredPages = pages?.filter((page) => {
     if (!searchQuery) return true;
@@ -39,7 +67,6 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
 
   const handleCreate = async () => {
     if (!selectedPageId || !siteName.trim()) return;
-
     const result = await createSite({
       pageId: selectedPageId,
       siteName: siteName.trim(),
@@ -57,8 +84,8 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const isValid = selectedPageId && siteName.trim().length > 0;
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
         render={
           <Button size={"sm"}>
             <IconPlus className="mr-2 h-4 w-4" />
@@ -66,13 +93,13 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
           </Button>
         }
       />
-      <SheetContent className="sm:max-w-135 px-4 py-2 font-sans tracking-tighter">
-        <SheetHeader className="px-0">
-          <SheetTitle className="font-medium">Create New Site</SheetTitle>
-          <SheetDescription>
+      <DialogContent className=" px-4 py-4 font-sans tracking-tighter">
+        <DialogHeader className="px-0">
+          <DialogTitle className="font-medium">Create New Site</DialogTitle>
+          <DialogDescription>
             Select a Notion page to create your site from.
-          </SheetDescription>
-        </SheetHeader>
+          </DialogDescription>
+        </DialogHeader>
 
         <div className="py-4 space-y-4">
           <div className="space-y-2">
@@ -85,20 +112,68 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Select Notion Page</Label>
-            <div className="relative">
-              <IconSearch className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search pages..."
-                className="pl-9"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
+          <Popover open={openPopover} onOpenChange={setOpenPopver}>
+            <PopoverTrigger
+              render={
+                <div ref={popoverTriggerRef} className="space-y-2">
+                  <Label>Notion Page</Label>
+                  <div className="relative">
+                    <IconSearch className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Paste notion link or select notion pages"
+                      className="pl-9"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSearchQuery(val);
 
-          <div className="border rounded-md max-h-75 overflow-y-auto">
+                        const idFromUrl = parsePageId(val);
+                        if (idFromUrl) {
+                          setSelectedPageId(idFromUrl);
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              }
+            />
+            <PopoverContent
+              style={{ width: `${popoverTriggerRef.current?.offsetWidth}px` }}
+              side="bottom"
+              className={" p-2"}
+            >
+              <PopoverHeader className="px-2">
+                <PopoverTitle>Notion Pages</PopoverTitle>
+              </PopoverHeader>
+              <ScrollArea className={"h-32 p-0"}>
+                {filteredPages && filteredPages?.length > 0 && (
+                  <ItemGroup className="p-1 cursor-pointer">
+                    {filteredPages?.map((page) => (
+                      <Item
+                        size={"xs"}
+                        key={page.id}
+                        className={`transition-colors ${
+                          selectedPageId === page.id
+                            ? "border-primary bg-primary/10"
+                            : "hover:bg-accent"
+                        }`}
+                        onClick={() => {
+                          setSelectedPageId(page.id);
+                          setSearchQuery(getPageTitle(page));
+                        }}
+                      >
+                        <ItemContent>
+                          <ItemTitle>{getPageTitle(page)}</ItemTitle>
+                        </ItemContent>
+                      </Item>
+                    ))}
+                  </ItemGroup>
+                )}
+              </ScrollArea>
+            </PopoverContent>
+          </Popover>
+
+          {/* <div className="border rounded-md max-h-75 overflow-y-auto">
             {filteredPages && filteredPages?.length > 0 && (
               <div className="p-2 space-y-2">
                 {filteredPages?.map((page) => (
@@ -121,24 +196,26 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
         </div>
 
-        <SheetFooter>
+        <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
           <Button onClick={handleCreate} disabled={!isValid || isCreating}>
             {isCreating ? "Creating..." : "Create Site"}
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 function getPageTitle(page: any): string {
-  if (!page.properties) return "Untitled";
+  if (!page.properties) {
+    return "Untitled";
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for (const key of Object.keys(page.properties)) {
@@ -147,5 +224,6 @@ function getPageTitle(page: any): string {
       return prop.title[0].plain_text;
     }
   }
+
   return "Untitled";
 }

@@ -213,7 +213,7 @@ export const defaultDarkThemeSettings = (
 
 export const defaultGeneralSettings = (siteName?: string) => ({
   siteName,
-  pageWidth: 65,
+  pageWidth: 768,
   header: true,
   footer: true,
   isDark: false,
@@ -282,7 +282,7 @@ export const applyDefaultSettings = ({
     general: {
       ...defaultGeneralSettings(seo?.title || ""),
       ...existingSettings?.general,
-      isDark: existingSettings?.general?.isDark ?? false,
+      isDark: existingSettings?.general?.isDark ?? true,
     },
     seo,
   };

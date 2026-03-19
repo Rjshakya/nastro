@@ -9,16 +9,21 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
     },
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
-    "types": ["./worker-configuration.d.ts", "@types/node"]
+    "types": ["./worker-configuration.d.ts", "@types/node"],
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+      },
+    ],
   },
   "include": ["src/**/*.ts"],
   "exclude": [
     "dist", // Stop TSC from looking inside the output folder
-    "node_modules"
-  ]
+    "node_modules",
+  ],
 }

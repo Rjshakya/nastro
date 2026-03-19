@@ -1,5 +1,4 @@
 import { client } from "./api-client";
-
 import type { Site, SiteSetting } from "@/types/site";
 import type { NotionPageSettings } from "#/types/customization";
 import type { ExtendedRecordMap } from "notion-types";
