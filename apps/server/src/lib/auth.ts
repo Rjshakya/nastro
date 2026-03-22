@@ -27,7 +27,7 @@ export const getAuth = async () => {
         clientSecret: env.NOTION_CLIENT_SECRET,
       },
     },
-    trustedOrigins: [env.CLIENT_URL],
+    trustedOrigins: [env.CLIENT_URL, "https://*.nastro.xyz"],
     account: {
       accountLinking: { trustedProviders: ["notion", "google"] },
     },

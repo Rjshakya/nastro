@@ -36,8 +36,8 @@
 
   "routes": [
     {
-      "custom_domain": true,
-      "pattern": "api.nastro.xyz",
+      "custom_domain": false,
+      "pattern": "api.nastro.xyz/*",
     },
   ],
 }

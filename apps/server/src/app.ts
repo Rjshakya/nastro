@@ -7,7 +7,19 @@ import { ApiResponse } from "./lib/api";
 
 export const app = new Hono()
 
-  .use("*", cors({ origin: [env.CLIENT_URL], credentials: true }))
+  .use(
+    "*",
+    cors({
+      origin: (origin) => {
+        if (origin.includes(".nastro.xyz")) {
+          return origin;
+        }
+
+        return env.CLIENT_URL;
+      },
+      credentials: true,
+    }),
+  )
   .get("/", (c) => {
     return c.text("Hello Hono!");
   })
