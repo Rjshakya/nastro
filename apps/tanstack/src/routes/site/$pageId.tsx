@@ -6,7 +6,7 @@ import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "#/components/site/editor/site-editor";
 import { loadFont } from "#/lib/fonts";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import { applyDefaultSettings } from "#/lib/settings-defaults";
+import { getDefaultSettings } from "#/lib/settings-defaults";
 
 const siteSearchSchema = z.object({
   slug: z.string(),
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/site/$pageId")({
     const page = data?.page as ExtendedRecordMap;
     // const seo = getNotionPageSeo({ page, site, pageId });
     const settings = site?.siteSetting;
-    const defaultSettings = applyDefaultSettings({
+    const defaultSettings = getDefaultSettings({
       existingSettings: settings || useNotionSettingsStore.getState().settings,
       page,
       pageId,
@@ -43,6 +43,7 @@ export const Route = createFileRoute("/site/$pageId")({
         loadFont(settings?.typography?.fonts?.secondary as string),
       ]);
     }
+
     return { site, page, seo: defaultSettings.seo };
   },
 });

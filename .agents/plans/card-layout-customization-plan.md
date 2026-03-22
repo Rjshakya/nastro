@@ -372,7 +372,7 @@ export const defaultLayoutSettings = (
 });
 ```
 
-Update `applyDefaultSettings` to merge new layout sections:
+Update `getDefaultSettings` to merge new layout sections:
 
 ```typescript
 layout: {
@@ -457,7 +457,7 @@ layout: {
 
 5. **apps/tanstack/src/lib/settings-defaults.ts**
    - Add defaults to `defaultLayoutSettings`
-   - Update `applyDefaultSettings` merging logic for new sections
+   - Update `getDefaultSettings` merging logic for new sections
 
 ---
 

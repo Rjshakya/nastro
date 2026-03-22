@@ -1,4 +1,5 @@
 import DashboardLayout from "#/components/dashboard/layout";
+import { protectedLoader } from "#/lib/auth-client";
 import { getNotionPages } from "#/lib/notion";
 import { getSites } from "#/lib/site";
 import type { NotionPages } from "#/types/notion";
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/dashboard")({
   ),
   pendingComponent: () => <div>loading...</div>,
   ssr: false,
+  beforeLoad: protectedLoader,
 });
 
 function RouteComponent() {

@@ -1,5 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 import { Env } from "env";
+import { redirect } from "@tanstack/react-router";
+import { getRouter } from "#/router";
 
 export const authClient = createAuthClient({
   baseURL: Env.apiUrl,
@@ -16,4 +18,16 @@ export const login = async () => {
   }
 };
 
-export const logout = async () => await authClient.signOut();
+export const logout = async () => {
+  await authClient.signOut();
+  const router = getRouter();
+  await router.invalidate();
+};
+
+export const protectedLoader = async () => {
+  const { data } = await authClient.getSession();
+
+  if (!data?.session.id) {
+    throw redirect({ to: "/login" });
+  }
+};

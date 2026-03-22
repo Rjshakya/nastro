@@ -11,7 +11,7 @@ export interface CreateSiteInput {
 
 export interface UpdateSiteInput {
   slug: string;
-  pageId: string;
+  pageId?: string;
   siteName: string;
   siteSetting?: SiteSetting;
 }

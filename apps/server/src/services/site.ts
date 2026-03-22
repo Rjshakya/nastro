@@ -14,7 +14,7 @@ class SiteError extends Data.TaggedError("SiteError")<{
 export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
   Effect.gen(function* () {
     const siteRepo = yield* SiteRepo();
-    const getSite = siteRepo.execute<SiteSelect | null, SiteError>(
+    const site = yield* siteRepo.execute<SiteSelect | null, SiteError>(
       (db, sites) =>
         Effect.tryPromise({
           try: async () => {
@@ -29,11 +29,11 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
         }),
     );
 
-    const site = yield* withCache({
-      execute: getSite,
-      key: KeyManager.getSiteById(pageId),
-      ttl: 60 * 60,
-    });
+    // const site = yield* withCache({
+    //   execute: getSite,
+    //   key: KeyManager.getSiteById(pageId),
+    //   ttl: 60 * 60,
+    // });
 
     if (!site) {
       return yield* new SiteError({
