@@ -6,10 +6,7 @@ import { getFontLink } from "./fonts";
 import { env } from "cloudflare:workers";
 import { createServerFn } from "@tanstack/react-start";
 import z from "zod";
-
-// export const getApiUrl = createServerOnlyFn(() => {
-//   return env.API_URL;
-// });
+import { getRequest } from "@tanstack/react-start/server";
 
 const getSite = async ({
   pageId,
@@ -41,6 +38,24 @@ const getSite = async ({
   }>;
 };
 
+const getSlugFromReq = (baseSlug: string) => {
+  if (baseSlug && baseSlug.length > 0) {
+    return baseSlug;
+  }
+
+  const req = getRequest();
+
+  const url = new URL(req.url);
+  const host = url.hostname;
+
+  if (!host.includes(".nastro.xyz")) {
+    return "";
+  }
+
+  const slug = host.split(".nastro.xyz")[0].trim();
+  return slug;
+};
+
 export const pageIdLoader = createServerFn()
   .inputValidator(
     z.object({
@@ -52,7 +67,8 @@ export const pageIdLoader = createServerFn()
   .handler(async ({ data: input }) => {
     try {
       const { pageId, fresh, slug } = input;
-      const { data } = await getSite({ pageId, slug, fresh });
+      const resolvedSlug = getSlugFromReq(slug || "");
+      const { data } = await getSite({ pageId, slug: resolvedSlug, fresh });
       const site = data?.site as Site;
       const page = data?.page as ExtendedRecordMap;
       const seo = getNotionPageSeo({ page, site, pageId });

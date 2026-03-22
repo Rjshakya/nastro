@@ -44,7 +44,8 @@ export const Route = createFileRoute("/$pageId")({
 
   //   // return await liveSiteLoader({ data: { siteId, pageId } });
   // },
-  loader: async ({ deps: { slug }, params: { pageId } }) => pageIdLoader({ data: { pageId, slug } }),
+  loader: async ({ deps: { slug }, params: { pageId } }) =>
+    pageIdLoader({ data: { pageId, slug } }),
   component: RouteComponent,
   head: ({ loaderData }) => {
     return {
