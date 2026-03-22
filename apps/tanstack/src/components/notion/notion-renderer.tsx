@@ -4,7 +4,7 @@ import { Code } from "react-notion-x/build/third-party/code";
 import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import { type CSSProperties } from "react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "../site/site-header";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/customization";
@@ -25,7 +25,9 @@ export function NotionRenderer({
   settings,
 }: NotionRendererProps & { settings?: NotionPageSettings }) {
   const { styles } = useNotionSettingsStore((s) => s);
-  const pathname = useLocation({ select: ({ pathname }) => pathname });
+  const { pathname } = useLocation();
+  const { origin } = useRouter();
+  const host = new URL("/", origin).hostname;
 
   if (!recordMap) {
     return (
@@ -39,6 +41,10 @@ export function NotionRenderer({
 
   const handlePageUrl = (pageId: string) => {
     if (!pathname.includes("/site")) {
+      if (host.includes(".nastro.xyz")) {
+        return `/${pageId}`;
+      }
+
       return `/${pageId}?slug=${slug}`;
     }
 

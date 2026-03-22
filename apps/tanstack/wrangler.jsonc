@@ -3,7 +3,7 @@
   "name": "nastro",
   "compatibility_date": "2026-03-01",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry",
+  "main": "src/server.ts",
   // "preview_urls": true,
   "observability": {
     "enabled": true,
@@ -19,15 +19,15 @@
 
   "routes": [
     {
-      "custom_domain": true,
-      "pattern": "nastro.xyz",
+      "custom_domain": false,
+      "pattern": "*.nastro.xyz/*",
     },
   ],
 
-  // "services": [
-  //   {
-  //     "service": "nastro-api",
-  //     "binding": "NASTRO-API-WORKER",
-  //   },
-  // ],
+  "services": [
+    {
+      "service": "nastro-api",
+      "binding": "NASTRO_API_WORKER",
+    },
+  ],
 }

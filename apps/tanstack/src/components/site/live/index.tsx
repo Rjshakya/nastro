@@ -32,7 +32,7 @@ export const LiveSite = () => {
   return (
     <NotionRenderer
       pageId={pageId}
-      slug={slug}
+      slug={slug || ""}
       recordMap={page}
       settings={site?.siteSetting || ({} as NotionPageSettings)}
     />

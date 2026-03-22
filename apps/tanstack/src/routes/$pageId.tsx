@@ -1,16 +1,10 @@
 import { LiveSite } from "#/components/site/live";
-import type { Site } from "#/types/site";
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
-import type { ExtendedRecordMap } from "notion-types";
 import z from "zod";
-import { getNotionPageSeo } from "#/lib/utils";
-import { getFontLink } from "#/lib/fonts";
-import type { NotionPageSettings } from "#/types/customization";
-import { getSite } from "#/lib/site";
 import { pageIdLoader } from "#/lib/pageId";
 
 const siteSearchSchema = z.object({
-  slug: z.string(),
+  slug: z.string().optional(),
 });
 
 export const Route = createFileRoute("/$pageId")({
@@ -18,34 +12,8 @@ export const Route = createFileRoute("/$pageId")({
   loaderDeps({ search: { slug } }) {
     return { slug };
   },
-  // loader: async ({ params, deps }) => {
-  //   const { pageId } = params;
-  //   const { slug } = deps;
-  //   const { data } = await getSite({ pageId, slug });
-  //   const site = data?.site as Site;
-  //   const page = data?.page as ExtendedRecordMap;
-  //   const seo = getNotionPageSeo({ page, site, pageId });
-  //   const settings = { ...site?.siteSetting } as NotionPageSettings;
-  //   // const styles = covertPageSettingsIntoStyles(settings);
-  //   const fonts = {
-  //     primary: getFontLink(settings?.typography?.fonts?.primary),
-  //     secondary: getFontLink(settings?.typography?.fonts?.secondary),
-  //   };
-
-  //   return {
-  //     site,
-  //     page,
-  //     seo,
-  //     css: {
-  //       // styles,
-  //       fonts,
-  //     },
-  //   };
-
-  //   // return await liveSiteLoader({ data: { siteId, pageId } });
-  // },
   loader: async ({ deps: { slug }, params: { pageId } }) =>
-    pageIdLoader({ data: { pageId, slug } }),
+    pageIdLoader({ data: { pageId, slug: slug ?? "" } }),
   component: RouteComponent,
   head: ({ loaderData }) => {
     return {
