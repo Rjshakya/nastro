@@ -12,4 +12,11 @@
       //  "head_sampling_rate": 1
     },
   },
+
+  // "services": [
+  //   {
+  //     "service": "nastro-api",
+  //     "binding": "NASTRO-API-WORKER",
+  //   },
+  // ],
 }
