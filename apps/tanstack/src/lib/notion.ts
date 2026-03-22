@@ -9,3 +9,4 @@ export const getNotionPages = async () => {
 
   return data;
 };
+``;

@@ -6,8 +6,6 @@ import z from "zod";
 import { getNotionPageSeo } from "#/lib/utils";
 import { getFontLink } from "#/lib/fonts";
 import type { NotionPageSettings } from "#/types/customization";
-import { createServerFn } from "@tanstack/react-start";
-import { liveSiteLoader } from "#/lib/live-site";
 import { getSite } from "#/lib/site";
 
 const siteSearchSchema = z.object({
