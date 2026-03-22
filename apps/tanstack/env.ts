@@ -4,5 +4,3 @@ export const Env = {
   googleFontApiKey: import.meta.env.VITE_PUBLIC_GOOGLE_FONTS_API_KEY as string,
   isDev: import.meta.env.DEV,
 };
-
-

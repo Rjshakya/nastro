@@ -117,7 +117,7 @@ export const defaultGeneralSettings: NotionPageSettings["general"] = {
 };
 
 // Simple function to apply defaults
-export const applyDefaultSettings = (
+export const getDefaultSettings = (
   existingSettings: Partial<NotionPageSettings> | null | undefined,
   pageTitle: string,
   pageIcon: string,
@@ -137,10 +137,10 @@ export const applyDefaultSettings = (
 Replace the settings initialization (lines 35-56) with:
 
 ```typescript
-import { applyDefaultSettings } from "#/lib/settings-defaults";
+import { getDefaultSettings } from "#/lib/settings-defaults";
 
 // ... in loader:
-const defaultSettings = applyDefaultSettings(
+const defaultSettings = getDefaultSettings(
   settings,
   defaultPageTitle || "",
   defaultPageIcon || "",
@@ -205,7 +205,7 @@ settings: {}
 ## File Changes
 
 1. **NEW**: `apps/tanstack/src/lib/settings-defaults.ts` - Simple defaults + apply function
-2. **MODIFY**: `apps/tanstack/src/routes/site/$siteId.tsx` - Use applyDefaultSettings
+2. **MODIFY**: `apps/tanstack/src/routes/site/$siteId.tsx` - Use getDefaultSettings
 3. **MODIFY**: `apps/tanstack/src/stores/notion-settings.ts` - Remove default init
 
 ## Success Criteria
@@ -214,6 +214,6 @@ settings: {}
 - [ ] Typography has only sizes defaults (no fonts)
 - [ ] Layout defaults use dynamic pageTitle/logo
 - [ ] General has all field defaults
-- [ ] Simple applyDefaultSettings function (no complex merging)
+- [ ] Simple getDefaultSettings function (no complex merging)
 - [ ] Store initialization is empty
 - [ ] Clean, minimal code

@@ -1,10 +1,10 @@
 import { NotionRenderer } from "#/components/notion/notion-renderer";
-import { ClientOnly, getRouteApi } from "@tanstack/react-router";
+import { getRouteApi } from "@tanstack/react-router";
 import "@/styles/notion.css";
 import type { NotionPageSettings } from "#/types/customization";
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import { applyDefaultSettings } from "#/lib/settings-defaults";
+import { getDefaultSettings } from "#/lib/settings-defaults";
 import { clientThemeToggle } from "#/lib/utils";
 
 const liveSiteRoute = getRouteApi("/$pageId");
@@ -16,7 +16,7 @@ export const LiveSite = () => {
   const { pageId } = liveSiteRoute.useParams({});
   useLayoutEffect(() => {
     if (site?.siteSetting && page) {
-      const defaultSettings = applyDefaultSettings({
+      const defaultSettings = getDefaultSettings({
         existingSettings: site?.siteSetting,
         page,
         site,

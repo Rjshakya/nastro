@@ -13,7 +13,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function createSlugUrl(slug: string) {
-  return new URL(slug, Env.clientUrl).href;
+  const originHost = new URL("/", Env.clientUrl).hostname;
+  const host = `${slug}.${originHost}`;
+
+  const origin = `https://${host}`;
+  return new URL("/", origin).href;
 }
 
 export function defaultNotionOgImage(page: ExtendedRecordMap, pageId: string) {

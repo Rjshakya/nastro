@@ -415,23 +415,22 @@ const layoutSections: TabLayoutProps["sections"] = [
 ];
 
 export function Settings({ open, onOpenChange }: SettingsV2Props) {
-  const { pageId } = useParams({ from: "/site/$pageId" });
-  const { slug } = useSearch({ from: "/site/$pageId" });
   const { site } = siteApi.useLoaderData();
   const { settings } = useNotionSettingsStore((s) => s);
+
   const tabKeys = Object.keys(tabNames).filter(
     (key) => key !== "darkTheme",
   ) as Array<keyof NotionPageSettings>;
+
   const { updateSite, isLoading } = useUpdateSite();
 
   const handleSave = async () => {
     await updateSite({
       siteId: site.id,
       input: {
-        siteName: settings?.general?.siteName ?? "",
+        siteName: settings?.general?.siteName ?? site.siteName,
         siteSetting: settings,
-        pageId,
-        slug: settings.general?.slug || slug,
+        slug: settings.general?.slug || site.slug,
       },
     });
     onOpenChange(false);

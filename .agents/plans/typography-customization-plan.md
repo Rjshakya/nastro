@@ -208,10 +208,10 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
 
 ### Step 5: Handle Existing Data (`lib/settings-defaults.ts`)
 
-**Update `applyDefaultSettings` to merge spacing:**
+**Update `getDefaultSettings` to merge spacing:**
 
 ```typescript
-// In applyDefaultSettings, update the typography section:
+// In getDefaultSettings, update the typography section:
 typography: {
   ...defaultTypographySettings,
   ...existingSettings?.typography,

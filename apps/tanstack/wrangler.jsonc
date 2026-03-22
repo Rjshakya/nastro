@@ -4,6 +4,7 @@
   "compatibility_date": "2026-03-01",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  // "preview_urls": true,
   "observability": {
     "enabled": true,
     // "head_sampling_rate": 1,
@@ -11,7 +12,17 @@
       "enabled": true,
       //  "head_sampling_rate": 1
     },
+    "traces": {
+      "enabled": true,
+    },
   },
+
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "nastro.xyz",
+    },
+  ],
 
   // "services": [
   //   {

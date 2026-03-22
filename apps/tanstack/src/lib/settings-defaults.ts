@@ -220,7 +220,7 @@ export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   slug: slug,
 });
 
-export const applyDefaultSettings = ({
+export const getDefaultSettings = ({
   existingSettings,
   page,
   site,

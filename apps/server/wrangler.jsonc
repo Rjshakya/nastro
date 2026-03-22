@@ -4,6 +4,7 @@
   "main": "src/app.ts",
   "compatibility_date": "2026-02-24",
   "compatibility_flags": ["nodejs_compat"],
+  // "preview_urls": true,
   "kv_namespaces": [
     {
       "binding": "NASTRO_KV",
@@ -20,14 +21,23 @@
   ],
   "observability": {
     "enabled": true,
-    // "head_sampling_rate": 1,
-    "logs": { 
-      "enabled": true, 
-      // "head_sampling_rate": 1 
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
     },
-
+    "traces": {
+      "enabled": true,
+    },
   },
   "dev": {
     "port": 8000,
   },
+
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "api.nastro.xyz",
+    },
+  ],
 }

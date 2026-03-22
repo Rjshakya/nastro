@@ -19,9 +19,7 @@ interface SiteCardProps {
 
 export function SiteCard({ site }: SiteCardProps) {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
-  const url = Env.isDev
-    ? "/$pageId"
-    : createSlugUrl(site.slug) + "/" + site.pageId;
+  const url = Env.isDev ? "/$pageId" : createSlugUrl(site.slug) + site.pageId;
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.pageId || "", siteId: site.id });
   };

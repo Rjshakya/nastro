@@ -205,10 +205,10 @@ export const defaultDarkThemeSettings = (
 };
 ```
 
-**Update `applyDefaultSettings`:**
+**Update `getDefaultSettings`:**
 
 ```typescript
-export const applyDefaultSettings = ({
+export const getDefaultSettings = ({
   existingSettings,
   page,
   site,
@@ -318,7 +318,7 @@ loader: async ({ params, deps }) => {
   // Use isDark from general settings for SSR (stored in DB)
   const isDark = settings?.general?.isDark ?? false;
 
-  const defaultSettings = applyDefaultSettings({
+  const defaultSettings = getDefaultSettings({
     existingSettings: settings,
     page,
     pageId,
@@ -440,7 +440,7 @@ const handleSave = async () => {
 3. Update store to read isDark from `settings.general.isDark`
 4. Update `computeCustomStyles` to accept isDark parameter
 5. Create `defaultDarkThemeSettings` with hex color values
-6. Update `applyDefaultSettings` to include dark theme and isDark in general
+6. Update `getDefaultSettings` to include dark theme and isDark in general
 
 ### Phase 2: Theme Toggle Integration
 
@@ -503,7 +503,7 @@ const handleSave = async () => {
 
 3. `apps/tanstack/src/lib/settings-defaults.ts`
    - Add `defaultDarkThemeSettings` with hex values
-   - Update `applyDefaultSettings`
+   - Update `getDefaultSettings`
 
 4. `apps/tanstack/src/components/ThemeToggle.tsx`
    - Use `newTheme` variable instead of classList check
@@ -529,7 +529,7 @@ const handleSave = async () => {
 For existing sites:
 
 ```typescript
-// In applyDefaultSettings
+// In getDefaultSettings
 const darkTheme = existingSettings?.darkTheme
   ? existingSettings.darkTheme
   : defaultDarkThemeSettings(undefined);
