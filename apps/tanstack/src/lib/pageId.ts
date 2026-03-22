@@ -14,7 +14,7 @@ import z from "zod";
 const getSite = async ({
   pageId,
   slug,
-  fresh,
+  // fresh,
 }: {
   slug: string;
   pageId: string;
