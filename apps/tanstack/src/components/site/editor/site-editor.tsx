@@ -1,8 +1,8 @@
 import { NotionRenderer } from "@/components/notion/notion-renderer";
 import "@/styles/notion.css";
 import { siteApi } from ".";
-import { Settings } from "../settings/settings";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
+import { SettingsV2 } from "../settings-v2/settings";
 
 export function SiteEditor() {
   const { page, site } = siteApi.useLoaderData();
@@ -22,10 +22,21 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
+        <NotionRenderer
+          slug={slug}
+          pageId={pageId}
+          recordMap={page}
+          settings={settings}
+        />
       </div>
 
-      <Settings open={isPanelOpen} onOpenChange={togglePanel} />
+      {/* <Settings open={isPanelOpen} onOpenChange={togglePanel} /> */}
+      <SettingsV2
+        open={isPanelOpen}
+        onOpenChange={togglePanel}
+        pageSettings={{ ...settings }}
+        siteId={site.id}
+      />
     </main>
   );
 }

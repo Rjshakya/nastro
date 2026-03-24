@@ -1,5 +1,5 @@
 import { computeCustomStyles } from "#/stores/notion-settings";
-import type { NotionPageSettings } from "#/types/customization";
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import type { Site } from "#/types/site";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
@@ -61,6 +61,7 @@ export function getNotionPageSeo({
     ogImage: seo?.ogImage || ogImgUrl,
     pageUrl: seo?.pageUrl || `${Env.clientUrl}/${site.id}?pageId=${pageId}`,
     pageIcon: seo?.pageIcon || pageIcon || "",
+    type: "seo",
   } satisfies NotionPageSettings["seo"];
 }
 
@@ -134,4 +135,8 @@ export const clientThemeToggle = (bool: boolean) => {
   const doc = window.document.documentElement;
   doc.classList.forEach((c) => doc.classList.remove(c));
   doc.classList.add(bool ? "dark" : "light");
+};
+
+export const getEntries = <T extends object>(obj: T) => {
+  return Object.entries(obj) as [keyof T, T[keyof T]][];
 };

@@ -4,6 +4,7 @@
 @import "@fontsource-variable/geist";
 @import "@fontsource-variable/geist-mono";
 @custom-variant dark (&:is(.dark *));
+@plugin 'tailwind-scrollbar';
 
 :root {
   --background: oklch(1 0 0);
@@ -81,6 +82,12 @@
 
   --custom-notion-property-select-item-blue: oklch(0.379 0.146 265.522);
 
+  /* notion - collection - tab - row */
+
+  --notion-collection-tab-row-display: flex;
+  --notion-collection-tab-bg: transparent;
+  --notion-collection-tab-active-bg: var(--accent);
+
   /* notion-card */
 
   --notion-collection-card: oklch(1 0 0);
@@ -89,13 +96,13 @@
   --notion-collection-card-text: oklch(0.145 0 0);
   --notion-collection-card-hover: oklch(0.97 0 0);
 
-  --notion-collection-card-padding-y: 0px;
+  /* Card container padding */
   --notion-collection-card-padding-x: 0px;
-  --notion-collection-card-margin-x: 0px;
-  --notion-collection-card-margin-y: 0px;
+  --notion-collection-card-padding-y: 0px;
 
   /* updates for notion - card */
   --notion-gallery-grid-gap: 16px;
+  --notion-collection-card-title-icon-display: none;
 
   --notion-collection-card-cover-padding-y: 0px;
   --notion-collection-card-cover-padding-x: 0px;
@@ -241,6 +248,10 @@
   --custom-notion-property-select-item-blue: oklch(0.932 0.032 255.585);
 
   --custom-notion-collection-card-text: var(--foreground);
+
+  /* notion collections tab row */
+  --notion-collection-view-tabs-content-item-bg: var(--accent);
+
   /* notion-card */
 
   --notion-collection-card: oklch(1 0 0);
