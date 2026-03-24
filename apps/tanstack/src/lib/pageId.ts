@@ -7,6 +7,7 @@ import { env } from "cloudflare:workers";
 import { createServerFn } from "@tanstack/react-start";
 import z from "zod";
 import { getRequest } from "@tanstack/react-start/server";
+import { setThemeServerFn } from "./theme";
 
 const getSite = async ({
   pageId,
@@ -77,6 +78,8 @@ export const pageIdLoader = createServerFn()
         primary: getFontLink(settings?.typography?.fonts?.primary),
         secondary: getFontLink(settings?.typography?.fonts?.secondary),
       };
+
+      setThemeServerFn({ data: settings?.general?.isDark ? "dark" : "light" });
 
       return {
         site,

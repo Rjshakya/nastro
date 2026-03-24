@@ -10,8 +10,8 @@ export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
   loader: async () => {
     const sites = await getSites();
-    const pages = await getNotionPages();
-    return { sites: sites.data as Site[], pages: pages.data as NotionPages };
+    // const pages = await getNotionPages();
+    return { sites: sites.data as Site[] };
   },
   errorComponent: ({ error }) => (
     <div>

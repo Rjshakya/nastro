@@ -533,7 +533,7 @@ const CardSection = ({
         if (typeof v === "number") {
           return (
             <SliderInput
-              label="Border Size"
+              label={k}
               min={0}
               max={10}
               value={(card?.[k] as number) || 1}

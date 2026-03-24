@@ -70,6 +70,7 @@ export const defaultThemeSettings = (
       red: "#ffe2dd",
       ...themeSettings?.buttons,
     },
+
     defaultButton: {
       background: "#242424",
       textColor: "#ffffff",
@@ -77,7 +78,13 @@ export const defaultThemeSettings = (
       hoverBackground: "#242424",
       ...themeSettings?.defaultButton,
     },
-  };
+    tab: {
+      activeBackground: "oklch(0.967 0.001 286.375)",
+      background: "oklch(1 0 0)",
+      ...themeSettings?.tab,
+    },
+    type: "theme",
+  } as NotionPageSettings["theme"];
 };
 
 export const defaultTypographySettings: NotionPageSettings["typography"] = {
@@ -217,7 +224,12 @@ export const defaultDarkThemeSettings = (
       hoverBackground: "#ffffff",
       ...darkThemeSettings?.defaultButton,
     },
-  };
+    tab: {
+      activeBackground: "oklch(0.274 0.006 286.033)",
+      background: "oklch(0.145 0 0)",
+    },
+    type: "theme",
+  } as NotionPageSettings["darkTheme"];
 };
 
 export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
@@ -227,6 +239,7 @@ export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   header: true,
   footer: true,
   isDark: false,
+  pageCoverHeight: 40,
 });
 
 export const getDefaultSettings = ({

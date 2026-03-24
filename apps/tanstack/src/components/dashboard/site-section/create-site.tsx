@@ -29,6 +29,7 @@ import { Item, ItemContent, ItemGroup, ItemTitle } from "#/components/ui/item";
 import { ScrollArea } from "#/components/ui/scroll-area";
 import { parsePageId } from "notion-utils";
 import { defaultNotionSettings } from "#/lib/settings-defaults";
+import { useNotionPages } from "#/hooks/use-notion";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -38,7 +39,9 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const { pages } = dashboardHomeApi.useLoaderData();
+  // const { pages } = dashboardHomeApi.useLoaderData();
+
+  const { data: pages } = useNotionPages();
   const {
     createSite,
     isLoading: isCreating,

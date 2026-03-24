@@ -7,6 +7,7 @@
 @plugin 'tailwind-scrollbar';
 
 :root {
+  interpolate-size: allow-keywords;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -51,6 +52,9 @@
   --notion-font-weight: 400;
   --notion-max-width: 100%;
 
+  /* page-cover */
+  --notion-page-cover-height: 40vh;
+
   --notion-custom-page-bg: oklch(1 0 0);
   --notion-custom-text: oklch(0.145 0 0);
   --notion-custom-border: oklch(0.922 0 0);
@@ -85,7 +89,7 @@
   /* notion - collection - tab - row */
 
   --notion-collection-tab-row-display: flex;
-  --notion-collection-tab-bg: transparent;
+  --notion-collection-tab-bg: oklch(1 0 0);
   --notion-collection-tab-active-bg: var(--accent);
 
   /* notion-card */
@@ -250,7 +254,9 @@
   --custom-notion-collection-card-text: var(--foreground);
 
   /* notion collections tab row */
-  --notion-collection-view-tabs-content-item-bg: var(--accent);
+  --notion-collection-tab-bg: oklch(0.145 0 0);
+  /* --notion-collection-view-tabs-content-item-bg: var(--accent); */
+  --notion-collection-tab-active-bg: var(--accent);
 
   /* notion-card */
 

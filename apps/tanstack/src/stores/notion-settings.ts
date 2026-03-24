@@ -171,6 +171,12 @@ export const computeTheme = (
       customization?.defaultButton?.borderColor;
   }
 
+  if (customization.tab) {
+    styles["--notion-collection-tab-bg"] = customization.tab?.background;
+    styles["--notion-collection-tab-active-bg"] =
+      customization.tab?.activeBackground;
+  }
+
   return styles;
 };
 
@@ -298,16 +304,9 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
   }
 
   // Tabs
-  // if (layout?.tabs?.display !== undefined) {
-  //   styles["--notion-collection-tab-row-display"] = layout.tabs.display;
-  // }
-  // if (layout?.tabs?.backgroundColor !== undefined) {
-  //   styles["--notion-collection-tab-bg"] = layout.tabs.backgroundColor;
-  // }
-  // if (layout?.tabs?.activeBackgroundColor !== undefined) {
-  //   styles["--notion-collection-tab-active-bg"] =
-  //     layout.tabs.activeBackgroundColor;
-  // }
+  if (layout?.tabs?.display !== undefined) {
+    styles["--notion-collection-tab-row-display"] = layout.tabs.display;
+  }
 
   return styles;
 };
@@ -323,6 +322,10 @@ export const computeGeneral = (general: NotionPageSettings["general"]) => {
     } else {
       styles["--notion-max-width"] = general.pageWidth + "px";
     }
+  }
+
+  if (general.pageCoverHeight !== undefined || general.pageCoverHeight !== null) {
+    styles["--notion-page-cover-height"] = general.pageCoverHeight + "vh";
   }
 
   return styles;

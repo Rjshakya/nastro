@@ -102,6 +102,9 @@ export interface NotionPageStyles {
   // width
   "--notion-max-width"?: string;
 
+  // page cover height
+  "--notion-page-cover-height"?: string;
+
   // gallery
   "--notion-gallery-grid-gap"?: string;
 

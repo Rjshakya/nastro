@@ -66,12 +66,16 @@ export const RenderThemeSections = ({
     }
 
     const mode = settings?.general?.isDark ? "darkTheme" : "theme";
+
+    // @ts-ignore
+    console.log(settings?.[mode]?.[sectionKey]?.[k]);
     // @ts-ignore
     return settings?.[mode]?.[sectionKey]?.[k] || defaultValue;
   };
 
   const handleChange = (k: string, v?: string) => {
     const mode = settings?.general?.isDark ? "darkTheme" : "theme";
+
     updateSettings({
       ...settings,
       [mode]: {

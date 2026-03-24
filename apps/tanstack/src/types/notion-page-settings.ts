@@ -70,6 +70,11 @@ export type ThemeSettingsDefaultButtonSection = {
   hoverBackground?: string;
 };
 
+export type ThemeSettingsTabSection = {
+  background?: string;
+  activeBackground?: string;
+};
+
 export interface ThemeSettingsUI {
   main?: ThemeSettingsMainSection;
   header?: ThemeSettingsHeaderSection;
@@ -79,6 +84,7 @@ export interface ThemeSettingsUI {
   card?: ThemeSettingsCardSection;
   buttons?: ThemeSettingsButtonsSection;
   defaultButton?: ThemeSettingsDefaultButtonSection;
+  tab?: ThemeSettingsTabSection;
   type: "theme";
 }
 
@@ -105,6 +111,7 @@ export type TypoSpacingUI = {
 export interface GeneralSettingsUI {
   siteName?: string;
   pageWidth?: number;
+  pageCoverHeight?: number;
   header?: boolean;
   footer?: boolean;
   isDark?: boolean;

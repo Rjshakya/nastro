@@ -3,6 +3,7 @@
 @import "@fontsource-variable/geist-mono";
 
 .notion {
+
   --bg-color: var(--notion-custom-page-bg);
   --fg-color: var(--notion-custom-text);
 
@@ -53,7 +54,6 @@
 
   --notion-item-default: var(--fg-color);
   -webkit-font-smoothing: antialiased;
-  --notion-page-cover-height: 40vh;
 
   /* font */
 
@@ -208,7 +208,7 @@
   }
 
   .notion-collection-view-tabs-content-item:hover {
-    background-color: var(--accent);
+    background-color: var(--notion-collection-tab-active-bg);
     border-radius: var(--radius);
     /* opacity: 65%; */
   }
@@ -309,12 +309,6 @@
     max-width: var(--notion-max-width);
   }
 }
-
-/* @media (max-width: 500px) {
-  .notion-row{
-    display: grid;
-  }
-} */
 
 .site-header {
   /*notion navbar*/
