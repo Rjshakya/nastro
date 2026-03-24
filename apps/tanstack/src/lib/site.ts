@@ -1,19 +1,20 @@
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import { client } from "./api-client";
-import type { Site, SiteSetting } from "@/types/site";
+import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 
 export interface CreateSiteInput {
   slug: string;
   pageId: string;
   siteName: string;
-  siteSetting?: SiteSetting;
+  siteSetting?: NotionPageSettings;
 }
 
 export interface UpdateSiteInput {
   slug: string;
   pageId?: string;
   siteName: string;
-  siteSetting?: SiteSetting;
+  siteSetting?: NotionPageSettings;
 }
 
 export interface GetSiteInput {

@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import type { LayoutFooterUI } from "#/types/customization";
+import type { LayoutFooterUI } from "#/types/notion-page-settings";
 import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
 import "@/styles/notion.css";
@@ -26,7 +26,6 @@ export const SiteFooter = ({ footer }: { footer?: LayoutFooterUI }) => {
             <AvatarImage className={"rounded-sm"} src={footer?.logo || ""} />
             <AvatarFallback />
           </Avatar>
-
 
           <p className="">{footer?.text || "Footer"}</p>
         </div>

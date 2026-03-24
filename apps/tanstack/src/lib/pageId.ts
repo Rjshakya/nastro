@@ -1,7 +1,7 @@
 import type { Site } from "#/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 import { getNotionPageSeo } from "./utils";
-import type { NotionPageSettings } from "#/types/customization";
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import { getFontLink } from "./fonts";
 import { env } from "cloudflare:workers";
 import { createServerFn } from "@tanstack/react-start";

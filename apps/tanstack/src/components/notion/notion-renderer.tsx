@@ -7,7 +7,7 @@ import { type CSSProperties } from "react";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "../site/site-header";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type { NotionPageSettings } from "#/types/customization";
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import { SiteFooter } from "../site/site-footer";
 import type { Block } from "notion-types";
 import { Button as ShadBtn } from "#/components/ui/button";

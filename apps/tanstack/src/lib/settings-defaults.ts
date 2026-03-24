@@ -1,4 +1,4 @@
-import type { NotionPageSettings } from "#/types/customization";
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import type { Site } from "#/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 import { getNotionPageSeo } from "./utils";
@@ -94,6 +94,7 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
     headingLetterSpacing: -1.3,
     fontWeight: 400,
   },
+  type: "typography",
 };
 
 export const defaultLayoutSettings = (
@@ -117,21 +118,29 @@ export const defaultLayoutSettings = (
   },
   card: {
     borderSize: 1,
-  },
-  cardCover: {
-    height: 200,
-    radius: 10,
     paddingX: 0,
     paddingY: 0,
-    marginX: 0,
-    marginY: 0,
+    cover: {
+      height: 200,
+      radius: 10,
+      paddingX: 0,
+      paddingY: 0,
+      marginX: 0,
+      marginY: 0,
+    },
+    body: {
+      paddingX: 12,
+      paddingY: 12,
+      marginX: 0,
+      marginY: 0,
+    },
   },
-  cardBody: {
-    paddingX: 12,
-    paddingY: 12,
-    marginX: 0,
-    marginY: 0,
+  tabs: {
+    display: "flex",
+    // backgroundColor: "transparent",
+    // activeBackgroundColor: "var(--accent)",
   },
+  type: "layout",
 });
 
 export const defaultDarkThemeSettings = (
@@ -213,11 +222,11 @@ export const defaultDarkThemeSettings = (
 
 export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   siteName,
+  slug: slug,
   pageWidth: 768,
   header: true,
   footer: true,
   isDark: false,
-  slug: slug,
 });
 
 export const getDefaultSettings = ({
@@ -233,57 +242,62 @@ export const getDefaultSettings = ({
 }): NotionPageSettings => {
   const seo = getNotionPageSeo({ page, pageId, site });
 
+  const defaultLayout = defaultLayoutSettings(seo?.title, seo?.pageIcon);
+
   return {
+    general: {
+      ...defaultGeneralSettings(seo?.title || "", site.slug),
+      ...existingSettings?.general,
+      isDark: existingSettings?.general?.isDark ?? true,
+      type: "general",
+    },
     theme: {
       ...defaultThemeSettings(existingSettings?.theme),
+      type: "theme",
     },
     darkTheme: {
       ...defaultDarkThemeSettings(existingSettings?.darkTheme),
+      type: "theme",
+    },
+
+    layout: {
+      ...defaultLayout,
+      header: {
+        ...defaultLayout?.header,
+      },
+      footer: {
+        ...defaultLayout?.footer,
+      },
+      gallery: {
+        ...defaultLayout?.gallery,
+      },
+      card: {
+        ...defaultLayout?.card,
+        cover: {
+          ...defaultLayout?.card?.cover,
+        },
+        body: {
+          ...defaultLayout?.card?.body,
+        },
+      },
+      tabs: {
+        ...defaultLayout?.tabs,
+      },
+      type: "layout",
     },
     typography: {
       ...defaultTypographySettings,
       ...existingSettings?.typography,
       sizes: {
-        ...defaultTypographySettings.sizes,
+        ...defaultTypographySettings?.sizes,
         ...existingSettings?.typography?.sizes,
       },
       spacing: {
-        ...defaultTypographySettings.spacing,
+        ...defaultTypographySettings?.spacing,
         ...existingSettings?.typography?.spacing,
       },
-    },
-    layout: {
-      ...defaultLayoutSettings(seo?.title, seo?.pageIcon),
-      ...existingSettings?.layout,
-      header: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.header,
-        ...existingSettings?.layout?.header,
-      },
-      footer: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.footer,
-        ...existingSettings?.layout?.footer,
-      },
-      gallery: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.gallery,
-        ...existingSettings?.layout?.gallery,
-      },
-      card: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.card,
-        ...existingSettings?.layout?.card,
-      },
-      cardCover: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.cardCover,
-        ...existingSettings?.layout?.cardCover,
-      },
-      cardBody: {
-        ...defaultLayoutSettings(seo?.title, seo?.pageIcon)?.cardBody,
-        ...existingSettings?.layout?.cardBody,
-      },
-    },
-    general: {
-      ...defaultGeneralSettings(seo?.title || "", site.slug),
-      ...existingSettings?.general,
-      isDark: existingSettings?.general?.isDark ?? true,
+
+      type: "typography",
     },
     seo,
   };
@@ -293,46 +307,56 @@ export const defaultNotionSettings = (
   title: string,
   slug: string,
 ): NotionPageSettings => {
+  const defaultLayout = defaultLayoutSettings(title);
+
   return {
     theme: {
       ...defaultThemeSettings(),
+      type: "theme",
     },
     darkTheme: {
       ...defaultDarkThemeSettings(),
+      type: "theme",
     },
     typography: {
       ...defaultTypographySettings,
       sizes: {
-        ...defaultTypographySettings.sizes,
+        ...defaultTypographySettings?.sizes,
       },
       spacing: {
-        ...defaultTypographySettings.spacing,
+        ...defaultTypographySettings?.spacing,
       },
+      type: "typography",
     },
     layout: {
-      ...defaultLayoutSettings(title),
+      ...defaultLayout,
       header: {
-        ...defaultLayoutSettings(title)?.header,
+        ...defaultLayout?.header,
       },
       footer: {
-        ...defaultLayoutSettings(title)?.footer,
+        ...defaultLayout?.footer,
       },
       gallery: {
-        ...defaultLayoutSettings(title)?.gallery,
+        ...defaultLayout?.gallery,
       },
       card: {
-        ...defaultLayoutSettings(title)?.card,
+        ...defaultLayout?.card,
+        cover: {
+          ...defaultLayout?.card?.cover,
+        },
+        body: {
+          ...defaultLayout?.card?.body,
+        },
       },
-      cardCover: {
-        ...defaultLayoutSettings(title)?.cardCover,
+      tabs: {
+        ...defaultLayout?.tabs,
       },
-      cardBody: {
-        ...defaultLayoutSettings(title)?.cardBody,
-      },
+      type: "layout",
     },
     general: {
       ...defaultGeneralSettings(title, slug),
       isDark: true,
+      type: "general",
     },
   };
 };

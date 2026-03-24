@@ -2,7 +2,7 @@ import type { ExtendedRecordMap } from "notion-types";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type { LayoutHeaderUI } from "#/types/customization";
+import type { LayoutHeaderUI } from "#/types/notion-page-settings";
 import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
 import {
@@ -30,9 +30,9 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
         </div>
 
         <div className="p-2 flex items-center gap-1.5">
-          {header?.list &&
-            header.list?.length > 0 &&
-            header.list.map((l, i) => {
+          {header?.lists &&
+            header.lists?.length > 0 &&
+            header.lists.map((l, i) => {
               return (
                 <DropdownMenu key={i}>
                   <DropdownMenuTrigger

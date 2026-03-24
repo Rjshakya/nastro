@@ -1,7 +1,7 @@
 import { NotionRenderer } from "#/components/notion/notion-renderer";
 import { getRouteApi } from "@tanstack/react-router";
 import "@/styles/notion.css";
-import type { NotionPageSettings } from "#/types/customization";
+import type { NotionPageSettings } from "#/types/notion-page-settings";
 import { useLayoutEffect } from "react";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { getDefaultSettings } from "#/lib/settings-defaults";

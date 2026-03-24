@@ -1,14 +1,14 @@
 import type {
-  CustomStyles,
   NotionPageSettings,
   ThemeSettingsButtonsSection,
-} from "#/types/customization";
+} from "#/types/notion-page-settings";
+import type { NotionPageStyles } from "#/types/notion-page-styles";
 import { create } from "zustand";
 
 interface NotionSettingsStore {
-  styles?: CustomStyles;
+  styles?: NotionPageStyles;
   settings: NotionPageSettings;
-  updateSettings: (settings: NotionPageSettings) => void;
+  updateSettings: (settings: NotionPageSettings) => NotionPageSettings;
   isPanelOpen: boolean;
   togglePanel: (v: boolean) => void;
   // isDark: boolean;
@@ -22,6 +22,7 @@ export const useNotionSettingsStore = create<NotionSettingsStore>(
     updateSettings(settings) {
       const isDark = settings.general?.isDark ?? false;
       set({ settings, styles: computeCustomStyles(settings, isDark) });
+      return settings;
     },
     setIsDark(isDark) {
       const { settings } = get();
@@ -30,8 +31,9 @@ export const useNotionSettingsStore = create<NotionSettingsStore>(
         general: {
           ...settings.general,
           isDark,
+          type: "general",
         },
-      };
+      } as NotionPageSettings;
       set({
         settings: updatedSettings,
         styles: computeCustomStyles(updatedSettings, isDark),
@@ -46,8 +48,8 @@ export const useNotionSettingsStore = create<NotionSettingsStore>(
 export const computeCustomStyles = (
   settings: NotionPageSettings | null,
   isDark: boolean = false,
-): CustomStyles => {
-  const styles: CustomStyles = {};
+): NotionPageStyles => {
+  const styles: NotionPageStyles = {};
 
   const themeSettings = isDark ? settings?.darkTheme : settings?.theme;
 
@@ -68,7 +70,7 @@ export const computeCustomStyles = (
 export const computeTheme = (
   customization: NotionPageSettings["theme"] | undefined,
 ) => {
-  const styles: CustomStyles = {};
+  const styles: NotionPageStyles = {};
   if (!customization) return {};
 
   if (customization.main) {
@@ -175,7 +177,7 @@ export const computeTheme = (
 export const computeTypography = (
   typography: NotionPageSettings["typography"],
 ) => {
-  const styles: CustomStyles = {};
+  const styles: NotionPageStyles = {};
   if (!typography) return {};
 
   if (typography.sizes) {
@@ -213,7 +215,7 @@ export const computeTypography = (
 };
 
 export const computeLayout = (layout: NotionPageSettings["layout"]) => {
-  const styles: CustomStyles = {};
+  const styles: NotionPageStyles = {};
 
   if (layout?.header) {
     styles["--notion-header-height"] = layout.header.height + "px";
@@ -245,9 +247,17 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
       layout.card.borderSize + "px";
   }
 
-  // Card Cover Settings
-  if (layout?.cardCover) {
-    const cover = layout.cardCover;
+  // Card Padding
+  if (layout?.card?.paddingX !== undefined) {
+    styles["--notion-collection-card-padding-x"] = layout.card.paddingX + "px";
+  }
+  if (layout?.card?.paddingY !== undefined) {
+    styles["--notion-collection-card-padding-y"] = layout.card.paddingY + "px";
+  }
+
+  // Card Cover Settings (support both new nested structure and old flat structure)
+  const cover = layout?.card?.cover;
+  if (cover) {
     if (cover.height !== undefined) {
       styles["--notion-collection-card-cover-height"] = cover.height + "px";
     }
@@ -270,9 +280,9 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
     }
   }
 
-  // Card Body Settings
-  if (layout?.cardBody) {
-    const body = layout.cardBody;
+  // Card Body Settings (support both new nested structure and old flat structure)
+  const body = layout?.card?.body;
+  if (body) {
     if (body.paddingX !== undefined) {
       styles["--notion-collection-card-body-padding-x"] = body.paddingX + "px";
     }
@@ -287,11 +297,23 @@ export const computeLayout = (layout: NotionPageSettings["layout"]) => {
     }
   }
 
+  // Tabs
+  // if (layout?.tabs?.display !== undefined) {
+  //   styles["--notion-collection-tab-row-display"] = layout.tabs.display;
+  // }
+  // if (layout?.tabs?.backgroundColor !== undefined) {
+  //   styles["--notion-collection-tab-bg"] = layout.tabs.backgroundColor;
+  // }
+  // if (layout?.tabs?.activeBackgroundColor !== undefined) {
+  //   styles["--notion-collection-tab-active-bg"] =
+  //     layout.tabs.activeBackgroundColor;
+  // }
+
   return styles;
 };
 
 export const computeGeneral = (general: NotionPageSettings["general"]) => {
-  const styles: CustomStyles = {};
+  const styles: NotionPageStyles = {};
 
   if (!general) return styles;
 
