@@ -121,7 +121,9 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Save as theme</DialogTitle>
-          <DialogDescription>Save your current setting as theme</DialogDescription>
+          <DialogDescription>
+            Save your current setting as theme
+          </DialogDescription>
 
           <div className="grid gap-4">
             <div className="grid gap-2">
@@ -146,7 +148,10 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
               onClick={() =>
                 updateTheme({
                   themeId,
-                  input: { ...theme, themeSetting: useNotionSettingsStore.getState().settings },
+                  input: {
+                    ...theme,
+                    themeSetting: useNotionSettingsStore.getState().settings,
+                  },
                 })
               }
             >
@@ -180,7 +185,9 @@ export const CreateTheme = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create theme</DialogTitle>
-          <DialogDescription>Create theme from your current settings</DialogDescription>
+          <DialogDescription>
+            Create theme from your current settings
+          </DialogDescription>
 
           <div className="grid gap-4">
             <div className="grid gap-2">
@@ -203,7 +210,10 @@ export const CreateTheme = () => {
           <DialogFooter>
             <Button
               onClick={() =>
-                createTheme({ ...theme, themeSetting: useNotionSettingsStore.getState().settings })
+                createTheme({
+                  ...theme,
+                  themeSetting: useNotionSettingsStore.getState().settings,
+                })
               }
             >
               {isLoading ? "Creating..." : "Create"}

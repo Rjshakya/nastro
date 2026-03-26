@@ -15,7 +15,11 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "secrets": "wrangler secret bulk .env.production",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "oxlint --config oxlint.config.ts",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",
@@ -39,6 +43,8 @@
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.9",
     "notion-types": "^7.8.2",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
     "tsx": "^4.21.0",
     "wrangler": "^4.4.0"
   }

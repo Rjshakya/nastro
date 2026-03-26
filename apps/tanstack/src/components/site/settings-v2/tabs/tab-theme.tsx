@@ -1,9 +1,16 @@
 import { Button } from "#/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "#/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "#/components/ui/collapsible";
 import { ColorPicker } from "#/components/ui/color-picker";
 import { cn, getEntries } from "#/lib/utils";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type { ThemeSettingsMainSection, ThemeSettingsUI } from "#/types/notion-page-settings";
+import type {
+  ThemeSettingsMainSection,
+  ThemeSettingsUI,
+} from "#/types/notion-page-settings";
 import { IconChevronDown } from "@tabler/icons-react";
 
 const labels = {
@@ -23,7 +30,10 @@ export const TabTheme = ({ theme }: { theme: ThemeSettingsUI }) => {
           <Collapsible key={i}>
             <CollapsibleTrigger
               render={
-                <Button className={"w-full flex items-center justify-between"} variant={"ghost"}>
+                <Button
+                  className={"w-full flex items-center justify-between"}
+                  variant={"ghost"}
+                >
                   <p className=" capitalize">{labels[k] || k}</p>
                   <IconChevronDown
                     className={cn(

@@ -1,4 +1,3 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { LayoutHeaderUI } from "#/types/notion-page-settings";

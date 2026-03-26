@@ -1,6 +1,10 @@
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "#/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "#/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +14,11 @@ import {
 } from "#/components/ui/dropdown-menu";
 import { Input } from "#/components/ui/input";
 import { Label } from "#/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "#/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "#/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -45,7 +53,10 @@ export const TabLayout = ({ layout }: { layout: LayoutSettingsUI }) => {
           <Collapsible>
             <CollapsibleTrigger
               render={
-                <Button className="w-full flex items-center justify-between" variant="ghost">
+                <Button
+                  className="w-full flex items-center justify-between"
+                  variant="ghost"
+                >
                   <span className="capitalize">{k}</span>
                   <IconChevronDown className="h-4 w-4 transition-transform" />
                 </Button>
@@ -85,7 +96,11 @@ const RenderLayoutSections = ({
     return null;
   }
 
-  if (sectionKey === "header" || sectionKey === "sidebar" || sectionKey === "footer") {
+  if (
+    sectionKey === "header" ||
+    sectionKey === "sidebar" ||
+    sectionKey === "footer"
+  ) {
     return (
       <HeaderLayoutSection
         section={section as LayoutHeaderUI}
@@ -188,7 +203,9 @@ const HeaderLayoutSection = ({
                 <Label>Text</Label>
                 <Input
                   value={newLink.text || ""}
-                  onChange={(e) => setNewLink({ ...newLink, text: e.target.value })}
+                  onChange={(e) =>
+                    setNewLink({ ...newLink, text: e.target.value })
+                  }
                   placeholder="Pricing"
                   className="h-7 text-xs"
                 />
@@ -197,7 +214,9 @@ const HeaderLayoutSection = ({
                 <Label>URL</Label>
                 <Input
                   value={newLink.url || ""}
-                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                  onChange={(e) =>
+                    setNewLink({ ...newLink, url: e.target.value })
+                  }
                   placeholder="https://..."
                   className="h-7 text-xs"
                 />
@@ -217,13 +236,18 @@ const HeaderLayoutSection = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent side="left">
-                    {["default", "outline", "secondary", "ghost", "destructive", "link"].map(
-                      (variant) => (
-                        <SelectItem key={variant} value={variant}>
-                          {variant}
-                        </SelectItem>
-                      ),
-                    )}
+                    {[
+                      "default",
+                      "outline",
+                      "secondary",
+                      "ghost",
+                      "destructive",
+                      "link",
+                    ].map((variant) => (
+                      <SelectItem key={variant} value={variant}>
+                        {variant}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -286,7 +310,9 @@ const HeaderLayoutSection = ({
                 <div>
                   <Input
                     value={newList.text || ""}
-                    onChange={(e) => setNewList({ ...newList, text: e.target.value })}
+                    onChange={(e) =>
+                      setNewList({ ...newList, text: e.target.value })
+                    }
                     placeholder="Products"
                     className="h-7 text-xs"
                   />
@@ -439,14 +465,20 @@ const HeaderLayoutSection = ({
                           <DropdownMenuGroup>
                             {li.links.map((l) => {
                               return (
-                                <DropdownMenuItem className={"p-1"}>{l.text}</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-1"}>
+                                  {l.text}
+                                </DropdownMenuItem>
                               );
                             })}
                           </DropdownMenuGroup>
                         </DropdownMenuContent>
                       </DropdownMenu>
                       <div className="">
-                        <Badge onClick={() => handleDeleteList(listIndex, section?.lists)}>
+                        <Badge
+                          onClick={() =>
+                            handleDeleteList(listIndex, section?.lists)
+                          }
+                        >
                           <IconTrash />
                         </Badge>
                       </div>
@@ -537,28 +569,32 @@ const CardSection = ({
                 }
               />
               <CollapsibleContent
-                className={"shadow-sm ring-2 ring-input grid gap-4 px-4 py-6 rounded-md mt-4 mx-2"}
+                className={
+                  "shadow-sm ring-2 ring-input grid gap-4 px-4 py-6 rounded-md mt-4 mx-2"
+                }
               >
-                {getEntries(v as Record<string, number | undefined>).map(([s, sv]) => {
-                  return (
-                    <SliderInput
-                      label={s}
-                      min={0}
-                      max={400}
-                      // @ts-ignore
-                      value={(card?.[k]?.[s] as any) || sv}
-                      onChange={(value) =>
-                        onChange({
-                          ...card,
-                          [k]: {
-                            ...card?.[k],
-                            [s]: value,
-                          },
-                        })
-                      }
-                    />
-                  );
-                })}
+                {getEntries(v as Record<string, number | undefined>).map(
+                  ([s, sv]) => {
+                    return (
+                      <SliderInput
+                        label={s}
+                        min={0}
+                        max={400}
+                        // @ts-ignore
+                        value={(card?.[k]?.[s] as any) || sv}
+                        onChange={(value) =>
+                          onChange({
+                            ...card,
+                            [k]: {
+                              ...card?.[k],
+                              [s]: value,
+                            },
+                          })
+                        }
+                      />
+                    );
+                  },
+                )}
               </CollapsibleContent>
             </Collapsible>
           );

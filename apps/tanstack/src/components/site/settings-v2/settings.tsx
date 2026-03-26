@@ -64,7 +64,9 @@ export const SettingsV2 = ({
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
-          <SheetDescription>Customize your site appearance and settings</SheetDescription>
+          <SheetDescription>
+            Customize your site appearance and settings
+          </SheetDescription>
         </SheetHeader>
 
         <SelectThemes
@@ -73,7 +75,10 @@ export const SettingsV2 = ({
             navigate({
               to: "/site/$pageId",
               search: () => {
-                let res = { slug: search.slug } as { slug: string; themeId?: string };
+                let res = { slug: search.slug } as {
+                  slug: string;
+                  themeId?: string;
+                };
 
                 if (th.id) {
                   res.themeId = th.id;
@@ -105,7 +110,10 @@ export const SettingsV2 = ({
           </TabsList>
 
           {getEntries(pageSettings).map(
-            ([k, v]: [string, NotionPageSettings[keyof NotionPageSettings]]) => {
+            ([k, v]: [
+              string,
+              NotionPageSettings[keyof NotionPageSettings],
+            ]) => {
               return (
                 <TabsContent value={k} key={k}>
                   <RenderSettingSection section={v} />
@@ -121,7 +129,11 @@ export const SettingsV2 = ({
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>
 
-            {search.themeId ? <SaveTheme themeId={search.themeId} /> : <CreateTheme />}
+            {search.themeId ? (
+              <SaveTheme themeId={search.themeId} />
+            ) : (
+              <CreateTheme />
+            )}
 
             <SheetClose className="bg-muted px-4 rounded-md hover:bg-muted/80 transition-colors">
               Cancel

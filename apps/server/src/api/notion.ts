@@ -22,7 +22,9 @@ const notionApp = new Hono<{ Variables: Vars }>()
       const notion = yield* NotionService;
       return yield* notion.getNotionPages();
     }).pipe(
-      Effect.provide(NotionServiceLive(getAccessToken(userId as string, "notion"))),
+      Effect.provide(
+        NotionServiceLive(getAccessToken(userId as string, "notion")),
+      ),
       Effect.provide(NotionClientLive),
     );
 

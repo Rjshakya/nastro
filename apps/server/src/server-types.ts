@@ -10,7 +10,6 @@ import type {
 import type { ExtendedRecordMap } from "notion-types";
 import type { GetPages } from "./services/notion/main";
 
-
 export type {
   SiteSelect,
   SiteInsert,

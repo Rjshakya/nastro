@@ -1,6 +1,10 @@
 import { FontPicker } from "#/components/font-picker";
 import { Button } from "#/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "#/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "#/components/ui/collapsible";
 import { Label } from "#/components/ui/label";
 import { SliderInput } from "#/components/ui/slider-input";
 import { getEntries } from "#/lib/utils";
@@ -31,11 +35,24 @@ export const TabTypo = ({ typography }: { typography: TypoSettingsUI }) => {
   const getSpacingConfig = useMemo(() => {
     return {
       fontWeight: { min: 100, max: 900, step: 100, label: "Font weight" },
-      headingLetterSpacing: { min: -10, max: 10, step: 0.1, label: "Heading letter spacing" },
+      headingLetterSpacing: {
+        min: -10,
+        max: 10,
+        step: 0.1,
+        label: "Heading letter spacing",
+      },
       letterSpacing: { min: -10, max: 10, step: 0.1, label: "Letter spacing" },
       lineHeight: { min: -10, max: 10, step: 0.1, label: "Line height" },
-      titleLetterSpacing: { min: -10, max: 10, step: 0.1, label: "Title letter spacing" },
-    } as Record<keyof TypoSpacingUI, { min: number; max: number; step: number; label: string }>;
+      titleLetterSpacing: {
+        min: -10,
+        max: 10,
+        step: 0.1,
+        label: "Title letter spacing",
+      },
+    } as Record<
+      keyof TypoSpacingUI,
+      { min: number; max: number; step: number; label: string }
+    >;
   }, []);
 
   const getSizesConfig = useMemo(() => {
@@ -45,7 +62,10 @@ export const TabTypo = ({ typography }: { typography: TypoSettingsUI }) => {
       heading2: { label: "H2", min: 0, max: 256, step: 1 },
       heading3: { label: "H3", min: 0, max: 256, step: 1 },
       base: { label: "Base", min: 0, max: 256, step: 1 },
-    } as Record<keyof TypoSizesUI, { min: number; max: number; step: number; label: string }>;
+    } as Record<
+      keyof TypoSizesUI,
+      { min: number; max: number; step: number; label: string }
+    >;
   }, []);
 
   return (
@@ -55,7 +75,10 @@ export const TabTypo = ({ typography }: { typography: TypoSettingsUI }) => {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className="w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className="w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Font Sizes</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>
@@ -86,7 +109,10 @@ export const TabTypo = ({ typography }: { typography: TypoSettingsUI }) => {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className=" w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className=" w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Fonts</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>
@@ -121,7 +147,10 @@ export const TabTypo = ({ typography }: { typography: TypoSettingsUI }) => {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className="w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className="w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Spacing</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>

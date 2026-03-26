@@ -7,7 +7,11 @@ import { useLayoutEffect } from "react";
 import { loadFont } from "#/lib/fonts";
 
 export function SiteEditor() {
-  const { page, site, settings: defaultSettings } = siteEditorRoute.useLoaderData();
+  const {
+    page,
+    site,
+    settings: defaultSettings,
+  } = siteEditorRoute.useLoaderData();
   const { pageId } = siteEditorRoute.useParams();
   const { slug } = siteEditorRoute.useLoaderDeps({});
   const { isPanelOpen, togglePanel } = useNotionSettingsStore((s) => s);
@@ -37,7 +41,12 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
+        <NotionRenderer
+          slug={slug}
+          pageId={pageId}
+          recordMap={page}
+          settings={settings}
+        />
       </div>
 
       {/* <Settings open={isPanelOpen} onOpenChange={togglePanel} /> */}
