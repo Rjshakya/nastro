@@ -48,6 +48,7 @@
   /* notion */
   --notion-letter-spacing: -0.05rem;
   --notion-heading-letter-spacing: -0.08rem;
+  --notion-page-title-letter-spacing: -0.08rem;
   --notion-text-line-height: 1.8rem;
   --notion-font-weight: 400;
   --notion-max-width: 100%;

@@ -18,7 +18,7 @@ export const Route = createFileRoute("/dashboard")({
       <p className="text-destructive">{error.message}</p>
     </div>
   ),
-  pendingComponent: () => <div>loading...</div>,
+  // pendingComponent: () => <div>loading...</div>,
   ssr: false,
   beforeLoad: protectedLoader,
 });

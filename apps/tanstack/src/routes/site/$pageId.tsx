@@ -10,12 +10,13 @@ import { getDefaultSettings } from "#/lib/settings-defaults";
 
 const siteSearchSchema = z.object({
   slug: z.string(),
+  themeId: z.string().optional(),
 });
 
 export const Route = createFileRoute("/site/$pageId")({
   validateSearch: siteSearchSchema,
-  loaderDeps({ search: { slug } }) {
-    return { slug };
+  loaderDeps({ search: { slug, themeId } }) {
+    return { slug, themeId };
   },
   component: RouteComponent,
   loader: async ({ params, deps }) => {
@@ -33,18 +34,14 @@ export const Route = createFileRoute("/site/$pageId")({
       site,
     });
 
-    useNotionSettingsStore.getState().updateSettings({
-      ...defaultSettings,
-    });
+    // if (settings?.typography?.fonts) {
+    //   Promise.all([
+    //     loadFont(settings?.typography?.fonts?.primary as string),
+    //     loadFont(settings?.typography?.fonts?.secondary as string),
+    //   ]);
+    // }
 
-    if (settings?.typography?.fonts) {
-      Promise.all([
-        loadFont(settings?.typography?.fonts?.primary as string),
-        loadFont(settings?.typography?.fonts?.secondary as string),
-      ]);
-    }
-
-    return { site, page, seo: defaultSettings.seo };
+    return { site, page, seo: defaultSettings.seo, settings: defaultSettings };
   },
 });
 

@@ -1,4 +1,3 @@
-import type { ExtendedRecordMap } from "notion-types";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";

@@ -1,3 +1,4 @@
+import { loadFont } from "#/lib/fonts";
 import type {
   NotionPageSettings,
   ThemeSettingsButtonsSection,
@@ -22,6 +23,14 @@ export const useNotionSettingsStore = create<NotionSettingsStore>(
     updateSettings(settings) {
       const isDark = settings.general?.isDark ?? false;
       set({ settings, styles: computeCustomStyles(settings, isDark) });
+
+      if (settings?.typography?.fonts) {
+        Promise.all([
+          loadFont(settings?.typography?.fonts?.primary as string),
+          loadFont(settings?.typography?.fonts?.secondary as string),
+        ]);
+      }
+
       return settings;
     },
     setIsDark(isDark) {
@@ -200,19 +209,25 @@ export const computeTypography = (
   }
 
   if (typography.spacing) {
-    if (typography.spacing.lineHeight) {
+    if (typography.spacing.lineHeight !== undefined) {
       styles["--notion-text-line-height"] =
         typography.spacing.lineHeight.toString();
     }
-    if (typography.spacing.letterSpacing) {
+    if (typography.spacing.letterSpacing !== undefined) {
       styles["--notion-letter-spacing"] =
         typography.spacing.letterSpacing + "px";
     }
-    if (typography.spacing.headingLetterSpacing) {
+    if (typography.spacing.headingLetterSpacing !== undefined) {
       styles["--notion-heading-letter-spacing"] =
         typography.spacing.headingLetterSpacing + "px";
     }
-    if (typography.spacing.fontWeight) {
+
+    if (typography.spacing.titleLetterSpacing !== undefined) {
+      styles["--notion-page-title-letter-spacing"] =
+        typography.spacing.titleLetterSpacing + "px";
+    }
+
+    if (typography.spacing.fontWeight !== undefined) {
       styles["--notion-font-weight"] = typography.spacing.fontWeight.toString();
     }
   }
@@ -324,7 +339,10 @@ export const computeGeneral = (general: NotionPageSettings["general"]) => {
     }
   }
 
-  if (general.pageCoverHeight !== undefined || general.pageCoverHeight !== null) {
+  if (
+    general.pageCoverHeight !== undefined ||
+    general.pageCoverHeight !== null
+  ) {
     styles["--notion-page-cover-height"] = general.pageCoverHeight + "vh";
   }
 

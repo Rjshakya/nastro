@@ -19,6 +19,10 @@ import { TabTheme } from "./tabs/tab-theme";
 import { TabLayout } from "./tabs/tab-layout";
 import { TabTypo } from "./tabs/tab-typo";
 import { TabSeo } from "./tabs/tab-seo";
+import { useThemes } from "#/hooks/use-themes";
+import { CreateTheme, SaveTheme, SelectThemes } from "./theme";
+import { useNavigate } from "@tanstack/react-router";
+import { siteEditorRoute } from "../editor";
 
 export const SettingsV2 = ({
   pageSettings,
@@ -33,6 +37,9 @@ export const SettingsV2 = ({
 }) => {
   const { updateSite, isLoading } = useUpdateSite();
   const { settings } = useNotionSettingsStore();
+  const { data: themes } = useThemes();
+  const navigate = useNavigate();
+  const search = siteEditorRoute.useSearch();
 
   const handleSave = async () => {
     try {
@@ -57,10 +64,27 @@ export const SettingsV2 = ({
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
-          <SheetDescription>
-            Customize your site appearance and settings
-          </SheetDescription>
+          <SheetDescription>Customize your site appearance and settings</SheetDescription>
         </SheetHeader>
+
+        <SelectThemes
+          themes={themes}
+          onThemeChange={(th) => {
+            navigate({
+              to: "/site/$pageId",
+              search: () => {
+                let res = { slug: search.slug } as { slug: string; themeId?: string };
+
+                if (th.id) {
+                  res.themeId = th.id;
+                }
+
+                return res;
+              },
+              params: (prev) => ({ pageId: prev.pageId || "page" }),
+            });
+          }}
+        />
 
         <Tabs defaultValue="general" className="mt-4 grid">
           <TabsList
@@ -81,10 +105,7 @@ export const SettingsV2 = ({
           </TabsList>
 
           {getEntries(pageSettings).map(
-            ([k, v]: [
-              string,
-              NotionPageSettings[keyof NotionPageSettings],
-            ]) => {
+            ([k, v]: [string, NotionPageSettings[keyof NotionPageSettings]]) => {
               return (
                 <TabsContent value={k} key={k}>
                   <RenderSettingSection section={v} />
@@ -99,6 +120,9 @@ export const SettingsV2 = ({
             <Button size="sm" onClick={handleSave} disabled={isLoading}>
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>
+
+            {search.themeId ? <SaveTheme themeId={search.themeId} /> : <CreateTheme />}
+
             <SheetClose className="bg-muted px-4 rounded-md hover:bg-muted/80 transition-colors">
               Cancel
             </SheetClose>

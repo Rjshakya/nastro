@@ -1,10 +1,6 @@
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "#/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "#/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,11 +10,7 @@ import {
 } from "#/components/ui/dropdown-menu";
 import { Input } from "#/components/ui/input";
 import { Label } from "#/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "#/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "#/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -53,16 +45,13 @@ export const TabLayout = ({ layout }: { layout: LayoutSettingsUI }) => {
           <Collapsible>
             <CollapsibleTrigger
               render={
-                <Button
-                  className="w-full flex items-center justify-between"
-                  variant="ghost"
-                >
+                <Button className="w-full flex items-center justify-between" variant="ghost">
                   <span className="capitalize">{k}</span>
                   <IconChevronDown className="h-4 w-4 transition-transform" />
                 </Button>
               }
             />
-            <CollapsibleContent className="bg-muted px-4 mt-2 rounded-md">
+            <CollapsibleContent className=" shadow-sm ring-2 ring-input px-4 mt-2 rounded-md">
               <RenderLayoutSections section={v} sectionKey={k} />
             </CollapsibleContent>
           </Collapsible>
@@ -96,16 +85,12 @@ const RenderLayoutSections = ({
     return null;
   }
 
-  if (
-    sectionKey === "header" ||
-    sectionKey === "sidebar" ||
-    sectionKey === "footer"
-  ) {
+  if (sectionKey === "header" || sectionKey === "sidebar" || sectionKey === "footer") {
     return (
       <HeaderLayoutSection
         section={section as LayoutHeaderUI}
         onChange={(value) => updateLayout("header", value)}
-        showLists={sectionKey === "footer"}
+        showLists={sectionKey === "header"}
       />
     );
   }
@@ -197,29 +182,27 @@ const HeaderLayoutSection = ({
               Add Link
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80">
+          <PopoverContent side="left" className="p-3">
             <div className="space-y-3">
               <div className="space-y-2">
                 <Label>Text</Label>
                 <Input
                   value={newLink.text || ""}
-                  onChange={(e) =>
-                    setNewLink({ ...newLink, text: e.target.value })
-                  }
+                  onChange={(e) => setNewLink({ ...newLink, text: e.target.value })}
                   placeholder="Pricing"
+                  className="h-7 text-xs"
                 />
               </div>
               <div className="space-y-2">
                 <Label>URL</Label>
                 <Input
                   value={newLink.url || ""}
-                  onChange={(e) =>
-                    setNewLink({ ...newLink, url: e.target.value })
-                  }
+                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
                   placeholder="https://..."
+                  className="h-7 text-xs"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex items-center justify-between">
                 <Label>Variant</Label>
                 <Select
                   value={newLink.variant || "default"}
@@ -230,22 +213,17 @@ const HeaderLayoutSection = ({
                     })
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger size="sm">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    {[
-                      "default",
-                      "outline",
-                      "secondary",
-                      "ghost",
-                      "destructive",
-                      "link",
-                    ].map((variant) => (
-                      <SelectItem key={variant} value={variant}>
-                        {variant}
-                      </SelectItem>
-                    ))}
+                  <SelectContent side="left">
+                    {["default", "outline", "secondary", "ghost", "destructive", "link"].map(
+                      (variant) => (
+                        <SelectItem key={variant} value={variant}>
+                          {variant}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -292,9 +270,9 @@ const HeaderLayoutSection = ({
               Add List
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="space-y-3">
-              <div className="space-y-2">
+          <PopoverContent side="left" className="">
+            <div className="space-y-4">
+              <div className="grid gap-6">
                 <div className="flex items-center justify-between gap-1">
                   <Label className="f">
                     <p>List Title</p>
@@ -304,13 +282,15 @@ const HeaderLayoutSection = ({
                     onChange={(l) => setNewList({ ...newList, links: l })}
                   />
                 </div>
-                <Input
-                  value={newList.text || ""}
-                  onChange={(e) =>
-                    setNewList({ ...newList, text: e.target.value })
-                  }
-                  placeholder="Products"
-                />
+
+                <div>
+                  <Input
+                    value={newList.text || ""}
+                    onChange={(e) => setNewList({ ...newList, text: e.target.value })}
+                    placeholder="Products"
+                    className="h-7 text-xs"
+                  />
+                </div>
               </div>
 
               <div>
@@ -459,20 +439,14 @@ const HeaderLayoutSection = ({
                           <DropdownMenuGroup>
                             {li.links.map((l) => {
                               return (
-                                <DropdownMenuItem className={"p-1"}>
-                                  {l.text}
-                                </DropdownMenuItem>
+                                <DropdownMenuItem className={"p-1"}>{l.text}</DropdownMenuItem>
                               );
                             })}
                           </DropdownMenuGroup>
                         </DropdownMenuContent>
                       </DropdownMenu>
                       <div className="">
-                        <Badge
-                          onClick={() =>
-                            handleDeleteList(listIndex, section?.lists)
-                          }
-                        >
+                        <Badge onClick={() => handleDeleteList(listIndex, section?.lists)}>
                           <IconTrash />
                         </Badge>
                       </div>
@@ -562,29 +536,29 @@ const CardSection = ({
                   </Button>
                 }
               />
-              <CollapsibleContent>
-                {getEntries(v as Record<string, number | undefined>).map(
-                  ([s, sv]) => {
-                    return (
-                      <SliderInput
-                        label={s}
-                        min={0}
-                        max={400}
-                        // @ts-ignore
-                        value={(card?.[k]?.[s] as any) || sv}
-                        onChange={(value) =>
-                          onChange({
-                            ...card,
-                            [k]: {
-                              ...card?.[k],
-                              [s]: value,
-                            },
-                          })
-                        }
-                      />
-                    );
-                  },
-                )}
+              <CollapsibleContent
+                className={"shadow-sm ring-2 ring-input grid gap-4 px-4 py-6 rounded-md mt-4 mx-2"}
+              >
+                {getEntries(v as Record<string, number | undefined>).map(([s, sv]) => {
+                  return (
+                    <SliderInput
+                      label={s}
+                      min={0}
+                      max={400}
+                      // @ts-ignore
+                      value={(card?.[k]?.[s] as any) || sv}
+                      onChange={(value) =>
+                        onChange({
+                          ...card,
+                          [k]: {
+                            ...card?.[k],
+                            [s]: value,
+                          },
+                        })
+                      }
+                    />
+                  );
+                })}
               </CollapsibleContent>
             </Collapsible>
           );
@@ -604,9 +578,9 @@ const TabsSection = ({
   onChange: (value: LayoutTabsUI) => void;
 }) => {
   return (
-    <div className="space-y-4 py-4">
+    <div className="space-y-4 py-2">
       {/* Display */}
-      <div className="space-y-2">
+      <div className="flex items-center justify-between gap-2">
         <Label className="capitalize">Display</Label>
         <Select
           value={tabs?.display || "flex"}
@@ -617,10 +591,10 @@ const TabsSection = ({
             })
           }
         >
-          <SelectTrigger>
+          <SelectTrigger size="sm" className={"w-32 "}>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className={"w-32"}>
             <SelectItem value="flex">Show</SelectItem>
             <SelectItem value="none">Hide</SelectItem>
           </SelectContent>

@@ -100,9 +100,10 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
     letterSpacing: -0.8,
     headingLetterSpacing: -1.3,
     fontWeight: 400,
+    titleLetterSpacing: -0.8,
   },
   type: "typography",
-};
+} as NotionPageSettings["typography"];
 
 export const defaultLayoutSettings = (
   pageTitle: string,
@@ -235,10 +236,10 @@ export const defaultDarkThemeSettings = (
 export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   siteName,
   slug: slug,
-  pageWidth: 768,
   header: true,
   footer: true,
   isDark: false,
+  pageWidth: 768,
   pageCoverHeight: 40,
 });
 

@@ -1,17 +1,15 @@
 import { Button } from "#/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "#/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "#/components/ui/collapsible";
 import { ColorPicker } from "#/components/ui/color-picker";
 import { cn, getEntries } from "#/lib/utils";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
-import type {
-  ThemeSettingsMainSection,
-  ThemeSettingsUI,
-} from "#/types/notion-page-settings";
+import type { ThemeSettingsMainSection, ThemeSettingsUI } from "#/types/notion-page-settings";
 import { IconChevronDown } from "@tabler/icons-react";
+
+const labels = {
+  notionBackground: "Notion background",
+  defaultButton: "Default Button",
+} as Record<keyof ThemeSettingsUI, string>;
 
 export const TabTheme = ({ theme }: { theme: ThemeSettingsUI }) => {
   return (
@@ -25,11 +23,8 @@ export const TabTheme = ({ theme }: { theme: ThemeSettingsUI }) => {
           <Collapsible key={i}>
             <CollapsibleTrigger
               render={
-                <Button
-                  className={"w-full flex items-center justify-between"}
-                  variant={"ghost"}
-                >
-                  <p className=" capitalize">{k}</p>
+                <Button className={"w-full flex items-center justify-between"} variant={"ghost"}>
+                  <p className=" capitalize">{labels[k] || k}</p>
                   <IconChevronDown
                     className={cn(
                       "h-4 w-4 transition-transform",
@@ -40,7 +35,7 @@ export const TabTheme = ({ theme }: { theme: ThemeSettingsUI }) => {
               }
             />
             <CollapsibleContent
-              className={`bg-muted px-4 mt-2 rounded-md divide-y divide-border`}
+              className={`shadow-sm ring-2 ring-input px-4 mt-2 rounded-md divide-y divide-border`}
             >
               <RenderThemeSections sections={v} sectionKey={k} />
             </CollapsibleContent>

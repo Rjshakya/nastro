@@ -105,6 +105,7 @@ export type TypoSpacingUI = {
   lineHeight?: number;
   letterSpacing?: number;
   headingLetterSpacing?: number;
+  titleLetterSpacing?: number;
   fontWeight?: number;
 };
 

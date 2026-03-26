@@ -1,15 +1,30 @@
 import { NotionRenderer } from "@/components/notion/notion-renderer";
 import "@/styles/notion.css";
-import { siteApi } from ".";
+import { siteEditorRoute } from ".";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { SettingsV2 } from "../settings-v2/settings";
+import { useLayoutEffect } from "react";
+import { loadFont } from "#/lib/fonts";
 
 export function SiteEditor() {
-  const { page, site } = siteApi.useLoaderData();
-  const { pageId } = siteApi.useParams();
-  const { slug } = siteApi.useLoaderDeps({});
+  const { page, site, settings: defaultSettings } = siteEditorRoute.useLoaderData();
+  const { pageId } = siteEditorRoute.useParams();
+  const { slug } = siteEditorRoute.useLoaderDeps({});
   const { isPanelOpen, togglePanel } = useNotionSettingsStore((s) => s);
   const { settings } = useNotionSettingsStore((s) => s);
+
+  useLayoutEffect(() => {
+    useNotionSettingsStore.getState().updateSettings({
+      ...defaultSettings,
+    });
+
+    if (defaultSettings?.typography?.fonts) {
+      Promise.all([
+        loadFont(defaultSettings?.typography?.fonts?.primary as string),
+        loadFont(defaultSettings?.typography?.fonts?.secondary as string),
+      ]);
+    }
+  }, []);
 
   if (!site) {
     return (
@@ -22,12 +37,7 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer
-          slug={slug}
-          pageId={pageId}
-          recordMap={page}
-          settings={settings}
-        />
+        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
       </div>
 
       {/* <Settings open={isPanelOpen} onOpenChange={togglePanel} /> */}

@@ -137,16 +137,10 @@ export function NotionRenderer({
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
-        header={
-          settings?.general?.header && (
-            <SiteHeader header={settings?.layout?.header} />
-          )
-        }
+        header={settings?.general?.header && <SiteHeader header={settings?.layout?.header} />}
         disableHeader
       />
-      {settings?.general?.footer && (
-        <SiteFooter footer={settings?.layout?.footer} />
-      )}
+      {settings?.general?.footer && <SiteFooter footer={settings?.layout?.footer} />}
     </div>
   );
 }

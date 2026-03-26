@@ -69,6 +69,7 @@ export interface NotionPageStyles {
 
   "--notion-letter-spacing"?: string;
   "--notion-heading-letter-spacing"?: string;
+  "--notion-page-title-letter-spacing"?: string;
   "--notion-text-line-height"?: string;
   "--notion-font-weight"?: string;
 

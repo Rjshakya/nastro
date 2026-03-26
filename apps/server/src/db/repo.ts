@@ -58,7 +58,10 @@ export const makeRepo = <
   const findAll = () =>
     Effect.tryPromise({
       try: async () => {
-        return (await db.select().from(table as Table<any>)) as ResultType[];
+        return (await db
+          .select()
+          .from(table as Table<any>)
+          .limit(100)) as ResultType[];
       },
       catch: (error) => new RepoError({ error, msg: "FAILED TO FIND ALL" }),
     });
@@ -74,9 +77,9 @@ export const makeRepo = <
             .where(eq(table[key], id))) as ResultType[]
         );
       },
-      catch: (error) =>{
-        console.error(error)
-        return  new RepoError({ error, msg: "FAILED TO FIND BY ID" })
+      catch: (error) => {
+        console.error(error);
+        return new RepoError({ error, msg: "FAILED TO FIND BY ID" });
       },
     });
 

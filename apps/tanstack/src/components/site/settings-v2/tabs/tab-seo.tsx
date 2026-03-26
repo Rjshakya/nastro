@@ -4,17 +4,22 @@ import { getEntries } from "#/lib/utils";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { SeoSettingsUI } from "#/types/notion-page-settings";
 
+const labels = {
+  ogImage: "OG Image",
+  pageUrl: "Page url",
+} as Record<keyof SeoSettingsUI, string>;
+
 export const TabSeo = ({ seo }: { seo: SeoSettingsUI }) => {
   const { settings, updateSettings } = useNotionSettingsStore();
 
   return (
     <div className="grid gap-4 py-4">
       {getEntries(seo).map(([key]) => {
-        if (!key || key === "type") return null;
+        if (!key || key === "type" || key === "pageIcon") return null;
 
         return (
           <div key={key} className="w-full grid gap-2">
-            <Label className="capitalize">{key}</Label>
+            <Label className="capitalize">{labels[key] || key}</Label>
             <Input
               value={settings?.seo?.[key as keyof SeoSettingsUI] || ""}
               onChange={(e) =>

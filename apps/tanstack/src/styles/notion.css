@@ -3,7 +3,6 @@
 @import "@fontsource-variable/geist-mono";
 
 .notion {
-
   --bg-color: var(--notion-custom-page-bg);
   --fg-color: var(--notion-custom-text);
 
@@ -264,7 +263,7 @@
 
 .notion-title {
   font-size: var(--notion-page-title);
-  letter-spacing: var(--notion-heading-letter-spacing);
+  letter-spacing: var(--notion-page-title-letter-spacing);
   text-align: var(--notion-page-title-align);
   font-family: var(--primary-font);
 }

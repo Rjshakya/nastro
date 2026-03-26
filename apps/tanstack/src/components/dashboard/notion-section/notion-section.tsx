@@ -3,15 +3,12 @@ import { useMemo } from "react";
 import { Button } from "../../ui/button";
 import { authClient } from "@/lib/auth-client";
 import { NotionPages as NotionPagesComp } from "./notion-pages";
-import { dashboardHomeApi } from "../home";
 import { Env } from "env";
+import { useNotionPages } from "#/hooks/use-notion";
 
 export const DashboardNotionSection = () => {
-  const { pages: notionPages } = dashboardHomeApi.useLoaderData();
-  const isNotionConnected = useMemo(
-    () => notionPages && notionPages.length > 0,
-    [notionPages],
-  );
+  const { data: notionPages } = useNotionPages();
+  const isNotionConnected = useMemo(() => notionPages && notionPages.length > 0, [notionPages]);
 
   const handleConnect = async () => {
     await authClient.linkSocial({
