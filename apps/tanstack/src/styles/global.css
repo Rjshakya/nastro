@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/typography';
 @import "tw-animate-css";
-@import "@fontsource-variable/geist";
 @import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/geist/wght.css";
 @custom-variant dark (&:is(.dark *));
 @plugin 'tailwind-scrollbar';
 
@@ -42,7 +42,7 @@
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.871 0.006 286.286);
 
-  --font-sans: "Geist Sans", sans-serif;
+  --font-sans: "Geist Variable", sans-serif;
   --font-mono: "Geist Mono Variable", monospace;
 
   /* notion */
@@ -154,7 +154,7 @@
 
   /* notion -  font */
 
-  --notion-primary-font: "Geist Sans", sans-serif;
+  --notion-primary-font: "Geist Variable", sans-serif;
   --notion-secondary-font: "Geist Sans", sans-serif;
 
   /* notion - header */
@@ -308,7 +308,7 @@
 }
 
 @theme inline {
-  --font-sans: "Geist Sans", sans-serif;
+  --font-sans: "Geist Variable", sans-serif;
   --font-mono: "Geist Mono Variable", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -359,10 +359,10 @@ body,
     @apply border-border outline-ring/50;
   }
   body {
-    @apply tracking-tight;
-    background-color: var(--background);
+    @apply bg-background text-foreground font-sans;
+    /* background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-sans);
+    font-family: var(--font-sans); */
   }
 }
 

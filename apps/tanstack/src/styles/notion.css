@@ -374,6 +374,10 @@
   display: none;
 }
 
+.notion-list-item-property .notion-page-title {
+  display: none;
+}
+
 .notion-list-body .notion-page-link {
   transition: all 300ms ease-in-out;
 }
@@ -396,4 +400,52 @@
 
 .notion-footer-custom {
   font-family: var(--secondary-font);
+}
+
+/* notion - table */
+
+/* .notion-table {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin-block: auto;
+} */
+
+@media (min-width: 1000px) {
+  .notion-table[style] {
+    width: var(--notion-max-width, 786px) !important;
+    max-width: var(--notion-max-width, 786px) !important;
+  }
+
+  .notion-table .notion-table-view {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* .notion-table[style] {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+}
+
+.notion-table .notion-table-view {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+} */
+
+/* notion - quote */
+
+.notion-quote {
+  display: block;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-left: 4px solid var(--fg-color);
+  padding: 0.8em 1em;
+  margin: 6px 0;
+  font-size: 1.2em;
+}
+
+.notion-callout-text .notion-text {
+  padding: 0px;
 }

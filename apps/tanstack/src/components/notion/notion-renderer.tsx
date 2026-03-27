@@ -133,7 +133,6 @@ export function NotionRenderer({
               </Link>
             );
           },
-
           Header: SiteHeader,
         }}
         mapPageUrl={handlePageUrl}
