@@ -9,11 +9,11 @@ export const DashboardSitesSection = () => {
   const { sites } = dashboardHomeApi.useLoaderData();
 
   return (
-    <div className="rounded-lg border bg-card p-1.5 grid gap-4">
+    <div className="rounded-lg  bg-muted p-1.5 grid gap-2">
       <div className="flex items-center justify-between  pt-1">
-        <div className="flex items-center gap-3">
-          <Button size={"icon-sm"} variant={"secondary"}>
-            <IconWorld className="size-5" />
+        <div className="flex items-center">
+          <Button size={"icon-sm"} variant={"ghost"}>
+            <IconWorld className="size-5 text-blue-400" />
           </Button>
           <h3 className="font-medium">Sites</h3>
         </div>
@@ -21,9 +21,13 @@ export const DashboardSitesSection = () => {
       </div>
 
       {sites && (
-        <div className="grid gap-2  rounded-md p-1">
+        <div className="grid gap-2  rounded-md p-1 bg-card">
           {sites?.map((site) => (
-            <SiteCard key={site.id} site={site as Site} />
+            <SiteCard
+              className=" hover:bg-muted/40 transition-all duration-300 ease-in-out"
+              key={site.id}
+              site={site as Site}
+            />
           ))}
         </div>
       )}

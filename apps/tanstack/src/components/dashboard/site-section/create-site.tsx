@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { useState } from "react";
+import { IconLink, IconPlus } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,6 @@ import { Label } from "@/components/ui/label";
 
 import { useCreateSite } from "#/hooks/use-sites";
 import type { Site } from "@/types/site";
-// import { useRouter } from "@tanstack/react-router";
-import { dashboardHomeApi } from "../home";
 import {
   Dialog,
   DialogContent,
@@ -18,18 +16,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "#/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "#/components/ui/popover";
-import { Item, ItemContent, ItemGroup, ItemTitle } from "#/components/ui/item";
-import { ScrollArea } from "#/components/ui/scroll-area";
+
 import { parsePageId } from "notion-utils";
 import { defaultNotionSettings } from "#/lib/settings-defaults";
 import { useNotionPages } from "#/hooks/use-notion";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
+import type { NotionPage } from "#/types/notion";
+import { authClient } from "#/lib/auth-client";
+import { Env } from "env";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -39,25 +39,9 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  // const { pages } = dashboardHomeApi.useLoaderData();
 
   const { data: pages } = useNotionPages();
-  const {
-    createSite,
-    isLoading: isCreating,
-    input,
-    setInput,
-  } = useCreateSite();
-  const [openPopover, setOpenPopver] = useState(false);
-  const popoverTriggerRef = useRef<HTMLDivElement>(null);
-
-  const filteredPages = useMemo(() => {
-    return pages?.filter((page) => {
-      if (!searchQuery) return true;
-      const title = getPageTitle(page);
-      return title.toLowerCase().includes(searchQuery.toLowerCase());
-    });
-  }, [pages, searchQuery]);
+  const { createSite, isLoading: isCreating, input, setInput } = useCreateSite();
 
   const handleCreate = async () => {
     if (!input) return;
@@ -76,6 +60,13 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     }
   };
 
+  const handleConnectNotion = async () => {
+    await authClient.linkSocial({
+      provider: "notion",
+      callbackURL: Env.clientUrl + "/dashboard",
+    });
+  };
+
   const isValid = selectedPageId && input.siteName.trim().length > 0;
 
   return (
@@ -91,9 +82,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
       <DialogContent className=" px-4 py-4 font-sans tracking-tighter">
         <DialogHeader className="px-0">
           <DialogTitle className="font-medium">Create New Site</DialogTitle>
-          <DialogDescription>
-            Select a Notion page to create your site from.
-          </DialogDescription>
+          <DialogDescription>Select a Notion page to create your site from.</DialogDescription>
         </DialogHeader>
 
         <div className="py-4 space-y-4">
@@ -119,74 +108,52 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
             </div>
           </div>
 
-          <Popover open={openPopover} onOpenChange={setOpenPopver}>
-            <PopoverTrigger
-              render={
-                <div ref={popoverTriggerRef} className="space-y-2">
-                  <Label>Notion Page</Label>
-                  <div className="relative">
-                    <IconSearch className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Paste notion link or select notion pages"
-                      className="pl-9"
-                      value={searchQuery}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setSearchQuery(val);
-
-                        const idFromUrl = parsePageId(val);
-                        if (idFromUrl) {
-                          setSelectedPageId(idFromUrl);
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-              }
-            />
-            <PopoverContent
-              style={{ width: `${popoverTriggerRef.current?.offsetWidth}px` }}
-              side="bottom"
-              className={" p-2"}
+          <div className=" space-y-3">
+            <div className="flex items-center">
+              <Label className=" flex-1">Notion Page</Label>
+              <Button onClick={handleConnectNotion} className={""} size={"xs"}>
+                <IconLink />
+                connect notion
+              </Button>
+            </div>
+            <Combobox
+              items={pages}
+              value={selectedPageId}
+              onValueChange={(pageId) => {
+                setSelectedPageId(pageId);
+                const page = pages?.find((p) => p?.id === pageId);
+                setSearchQuery(getPageTitle(page));
+              }}
             >
-              <PopoverHeader className="px-2">
-                <PopoverTitle>Notion Pages</PopoverTitle>
-              </PopoverHeader>
-              <ScrollArea className={"h-32 p-0"}>
-                {filteredPages && filteredPages?.length > 0 && (
-                  <ItemGroup className="p-1 cursor-pointer">
-                    {filteredPages?.map((page) => (
-                      <Item
-                        size={"xs"}
-                        key={page.id}
-                        className={`transition-colors ${
-                          selectedPageId === page.id
-                            ? "border-primary bg-primary/10"
-                            : "hover:bg-accent"
-                        }`}
-                        onClick={() => {
-                          setSelectedPageId(page.id);
-                          setSearchQuery(getPageTitle(page));
-                        }}
-                      >
-                        <ItemContent>
-                          <ItemTitle>{getPageTitle(page)}</ItemTitle>
-                        </ItemContent>
-                      </Item>
-                    ))}
-                  </ItemGroup>
-                )}
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
+              <ComboboxInput
+                placeholder="Paste notion link or select notion pages"
+                value={searchQuery}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchQuery(val);
+                  const idFromUrl = parsePageId(val);
+                  if (idFromUrl) setSelectedPageId(idFromUrl);
+                }}
+              />
+              <ComboboxContent>
+                <ComboboxList>
+                  {(item: NotionPage) => (
+                    <ComboboxItem key={item?.id} value={item?.id}>
+                      {getPageTitle(item)}
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
+          </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
           <Button onClick={handleCreate} disabled={!isValid || isCreating}>
             {isCreating ? "Creating..." : "Create Site"}
+          </Button>
+          <Button variant="destructive" onClick={() => setOpen(false)}>
+            Cancel
           </Button>
         </DialogFooter>
       </DialogContent>

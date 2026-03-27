@@ -1,6 +1,4 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getThemeServerFn } from "@/lib/theme";
 
@@ -19,8 +17,28 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Nastro",
       },
+      { property: "og:title", content: "Nastro" },
+      { property: "og:description", content: "Fastest way from notion doc to published site." },
+      {
+        property: "og:url",
+        content: "https://nastro.xyz",
+      },
+      // {
+      //   property: "og:image",
+      //   content: loaderData?.seo?.ogImage,
+      // },
+      { name: "twitter:title", content: "Nastro" },
+      { name: "twitter:description", content: "Fastest way from notion doc to published site." },
+      {
+        name: "twitter:url",
+        content: "https://nastro.xyz",
+      },
+      // {
+      //   name: "twitter:image",
+      //   content: loaderData?.seo?.ogImage,
+      // },
     ],
     links: [
       {
@@ -54,17 +72,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        {/* <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        /> */}
         <Scripts />
       </body>
     </html>

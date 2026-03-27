@@ -188,8 +188,8 @@
     line-height: normal;
     border-radius: var(--radius);
     display: grid;
-    padding: 10px;
-    height: 14px;
+    padding: 12px;
+    height: fit-content;
     background-color: var(--notion-collection-tab-bg);
     transition: background-color 350ms ease-in-out;
 
@@ -217,9 +217,10 @@
     background-color: var(--notion-collection-tab-active-bg);
     border-radius: var(--radius);
     font-weight: 500;
-    /* opacity: 65%; */
   }
 }
+
+
 
 .notion-collection-header .notion-page-icon-inline {
   display: none;

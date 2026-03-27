@@ -8,10 +8,7 @@ import { useNotionPages } from "#/hooks/use-notion";
 
 export const DashboardNotionSection = () => {
   const { data: notionPages } = useNotionPages();
-  const isNotionConnected = useMemo(
-    () => notionPages && notionPages.length > 0,
-    [notionPages],
-  );
+  const isNotionConnected = useMemo(() => notionPages && notionPages.length > 0, [notionPages]);
 
   const handleConnect = async () => {
     await authClient.linkSocial({

@@ -78,6 +78,8 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
   const handleSave = async () => {
     const settingsWithDefaults = getPureDefaultSettings(settings);
     const settingsWithoutSeo = getSettingsWithOutSeo(settingsWithDefaults);
+
+    console.log(settingsWithoutSeo)
     await updateTheme({ themeId, input: { ...theme, themeSetting: settingsWithoutSeo } });
   };
 

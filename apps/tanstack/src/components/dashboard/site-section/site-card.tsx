@@ -1,8 +1,4 @@
-import {
-  IconTrash,
-  IconSettings,
-  IconCircleArrowUpRightFilled,
-} from "@tabler/icons-react";
+import { IconTrash, IconSettings, IconArrowUpRight, IconDots } from "@tabler/icons-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,14 +6,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Site } from "@/types/site";
 import { Link } from "@tanstack/react-router";
 import { useDeleteSite } from "#/hooks/use-sites";
-import { createSlugUrl } from "#/lib/utils";
+import { cn, createSlugUrl } from "#/lib/utils";
 import { Env } from "env";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "#/components/ui/dropdown-menu";
 
 interface SiteCardProps {
   site: Site;
+  className?: string;
 }
 
-export function SiteCard({ site }: SiteCardProps) {
+export function SiteCard({ site, className }: SiteCardProps) {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
   const url = Env.isDev ? "/$pageId" : createSlugUrl(site.slug) + site.pageId;
   const _handleDelete = async () => {
@@ -25,45 +29,67 @@ export function SiteCard({ site }: SiteCardProps) {
   };
 
   return (
-    <Card className="rounded-md p-1">
-      <CardHeader className="px-1 flex items-center justify-between gap-2">
-        <CardTitle className="">{site.siteName}</CardTitle>
+    <Card className={cn("rounded-md p-3 ring-0", className)}>
+      <CardHeader className="px-0 flex items-center justify-between gap-2">
+        <Link
+          to="/site/$pageId"
+          params={{ pageId: site.pageId || "" }}
+          search={{ slug: site.slug }}
+          className="flex-1  "
+        >
+          <CardTitle className="px-2   ">
+            <p className=" ">{site.siteName}</p>
+          </CardTitle>
+        </Link>
+
         <div className="">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="text-destructive"
-            onClick={() => _handleDelete()}
-            disabled={isDeleting}
-          >
-            <IconTrash className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              onClick={(e) => e.stopPropagation()}
+              render={
+                <Button size={"icon-sm"} variant={"ghost"}>
+                  <IconDots />
+                </Button>
+              }
+            />
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link
+                    to={url}
+                    params={{ pageId: site.pageId || "" }}
+                    search={{ slug: site.slug }}
+                    target="_blank"
+                    className="flex items-center gap-2"
+                  >
+                    <IconArrowUpRight />
+                    <p>Link</p>
+                  </Link>
+                </DropdownMenuItem>
 
-          <Link
-            to="/site/$pageId"
-            params={{ pageId: site.pageId || "" }}
-            search={{ slug: site.slug }}
-          >
-            <Button variant="ghost" size="icon-sm" className="">
-              <IconSettings className="h-4 w-4" />
-            </Button>
-          </Link>
+                <DropdownMenuItem>
+                  <Link
+                    to="/site/$pageId"
+                    params={{ pageId: site.pageId || "" }}
+                    search={{ slug: site.slug }}
+                    className="flex items-center gap-2"
+                  >
+                    <IconSettings className="h-4 w-4" />
+                    <p>Edit</p>
+                  </Link>
+                </DropdownMenuItem>
 
-          <Link
-            to={url}
-            params={{ pageId: site.pageId || "" }}
-            search={{ slug: site.slug }}
-            target="_blank"
-          >
-            <Button
-              variant="secondary"
-              size="icon-sm"
-              className="text-blue-500"
-              disabled={isDeleting}
-            >
-              <IconCircleArrowUpRightFilled />
-            </Button>
-          </Link>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => _handleDelete()}
+                  disabled={isDeleting}
+                >
+                  <IconTrash className="h-4 w-4" />
+                  <p>Delete</p>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardHeader>
     </Card>

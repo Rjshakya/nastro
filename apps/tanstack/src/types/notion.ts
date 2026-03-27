@@ -5,9 +5,10 @@ import type {
   PartialPageObjectResponse,
 } from "@notionhq/client";
 
-export type NotionPages = (
+export type NotionPage =
   | PageObjectResponse
   | PartialPageObjectResponse
   | PartialDataSourceObjectResponse
-  | DataSourceObjectResponse
-)[];
+  | DataSourceObjectResponse;
+
+export type NotionPages = NotionPage[];
