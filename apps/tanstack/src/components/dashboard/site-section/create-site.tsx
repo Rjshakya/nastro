@@ -30,13 +30,14 @@ import {
 import type { NotionPage } from "#/types/notion";
 import { authClient } from "#/lib/auth-client";
 import { Env } from "env";
+import { useCreateSiteStore } from "#/stores/create-site";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
 }
 
 export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
-  const [open, setOpen] = useState(false);
+  const { openDialog, setOpenDialog } = useCreateSiteStore((s) => s);
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -53,7 +54,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
 
     if (result) {
       onSuccess?.({ ...(result as Site) });
-      setOpen(false);
+      setOpenDialog(false);
       setSelectedPageId(null);
       setInput({ pageId: "", siteName: "", slug: "" });
       setSelectedPageId("");
@@ -70,7 +71,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const isValid = selectedPageId && input.siteName.trim().length > 0;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger
         render={
           <Button size={"sm"}>
@@ -152,7 +153,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
           <Button onClick={handleCreate} disabled={!isValid || isCreating}>
             {isCreating ? "Creating..." : "Create Site"}
           </Button>
-          <Button variant="destructive" onClick={() => setOpen(false)}>
+          <Button variant="destructive" onClick={() => setOpenDialog(false)}>
             Cancel
           </Button>
         </DialogFooter>
