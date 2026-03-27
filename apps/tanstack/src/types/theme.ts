@@ -7,5 +7,5 @@ export type Theme = {
   updatedAt: string;
   createdBy: string;
   isPublic: boolean | null;
-  themeSetting: NotionPageSettings;
+  themeSetting: Omit<NotionPageSettings, "seo">;
 };

@@ -23,80 +23,45 @@ import { useCreateTheme, useUpdateTheme } from "#/hooks/use-themes";
 import type { CreateThemeInput, UpdateThemeInput } from "#/lib/site.theme";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { Theme } from "#/types/theme";
-import { useEffect, useMemo, useState } from "react";
-import { siteEditorRoute } from "../editor";
+import { useState } from "react";
+import { useThemeStore } from "#/stores/theme-store";
+import { getSettingsWithOutSeo } from "#/lib/utils";
+import { getPureDefaultSettings } from "#/lib/settings-defaults";
 
-export const SelectThemes = ({
-  themes,
-  onThemeChange,
-}: {
-  themes: Theme[];
-  onThemeChange: (theme: Theme) => void;
-}) => {
-  const { themeId } = siteEditorRoute.useSearch();
-  const { updateSettings } = useNotionSettingsStore((s) => s);
-  const { settings: defaultSettings } = siteEditorRoute.useLoaderData();
-  const [theme, setTheme] = useState<Theme>({
-    name: "default",
-    createdAt: "",
-    createdBy: "",
-    id: "",
-    isPublic: true,
-    themeSetting: defaultSettings,
-    updatedAt: "",
-  });
-
-  const defaulTheme = useMemo(
-    () => ({
-      name: "default",
-      createdAt: "",
-      createdBy: "",
-      id: "",
-      isPublic: true,
-      themeSetting: defaultSettings,
-      updatedAt: "",
-    }),
-    [],
-  );
-
-  useEffect(() => {
-    if (!themeId || themeId?.length < 4) return;
-
-    const findTheme = themes.find((t) => t.id === themeId);
-    if (!findTheme) return;
-    // updateSettings(findTheme?.themeSetting)
-    setTheme(findTheme);
-  }, [themeId]);
+export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) => void }) => {
+  const { themes, theme, setTheme } = useThemeStore((s) => s);
 
   return (
-    <Select value={theme?.name}>
-      <SelectTrigger className={"w-full"}>
-        <SelectValue className={" capitalize"} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {themes.length > 0 ? (
-            [...themes, defaulTheme].map((t) => {
-              return (
-                <SelectItem
-                  className={" capitalize"}
-                  onClick={() => {
-                    updateSettings(t?.themeSetting);
-                    onThemeChange(t);
-                    setTheme(t);
-                  }}
-                  value={t.name}
-                >
-                  {t.name}
-                </SelectItem>
-              );
-            })
-          ) : (
-            <SelectItem>No theme</SelectItem>
-          )}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="grid gap-2">
+      <Label htmlFor="theme">Theme</Label>
+      <Select id="theme" value={theme?.name}>
+        <SelectTrigger className={"w-full"}>
+          <SelectValue className={" capitalize"} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {themes.length > 0 ? (
+              themes.map((t) => {
+                return (
+                  <SelectItem
+                    className={" capitalize"}
+                    onClick={() => {
+                      onThemeChange(t);
+                      setTheme(t);
+                    }}
+                    value={t.name}
+                  >
+                    {t.name}
+                  </SelectItem>
+                );
+              })
+            ) : (
+              <SelectItem>No theme</SelectItem>
+            )}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 
@@ -108,24 +73,29 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
   });
 
   const { isLoading, updateTheme } = useUpdateTheme();
+  const { settings } = useNotionSettingsStore((s) => s);
+
+  const handleSave = async () => {
+    const settingsWithDefaults = getPureDefaultSettings(settings);
+    const settingsWithoutSeo = getSettingsWithOutSeo(settingsWithDefaults);
+    await updateTheme({ themeId, input: { ...theme, themeSetting: settingsWithoutSeo } });
+  };
 
   return (
     <Dialog>
       <DialogTrigger
         render={
-          <Button size={"sm"} variant={"secondary"}>
-            Sava theme
+          <Button className={"w-full justify-start "} size={"sm"} variant={"ghost"}>
+            Save theme
           </Button>
         }
       />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Save as theme</DialogTitle>
-          <DialogDescription>
-            Save your current setting as theme
-          </DialogDescription>
+          <DialogDescription>Save your current setting as theme</DialogDescription>
 
-          <div className="grid gap-4">
+          <div className="grid gap-4 mb-4">
             <div className="grid gap-2">
               <Label>Name</Label>
               <Input
@@ -134,9 +104,12 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label>Public</Label>
+            <div className="flex items-center  gap-2">
+              <Label className="flex-1" htmlFor="public:checkbox">
+                Public
+              </Label>
               <Checkbox
+                id="public:checkbox"
                 checked={!!theme.isPublic}
                 onCheckedChange={(c) => setTheme({ ...theme, isPublic: c })}
               />
@@ -144,19 +117,7 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
           </div>
 
           <DialogFooter>
-            <Button
-              onClick={() =>
-                updateTheme({
-                  themeId,
-                  input: {
-                    ...theme,
-                    themeSetting: useNotionSettingsStore.getState().settings,
-                  },
-                })
-              }
-            >
-              {isLoading ? "Saving..." : "Save"}
-            </Button>
+            <Button onClick={handleSave}>{isLoading ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </DialogHeader>
       </DialogContent>
@@ -172,12 +133,19 @@ export const CreateTheme = () => {
   });
 
   const { isLoading, createTheme } = useCreateTheme();
+  const { settings } = useNotionSettingsStore((s) => s);
+
+  const handleCreate = async () => {
+    const settingsWithDefaults = getPureDefaultSettings(settings);
+    const settingsWithoutSeo = getSettingsWithOutSeo(settingsWithDefaults);
+    await createTheme({ ...theme, themeSetting: settingsWithoutSeo });
+  };
 
   return (
     <Dialog>
       <DialogTrigger
         render={
-          <Button size={"sm"} variant={"secondary"}>
+          <Button className={"w-full justify-start"} size={"sm"} variant={"ghost"}>
             Create theme
           </Button>
         }
@@ -185,11 +153,9 @@ export const CreateTheme = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create theme</DialogTitle>
-          <DialogDescription>
-            Create theme from your current settings
-          </DialogDescription>
+          <DialogDescription>Create theme from your current settings</DialogDescription>
 
-          <div className="grid gap-4">
+          <div className="grid gap-4 mb-4">
             <div className="grid gap-2">
               <Label>Name</Label>
               <Input
@@ -198,9 +164,12 @@ export const CreateTheme = () => {
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label>Public</Label>
+            <div className="flex items-center  gap-2">
+              <Label className="flex-1" htmlFor="public:checkbox">
+                Public
+              </Label>
               <Checkbox
+                id="public:checkbox"
                 checked={!!theme.isPublic}
                 onCheckedChange={(c) => setTheme({ ...theme, isPublic: c })}
               />
@@ -208,16 +177,7 @@ export const CreateTheme = () => {
           </div>
 
           <DialogFooter>
-            <Button
-              onClick={() =>
-                createTheme({
-                  ...theme,
-                  themeSetting: useNotionSettingsStore.getState().settings,
-                })
-              }
-            >
-              {isLoading ? "Creating..." : "Create"}
-            </Button>
+            <Button onClick={handleCreate}>{isLoading ? "Creating..." : "Create"}</Button>
           </DialogFooter>
         </DialogHeader>
       </DialogContent>

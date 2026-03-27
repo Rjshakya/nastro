@@ -140,3 +140,15 @@ export const clientThemeToggle = (bool: boolean) => {
 export const getEntries = <T extends object>(obj: T) => {
   return Object.entries(obj) as [keyof T, T[keyof T]][];
 };
+
+export const getSettingsWithOutSeo = (
+  settings: NotionPageSettings,
+): Omit<NotionPageSettings, "seo"> => {
+  return {
+    darkTheme: settings.darkTheme,
+    general: settings.general,
+    layout: settings.layout,
+    theme: settings.theme,
+    typography: settings.typography,
+  } as Omit<NotionPageSettings, "seo">;
+};

@@ -23,9 +23,10 @@ export const Route = createFileRoute("/site/$pageId")({
     const { pageId } = params;
     const { slug } = deps;
     const { data } = await getSite({ slug, pageId });
+
     const site = data?.site as Site;
     const page = data?.page as ExtendedRecordMap;
-    // const seo = getNotionPageSeo({ page, site, pageId });
+
     const settings = site?.siteSetting;
     const defaultSettings = getDefaultSettings({
       existingSettings: settings || useNotionSettingsStore.getState().settings,
@@ -33,13 +34,6 @@ export const Route = createFileRoute("/site/$pageId")({
       pageId,
       site,
     });
-
-    // if (settings?.typography?.fonts) {
-    //   Promise.all([
-    //     loadFont(settings?.typography?.fonts?.primary as string),
-    //     loadFont(settings?.typography?.fonts?.secondary as string),
-    //   ]);
-    // }
 
     return { site, page, seo: defaultSettings.seo, settings: defaultSettings };
   },

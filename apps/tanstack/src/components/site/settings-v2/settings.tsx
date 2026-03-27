@@ -23,6 +23,19 @@ import { useThemes } from "#/hooks/use-themes";
 import { CreateTheme, SaveTheme, SelectThemes } from "./theme";
 import { useNavigate } from "@tanstack/react-router";
 import { siteEditorRoute } from "../editor";
+import type { Theme } from "#/types/theme";
+import { useThemeStore } from "#/stores/theme-store";
+import { useEffect } from "react";
+import { ButtonGroup } from "#/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IconChevronDown } from "@tabler/icons-react";
+import { authClient } from "#/lib/auth-client";
 
 export const SettingsV2 = ({
   pageSettings,
@@ -36,19 +49,23 @@ export const SettingsV2 = ({
   siteId: string;
 }) => {
   const { updateSite, isLoading } = useUpdateSite();
-  const { settings } = useNotionSettingsStore();
-  const { data: themes } = useThemes();
+  const { settings: settingsState } = useNotionSettingsStore();
   const navigate = useNavigate();
+
   const search = siteEditorRoute.useSearch();
+  const { settings: defaultSettings } = siteEditorRoute.useLoaderData();
+
+  const { defaultTheme, setThemes, setTheme, setHasThemeChanged } = useThemeStore((s) => s);
+  const { data: themes } = useThemes({});
 
   const handleSave = async () => {
     try {
       await updateSite({
         siteId,
         input: {
-          slug: settings.general?.slug || "",
-          siteName: settings.general?.siteName || "",
-          siteSetting: settings,
+          slug: settingsState.general?.slug || "",
+          siteName: settingsState.general?.siteName || "",
+          siteSetting: settingsState,
         },
       });
       onOpenChange(false);
@@ -56,6 +73,28 @@ export const SettingsV2 = ({
       console.error("Failed to save settings:", error);
     }
   };
+
+  useEffect(() => {
+    if (!themes || !themes.length) return;
+
+    const run = async (ths: Theme[]): Promise<void> => {
+      const defTheme = defaultTheme(defaultSettings);
+      const themesWithDefault = [...ths, defTheme];
+      const findTheme = ths?.length && ths.find((t) => t?.id === search?.themeId);
+
+      if (findTheme) {
+        setTheme(findTheme);
+      } else {
+        setTheme(defTheme);
+      }
+
+      setThemes(themesWithDefault);
+      setHasThemeChanged(false);
+    };
+
+    run(themes);
+  }, [themes, search?.themeId]);
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -64,13 +103,10 @@ export const SettingsV2 = ({
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
-          <SheetDescription>
-            Customize your site appearance and settings
-          </SheetDescription>
+          <SheetDescription>Customize your site appearance and settings</SheetDescription>
         </SheetHeader>
 
         <SelectThemes
-          themes={themes}
           onThemeChange={(th) => {
             navigate({
               to: "/site/$pageId",
@@ -91,7 +127,7 @@ export const SettingsV2 = ({
           }}
         />
 
-        <Tabs defaultValue="general" className="mt-4 grid">
+        <Tabs defaultValue="general" className=" grid">
           <TabsList
             className="w-full justify-start overflow-x-scroll "
             style={{ scrollbarWidth: "none" }}
@@ -110,10 +146,7 @@ export const SettingsV2 = ({
           </TabsList>
 
           {getEntries(pageSettings).map(
-            ([k, v]: [
-              string,
-              NotionPageSettings[keyof NotionPageSettings],
-            ]) => {
+            ([k, v]: [string, NotionPageSettings[keyof NotionPageSettings]]) => {
               return (
                 <TabsContent value={k} key={k}>
                   <RenderSettingSection section={v} />
@@ -125,25 +158,68 @@ export const SettingsV2 = ({
 
         <SheetFooter>
           <div className="mt-6 flex gap-2 justify-end">
-            <Button size="sm" onClick={handleSave} disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
+            <SaveSettings themeId={search?.themeId} handleSave={handleSave} isSaving={isLoading} />
 
-            {search.themeId ? (
-              <SaveTheme themeId={search.themeId} />
-            ) : (
-              <CreateTheme />
-            )}
-
-            <SheetClose className="bg-muted px-4 rounded-md hover:bg-muted/80 transition-colors">
-              Cancel
-            </SheetClose>
+            <SheetClose
+              render={
+                <Button size={"sm"} variant={"destructive"}>
+                  Close
+                </Button>
+              }
+            />
           </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>
   );
 };
+
+function SaveSettings({
+  themeId,
+  handleSave,
+  isSaving,
+}: {
+  themeId?: string;
+  handleSave: () => Promise<void>;
+  isSaving: boolean;
+}) {
+  const { theme, hasThemeChanged } = useThemeStore((s) => s);
+  const { data } = authClient.useSession();
+
+  const render = () => {
+    if (themeId && themeId === theme?.id && data?.user.id === theme?.createdBy) {
+      if (hasThemeChanged) {
+        return [<CreateTheme />, <SaveTheme themeId={themeId} />];
+      }
+    }
+
+    return [<CreateTheme />];
+  };
+
+  return (
+    <ButtonGroup>
+      <Button size={"sm"} onClick={handleSave}>
+        {isSaving ? "Saving..." : "Save Changes"}
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button size={"sm"} className="">
+              <IconChevronDown />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuGroup>
+            {render().map((comp) => {
+              return <DropdownMenuItem render={comp} />;
+            })}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </ButtonGroup>
+  );
+}
 
 export const RenderSettingSection = ({
   section,

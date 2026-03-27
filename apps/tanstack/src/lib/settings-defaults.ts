@@ -102,11 +102,15 @@ export const defaultTypographySettings: NotionPageSettings["typography"] = {
     fontWeight: 400,
     titleLetterSpacing: -0.8,
   },
+  fonts: {
+    primary: "Geist",
+    secondary: "Geist Mono",
+  },
   type: "typography",
 } as NotionPageSettings["typography"];
 
 export const defaultLayoutSettings = (
-  pageTitle: string,
+  pageTitle?: string,
   pageIcon?: string,
 ): NotionPageSettings["layout"] => ({
   header: {
@@ -145,8 +149,6 @@ export const defaultLayoutSettings = (
   },
   tabs: {
     display: "flex",
-    // backgroundColor: "transparent",
-    // activeBackgroundColor: "var(--accent)",
   },
   type: "layout",
 });
@@ -243,24 +245,19 @@ export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   pageCoverHeight: 40,
 });
 
-export const getDefaultSettings = ({
-  existingSettings,
-  page,
-  site,
-  pageId,
-}: {
-  existingSettings: NotionPageSettings | null | undefined;
-  page: ExtendedRecordMap;
-  site: Site;
-  pageId: string;
-}): NotionPageSettings => {
-  const seo = getNotionPageSeo({ page, pageId, site });
-
-  const defaultLayout = defaultLayoutSettings(seo?.title, seo?.pageIcon);
+export const getPureDefaultSettings = (
+  existingSettings?: NotionPageSettings,
+  pageTitle?: string,
+  pageIcon?: string,
+): NotionPageSettings => {
+  const defaultLayout = defaultLayoutSettings(pageTitle, pageIcon);
 
   return {
     general: {
-      ...defaultGeneralSettings(seo?.title || "", site.slug),
+      ...defaultGeneralSettings(
+        existingSettings?.seo?.title || "",
+        existingSettings?.general?.slug,
+      ),
       ...existingSettings?.general,
       isDark: existingSettings?.general?.isDark ?? true,
       type: "general",
@@ -310,11 +307,98 @@ export const getDefaultSettings = ({
         ...defaultTypographySettings?.spacing,
         ...existingSettings?.typography?.spacing,
       },
+      fonts: {
+        ...defaultTypographySettings?.fonts,
+        ...existingSettings?.typography?.fonts,
+      },
 
       type: "typography",
     },
-    seo,
+    seo: existingSettings?.seo,
   };
+};
+
+export const getDefaultSettings = ({
+  existingSettings,
+  page,
+  site,
+  pageId,
+}: {
+  existingSettings: NotionPageSettings | null | undefined;
+  page: ExtendedRecordMap;
+  site: Site;
+  pageId: string;
+}): NotionPageSettings => {
+  const seo = getNotionPageSeo({ page, pageId, site });
+  // const defaultLayout = defaultLayoutSettings(seo?.title, seo?.pageIcon);
+
+  // return {
+  //   general: {
+  //     ...defaultGeneralSettings(seo?.title || "", site.slug),
+  //     ...existingSettings?.general,
+  //     isDark: existingSettings?.general?.isDark ?? true,
+  //     type: "general",
+  //   },
+  //   theme: {
+  //     ...defaultThemeSettings(existingSettings?.theme),
+  //     type: "theme",
+  //   },
+  //   darkTheme: {
+  //     ...defaultDarkThemeSettings(existingSettings?.darkTheme),
+  //     type: "theme",
+  //   },
+
+  //   layout: {
+  //     ...defaultLayout,
+  //     header: {
+  //       ...defaultLayout?.header,
+  //     },
+  //     footer: {
+  //       ...defaultLayout?.footer,
+  //     },
+  //     gallery: {
+  //       ...defaultLayout?.gallery,
+  //     },
+  //     card: {
+  //       ...defaultLayout?.card,
+  //       cover: {
+  //         ...defaultLayout?.card?.cover,
+  //       },
+  //       body: {
+  //         ...defaultLayout?.card?.body,
+  //       },
+  //     },
+  //     tabs: {
+  //       ...defaultLayout?.tabs,
+  //     },
+  //     type: "layout",
+  //   },
+  //   typography: {
+  //     ...defaultTypographySettings,
+  //     ...existingSettings?.typography,
+  //     sizes: {
+  //       ...defaultTypographySettings?.sizes,
+  //       ...existingSettings?.typography?.sizes,
+  //     },
+  //     spacing: {
+  //       ...defaultTypographySettings?.spacing,
+  //       ...existingSettings?.typography?.spacing,
+  //     },
+  //     fonts: {
+  //       ...defaultTypographySettings?.fonts,
+  //       ...existingSettings?.typography?.fonts,
+  //     },
+
+  //     type: "typography",
+  //   },
+  //   seo,
+  // };
+
+  return getPureDefaultSettings(
+    { ...existingSettings, seo },
+    seo?.title,
+    seo?.pageIcon,
+  );
 };
 
 export const defaultNotionSettings = (

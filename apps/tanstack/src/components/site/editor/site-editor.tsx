@@ -4,14 +4,10 @@ import { siteEditorRoute } from ".";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { SettingsV2 } from "../settings-v2/settings";
 import { useLayoutEffect } from "react";
-import { loadFont } from "#/lib/fonts";
+import { clientThemeToggle } from "#/lib/utils";
 
 export function SiteEditor() {
-  const {
-    page,
-    site,
-    settings: defaultSettings,
-  } = siteEditorRoute.useLoaderData();
+  const { page, site, settings: defaultSettings } = siteEditorRoute.useLoaderData();
   const { pageId } = siteEditorRoute.useParams();
   const { slug } = siteEditorRoute.useLoaderDeps({});
   const { isPanelOpen, togglePanel } = useNotionSettingsStore((s) => s);
@@ -21,13 +17,7 @@ export function SiteEditor() {
     useNotionSettingsStore.getState().updateSettings({
       ...defaultSettings,
     });
-
-    if (defaultSettings?.typography?.fonts) {
-      Promise.all([
-        loadFont(defaultSettings?.typography?.fonts?.primary as string),
-        loadFont(defaultSettings?.typography?.fonts?.secondary as string),
-      ]);
-    }
+    clientThemeToggle(!!defaultSettings?.general?.isDark);
   }, []);
 
   if (!site) {
@@ -41,12 +31,7 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer
-          slug={slug}
-          pageId={pageId}
-          recordMap={page}
-          settings={settings}
-        />
+        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
       </div>
 
       {/* <Settings open={isPanelOpen} onOpenChange={togglePanel} /> */}

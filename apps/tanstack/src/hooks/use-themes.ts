@@ -14,13 +14,30 @@ import {
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const useThemes = () => {
-  const fetcher = () => getAllThemes({ limit: 50 });
+type After<T> = (data: T) => Promise<T>;
 
+/**
+ *
+ * @param  after
+ *
+ * @description
+ *
+ * it takes after callback ,
+ * it will executed after primary data is fetched ,
+ * and then return data modified by after ,
+ *
+ * if error occurs in after fn ,
+ * then primary fetched data is returned
+ *
+ *
+ */
+export const useThemes = <T = Theme[]>({ after }: { after?: After<T> }) => {
+  const fetcher = () => getAllThemes({ limit: 50 });
   const swr = useSWR("/themes", fetcher);
+  const data = swr?.data?.result as T;
 
   return {
-    data: swr.data?.result as Theme[],
+    data: data as T,
     error: swr.error,
     isLoading: swr.isLoading,
     mutate: swr.mutate,

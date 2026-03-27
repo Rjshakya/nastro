@@ -8,13 +8,13 @@ interface GetThemeInput {
 
 export interface CreateThemeInput {
   name: string;
-  themeSetting?: NotionPageSettings;
+  themeSetting?: Theme["themeSetting"];
   isPublic?: boolean;
 }
 
 export interface UpdateThemeInput {
   name?: string;
-  themeSetting?: NotionPageSettings;
+  themeSetting?: Theme["themeSetting"];
   isPublic?: boolean;
 }
 

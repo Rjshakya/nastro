@@ -5,6 +5,7 @@ import type {
 } from "#/types/notion-page-settings";
 import type { NotionPageStyles } from "#/types/notion-page-styles";
 import { create } from "zustand";
+import { useThemeStore } from "./theme-store";
 
 interface NotionSettingsStore {
   styles?: NotionPageStyles;
@@ -31,6 +32,7 @@ export const useNotionSettingsStore = create<NotionSettingsStore>(
         ]);
       }
 
+      useThemeStore.setState({ hasThemeChanged: true });
       return settings;
     },
     setIsDark(isDark) {

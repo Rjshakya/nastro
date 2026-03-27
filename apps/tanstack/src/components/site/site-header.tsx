@@ -35,11 +35,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
                 <DropdownMenu key={i}>
                   <DropdownMenuTrigger
                     render={
-                      <Button
-                        variant={"link"}
-                        className={"notion-header-btn"}
-                        size={"sm"}
-                      >
+                      <Button variant={"link"} className={"notion-header-btn"} size={"sm"}>
                         {l?.text}
                         <IconChevronDown stroke={1} />
                       </Button>
@@ -50,9 +46,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
                       {l?.links &&
                         l.links.length > 0 &&
                         l.links.map((link) => {
-                          return (
-                            <DropdownMenuItem>{link.text}</DropdownMenuItem>
-                          );
+                          return <DropdownMenuItem>{link.text}</DropdownMenuItem>;
                         })}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
@@ -65,11 +59,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
             header.links.map((l, i) => {
               return (
                 <Link key={i} target="_blank" to={l?.url}>
-                  <Button
-                    variant={l.variant}
-                    className={"notion-header-btn"}
-                    size={"sm"}
-                  >
+                  <Button variant={l.variant} className={"notion-header-btn"} size={"sm"}>
                     {l?.text}
                   </Button>
                 </Link>
@@ -93,17 +83,8 @@ function ThemeToggle() {
   }
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleTheme}
-      aria-label="Toggle theme"
-    >
-      {settings?.general?.isDark ? (
-        <Moon className="h-4 w-4" />
-      ) : (
-        <Sun className="h-4 w-4" />
-      )}
+    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+      {settings?.general?.isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
     </Button>
   );
 }

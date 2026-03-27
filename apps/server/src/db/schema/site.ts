@@ -4,6 +4,8 @@ import { user } from "./auth-schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { v7 } from "uuid";
 import { nanoid } from "nanoid";
+import { themeTable } from "./theme";
+import { templateTable } from "./template";
 
 export const sites = pgTable("site", {
   id: text()
@@ -21,6 +23,8 @@ export const sites = pgTable("site", {
     .$defaultFn(() => nanoid(13)),
   siteName: text("site_name").notNull(),
   siteSetting: jsonb("site_setting"),
+  themeId: text().references(() => themeTable.id),
+  templateId: text().references(() => templateTable.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
