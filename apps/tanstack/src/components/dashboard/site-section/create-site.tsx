@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useCreateSite } from "#/hooks/use-sites";
+import { useCreateSite, useIsSiteSlugAvailable } from "#/hooks/use-sites";
 import type { Site } from "@/types/site";
 import {
   Dialog,
@@ -31,6 +31,8 @@ import type { NotionPage } from "#/types/notion";
 import { authClient } from "#/lib/auth-client";
 import { Env } from "env";
 import { useCreateSiteStore } from "#/stores/create-site";
+import { useDebounce } from "#/hooks/use-debounce";
+import { Badge } from "#/components/ui/badge";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -43,6 +45,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
 
   const { data: pages } = useNotionPages();
   const { createSite, isLoading: isCreating, input, setInput } = useCreateSite();
+  const { isAvailable, value, setValue, isLoading } = useIsSiteSlugAvailable("");
 
   const handleCreate = async () => {
     if (!input) return;
@@ -50,6 +53,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
       ...input,
       pageId: selectedPageId ?? "",
       siteSetting: defaultNotionSettings(input.siteName, input.slug),
+      slug: value,
     });
 
     if (result) {
@@ -99,12 +103,28 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
 
           <div className="py-4 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="slug">Slug</Label>
+              <Label className="flex items-center justify-between gap-2" htmlFor="slug">
+                <p>Slug</p>
+                {value.length > 0 &&
+                  (isLoading ? (
+                    <Badge variant={"outline"}>loading...</Badge>
+                  ) : isAvailable ? (
+                    <Badge className="bg-green-500" variant={"default"}>
+                      available
+                    </Badge>
+                  ) : (
+                    <Badge className="" variant={"destructive"}>
+                      unavailable
+                    </Badge>
+                  ))}
+              </Label>
               <Input
                 id="slug"
                 placeholder="my-site"
-                value={input?.slug}
-                onChange={(e) => setInput({ ...input, slug: e.target.value })}
+                value={value}
+                onChange={(e) => {
+                  setValue(e.target.value);
+                }}
               />
             </div>
           </div>

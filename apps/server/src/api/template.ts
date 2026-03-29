@@ -48,7 +48,7 @@ export const templateApp = new Hono<{ Variables: Vars }>()
       );
 
       return res;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const templates = await Effect.runPromise(program);
 
@@ -66,7 +66,7 @@ export const templateApp = new Hono<{ Variables: Vars }>()
       const repo = yield* TemplateRepo();
       const templates = yield* repo.findById("id", id);
       return templates.length ? templates[0] : null;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const template = await Effect.runPromise(program);
 
@@ -100,7 +100,7 @@ export const templateApp = new Hono<{ Variables: Vars }>()
         const repo = yield* TemplateRepo();
         const templates = yield* repo.insert({ ...input, createdBy: userId });
         return templates.length ? templates[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(Effect.provide(DatabaseLive()));
 
       const template = await Effect.runPromise(program);
 
@@ -139,7 +139,7 @@ export const templateApp = new Hono<{ Variables: Vars }>()
           }),
         );
         return templates.length ? templates[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(Effect.provide(DatabaseLive()));
 
       const template = await Effect.runPromise(program);
 
@@ -170,7 +170,7 @@ export const templateApp = new Hono<{ Variables: Vars }>()
       const repo = yield* TemplateRepo();
       const templates = yield* repo.deleteById("id", id);
       return templates.length ? templates[0] : null;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const template = await Effect.runPromise(program);
 

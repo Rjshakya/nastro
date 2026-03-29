@@ -90,3 +90,14 @@ export const deleteSite = async (
 
   return res.json();
 };
+
+export const getIsSiteSlugAvailable = async (slug: string) => {
+  const res = await client.api.site.slug.available.$post({ json: { slug } });
+
+  if (!res.ok) {
+    throw new Error("Failed to check slug availability");
+  }
+
+  const data = await res.json();
+  return data?.data;
+};

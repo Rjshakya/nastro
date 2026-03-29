@@ -11,9 +11,11 @@ import {
   deleteSite,
   type CreateSiteInput,
   type GetSiteInput,
+  getIsSiteSlugAvailable,
 } from "#/lib/site";
 import { useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDebounce } from "./use-debounce";
 
 export const useSites = () => {
   const fetcher = () => getSites();
@@ -99,5 +101,58 @@ export const useDeleteSite = () => {
     isLoading: isMutating,
     error,
     reset,
+  };
+};
+
+export const useIsSiteSlugAvailable = (slug: string) => {
+  const fetcher = (v: string) => {
+    if (!v || !v.length) return Promise.resolve(false);
+    return getIsSiteSlugAvailable(v);
+  };
+  const { debouncedValue, value, setValue } = useDebounce(slug, 500);
+
+  const [data, setData] = useState<{
+    isAvailable: boolean;
+    error: unknown;
+    isLoading: boolean;
+  }>({
+    isAvailable: false,
+    error: null,
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    setData({ ...data, isLoading: true });
+
+    let timer: NodeJS.Timeout | undefined;
+    fetcher(debouncedValue as string)
+      .then((v) => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        timer = setTimeout(
+          () =>
+            setData((prev) => ({ ...prev, isAvailable: v, isLoading: false })),
+          300,
+        );
+      })
+      .catch((r) =>
+        setData((prev) => ({ ...prev, error: r, isLoading: false })),
+      );
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [debouncedValue]);
+
+  return {
+    isAvailable: data.isAvailable,
+    error: data.error,
+    isLoading: data.isLoading,
+    value,
+    setValue,
   };
 };

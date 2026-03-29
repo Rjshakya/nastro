@@ -75,6 +75,7 @@ export const KeyManager = {
   getPageContent: (pageId: string) => `notion:page:content:${pageId}`,
   getSiteById: (siteId: string) => `notion:site:${siteId}`,
   getUserSites: (userId: string) => `notion:sites:${userId}`,
+  getSlug: (slug: string) => `notion:site:slug:${slug}`,
 
   delete: {
     getSiteById: (siteId: string) =>

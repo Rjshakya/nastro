@@ -48,7 +48,7 @@ const themeApp = new Hono<{ Variables: Vars }>()
       );
 
       return res;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const themes = await Effect.runPromise(program);
     return c.json(ApiResponse({ data: themes, message: "success" }), 200);
@@ -60,7 +60,7 @@ const themeApp = new Hono<{ Variables: Vars }>()
       const repo = yield* ThemeRepo();
       const themes = yield* repo.findById("id", id);
       return themes.length ? themes[0] : null;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const theme = await Effect.runPromise(program);
 
@@ -94,7 +94,7 @@ const themeApp = new Hono<{ Variables: Vars }>()
         const repo = yield* ThemeRepo();
         const themes = yield* repo.insert({ ...input, createdBy: userId });
         return themes.length ? themes[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(Effect.provide(DatabaseLive()));
 
       const theme = await Effect.runPromise(program);
 
@@ -136,7 +136,7 @@ const themeApp = new Hono<{ Variables: Vars }>()
           }),
         );
         return themes.length ? themes[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(Effect.provide(DatabaseLive()));
 
       const theme = await Effect.runPromise(program);
 
@@ -167,7 +167,7 @@ const themeApp = new Hono<{ Variables: Vars }>()
       const repo = yield* ThemeRepo();
       const themes = yield* repo.deleteById("id", id);
       return themes.length ? themes[0] : null;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const theme = await Effect.runPromise(program);
 

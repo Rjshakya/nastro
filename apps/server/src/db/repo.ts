@@ -23,7 +23,7 @@ export interface Repo<
   T extends Table<any>,
   ResultType extends InferSelectModel<T>,
 > {
-  findAll: () => Effect.Effect<ResultType[], RepoError, never>;
+  findAll: (limit?: number) => Effect.Effect<ResultType[], RepoError, never>;
   findById: (
     key: keyof InferSelectModel<T>,
     id: string,
@@ -55,13 +55,13 @@ export const makeRepo = <
   db: NodePgDatabase,
   table: T,
 ): Repo<T, ResultType> => {
-  const findAll = () =>
+  const findAll = (limit?: number) =>
     Effect.tryPromise({
       try: async () => {
         return (await db
           .select()
           .from(table as Table<any>)
-          .limit(100)) as ResultType[];
+          .limit(limit ?? 100)) as ResultType[];
       },
       catch: (error) => new RepoError({ error, msg: "FAILED TO FIND ALL" }),
     });
@@ -69,11 +69,13 @@ export const makeRepo = <
   const findById = (key: keyof InferSelectModel<T>, id: string) =>
     Effect.tryPromise({
       try: async () => {
-        return (await db
-          .select()
-          .from(table as Table<any>)
-          // @ts-expect-error  column type error
-          .where(eq(table[key], id))) as ResultType[];
+        return (
+          (await db
+            .select()
+            .from(table as Table<any>)
+            // @ts-expect-error  column type error
+            .where(eq(table[key], id))) as ResultType[]
+        );
       },
       catch: (error) => {
         console.error(error);
@@ -108,12 +110,14 @@ export const makeRepo = <
   ) =>
     Effect.tryPromise({
       try: async () => {
-        return (await db
-          .update(table)
-          .set(data)
-          // @ts-expect-error  column type error
-          .where(eq(table[key], id))
-          .returning()) as unknown as ResultType[];
+        return (
+          (await db
+            .update(table)
+            .set(data)
+            // @ts-expect-error  column type error
+            .where(eq(table[key], id))
+            .returning()) as unknown as ResultType[]
+        );
       },
       catch: (error) => new RepoError({ error, msg: "FAILED TO UPDATE BY ID" }),
     });
@@ -121,10 +125,13 @@ export const makeRepo = <
   const deleteById = (key: keyof InferSelectModel<T>, id: string) =>
     Effect.tryPromise({
       try: async () => {
-        return (await db
-          .delete(table)
-          // @ts-expect-error  column type error
-          .where(eq(table[key], id))) as unknown as ResultType[];
+        return (
+          (await db
+            .delete(table)
+            // @ts-expect-error  column type error
+            .where(eq(table[key], id))
+            .returning()) as unknown as ResultType[]
+        );
       },
       catch: (error) => new RepoError({ error, msg: "FAILED TO DELETE BY ID" }),
     });

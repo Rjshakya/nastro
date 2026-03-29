@@ -6,9 +6,10 @@ class DatabaseError extends Data.TaggedError("DatabaseError")<{
   readonly message: any;
 }> {}
 
-export const getDB = async () => drizzle(env.HYPERDRIVE.connectionString);
+export const getDB = async (connectionString?: string) =>
+  drizzle(env.HYPERDRIVE.connectionString);
 export const getDBeffect = Effect.tryPromise({
-  try: getDB,
+  try: async () => getDB(),
   catch: (e) => new DatabaseError({ message: e }),
 });
 
@@ -19,10 +20,11 @@ export class DataBase extends ServiceMap.Service<
   }
 >()("DataBase") {}
 
-export const DatabaseLive = Layer.succeed(DataBase, {
-  getDb: () =>
-    Effect.tryPromise({
-      try: getDB,
-      catch: (e) => new DatabaseError({ message: e }),
-    }),
-});
+export const DatabaseLive = (connectionString?: string) =>
+  Layer.succeed(DataBase, {
+    getDb: () =>
+      Effect.tryPromise({
+        try: async () => getDB(connectionString),
+        catch: (e) => new DatabaseError({ message: e }),
+      }),
+  });

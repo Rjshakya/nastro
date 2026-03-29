@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { KeyManager, withCache } from "@/lib/cache";
 import { SiteRepo } from "@/repo/site";
 import { NotionService } from "./notion/main";
+import { SlugService } from "./slug";
 
 class SiteError extends Data.TaggedError("SiteError")<{
   message: string;
@@ -62,21 +63,25 @@ export const createSite = Effect.fn("services/site/createSite")((
   data: SiteInsert,
 ) => {
   return Effect.gen(function* () {
+    const slugService = yield* SlugService;
+    const slug = yield* slugService.storeSlug(data?.slug);
+
     const repo = yield* SiteRepo();
-    const site = yield* repo.insert({ ...data }).pipe(
-      Effect.catchTags({
-        RepoError: (e) =>
-          Effect.gen(function* () {
-            if (e.msg == "FAILED TO INSERT") {
-              const slug = yield* createUniqueSlug(data.slug as string);
-              const _site = yield* repo.insert({ ...data, slug });
-              return yield* Effect.succeed(_site);
-            }
-            return yield* e;
-          }),
-      }),
+    const site = yield* repo.insert({ ...data, slug }).pipe(
+      Effect.catch((e) =>
+        Effect.gen(function* () {
+          yield* slugService.deleteSlug(slug);
+          return yield* e;
+        }),
+      ),
     );
 
     return site;
   });
 });
+
+export const isSlugAvailable = (slug: string) =>
+  Effect.gen(function* () {
+    const slugService = yield* SlugService;
+    return yield* slugService.isAvailable(slug);
+  });

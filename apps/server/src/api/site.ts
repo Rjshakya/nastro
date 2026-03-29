@@ -6,8 +6,14 @@ import { Vars } from "@/lib/hono-types";
 import { NotionClientLive } from "@/lib/notion";
 import { authMiddleWare } from "@/middlewares/auth";
 import { SiteRepo } from "@/repo/site";
+import { KVStoreLive } from "@/services/kv-store";
 import { NotionServiceLive } from "@/services/notion/main";
-import { createSite, getSiteBySlugWithPage } from "@/services/site";
+import {
+  createSite,
+  getSiteBySlugWithPage,
+  isSlugAvailable,
+} from "@/services/site";
+import { SlugService, SlugServiceLive } from "@/services/slug";
 
 import { zValidator } from "@hono/zod-validator";
 import { Effect, pipe } from "effect";
@@ -35,7 +41,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     const program = pipe(
       getSiteBySlugWithPage(slug, pageId),
-      Effect.provide(DatabaseLive),
+      Effect.provide(DatabaseLive()),
       Effect.provide(NotionServiceLive()),
       Effect.provide(NotionClientLive),
     );
@@ -56,7 +62,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const repo = yield* SiteRepo();
       const userSites = yield* repo.findById("userId", userId as string);
       return userSites;
-    }).pipe(Effect.provide(DatabaseLive));
+    }).pipe(Effect.provide(DatabaseLive()));
 
     const sites = await Effect.runPromise(program);
 
@@ -73,8 +79,11 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     async (c) => {
       const userId = c.get("user")?.id as string;
       const input = c.req.valid("json");
+
       const program = createSite({ ...input, userId }).pipe(
-        Effect.provide(DatabaseLive),
+        Effect.provide(DatabaseLive()),
+        Effect.provide(SlugServiceLive),
+        Effect.provide(KVStoreLive),
       );
 
       const site = await Effect.runPromise(program);
@@ -86,6 +95,23 @@ const sitesApp = new Hono<{ Variables: Vars }>()
           message: "Site created successfully",
         }),
       );
+    },
+  )
+  .post(
+    "/slug/available",
+    zValidator(
+      "json",
+      z.object({ slug: z.string().min(1, "minimum one char is required") }),
+    ),
+    async (c) => {
+      const { slug } = c.req.valid("json");
+      const program = isSlugAvailable(slug).pipe(
+        Effect.provide(SlugServiceLive),
+        Effect.provide(KVStoreLive),
+      );
+
+      const res = await Effect.runPromise(program);
+      return c.json(ApiResponse({ data: res, message: "success" }));
     },
   )
   .patch(
@@ -101,7 +127,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
         const repo = yield* SiteRepo();
         const site = yield* repo.updateById("id", id, { ...input, userId });
         return site.length ? site[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(Effect.provide(DatabaseLive()));
 
       const site = await Effect.runPromise(program);
       await KeyManager.delete.getUserSites(userId as string);
@@ -129,7 +155,22 @@ const sitesApp = new Hono<{ Variables: Vars }>()
         const repo = yield* SiteRepo();
         const site = yield* repo.deleteById("id", id);
         return site.length ? site[0] : null;
-      }).pipe(Effect.provide(DatabaseLive));
+      }).pipe(
+        Effect.tap((data) =>
+          Effect.gen(function* () {
+            if (!data) {
+              return yield* Effect.fail("site/delete/id no data error");
+            }
+
+            const slugService = yield* SlugService;
+            yield* slugService.deleteSlug(data.slug);
+          }),
+        ),
+
+        Effect.provide(DatabaseLive()),
+        Effect.provide(SlugServiceLive),
+        Effect.provide(KVStoreLive),
+      );
 
       const site = await Effect.runPromise(program);
       await KeyManager.delete.getUserSites(userId as string);
