@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
 import { authClient } from "#/lib/auth-client";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 const data = {
   user: {
@@ -40,7 +41,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link className="flex items-center gap-2" to="/">
-                <IconInnerShadowTop className="size-5!" />
+                {/* <IconInnerShadowTop className="size-5!" /> */}
+                <Avatar>
+                  <AvatarImage src="/favicon.png"/>
+                </Avatar>
                 <span className="text-base font-semibold">Nastro</span>
               </Link>
             </SidebarMenuButton>
