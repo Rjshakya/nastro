@@ -41,6 +41,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     const program = pipe(
       getSiteBySlugWithPage(slug, pageId),
+
       Effect.provide(DatabaseLive()),
       Effect.provide(NotionServiceLive()),
       Effect.provide(NotionClientLive),
@@ -63,7 +64,6 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const userSites = yield* repo.findById("userId", userId as string);
       return userSites;
     }).pipe(Effect.provide(DatabaseLive()));
-
     const sites = await Effect.runPromise(program);
 
     return c.json(
@@ -82,6 +82,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
       const program = createSite({ ...input, userId }).pipe(
         Effect.provide(DatabaseLive()),
+        Effect.provide(NotionServiceLive()),
+        Effect.provide(NotionClientLive),
         Effect.provide(SlugServiceLive),
         Effect.provide(KVStoreLive),
       );

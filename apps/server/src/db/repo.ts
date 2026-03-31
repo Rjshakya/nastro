@@ -1,23 +1,7 @@
 import { eq, InferInsertModel, InferSelectModel, Table } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Data, Effect } from "effect";
-
-class RepoError extends Data.TaggedError("RepoError")<{
-  readonly error: any;
-  readonly msg:
-    | "FAILED TO FIND ALL"
-    | "FAILED TO FIND BY ID"
-    | "FAILED TO INSERT"
-    | "FAILED TO UPDATE BY ID"
-    | "FAILED TO DELETE BY ID"
-    | "FAILED TO EXECUTE";
-}> {
-  override get message() {
-    return `error:${JSON.stringify(this.error)}
-             msg:${this.msg}  
-  `;
-  }
-}
+import { Effect } from "effect";
+import { RepoError } from "@/errors/tagged.errors";
 
 export interface Repo<
   T extends Table<any>,
@@ -63,7 +47,12 @@ export const makeRepo = <
           .from(table as Table<any>)
           .limit(limit ?? 100)) as ResultType[];
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO FIND ALL" }),
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_FIND_ALL",
+          code: 500,
+        }),
     });
 
   const findById = (key: keyof InferSelectModel<T>, id: string) =>
@@ -79,7 +68,11 @@ export const makeRepo = <
       },
       catch: (error) => {
         console.error(error);
-        return new RepoError({ error, msg: "FAILED TO FIND BY ID" });
+        return new RepoError({
+          message: String(error),
+          type: "FAILED_TO_FIND_BY_ID",
+          code: 500,
+        });
       },
     });
 
@@ -92,7 +85,12 @@ export const makeRepo = <
           .returning()) as unknown as ResultType[];
         return res;
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO INSERT" }),
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_INSERT",
+          code: 500,
+        }),
     });
 
   const insertVoid = (data: InferInsertModel<T>) =>
@@ -100,7 +98,12 @@ export const makeRepo = <
       try: async () => {
         await db.insert(table).values({ ...data, id: "" });
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO INSERT" }),
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_INSERT",
+          code: 500,
+        }),
     });
 
   const updateById = (
@@ -119,7 +122,12 @@ export const makeRepo = <
             .returning()) as unknown as ResultType[]
         );
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO UPDATE BY ID" }),
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_UPDATE_BY_ID",
+          code: 500,
+        }),
     });
 
   const deleteById = (key: keyof InferSelectModel<T>, id: string) =>
@@ -133,7 +141,12 @@ export const makeRepo = <
             .returning()) as unknown as ResultType[]
         );
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO DELETE BY ID" }),
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_DELETE_BY_ID",
+          code: 500,
+        }),
     });
 
   const execute = <R, E>(
@@ -143,7 +156,12 @@ export const makeRepo = <
       try: async () => {
         return f(db, table);
       },
-      catch: (error) => new RepoError({ error, msg: "FAILED TO EXECUTE" }) as E,
+      catch: (error) =>
+        new RepoError({
+          message: String(error),
+          type: "FAILED_TO_EXECUTE",
+          code: 500,
+        }) as E,
     }).pipe(Effect.flatMap((res) => res));
 
   return {

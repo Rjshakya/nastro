@@ -1,10 +1,7 @@
 import { env } from "cloudflare:workers";
-import { Data, Effect } from "effect";
+import { Effect } from "effect";
 
-class CacheError extends Data.TaggedError("CacheError")<{
-  message: string;
-  error?: any;
-}> {}
+import { CacheError } from "@/errors/tagged.errors";
 
 /**
  * withCache : helper function for caching.
@@ -57,7 +54,13 @@ export const withCache = Effect.fn("withCache")(<T, E, R>({
     return res;
   }).pipe(
     Effect.catchTag("UnknownError", (e) =>
-      Effect.fail(new CacheError({ message: "Cache Error", error: e })),
+      Effect.fail(
+        new CacheError({
+          message: "Cache Error",
+          type: "CACHE_ERROR",
+          code: 500,
+        }),
+      ),
     ),
     Effect.catchTag("CacheError", (e) => Effect.fail(e)),
   );
@@ -67,7 +70,11 @@ const deleteKeyFromCache = (key: string) =>
   Effect.tryPromise({
     try: async () => await env.NASTRO_KV.delete(key),
     catch: (e) =>
-      new CacheError({ message: "failed to delete :" + key, error: e }),
+      new CacheError({
+        message: "failed to delete :" + key,
+        type: "DELETE_FAILED",
+        code: 500,
+      }),
   });
 
 export const KeyManager = {

@@ -1,4 +1,4 @@
-import { Data, Effect, Layer, ServiceMap } from "effect";
+import { Effect, Layer, ServiceMap } from "effect";
 
 const NOTION_API_URL = "https://api.notion.com/v1";
 const NOTION_API_VERSION = "2025-09-03";
@@ -19,10 +19,7 @@ export type GetPages = (
   | DataSourceObjectResponse
 )[];
 
-class NotionError extends Data.TaggedError("NotionError")<{
-  message: string;
-  error?: unknown;
-}> {}
+import { NotionError } from "@/errors/tagged.errors";
 
 export class NotionService extends ServiceMap.Service<
   NotionService,
@@ -55,6 +52,8 @@ export const NotionServiceLive = (
             if (!accessToken) {
               throw new NotionError({
                 message: "NOTION ACCESS TOKEN NOT PROVIDED",
+                type: "ACCESS_TOKEN_MISSING",
+                code: 401,
               });
             }
 
@@ -69,14 +68,22 @@ export const NotionServiceLive = (
             });
 
             if (!response.ok) {
-              throw new NotionError({ message: "NOTION REQUEST FAILED" });
+              throw new NotionError({
+                message: "NOTION REQUEST FAILED",
+                type: "REQUEST_FAILED",
+                code: 500,
+              });
             }
 
             return (await response.json()) as T;
           },
           catch: (e) => {
             console.error(e);
-            return new NotionError({ message: "NOTION REQUEST FAILED" });
+            return new NotionError({
+              message: "NOTION REQUEST FAILED",
+              type: "REQUEST_FAILED",
+              code: 500,
+            });
           },
         });
 
@@ -88,7 +95,11 @@ export const NotionServiceLive = (
               return page;
             },
             catch: (e) =>
-              new NotionError({ message: "NOTION PAGE NOT FOUND", error: e }),
+              new NotionError({
+                message: "NOTION PAGE ERROR",
+                type: "PAGE_ERROR",
+                code: 500,
+              }),
           }),
         getNotionPages: () =>
           Effect.gen(function* () {

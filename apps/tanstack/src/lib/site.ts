@@ -1,4 +1,5 @@
 import type { NotionPageSettings } from "#/types/notion-page-settings";
+import { toast } from "sonner";
 import { client } from "./api-client";
 import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
@@ -54,6 +55,7 @@ export const createSite = async (
   });
   if (!res.ok) {
     const error = await res.json();
+    toast.error(error?.message || "failed to create site");
     console.log(error);
     throw new Error("Failed to create site");
   }

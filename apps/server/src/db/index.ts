@@ -1,16 +1,19 @@
 import { env } from "cloudflare:workers";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Data, Effect, Layer, ServiceMap } from "effect";
+import { Effect, Layer, ServiceMap } from "effect";
 
-class DatabaseError extends Data.TaggedError("DatabaseError")<{
-  readonly message: any;
-}> {}
+import { DatabaseError } from "@/errors/tagged.errors";
 
 export const getDB = async (connectionString?: string) =>
   drizzle(env.HYPERDRIVE.connectionString);
 export const getDBeffect = Effect.tryPromise({
   try: async () => getDB(),
-  catch: (e) => new DatabaseError({ message: e }),
+  catch: (e) =>
+    new DatabaseError({
+      message: String(e),
+      type: "CONNECTION_FAILED",
+      code: 500,
+    }),
 });
 
 export class DataBase extends ServiceMap.Service<
@@ -25,6 +28,11 @@ export const DatabaseLive = (connectionString?: string) =>
     getDb: () =>
       Effect.tryPromise({
         try: async () => getDB(connectionString),
-        catch: (e) => new DatabaseError({ message: e }),
+        catch: (e) =>
+          new DatabaseError({
+            message: String(e),
+            type: "CONNECTION_FAILED",
+            code: 500,
+          }),
       }),
   });

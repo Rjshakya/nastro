@@ -5,6 +5,7 @@ import { getThemeServerFn } from "@/lib/theme";
 import appCss from "../styles/global.css?url";
 import rcp from "react-color-palette/css?url";
 import { Link } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -76,6 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <Toaster className=" capitalize" richColors position="top-center" />
         <Scripts />
       </body>
     </html>

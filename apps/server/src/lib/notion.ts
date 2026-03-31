@@ -17,7 +17,10 @@ export const getNotionCms = (token: string) => new NotionCMS(token);
  *  - for notion - page as website service
  */
 export const getNotionClient = (token?: string, accountId?: string) =>
-  new NotionAPI({ authToken: token, activeUser: accountId });
+  new NotionAPI({
+    authToken: token,
+    activeUser: accountId,
+  });
 
 export class NotionClient extends ServiceMap.Service<
   NotionClient,
