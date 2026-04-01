@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { client } from "./api-client";
 import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
+import { handleHttpError } from "./error";
 
 export interface CreateSiteInput {
   slug: string;
@@ -26,9 +27,18 @@ export interface GetSiteInput {
 
 export const getSites = async () => {
   const res = await client.api.site.all.$get({});
+
   if (!res.ok) {
-    throw new Error("Failed to fetch sites hc");
+    const error = await res.json();
+    handleHttpError()({
+      message: error?.message || "failed to get sites",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
+
   return await res.json();
 };
 
@@ -36,8 +46,16 @@ export const getSite = async ({ pageId, slug, fresh }: GetSiteInput) => {
   const res = await client.api.site.$get({
     query: { pageId, fresh, slug },
   });
+
   if (!res.ok) {
-    throw new Error("Failed to fetch site");
+    const error = await res.json();
+    handleHttpError()({
+      message: error?.message || `failed to get your site ${slug}`,
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
 
   const json = await res.json();
@@ -55,9 +73,13 @@ export const createSite = async (
   });
   if (!res.ok) {
     const error = await res.json();
-    toast.error(error?.message || "failed to create site");
-    console.log(error);
-    throw new Error("Failed to create site");
+    handleHttpError()({
+      message: error?.message || "Failed to create site",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
 
   return res.json();
@@ -72,7 +94,14 @@ export const updateSite = async (
     json: arg.input,
   });
   if (!res.ok) {
-    throw new Error("Failed to update site");
+    const error = await res.json();
+    handleHttpError()({
+      message: error?.message || "Failed to update site",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
 
   return res.json();
@@ -86,8 +115,16 @@ export const deleteSite = async (
     param: { id: arg.siteId },
     query: { pageId: arg.pageId },
   });
+
   if (!res.ok) {
-    throw new Error("Failed to delete site");
+    const error = await res.json();
+    handleHttpError()({
+      message: error?.message || "Failed to delete site",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
 
   return res.json();
@@ -97,7 +134,15 @@ export const getIsSiteSlugAvailable = async (slug: string) => {
   const res = await client.api.site.slug.available.$post({ json: { slug } });
 
   if (!res.ok) {
-    throw new Error("Failed to check slug availability");
+    const error = await res.json();
+
+    handleHttpError()({
+      message: error?.message || "Failed to check slug availability",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
   }
 
   const data = await res.json();

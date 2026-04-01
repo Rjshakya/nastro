@@ -76,10 +76,13 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
   const { settings } = useNotionSettingsStore((s) => s);
 
   const handleSave = async () => {
+    if (!theme.name) {
+      return;
+    }
+
     const settingsWithDefaults = getPureDefaultSettings(settings);
     const settingsWithoutSeo = getSettingsWithOutSeo(settingsWithDefaults);
 
-    console.log(settingsWithoutSeo)
     await updateTheme({ themeId, input: { ...theme, themeSetting: settingsWithoutSeo } });
   };
 
@@ -106,7 +109,7 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
               />
             </div>
 
-            <div className="flex items-center  gap-2">
+            <div className="flex items-center gap-2">
               <Label className="flex-1" htmlFor="public:checkbox">
                 Public
               </Label>

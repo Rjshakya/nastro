@@ -49,7 +49,6 @@ export const NotionServiceLive = (
       }) =>
         Effect.tryPromise({
           try: async () => {
-            
             if (!resolveAccessToken) {
               throw new NotionError({
                 message: "NOTION ACCESS TOKEN NOT PROVIDED",
@@ -95,7 +94,7 @@ export const NotionServiceLive = (
               const page = await notionClient.getPage(pageId);
               return page;
             },
-            catch: (e) =>
+            catch: () =>
               new NotionError({
                 message: "NOTION PAGE ERROR",
                 type: "PAGE_ERROR",

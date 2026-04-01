@@ -5,6 +5,7 @@ import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { SettingsV2 } from "../settings-v2/settings";
 import { useLayoutEffect } from "react";
 import { clientThemeToggle } from "#/lib/utils";
+import { useSearch } from "@tanstack/react-router";
 
 export function SiteEditor() {
   const { page, site, settings: defaultSettings } = siteEditorRoute.useLoaderData();
@@ -12,6 +13,7 @@ export function SiteEditor() {
   const { slug } = siteEditorRoute.useLoaderDeps({});
   const { isPanelOpen, togglePanel } = useNotionSettingsStore((s) => s);
   const { settings } = useNotionSettingsStore((s) => s);
+  const search = useSearch({ from: "/site/$pageId" });
 
   useLayoutEffect(() => {
     useNotionSettingsStore.getState().updateSettings({
@@ -31,10 +33,16 @@ export function SiteEditor() {
   return (
     <main className="min-h-screen bg-background relative rounded-md ">
       <div contentEditable={false} className=" z-0 ">
-        <NotionRenderer slug={slug} pageId={pageId} recordMap={page} settings={settings} />
+        <NotionRenderer
+          slug={slug}
+          pageId={pageId}
+          recordMap={page}
+          settings={settings}
+          themeId={search?.themeId}
+        />
       </div>
 
-      {/* <Settings open={isPanelOpen} onOpenChange={togglePanel} /> */}
+      {/* sheet component */}
       <SettingsV2
         open={isPanelOpen}
         onOpenChange={togglePanel}

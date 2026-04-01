@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useCreateSiteStore } from "#/stores/create-site";
+import { Link, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
 
 export function NavMain({
   items,
@@ -19,6 +20,18 @@ export function NavMain({
   }[];
 }) {
   const { setOpenDialog } = useCreateSiteStore((s) => s);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleOuickCreate = (pathName: string) => {
+    if (!pathName.includes("site")) {
+      setOpenDialog(true);
+      return;
+    }
+
+    navigate({ to: "/dashboard" });
+    setOpenDialog(true);
+  };
 
   return (
     <SidebarGroup>
@@ -26,7 +39,7 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
-              onClick={() => setOpenDialog(true)}
+              onClick={() => handleOuickCreate(location.pathname)}
               tooltip="Quick Create"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
             >
@@ -39,10 +52,12 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
+              <Link to={item?.url}>
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

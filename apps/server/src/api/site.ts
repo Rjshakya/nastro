@@ -36,6 +36,15 @@ const getSiteQuerySchema = z.object({
 });
 
 const sitesApp = new Hono<{ Variables: Vars }>()
+  // .use(async (c) => {
+  //   return c.json(
+  //     ApiResponse({
+  //       data: null,
+  //       message: "no site",
+  //     }),
+  //     400,
+  //   );
+  // })
   .get("/", zValidator("query", getSiteQuerySchema), async (c) => {
     const { pageId, slug } = c.req.valid("query");
 
@@ -56,6 +65,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     );
   })
   .use(authMiddleWare())
+
   .get("/all", async (c) => {
     const userId = c.get("user")?.id;
 

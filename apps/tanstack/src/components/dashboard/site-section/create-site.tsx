@@ -39,6 +39,7 @@ interface CreateSiteDialogProps {
 }
 
 export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
+  
   const { openDialog, setOpenDialog } = useCreateSiteStore((s) => s);
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,11 +49,12 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const { isAvailable, value, setValue, isLoading } = useIsSiteSlugAvailable("");
 
   const handleCreate = async () => {
-    if (!input) return;
+    if (!input || !selectedPageId || !value) return;
+
     const result = await createSite({
       ...input,
-      pageId: selectedPageId ?? "",
-      siteSetting: defaultNotionSettings(input.siteName, input.slug),
+      pageId: selectedPageId,
+      siteSetting: defaultNotionSettings(input.siteName, value),
       slug: value,
     });
 

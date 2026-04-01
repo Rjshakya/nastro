@@ -1,4 +1,5 @@
 import { ThemeToggle } from "../ThemeToggle";
+import { SidebarTrigger } from "../ui/sidebar";
 import { DashboardSitesSection } from "./site-section/sites-section";
 import { getRouteApi } from "@tanstack/react-router";
 
@@ -15,6 +16,7 @@ export const DashboardHome = () => {
             </div>
             <div className="flex ">
               <ThemeToggle />
+              <SidebarTrigger customeSize={"icon"} />
             </div>
           </div>
 

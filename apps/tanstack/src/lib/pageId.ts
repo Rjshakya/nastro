@@ -30,9 +30,17 @@ const getSite = async ({
   });
 
   if (!res.ok) {
-    throw new Error(
-      `url : ${url.href} status : ${res.status} , statusText:${res.statusText} , msg: Failed to fetch site`,
-    );
+    const error = await res.json();
+
+    const errObj = {
+      url: url.href,
+      status: res.status,
+      statusText: res.statusText,
+      error,
+    };
+
+    console.error("Failed to fetch site:", errObj);
+    throw new Error(JSON.stringify(errObj));
   }
   return res.json() as Promise<{
     data: { site: Site; page: ExtendedRecordMap };
@@ -91,5 +99,6 @@ export const pageIdLoader = createServerFn()
       };
     } catch (e) {
       console.error(e);
+      throw new Error("Oops ! failed to load your site");
     }
   });
