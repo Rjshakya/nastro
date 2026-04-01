@@ -4,7 +4,11 @@ import { cors } from "hono/cors";
 import { env } from "cloudflare:workers";
 import { api } from "./api";
 import { ApiResponse } from "./lib/api";
-import { SiteError, NotionError } from "@/errors/tagged.errors";
+import {
+  SiteError,
+  NotionError,
+  SlugServiceError,
+} from "@/errors/tagged.errors";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 
 export const app = new Hono()
@@ -50,6 +54,17 @@ export const app = new Hono()
     }
 
     if (e instanceof NotionError && e._tag === "NotionError") {
+      return c.json(
+        ApiResponse({
+          data: null,
+          error: e.type,
+          message: e.message,
+        }),
+        getCode(e.code),
+      );
+    }
+
+    if (e instanceof SlugServiceError) {
       return c.json(
         ApiResponse({
           data: null,

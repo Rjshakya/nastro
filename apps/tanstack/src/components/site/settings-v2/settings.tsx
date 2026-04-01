@@ -107,7 +107,7 @@ export const SettingsV2 = ({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         overlayClassName="supports-backdrop-filter:backdrop-blur-none"
-        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50"
+        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-60"
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>

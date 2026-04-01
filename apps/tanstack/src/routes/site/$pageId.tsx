@@ -5,8 +5,7 @@ import { z } from "zod";
 import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "#/components/site/editor/site-editor";
 import { SiteEditorLoading } from "#/components/site/editor/site-editor-loading";
-import { Error } from "#/components/error";
-import { loadFont } from "#/lib/fonts";
+
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { getDefaultSettings } from "#/lib/settings-defaults";
 

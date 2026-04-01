@@ -409,6 +409,10 @@
   }
 }
 
+.notion-table-header{
+  z-index: 50;
+}
+
 .notion-quote {
   display: block;
   width: 100%;

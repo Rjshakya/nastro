@@ -27,10 +27,7 @@ export function DashboardLoading() {
             <div className="grid gap-2 rounded-md p-1 bg-card">
               {/* Site card skeletons */}
               {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between p-3 rounded-md"
-                >
+                <div key={i} className="flex items-center justify-between p-3 rounded-md">
                   <div className="flex items-center gap-3">
                     <Skeleton className="h-10 w-10 rounded-lg" />
                     <div className="space-y-1.5">

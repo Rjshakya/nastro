@@ -39,7 +39,6 @@ interface CreateSiteDialogProps {
 }
 
 export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
-  
   const { openDialog, setOpenDialog } = useCreateSiteStore((s) => s);
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");

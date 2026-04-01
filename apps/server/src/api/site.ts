@@ -1,5 +1,6 @@
 import { DatabaseLive } from "@/db";
 import { sitesInsertSchema } from "@/db/schema/site";
+import { SiteError } from "@/errors/tagged.errors";
 import { ApiResponse } from "@/lib/api";
 import { KeyManager } from "@/lib/cache";
 import { Vars } from "@/lib/hono-types";
@@ -137,9 +138,25 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
       const program = Effect.gen(function* () {
         const repo = yield* SiteRepo();
+
+        const existing = yield* repo.findById("id", id);
+        if (!existing || !existing.length) {
+          return yield* Effect.fail("site/update/id no data error");
+        }
+
+        if (input.slug !== existing[0].slug) {
+          const slugService = yield* SlugService;
+          const storedSlug = yield* slugService.storeSlug(input.slug);
+          const deletedSlug = yield* slugService.deleteSlug(existing[0].slug);
+        }
+
         const site = yield* repo.updateById("id", id, { ...input, userId });
         return site.length ? site[0] : null;
-      }).pipe(Effect.provide(DatabaseLive()));
+      }).pipe(
+        Effect.provide(DatabaseLive()),
+        Effect.provide(SlugServiceLive),
+        Effect.provide(KVStoreLive),
+      );
 
       const site = await Effect.runPromise(program);
       await KeyManager.delete.getUserSites(userId as string);

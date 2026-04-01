@@ -16,14 +16,27 @@ export const LiveSite = () => {
   const { pageId } = liveSiteRoute.useParams({});
   useLayoutEffect(() => {
     if (site?.siteSetting && page) {
+      const localTheme = localStorage.getItem("nastro_theme") as "dark" | "light" | null;
+      let localIsDark = site.siteSetting?.general?.isDark;
+
+      if (localTheme) {
+        localIsDark = localTheme === "dark";
+      }
+
       const defaultSettings = getDefaultSettings({
-        existingSettings: site?.siteSetting,
+        existingSettings: {
+          ...site?.siteSetting,
+          general: {
+            ...site?.siteSetting?.general,
+            isDark: localIsDark,
+            type: "general",
+          },
+        },
         page,
         site,
         pageId,
       });
 
-      clientThemeToggle(!!site?.siteSetting?.general?.isDark);
       useNotionSettingsStore.getState().updateSettings({
         ...defaultSettings,
       });

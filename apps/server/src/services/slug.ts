@@ -16,7 +16,7 @@ export class SlugService extends ServiceMap.Service<
     storeSlug: (
       slug: string,
     ) => Effect.Effect<string, KVStoreError | SlugServiceError, never>;
-    deleteSlug: (key: string) => Effect.Effect<string, KVStoreError, never>;
+    deleteSlug: (slug: string) => Effect.Effect<string, KVStoreError, never>;
   }
 >()("services/slug") {}
 

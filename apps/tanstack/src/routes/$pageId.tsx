@@ -1,5 +1,5 @@
 import { LiveSite } from "#/components/site/live";
-import { ClientOnly, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 import { pageIdLoader } from "#/lib/pageId";
 import { Error } from "#/components/error";
@@ -63,9 +63,7 @@ export const Route = createFileRoute("/$pageId")({
 function RouteComponent() {
   return (
     <main>
-      {/* <ClientOnly fallback={null}> */}
       <LiveSite />
-      {/* </ClientOnly> */}
     </main>
   );
 }

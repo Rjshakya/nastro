@@ -135,6 +135,7 @@ export const clientThemeToggle = (bool: boolean) => {
   const doc = window.document.documentElement;
   doc.classList.forEach((c) => doc.classList.remove(c));
   doc.classList.add(bool ? "dark" : "light");
+  localStorage.setItem("nastro_theme", bool ? "dark" : "light");
 };
 
 export const getEntries = <T extends object>(obj: T) => {

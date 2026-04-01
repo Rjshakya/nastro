@@ -4,14 +4,14 @@ import { Code } from "react-notion-x/build/third-party/code";
 import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import { type CSSProperties } from "react";
-import { Link, useLocation, useRouter, useSearch } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "../site/site-header";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/notion-page-settings";
 import { SiteFooter } from "../site/site-footer";
 import type { Block } from "notion-types";
 import { Button as ShadBtn } from "#/components/ui/button";
-import { IconFile, IconFileDescription } from "@tabler/icons-react";
+import { IconFileDescription } from "@tabler/icons-react";
 
 interface NotionRendererProps {
   pageId: string;
@@ -63,6 +63,8 @@ export function NotionRenderer({
 
     return url + `&themeId=${themeId}`;
   };
+
+  console.log("data", recordMap);
 
   return (
     <div
