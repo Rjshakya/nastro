@@ -33,9 +33,6 @@ const notionApp = new Hono<{ Variables: Vars }>()
     return c.json(ApiResponse({ data: pages, message: "success" }));
   })
   .get("/pages/:pageId", zValidator("param", pageParamsSchema), async (c) => {
-    // const userId = c.get("user")?.id;
-    // const { pageId } = c.req.valid("param");
-
     return c.json(
       ApiResponse({
         data: {},

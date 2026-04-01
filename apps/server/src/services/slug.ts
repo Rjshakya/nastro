@@ -1,11 +1,8 @@
-import { Data, Effect, Layer, ServiceMap } from "effect";
+import { Effect, Layer, ServiceMap } from "effect";
 import { KVStore, KVStoreError } from "./kv-store";
 import { KeyManager } from "@/lib/cache";
 
-class SlugServiceError extends Data.TaggedError("SlugServiceError")<{
-  msg: string;
-  errorType: "SIMILAR SLUG EXIST";
-}> {}
+import { SlugServiceError } from "@/errors/tagged.errors";
 
 export class SlugService extends ServiceMap.Service<
   SlugService,
@@ -42,8 +39,9 @@ export const SlugServiceLive = Layer.effect(
 
         if (existing) {
           return yield* new SlugServiceError({
-            msg: "Slug already exists",
-            errorType: "SIMILAR SLUG EXIST",
+            message: "Slug already exists",
+            type: "SIMILAR_SLUG_EXISTS",
+            code: 409,
           });
         }
 

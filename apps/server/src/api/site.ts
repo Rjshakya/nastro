@@ -36,11 +36,21 @@ const getSiteQuerySchema = z.object({
 });
 
 const sitesApp = new Hono<{ Variables: Vars }>()
+  // .use(async (c) => {
+  //   return c.json(
+  //     ApiResponse({
+  //       data: null,
+  //       message: "no site",
+  //     }),
+  //     400,
+  //   );
+  // })
   .get("/", zValidator("query", getSiteQuerySchema), async (c) => {
     const { pageId, slug } = c.req.valid("query");
 
     const program = pipe(
       getSiteBySlugWithPage(slug, pageId),
+
       Effect.provide(DatabaseLive()),
       Effect.provide(NotionServiceLive()),
       Effect.provide(NotionClientLive),
@@ -55,6 +65,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     );
   })
   .use(authMiddleWare())
+
   .get("/all", async (c) => {
     const userId = c.get("user")?.id;
 
@@ -63,7 +74,6 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const userSites = yield* repo.findById("userId", userId as string);
       return userSites;
     }).pipe(Effect.provide(DatabaseLive()));
-
     const sites = await Effect.runPromise(program);
 
     return c.json(
@@ -82,6 +92,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
       const program = createSite({ ...input, userId }).pipe(
         Effect.provide(DatabaseLive()),
+        Effect.provide(NotionServiceLive()),
+        Effect.provide(NotionClientLive),
         Effect.provide(SlugServiceLive),
         Effect.provide(KVStoreLive),
       );

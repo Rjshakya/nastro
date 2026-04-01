@@ -5,6 +5,8 @@ import { getThemeServerFn } from "@/lib/theme";
 import appCss from "../styles/global.css?url";
 import rcp from "react-color-palette/css?url";
 import { Link } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
+import { Error } from "#/components/error";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -65,6 +67,9 @@ export const Route = createRootRoute({
       </div>
     );
   },
+  errorComponent: ({ error }) => (
+    <Error message={error.message} onRetry={() => window.location.reload()} />
+  ),
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -76,6 +81,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <Toaster className=" capitalize" richColors position="top-center" />
         <Scripts />
       </body>
     </html>

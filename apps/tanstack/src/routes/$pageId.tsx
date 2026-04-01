@@ -2,6 +2,7 @@ import { LiveSite } from "#/components/site/live";
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 import { pageIdLoader } from "#/lib/pageId";
+import { Error } from "#/components/error";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
@@ -53,16 +54,10 @@ export const Route = createFileRoute("/$pageId")({
     };
   },
 
-  /**
-   *   @description To - do
-   *
-   *   i have to do it , ssr:true
-   *   for that , i have to call getSite in createServerfnhandler ,
-   *   then only it may work
-   *   because it is public route , not need for sending cookies for auth.
-   */
-
   ssr: true,
+  errorComponent: ({ error }) => (
+    <Error message={error.message} onRetry={() => window.location.reload()} />
+  ),
 });
 
 function RouteComponent() {

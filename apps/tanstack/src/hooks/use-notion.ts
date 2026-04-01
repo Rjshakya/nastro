@@ -3,7 +3,6 @@ import type { NotionPages } from "@/types/notion";
 import useSWR from "swr";
 export const useNotionPages = () => {
   const fetcher = () => getNotionPages();
-
   const swr = useSWR("/notion/pages", fetcher);
 
   return {

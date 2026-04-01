@@ -1,12 +1,9 @@
 import { env } from "cloudflare:workers";
-import { Data, Effect, Layer, ServiceMap } from "effect";
+import { Effect, Layer, ServiceMap } from "effect";
+import { KVStoreError } from "@/errors/tagged.errors";
 
 export const getKV = () => Effect.succeed(env.NASTRO_KV);
-
-export class KVStoreError extends Data.TaggedError("KVStoreError")<{
-  msg: string;
-  _err: unknown;
-}> {}
+export { KVStoreError };
 
 export class KVStore extends ServiceMap.Service<
   KVStore,
@@ -32,7 +29,11 @@ export const KVStoreLive = Layer.effect(
           return await kv.get<T>(key);
         },
         catch: (e) =>
-          new KVStoreError({ msg: "failed to get from kv", _err: e }),
+          new KVStoreError({
+            message: "failed to get from kv",
+            type: "GET_FAILED",
+            code: 500,
+          }),
       });
 
     const set = (key: string, value: string, ttl?: number) =>
@@ -40,7 +41,12 @@ export const KVStoreLive = Layer.effect(
         try: async () => {
           return await kv.put(key, value);
         },
-        catch: (e) => new KVStoreError({ msg: "failed to set in kv", _err: e }),
+        catch: (e) =>
+          new KVStoreError({
+            message: "failed to set in kv",
+            type: "SET_FAILED",
+            code: 500,
+          }),
       });
 
     const deleteKey = (key: string) =>
@@ -49,7 +55,11 @@ export const KVStoreLive = Layer.effect(
           return await kv.delete(key);
         },
         catch: (e) =>
-          new KVStoreError({ _err: e, msg: "failed to delete from kv" }),
+          new KVStoreError({
+            message: "failed to delete from kv",
+            type: "DELETE_FAILED",
+            code: 500,
+          }),
       });
 
     return {

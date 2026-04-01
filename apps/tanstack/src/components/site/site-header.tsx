@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { LayoutHeaderUI } from "#/types/notion-page-settings";
 import { Button } from "../ui/button";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +13,8 @@ import {
 import { IconChevronDown } from "@tabler/icons-react";
 import { Moon, Sun } from "lucide-react";
 import { clientThemeToggle } from "#/lib/utils";
+import { setThemeServerFn } from "#/lib/theme";
+import { toast } from "sonner";
 
 export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
   return (

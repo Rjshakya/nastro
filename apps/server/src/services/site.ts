@@ -1,16 +1,13 @@
 import { SiteInsert, SiteSelect } from "@/db/schema/site";
 import { eq } from "drizzle-orm";
-import { Data, Effect } from "effect";
+import { Effect } from "effect";
 import { nanoid } from "nanoid";
 import { KeyManager, withCache } from "@/lib/cache";
 import { SiteRepo } from "@/repo/site";
 import { NotionService } from "./notion/main";
 import { SlugService } from "./slug";
 
-class SiteError extends Data.TaggedError("SiteError")<{
-  message: string;
-  code: "NOT_FOUND" | "ALREADY_EXISTS" | "INVALID_INPUT" | "UNKNOWN";
-}> {}
+import { SiteError } from "@/errors/tagged.errors";
 
 export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
   Effect.gen(function* () {
@@ -26,20 +23,16 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
               .limit(1);
             return result.length ? result[0] : null;
           },
-          catch: (e) => new SiteError({ code: "UNKNOWN", message: `${e}` }),
+          catch: (e) =>
+            new SiteError({ type: "NOT_FOUND", message: `${e}`, code: 404 }),
         }),
     );
 
-    // const site = yield* withCache({
-    //   execute: getSite,
-    //   key: KeyManager.getSiteById(pageId),
-    //   ttl: 60 * 60,
-    // });
-
     if (!site) {
       return yield* new SiteError({
-        code: "NOT_FOUND",
+        type: "NOT_FOUND",
         message: "no site found",
+        code: 404,
       });
     }
 
@@ -52,7 +45,9 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
     });
     return { site, page };
   }).pipe(
-    Effect.mapError((e) => new SiteError({ code: "UNKNOWN", message: `${e}` })),
+    Effect.mapError(
+      (e) => new SiteError({ type: "UNKNOWN", message: `${e}`, code: 500 }),
+    ),
   );
 
 export const createUniqueSlug = (baseSlug: string) => {
@@ -63,6 +58,9 @@ export const createSite = Effect.fn("services/site/createSite")((
   data: SiteInsert,
 ) => {
   return Effect.gen(function* () {
+    const pageId = data?.pageId as string;
+    yield* checkIsPagePublic(pageId);
+
     const slugService = yield* SlugService;
     const slug = yield* slugService.storeSlug(data?.slug);
 
@@ -77,8 +75,35 @@ export const createSite = Effect.fn("services/site/createSite")((
     );
 
     return site;
-  });
+  }).pipe(
+    Effect.catchTag("NotionError", (e) => {
+      if (e.type === "PAGE_ERROR") {
+        return Effect.fail(
+          new SiteError({
+            type: "NOT_PUBLIC",
+            message: "page is not public",
+            code: 400,
+          }),
+        );
+      }
+
+      return Effect.fail(
+        new SiteError({
+          type: "NOTION_ERROR",
+          message: "notion error",
+          code: 500,
+        }),
+      );
+    }),
+  );
 });
+
+export const checkIsPagePublic = (pageId: string) =>
+  Effect.gen(function* () {
+    const notion = yield* NotionService;
+    const page = yield* notion.getPageOfSite(pageId);
+    return { page, pageId, isPublic: !!page };
+  });
 
 export const isSlugAvailable = (slug: string) =>
   Effect.gen(function* () {

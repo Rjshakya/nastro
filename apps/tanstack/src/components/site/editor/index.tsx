@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getRouteApi, Outlet } from "@tanstack/react-router";
-import { SiteEditorHeader } from "../site-editor-header";
+import { SiteEditorHeader } from "./site-editor-header";
 
 export const siteEditorRoute = getRouteApi("/site/$pageId");
 export default function SiteEditorLayout() {

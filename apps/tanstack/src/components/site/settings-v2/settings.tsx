@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IconChevronDown } from "@tabler/icons-react";
 import { authClient } from "#/lib/auth-client";
+import { toast } from "sonner";
 
 export const SettingsV2 = ({
   pageSettings,
@@ -48,8 +49,8 @@ export const SettingsV2 = ({
   onOpenChange: (v: boolean) => void;
   siteId: string;
 }) => {
-  const { updateSite, isLoading } = useUpdateSite();
-  const { settings: settingsState } = useNotionSettingsStore();
+  const { updateSite, isLoading: isSaving } = useUpdateSite();
+  const { settings: currentSettings } = useNotionSettingsStore();
   const navigate = useNavigate();
 
   const search = siteEditorRoute.useSearch();
@@ -59,18 +60,25 @@ export const SettingsV2 = ({
   const { data: themes } = useThemes({});
 
   const handleSave = async () => {
+    const generalSettings = currentSettings?.general;
+
+    if (!generalSettings || !generalSettings?.slug || !generalSettings?.siteName) {
+      return;
+    }
+
     try {
       await updateSite({
         siteId,
         input: {
-          slug: settingsState.general?.slug || "",
-          siteName: settingsState.general?.siteName || "",
-          siteSetting: settingsState,
+          slug: generalSettings?.slug,
+          siteName: generalSettings?.siteName,
+          siteSetting: currentSettings,
         },
       });
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to save settings:", error);
+      toast.error("failed to save site");
     }
   };
 
@@ -98,8 +106,8 @@ export const SettingsV2 = ({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        overlayClassName="supports-backdrop-filter:backdrop-blur-none  "
-        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50 "
+        overlayClassName="supports-backdrop-filter:backdrop-blur-none"
+        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50"
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
@@ -158,7 +166,7 @@ export const SettingsV2 = ({
 
         <SheetFooter>
           <div className="mt-6 flex gap-2 justify-end">
-            <SaveSettings themeId={search?.themeId} handleSave={handleSave} isSaving={isLoading} />
+            <SaveSettings themeId={search?.themeId} handleSave={handleSave} isSaving={isSaving} />
 
             <SheetClose
               render={
