@@ -7,7 +7,6 @@
 @plugin 'tailwind-scrollbar';
 
 :root {
-  interpolate-size: allow-keywords;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -183,6 +182,11 @@
   --notion-footer-btn-color: oklch(0.552 0.016 285.938);
   --notion-footer-height: 45px;
   --notion-footer-width: 100%;
+
+  /* notion text selection */
+
+  --notion-text-selection-bg: var(--foreground);
+  --notion-text-selection-color: var(--background);
 }
 
 .dark {
@@ -305,6 +309,11 @@
   --notion-footer-text-color: oklch(0.985 0 0);
   --notion-footer-btn-bg: oklch(0.967 0.001 286.375);
   --notion-footer-btn-color: oklch(0.705 0.015 286.067);
+
+  /* notion text selection */
+
+  --notion-text-selection-bg: var(--foreground);
+  --notion-text-selection-color: var(--background);
 }
 
 @theme inline {

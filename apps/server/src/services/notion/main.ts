@@ -19,13 +19,26 @@ export type GetPages = (
   | DataSourceObjectResponse
 )[];
 
+export type GetPageOptions = {
+  concurrency?: number | undefined;
+  fetchMissingBlocks?: boolean | undefined;
+  fetchCollections?: boolean | undefined;
+  signFileUrls?: boolean | undefined;
+  chunkLimit?: number | undefined;
+  chunkNumber?: number | undefined;
+  throwOnCollectionErrors?: boolean | undefined;
+  collectionReducerLimit?: number | undefined;
+  fetchRelationPages?: boolean | undefined;
+};
+
 import { NotionError } from "@/errors/tagged.errors";
 
 export class NotionService extends ServiceMap.Service<
   NotionService,
   {
-    readonly getPageOfSite: (
+    readonly getPage: (
       pageId: string,
+      options?: GetPageOptions,
     ) => Effect.Effect<ExtendedRecordMap, NotionError>;
     readonly getNotionPages: () => Effect.Effect<GetPages, NotionError, never>;
   }
@@ -88,10 +101,13 @@ export const NotionServiceLive = (
         });
 
       return NotionService.of({
-        getPageOfSite: (pageId) =>
+        getPage: (pageId, options) =>
           Effect.tryPromise({
             try: async () => {
-              const page = await notionClient.getPage(pageId);
+              const page = await notionClient.getPage(
+                pageId,
+                options ? { ...options } : undefined,
+              );
               return page;
             },
             catch: () =>

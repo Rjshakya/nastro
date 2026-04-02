@@ -1,3 +1,4 @@
+import { SlugInput } from "#/components/slug-input";
 import { Badge } from "#/components/ui/badge";
 import { Checkbox } from "#/components/ui/checkbox";
 import { Input } from "#/components/ui/input";
@@ -49,7 +50,7 @@ export const TabGeneral = ({ general }: { general: GeneralSettingsUI }) => {
         }
 
         if (k === "slug") {
-          return <SlugInput key={i} general={general} />;
+          return <GeneralSettingSlugInput key={i} general={general} />;
         }
 
         if (typeof v === "string") {
@@ -93,9 +94,9 @@ export const TabGeneral = ({ general }: { general: GeneralSettingsUI }) => {
   );
 };
 
-function SlugInput({ general }: { general: NotionPageSettings["general"] }) {
+function GeneralSettingSlugInput({ general }: { general: NotionPageSettings["general"] }) {
   const { updateSettings, settings } = useNotionSettingsStore((s) => s);
-  const { isAvailable, value, setValue, isLoading } = useIsSiteSlugAvailable("");
+  const { isAvailable, setValue, isLoading } = useIsSiteSlugAvailable("");
   const search = useSearch({ from: "/site/$pageId" });
   const [showAvailablityIndicator, setShowAvailablityIndicator] = useState(false);
 
@@ -114,28 +115,12 @@ function SlugInput({ general }: { general: NotionPageSettings["general"] }) {
   };
 
   return (
-    <div className="w-full grid gap-2 ">
-      <Label className="capitalize flex items-center justify-between gap-2" htmlFor="slug">
-        <p>Slug</p>
-        {showAvailablityIndicator &&
-          value.length > 0 &&
-          (isLoading ? (
-            <Badge variant={"outline"}>loading...</Badge>
-          ) : isAvailable ? (
-            <Badge className="bg-green-500" variant={"default"}>
-              available
-            </Badge>
-          ) : (
-            <Badge className="" variant={"destructive"}>
-              unavailable
-            </Badge>
-          ))}
-      </Label>
-
-      <Input
-        value={settings?.general?.["slug"] as string}
-        onChange={(e) => handleSlugUpdate(e.target.value, "slug")}
-      />
-    </div>
+    <SlugInput
+      isAvailable={isAvailable}
+      isLoading={isLoading}
+      value={settings?.general?.["slug"] as string}
+      onChange={(slug) => handleSlugUpdate(slug, "slug")}
+      showAvailablityIndicator={showAvailablityIndicator}
+    />
   );
 }

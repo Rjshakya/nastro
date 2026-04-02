@@ -85,6 +85,7 @@ export const pageIdLoader = createServerFn()
       const page = data?.page as ExtendedRecordMap;
       const seo = getNotionPageSeo({ page, site, pageId });
       const settings = { ...site?.siteSetting } as NotionPageSettings;
+
       const fonts = {
         primary: getFontLink(settings?.typography?.fonts?.primary),
         secondary: getFontLink(settings?.typography?.fonts?.secondary),

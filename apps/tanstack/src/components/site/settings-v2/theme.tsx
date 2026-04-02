@@ -27,6 +27,7 @@ import { useState } from "react";
 import { useThemeStore } from "#/stores/theme-store";
 import { getSettingsWithOutSeo } from "#/lib/utils";
 import { getPureDefaultSettings } from "#/lib/settings-defaults";
+import { toast } from "sonner";
 
 export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) => void }) => {
   const { themes, theme, setTheme } = useThemeStore((s) => s);
@@ -77,6 +78,7 @@ export const SaveTheme = ({ themeId }: { themeId: string }) => {
 
   const handleSave = async () => {
     if (!theme.name) {
+      toast.error("Theme name is required");
       return;
     }
 
@@ -141,6 +143,11 @@ export const CreateTheme = () => {
   const { settings } = useNotionSettingsStore((s) => s);
 
   const handleCreate = async () => {
+    if (!theme.name) {
+      toast.error("Theme name is required");
+      return;
+    }
+
     const settingsWithDefaults = getPureDefaultSettings(settings);
     const settingsWithoutSeo = getSettingsWithOutSeo(settingsWithDefaults);
     await createTheme({ ...theme, themeSetting: settingsWithoutSeo });

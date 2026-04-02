@@ -13,8 +13,13 @@ import {
 import { IconChevronDown } from "@tabler/icons-react";
 import { Moon, Sun } from "lucide-react";
 import { clientThemeToggle } from "#/lib/utils";
-import { setThemeServerFn } from "#/lib/theme";
-import { toast } from "sonner";
+
+export const defaultAvatars = [
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg",
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/purple.jpg",
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/red.jpg",
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/orange.jpg",
+];
 
 export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
   return (
@@ -22,7 +27,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
       <div className="flex items-center justify-between gap-1">
         <div className="flex gap-1 items-center p-2">
           <Avatar className={"size-5"}>
-            <AvatarImage className={"rounded-sm"} src={header?.logo || ""} />
+            <AvatarImage className={"rounded-sm"} src={header?.logo || defaultAvatars[0]} />
             <AvatarFallback />
           </Avatar>
 

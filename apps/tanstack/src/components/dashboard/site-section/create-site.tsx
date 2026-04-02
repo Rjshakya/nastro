@@ -31,8 +31,7 @@ import type { NotionPage } from "#/types/notion";
 import { authClient } from "#/lib/auth-client";
 import { Env } from "env";
 import { useCreateSiteStore } from "#/stores/create-site";
-import { useDebounce } from "#/hooks/use-debounce";
-import { Badge } from "#/components/ui/badge";
+import { SlugInput } from "#/components/slug-input";
 
 interface CreateSiteDialogProps {
   onSuccess?: (site: Site) => void;
@@ -79,7 +78,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger
         render={
-          <Button size={"sm"}>
+          <Button size={"sm"} variant={"outline"} className={" shadow-2xl"}>
             <IconPlus className="mr-2 h-4 w-4" />
             New Site
           </Button>
@@ -103,31 +102,13 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
           </div>
 
           <div className="py-4 space-y-4">
-            <div className="space-y-2">
-              <Label className="flex items-center justify-between gap-2" htmlFor="slug">
-                <p>Slug</p>
-                {value.length > 0 &&
-                  (isLoading ? (
-                    <Badge variant={"outline"}>loading...</Badge>
-                  ) : isAvailable ? (
-                    <Badge className="bg-green-500" variant={"default"}>
-                      available
-                    </Badge>
-                  ) : (
-                    <Badge className="" variant={"destructive"}>
-                      unavailable
-                    </Badge>
-                  ))}
-              </Label>
-              <Input
-                id="slug"
-                placeholder="my-site"
-                value={value}
-                onChange={(e) => {
-                  setValue(e.target.value);
-                }}
-              />
-            </div>
+            <SlugInput
+              isAvailable={isAvailable}
+              isLoading={isLoading}
+              value={value}
+              onChange={setValue}
+              placeholder="my-site"
+            />
           </div>
 
           <div className=" space-y-3">

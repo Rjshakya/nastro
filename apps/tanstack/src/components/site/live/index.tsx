@@ -14,13 +14,19 @@ export const LiveSite = () => {
   const page = data?.page;
   const { slug } = liveSiteRoute.useLoaderDeps();
   const { pageId } = liveSiteRoute.useParams({});
+  const { settings, updateSettings } = useNotionSettingsStore((s) => s);
   useLayoutEffect(() => {
     if (site?.siteSetting && page) {
       const localTheme = localStorage.getItem("nastro_theme") as "dark" | "light" | null;
-      let localIsDark = site.siteSetting?.general?.isDark;
+      let originallyIsDark = site.siteSetting?.general?.isDark;
+
+      /**
+       *  here we are preferring user's browser state,
+       *  if we have , otherwise fallback to original.
+       */
 
       if (localTheme) {
-        localIsDark = localTheme === "dark";
+        originallyIsDark = localTheme === "dark";
       }
 
       const defaultSettings = getDefaultSettings({
@@ -28,7 +34,7 @@ export const LiveSite = () => {
           ...site?.siteSetting,
           general: {
             ...site?.siteSetting?.general,
-            isDark: localIsDark,
+            isDark: originallyIsDark,
             type: "general",
           },
         },
@@ -37,9 +43,11 @@ export const LiveSite = () => {
         pageId,
       });
 
-      useNotionSettingsStore.getState().updateSettings({
+      updateSettings({
         ...defaultSettings,
       });
+
+      clientThemeToggle(!!originallyIsDark);
     }
   }, [site?.siteSetting, page]);
   return (
@@ -47,7 +55,7 @@ export const LiveSite = () => {
       pageId={pageId}
       slug={slug || ""}
       recordMap={page}
-      settings={site?.siteSetting || ({} as NotionPageSettings)}
+      settings={settings || ({} as NotionPageSettings)}
     />
   );
 };

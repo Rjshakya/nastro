@@ -104,9 +104,150 @@ export const useDeleteSite = () => {
   };
 };
 
+export const BANNED_SUBDOMAINS = new Set([
+  // ── Product & brand ──────────────────────────────────────
+  "nastro",
+  "nastro-app",
+  "getnastro",
+  "trynastro",
+
+  // ── Core pages / marketing ───────────────────────────────
+  "www",
+  "app",
+  "home",
+  "landing",
+  "site",
+  "web",
+
+  // ── Auth ─────────────────────────────────────────────────
+  "auth",
+  "login",
+  "logout",
+  "signin",
+  "signup",
+  "register",
+  "sso",
+  "oauth",
+  "callback",
+  "verify",
+  "confirm",
+  "reset",
+  "forgot",
+  "password",
+  "2fa",
+  "mfa",
+
+  // ── Product sections ─────────────────────────────────────
+  "dashboard",
+  "admin",
+  "console",
+  "panel",
+  "settings",
+  "account",
+  "profile",
+  "billing",
+  "checkout",
+  "upgrade",
+  "plans",
+  "pricing",
+  "onboarding",
+
+  // ── Docs / legal / support ───────────────────────────────
+  "docs",
+  "documentation",
+  "help",
+  "support",
+  "faq",
+  "status",
+  "roadmap",
+  "changelog",
+  "blog",
+  "news",
+  "press",
+  "terms",
+  "privacy",
+  "legal",
+  "security",
+  "abuse",
+  "dmca",
+
+  // ── Infrastructure ───────────────────────────────────────
+  "api",
+  "cdn",
+  "assets",
+  "static",
+  "media",
+  "uploads",
+  "files",
+  "storage",
+  "mail",
+  "email",
+  "smtp",
+  "imap",
+  "ns",
+  "ns1",
+  "ns2",
+  "dns",
+  "ftp",
+  "sftp",
+  "ssh",
+  "vpn",
+  "proxy",
+  "gateway",
+
+  // ── Internal / system ────────────────────────────────────
+  "internal",
+  "intranet",
+  "dev",
+  "develop",
+  "development",
+  "staging",
+  "stage",
+  "test",
+  "testing",
+  "sandbox",
+  "preview",
+  "beta",
+  "alpha",
+  "canary",
+  "local",
+  "localhost",
+
+  // ── Common squatting targets ─────────────────────────────
+  "about",
+  "contact",
+  "careers",
+  "jobs",
+  "team",
+  "investors",
+  "partners",
+  "affiliate",
+  "store",
+  "shop",
+  "pay",
+  "payments",
+]);
+
+const SLUG_REGEX = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/;
+
+export function isValidSubdomainSlug(slug: string): boolean {
+  const s = slug.trim();
+  return s.length >= 3 && s.length <= 32 && SLUG_REGEX.test(s);
+}
+
 export const useIsSiteSlugAvailable = (slug: string) => {
   const fetcher = (v: string) => {
-    if (!v || !v.length) return Promise.resolve(false);
+    if (!v || !v.length) {
+      return Promise.resolve(false);
+    }
+
+    if (
+      BANNED_SUBDOMAINS.has(v.toLowerCase().trim()) ||
+      !isValidSubdomainSlug(v)
+    ) {
+      return Promise.resolve(false);
+    }
+
     return getIsSiteSlugAvailable(v);
   };
   const { debouncedValue, value, setValue } = useDebounce(slug, 500);

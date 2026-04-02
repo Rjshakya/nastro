@@ -7,6 +7,7 @@ export const siteEditorRoute = getRouteApi("/site/$pageId");
 export default function SiteEditorLayout() {
   return (
     <SidebarProvider
+      defaultOpen={false}
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 62)",

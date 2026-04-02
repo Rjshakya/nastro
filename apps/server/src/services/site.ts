@@ -37,18 +37,14 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
     }
 
     const notion = yield* NotionService;
-    const getPage = notion.getPageOfSite(pageId);
+    const getPage = notion.getPage(pageId);
     const page = yield* withCache({
       execute: getPage,
       key: KeyManager.getPageContent(pageId),
       ttl: 60 * 60,
     });
     return { site, page };
-  }).pipe(
-    Effect.mapError(
-      (e) => new SiteError({ type: "UNKNOWN", message: `${e}`, code: 500 }),
-    ),
-  );
+  });
 
 export const createUniqueSlug = (baseSlug: string) => {
   return Effect.succeed(`${baseSlug}-${nanoid(5)}`);
@@ -101,7 +97,7 @@ export const createSite = Effect.fn("services/site/createSite")((
 export const checkIsPagePublic = (pageId: string) =>
   Effect.gen(function* () {
     const notion = yield* NotionService;
-    const page = yield* notion.getPageOfSite(pageId);
+    const page = yield* notion.getPage(pageId);
     return { page, pageId, isPublic: !!page };
   });
 

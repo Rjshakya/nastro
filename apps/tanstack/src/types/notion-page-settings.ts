@@ -75,6 +75,11 @@ export type ThemeSettingsTabSection = {
   activeBackground?: string;
 };
 
+export type ThemeSettingsTextSelection = {
+  background?: string;
+  textColor?: string;
+};
+
 export interface ThemeSettingsUI {
   main?: ThemeSettingsMainSection;
   header?: ThemeSettingsHeaderSection;
@@ -85,6 +90,7 @@ export interface ThemeSettingsUI {
   buttons?: ThemeSettingsButtonsSection;
   defaultButton?: ThemeSettingsDefaultButtonSection;
   tab?: ThemeSettingsTabSection;
+  textSelection?: ThemeSettingsTextSelection;
   type: "theme";
 }
 

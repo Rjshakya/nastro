@@ -78,7 +78,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html className={theme} lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -95,7 +95,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               })();
             `,
           }}
-        />
+        /> */}
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>

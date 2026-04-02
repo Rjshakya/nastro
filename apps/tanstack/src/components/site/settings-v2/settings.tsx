@@ -21,7 +21,7 @@ import { TabTypo } from "./tabs/tab-typo";
 import { TabSeo } from "./tabs/tab-seo";
 import { useThemes } from "#/hooks/use-themes";
 import { CreateTheme, SaveTheme, SelectThemes } from "./theme";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { siteEditorRoute } from "../editor";
 import type { Theme } from "#/types/theme";
 import { useThemeStore } from "#/stores/theme-store";
@@ -56,6 +56,8 @@ export const SettingsV2 = ({
   const search = siteEditorRoute.useSearch();
   const { settings: defaultSettings } = siteEditorRoute.useLoaderData();
 
+  const router = useRouter();
+
   const { defaultTheme, setThemes, setTheme, setHasThemeChanged } = useThemeStore((s) => s);
   const { data: themes } = useThemes({});
 
@@ -63,6 +65,7 @@ export const SettingsV2 = ({
     const generalSettings = currentSettings?.general;
 
     if (!generalSettings || !generalSettings?.slug || !generalSettings?.siteName) {
+      toast.error("Site name and slug are required");
       return;
     }
 
@@ -74,7 +77,8 @@ export const SettingsV2 = ({
           siteName: generalSettings?.siteName,
           siteSetting: currentSettings,
         },
-      });
+      }).then(async () => await router.invalidate());
+
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to save settings:", error);
@@ -107,7 +111,7 @@ export const SettingsV2 = ({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         overlayClassName="supports-backdrop-filter:backdrop-blur-none"
-        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-60"
+        className="w-full sm:max-w-md overflow-y-auto px-4 py-2 z-50"
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>

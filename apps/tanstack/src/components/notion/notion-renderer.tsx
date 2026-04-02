@@ -1,8 +1,7 @@
 import { NotionRenderer as NotionRendererLib, Button } from "react-notion-x";
 import { Card, CardContent } from "@/components/ui/card";
-import { Code } from "react-notion-x/build/third-party/code";
-import { Collection } from "react-notion-x/build/third-party/collection";
-import { Equation } from "react-notion-x/build/third-party/equation";
+import { Collection } from "react-notion-x/third-party/collection";
+import { Equation } from "react-notion-x/third-party/equation";
 import { type CSSProperties } from "react";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "../site/site-header";
@@ -12,6 +11,7 @@ import { SiteFooter } from "../site/site-footer";
 import type { Block } from "notion-types";
 import { Button as ShadBtn } from "#/components/ui/button";
 import { IconFileDescription } from "@tabler/icons-react";
+import { renderCodeBlock } from "./code";
 
 interface NotionRendererProps {
   pageId: string;
@@ -64,8 +64,6 @@ export function NotionRenderer({
     return url + `&themeId=${themeId}`;
   };
 
-  console.log("data", recordMap);
-
   return (
     <div
       style={{ ...styles } as CSSProperties & Record<string, any>}
@@ -78,7 +76,6 @@ export function NotionRenderer({
         rootPageId={pageId}
         components={{
           Button,
-          Code,
           Equation,
           Collection,
           PageLink: ({ href, children, ...props }: any) => {
@@ -114,6 +111,7 @@ export function NotionRenderer({
             );
           },
           Header: SiteHeader,
+          Code: renderCodeBlock(recordMap),
         }}
         mapPageUrl={pageWithThemeId}
         header={settings?.general?.header && <SiteHeader header={settings?.layout?.header} />}

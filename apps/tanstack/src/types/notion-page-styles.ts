@@ -134,4 +134,8 @@ export interface NotionPageStyles {
   "--notion-collection-tab-row-display"?: string;
   "--notion-collection-tab-bg"?: string;
   "--notion-collection-tab-active-bg"?: string;
+
+  // notion text selection
+  "--notion-text-selection-bg"?: string;
+  "--notion-text-selection-color"?: string;
 }

@@ -83,6 +83,11 @@ export const defaultThemeSettings = (
       background: "oklch(1 0 0)",
       ...themeSettings?.tab,
     },
+    textSelection: {
+      textColor: "oklch(1 0 0)",
+      background: "oklch(0.141 0.005 285.823)",
+      ...themeSettings?.textSelection,
+    },
     type: "theme",
   } as NotionPageSettings["theme"];
 };
@@ -164,6 +169,11 @@ export const defaultDarkThemeSettings = (
     tab: {
       activeBackground: "oklch(0.274 0.006 286.033)",
       background: "oklch(0.145 0 0)",
+    },
+    textSelection: {
+      textColor: "oklch(0.141 0.005 285.823)",
+      background: "oklch(0.985 0 0)",
+      ...darkThemeSettings?.textSelection,
     },
     type: "theme",
   } as NotionPageSettings["darkTheme"];
@@ -254,8 +264,8 @@ export const defaultLayoutSettings = (
 export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   siteName,
   slug: slug,
-  header: true,
-  footer: true,
+  header: false,
+  footer: false,
   isDark: false,
   pageWidth: 768,
   pageCoverHeight: 40,

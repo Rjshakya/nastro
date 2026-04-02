@@ -188,6 +188,13 @@ export const computeTheme = (
       customization.tab?.activeBackground;
   }
 
+  if (customization.textSelection) {
+    styles["--notion-text-selection-bg"] =
+      customization.textSelection.background;
+    styles["--notion-text-selection-color"] =
+      customization.textSelection.textColor;
+  }
+
   return styles;
 };
 

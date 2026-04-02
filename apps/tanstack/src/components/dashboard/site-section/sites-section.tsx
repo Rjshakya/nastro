@@ -10,8 +10,8 @@ export const DashboardSitesSection = () => {
   const { sites } = dashboardHomeApi.useLoaderData();
 
   return (
-    <div className="rounded-lg  bg-muted p-1.5 grid gap-2">
-      <div className="flex items-center justify-between  pt-1">
+    <div className="rounded-lg  bg-muted  grid gap-2 p-1">
+      <div className="flex items-center justify-between ">
         <div className="flex items-center">
           <Button size={"icon-sm"} variant={"ghost"}>
             <IconWorld className="size-5 text-blue-400" />

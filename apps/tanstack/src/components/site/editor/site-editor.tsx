@@ -19,6 +19,7 @@ export function SiteEditor() {
     useNotionSettingsStore.getState().updateSettings({
       ...defaultSettings,
     });
+
     clientThemeToggle(!!defaultSettings?.general?.isDark);
   }, []);
 

@@ -1,3 +1,4 @@
+import { cn } from "#/lib/utils";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -26,7 +27,14 @@ export function SiteEditorHeader() {
         <p className=" font-medium">Editor</p>
         <div className="ml-auto flex items-center gap-2"></div>
 
-        <Button variant="outline" size="sm" onClick={() => togglePanel(true)}>
+        <Button
+          className={cn(
+            "border-2 border-ring dark:border dark:border-ring/70 dark:ring dark:ring-ring/35 ",
+          )}
+          variant="outline"
+          size="sm"
+          onClick={() => togglePanel(true)}
+        >
           <IconSettings className="mr-2 h-4 w-4" />
           Settings
         </Button>

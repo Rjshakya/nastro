@@ -3,12 +3,12 @@ import type { LayoutFooterUI } from "#/types/notion-page-settings";
 import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
 import "@/styles/notion.css";
-import { Separator } from "../ui/separator";
+import { defaultAvatars } from "./site-header";
 
 export const SiteFooter = ({ footer }: { footer?: LayoutFooterUI }) => {
   return (
-    <footer className="w-full p-4 notion  notion-footer-custom ">
-      <div className=" max-w-4xl mx-auto grid gap-4">
+    <footer className="w-full notion px-2  notion-footer ">
+      <div className="grid">
         <div className="w-full flex items-center justify-center">
           {footer?.links &&
             footer?.links?.length > 0 &&
@@ -21,9 +21,9 @@ export const SiteFooter = ({ footer }: { footer?: LayoutFooterUI }) => {
             })}
         </div>
 
-        <div className="flex gap-2 items-center justify-center p-2">
+        <div className="flex gap-2 items-center py-2 ">
           <Avatar className={"size-5"}>
-            <AvatarImage className={"rounded-sm"} src={footer?.logo || ""} />
+            <AvatarImage className={"rounded-sm"} src={footer?.logo || defaultAvatars[0]} />
             <AvatarFallback />
           </Avatar>
 
