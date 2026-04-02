@@ -1,15 +1,24 @@
-import { Button } from "#/components/ui/button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "#/components/landing/navbar";
+import { HeroSection } from "#/components/landing/hero-section";
+import { FeaturesGrid } from "#/components/landing/features-grid";
+import { Pricing } from "#/components/landing/pricing";
+import { Footer } from "#/components/landing/footer";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({
+  component: LandingPage,
+});
 
-function App() {
+function LandingPage() {
   return (
-    <main className=" px-4 pb-8 pt-14">
-      <p>Main page</p>
-      <Button>Click</Button>
-      <Link to="/about">goto</Link>
-      <Link to="/dashboard">Dashboard</Link>
-    </main>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main>
+        <HeroSection />
+        <FeaturesGrid />
+        <Pricing />
+      </main>
+      <Footer />
+    </div>
   );
 }

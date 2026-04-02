@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, jsonb, index } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { v7 } from "uuid";
@@ -7,30 +7,37 @@ import { nanoid } from "nanoid";
 import { themeTable } from "./theme";
 import { templateTable } from "./template";
 
-export const sites = pgTable("site", {
-  id: text()
-    .primaryKey()
-    .$defaultFn(() => v7()),
-  userId: text()
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  pageId: text(),
-  slug: text().unique().notNull(),
-  databaseId: text(),
-  shortId: text("short_id")
-    .notNull()
-    .unique()
-    .$defaultFn(() => nanoid(13)),
-  siteName: text("site_name").notNull(),
-  siteSetting: jsonb("site_setting"),
-  themeId: text().references(() => themeTable.id),
-  templateId: text().references(() => templateTable.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
+export const sites = pgTable(
+  "site",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => v7()),
+    userId: text()
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    pageId: text(),
+    slug: text().unique().notNull(),
+    databaseId: text(),
+    shortId: text("short_id")
+      .notNull()
+      .unique()
+      .$defaultFn(() => nanoid(13)),
+    siteName: text("site_name").notNull(),
+    siteSetting: jsonb("site_setting"),
+    themeId: text().references(() => themeTable.id),
+    templateId: text().references(() => templateTable.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("site_slug_idx").on(table.slug),
+    index("site_pageId_idx").on(table.pageId),
+  ],
+);
 
 export const sitesRelations = relations(sites, ({ one }) => ({
   user: one(user, {

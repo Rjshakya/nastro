@@ -264,8 +264,8 @@ export const defaultLayoutSettings = (
 export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   siteName,
   slug: slug,
-  header: false,
-  footer: false,
+  header: true,
+  footer: true,
   isDark: false,
   pageWidth: 768,
   pageCoverHeight: 40,

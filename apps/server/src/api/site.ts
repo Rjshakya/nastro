@@ -19,6 +19,8 @@ import { zValidator } from "@hono/zod-validator";
 import { Effect, pipe } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
+import { rateLimiter } from "hono-rate-limiter";
+import { env } from "cloudflare:workers";
 
 const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
@@ -168,45 +170,74 @@ const getSiteQuerySchema = z.object({
 });
 
 const sitesApp = new Hono<{ Variables: Vars }>()
+  .get(
+    "/",
+    rateLimiter({
+      binding: env.SITE_READ_LIMITER,
+      keyGenerator(c) {
+        return c.req.path;
+      },
+      message: "Rate limit exceeded",
+    }),
+    zValidator("query", getSiteQuerySchema),
+    async (c) => {
+      const { pageId, slug } = c.req.valid("query");
 
-  .get("/", zValidator("query", getSiteQuerySchema), async (c) => {
-    const { pageId, slug } = c.req.valid("query");
+      const program = pipe(
+        getSiteBySlugWithPage(slug, pageId),
+        Effect.provide(DatabaseLive()),
+        Effect.provide(NotionServiceLive()),
+        Effect.provide(NotionClientLive),
+      );
 
-    const program = pipe(
-      getSiteBySlugWithPage(slug, pageId),
-
-      Effect.provide(DatabaseLive()),
-      Effect.provide(NotionServiceLive()),
-      Effect.provide(NotionClientLive),
-    );
-
-    const site = await Effect.runPromise(program);
-    return c.json(
-      ApiResponse({
-        data: { ...site },
-        message: "Site fetched successfully",
-      }),
-    );
-  })
+      const site = await Effect.runPromise(program);
+      return c.json(
+        ApiResponse({
+          data: { ...site },
+          message: "Site fetched successfully",
+        }),
+      );
+    },
+  )
   .use(authMiddleWare())
+  .get(
+    "/all",
+    rateLimiter<{ Variables: Vars }>({
+      binding: env.SITE_READ_LIMITER,
+      keyGenerator(c) {
+        const user = c.get("user");
+        return user?.id || c.req.path;
+      },
+      message: "Rate limit exceeded",
+    }),
+    async (c) => {
+      const userId = c.get("user")?.id;
 
-  .get("/all", async (c) => {
-    const userId = c.get("user")?.id;
+      const program = Effect.gen(function* () {
+        const repo = yield* SiteRepo();
+        const userSites = yield* repo.findById("userId", userId as string);
+        return userSites;
+      }).pipe(Effect.provide(DatabaseLive()));
+      const sites = await Effect.runPromise(program);
 
-    const program = Effect.gen(function* () {
-      const repo = yield* SiteRepo();
-      const userSites = yield* repo.findById("userId", userId as string);
-      return userSites;
-    }).pipe(Effect.provide(DatabaseLive()));
-    const sites = await Effect.runPromise(program);
-
-    return c.json(
-      ApiResponse({
-        data: sites,
-        message: "Sites fetched successfully",
-      }),
-    );
-  })
+      return c.json(
+        ApiResponse({
+          data: sites,
+          message: "Sites fetched successfully",
+        }),
+      );
+    },
+  )
+  .use(
+    rateLimiter<{ Variables: Vars }>({
+      binding: env.SITE_WRITE_LIMITER,
+      keyGenerator(c) {
+        const user = c.get("user");
+        return user?.id || c.req.path;
+      },
+      message: "Rate limit exceeded",
+    }),
+  )
   .post(
     "/",
     zValidator(

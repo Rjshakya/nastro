@@ -8,6 +8,8 @@ import { Effect } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
 import { NotionService, NotionServiceLive } from "@/services/notion/main";
+import { rateLimiter } from "hono-rate-limiter";
+import { env } from "cloudflare:workers";
 
 const pageParamsSchema = z.object({
   pageId: z.string().min(1, "Page ID is required"),
@@ -15,6 +17,16 @@ const pageParamsSchema = z.object({
 
 const notionApp = new Hono<{ Variables: Vars }>()
   .use(authMiddleWare())
+  .use(
+    rateLimiter<{ Variables: Vars }>({
+      binding: env.NOTION_PAGES_API_READ_LIMITER,
+      keyGenerator(c) {
+        const user = c.get("user");
+        return user?.id || c.req.path;
+      },
+      message: "Rate limit exceed",
+    }),
+  )
   .get("/pages", async (c) => {
     const userId = c.get("user")?.id;
 
