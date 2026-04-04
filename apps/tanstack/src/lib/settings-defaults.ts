@@ -297,6 +297,7 @@ export const getPureDefaultSettings = (
     layout: defaultLayout,
     typography: defaultTypographySettings(existingSettings?.typography),
     seo: existingSettings?.seo,
+    analytics: existingSettings?.analytics || { type: "analytics", trackingId: "" },
   };
 };
 
@@ -349,6 +350,10 @@ export const defaultNotionSettings = (
       ...defaultGeneralSettings(title, slug),
       isDark: true,
       type: "general",
+    },
+    analytics: {
+      type: "analytics",
+      trackingId: ""
     },
   };
 };

@@ -19,6 +19,7 @@ import { TabTheme } from "./tabs/tab-theme";
 import { TabLayout } from "./tabs/tab-layout";
 import { TabTypo } from "./tabs/tab-typo";
 import { TabSeo } from "./tabs/tab-seo";
+import { TabAnalytics } from "./tabs/tab-analytics";
 import { useThemes } from "#/hooks/use-themes";
 import { CreateTheme, SaveTheme, SelectThemes } from "./theme";
 import { useNavigate, useRouter } from "@tanstack/react-router";
@@ -58,13 +59,18 @@ export const SettingsV2 = ({
 
   const router = useRouter();
 
-  const { defaultTheme, setThemes, setTheme, setHasThemeChanged } = useThemeStore((s) => s);
+  const { defaultTheme, setThemes, setTheme, setHasThemeChanged } =
+    useThemeStore((s) => s);
   const { data: themes } = useThemes({});
 
   const handleSave = async () => {
     const generalSettings = currentSettings?.general;
 
-    if (!generalSettings || !generalSettings?.slug || !generalSettings?.siteName) {
+    if (
+      !generalSettings ||
+      !generalSettings?.slug ||
+      !generalSettings?.siteName
+    ) {
       toast.error("Site name and slug are required");
       return;
     }
@@ -92,7 +98,8 @@ export const SettingsV2 = ({
     const run = async (ths: Theme[]): Promise<void> => {
       const defTheme = defaultTheme(defaultSettings);
       const themesWithDefault = [...ths, defTheme];
-      const findTheme = ths?.length && ths.find((t) => t?.id === search?.themeId);
+      const findTheme =
+        ths?.length && ths.find((t) => t?.id === search?.themeId);
 
       if (findTheme) {
         setTheme(findTheme);
@@ -115,7 +122,9 @@ export const SettingsV2 = ({
       >
         <SheetHeader className="px-0">
           <SheetTitle className="font-medium">Site Settings</SheetTitle>
-          <SheetDescription>Customize your site appearance and settings</SheetDescription>
+          <SheetDescription>
+            Customize your site appearance and settings
+          </SheetDescription>
         </SheetHeader>
 
         <SelectThemes
@@ -158,7 +167,10 @@ export const SettingsV2 = ({
           </TabsList>
 
           {getEntries(pageSettings).map(
-            ([k, v]: [string, NotionPageSettings[keyof NotionPageSettings]]) => {
+            ([k, v]: [
+              string,
+              NotionPageSettings[keyof NotionPageSettings],
+            ]) => {
               return (
                 <TabsContent value={k} key={k}>
                   <RenderSettingSection section={v} />
@@ -170,7 +182,11 @@ export const SettingsV2 = ({
 
         <SheetFooter>
           <div className="mt-6 flex gap-2 justify-end">
-            <SaveSettings themeId={search?.themeId} handleSave={handleSave} isSaving={isSaving} />
+            <SaveSettings
+              themeId={search?.themeId}
+              handleSave={handleSave}
+              isSaving={isSaving}
+            />
 
             <SheetClose
               render={
@@ -199,7 +215,11 @@ function SaveSettings({
   const { data } = authClient.useSession();
 
   const render = () => {
-    if (themeId && themeId === theme?.id && data?.user.id === theme?.createdBy) {
+    if (
+      themeId &&
+      themeId === theme?.id &&
+      data?.user.id === theme?.createdBy
+    ) {
       if (hasThemeChanged) {
         return [<CreateTheme />, <SaveTheme themeId={themeId} />];
       }
@@ -260,6 +280,10 @@ export const RenderSettingSection = ({
 
   if (section.type === "seo") {
     return <TabSeo seo={section} />;
+  }
+
+  if (section.type === "analytics") {
+    return <TabAnalytics analytics={section} />;
   }
 
   return null;

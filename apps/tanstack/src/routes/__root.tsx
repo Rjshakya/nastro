@@ -78,28 +78,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html className={theme} lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('theme');
-                  var bool = theme === 'dark' ? true : false;
-                  
-                  const doc = document.documentElement;
-                  doc.classList.forEach((c) => doc.classList.remove(c));
-                  doc.classList.add(bool ? "dark" : "light");
-
-
-                } catch (e) {}
-              })();
-            `,
-          }}
-        /> */}
       </head>
       <body className="font-sans antialiased wrap-anywhere">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        <Toaster className=" capitalize" richColors position="top-center" />
+        <Toaster className="capitalize" richColors position="top-center" />
         <Scripts />
       </body>
     </html>

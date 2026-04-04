@@ -354,8 +354,11 @@
   width: var(--notion-header-width);
   /* max-width: 100vw; */
   overflow: hidden;
-  height: var(--notion-header-height);
-  min-height: var(--notion-header-height);
+  /* height: var(--notion-header-height);
+  min-height: var(--notion-header-height); */
+  height: fit-content;
+  min-height: fit-content;
+
   background: var(--notion-header-bg);
   color: var(--notion-header-text-color);
   margin-inline: auto;
