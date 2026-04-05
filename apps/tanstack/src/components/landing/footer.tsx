@@ -1,70 +1,57 @@
 import { motion } from "motion/react";
-import { Github, Twitter } from "lucide-react";
+import { IconBrandGithub, IconBrandX } from "@tabler/icons-react";
+import { Logo } from "#/components/logo";
+import { Link } from "@tanstack/react-router";
 
-const footerLinks = {
-  product: {
-    title: "Product",
-    links: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Templates", href: "/templates" },
-      { label: "Changelog", href: "/changelog" },
-    ],
-  },
-  resources: {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "/docs" },
-      { label: "API Reference", href: "/api" },
-      { label: "Guides", href: "/guides" },
-      { label: "Blog", href: "/blog" },
-    ],
-  },
-  company: {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "/contact" },
-      { label: "Press Kit", href: "/press" },
-    ],
-  },
-  legal: {
-    title: "Legal",
-    links: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Terms", href: "/terms" },
-      { label: "Cookie Policy", href: "/cookies" },
-    ],
-  },
-};
+const links = [
+  { label: "Features", href: "#features" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Docs", href: "/docs" },
+  { label: "Contact", href: "/contact" },
+];
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com", icon: Github },
-  { label: "Twitter", href: "https://twitter.com", icon: Twitter },
+  { label: "GitHub", href: "https://github.com", icon: IconBrandGithub },
+  { label: "X", href: "https://x.com", icon: IconBrandX },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <footer className="">
+      <div className="container  mx-auto px-4 sm:px-6 py-16">
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-6 gap-8 lg:gap-12"
+          className="max-w-5xl mx-auto border p-5 bg-muted"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          {/* Brand Column */}
-          <div className="col-span-2">
-            <a href="/" className="text-xl font-bold tracking-tight">
-              Nastro
-            </a>
-            <p className="mt-4 text-sm text-muted-foreground max-w-xs">
-              Turn your Notion pages into beautiful, professional websites with
-              custom domains and zero code.
-            </p>
-            <div className="flex items-center gap-4 mt-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+            {/* Logo and tagline */}
+            <div className="space-y-4">
+              <Link to="/">
+                <Logo />
+              </Link>
+              <p className="text-sm text-muted-foreground max-w-xs">
+                Turn your Notion pages into beautiful websites.
+              </p>
+            </div>
+
+            {/* Links */}
+            <nav className="flex flex-wrap items-center gap-6">
+              {links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            {/* Social */}
+            <div className="flex items-center gap-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -74,56 +61,31 @@ export function Footer() {
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={social.label}
                 >
-                  <social.icon className="h-5 w-5" />
+                  <social.icon className="h-5 w-5" stroke={1.5} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Link Columns */}
-          {Object.values(footerLinks).map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold text-sm mb-4">{section.title}</h3>
-              <ul className="space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+          {/* Bottom bar */}
+          <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} Nastro. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="/privacy"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Privacy
+              </a>
+              <a
+                href="/terms"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Terms
+              </a>
             </div>
-          ))}
-        </motion.div>
-
-        {/* Bottom Bar */}
-        <motion.div
-          className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Nastro. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <a
-              href="/privacy"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="/terms"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Terms of Service
-            </a>
           </div>
         </motion.div>
       </div>

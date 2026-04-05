@@ -1,5 +1,5 @@
 import { Button } from "#/components/ui/button";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconArrowUpRight } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Comparison, ComparisonHandle, ComparisonItem } from "../kibo-ui/comparison";
@@ -46,11 +46,9 @@ export function HeroSection() {
             className="md:px-.5 flex items-center justify-start gap-4 "
           >
             <Link to="/dashboard">
-              <Button size="lg" className="rounded-sm px-2 border-2  flex gap-2.5">
+              <Button size="lg" className="rounded-sm px-4 flex items-center gap-1">
                 <p>Get Started Free</p>
-                <span className="bg-secondary text-foreground p-1 rounded-xs">
-                  <IconArrowRight />
-                </span>
+                <IconArrowUpRight />
               </Button>
             </Link>
           </motion.div>
@@ -62,7 +60,7 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="max-w-5xl mx-auto bg-[url(/cool-bg-1.png)] sm:p-12 lg:p-16 p-6 mb-16  "
+          className="max-w-5xl mx-auto bg-[url(/cool-bg-1.png)] sm:p-12 lg:p-16 p-6 mb-16"
         >
           <Comparison className="aspect-square sm:aspect-video" mode="drag">
             <ComparisonItem className="" position="left">
