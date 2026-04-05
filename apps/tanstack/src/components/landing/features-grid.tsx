@@ -1,79 +1,85 @@
 import { Card, CardContent } from "#/components/ui/card";
 import {
-  Globe,
-  FileText,
-  Eye,
-  BarChart3,
-  Code,
-  Palette,
-  Lock,
-  Zap,
-} from "lucide-react";
+  IconWorld,
+  IconBrandNotion,
+  IconChartBar,
+  IconCode,
+  IconPalette,
+  IconSearch,
+  IconEye,
+  IconBrandGoogleAnalytics,
+} from "@tabler/icons-react";
 import { motion } from "motion/react";
+import { Button } from "../ui/button";
 
 const features = [
   {
-    title: "Custom Domains",
+    title: "Free .nastro.xyz subdomain",
     description:
-      "Use your own domain or subdomain. Free SSL certificate included with every site.",
-    icon: Globe,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
+      "Get started instantly with a free subdomain. No domain purchase required to publish your site.",
+    icon: IconWorld,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "md:col-span-2",
+  },
+  {
+    title: "Custom domains",
+    description: "Connect your own domain with free SSL certificates automatically provisioned.",
+    icon: IconWorld,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "",
   },
   {
     title: "Notion as CMS",
+    description: "Your content lives in Notion. Edit once, update everywhere automatically.",
+    icon: IconBrandNotion,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "",
+  },
+
+  {
+    title: "Custom themes",
     description:
-      "Your content lives in Notion. Edit once, and it updates everywhere automatically.",
-    icon: FileText,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
+      "Full control over colors, fonts, spacing, and layouts. Match your brand perfectly.",
+    icon: IconPalette,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "",
   },
   {
-    title: "Real-time Preview",
-    description:
-      "See changes instantly as you customize colors, fonts, and layouts.",
-    icon: Eye,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
+    title: "Full SEO control",
+    description: "Custom titles, descriptions, OG images, favicons, and page URLs for every page.",
+    icon: IconSearch,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "",
   },
   {
-    title: "Analytics",
-    description:
-      "Track visitors, page views, and traffic sources with built-in analytics.",
-    icon: BarChart3,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
+    title: "Built-in analytics",
+    description: "Track visitors, page views, and traffic sources. Basic on free, advanced on Pro.",
+    icon: IconBrandGoogleAnalytics,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "md:col-span-2",
+  },
+  {
+    title: "Real-time preview",
+    description: "See changes instantly as you customize colors, fonts, and layouts in the editor.",
+    icon: IconEye,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "",
   },
   {
     title: "Developer API",
-    description:
-      "RESTful API for fetching Notion content. Perfect for headless CMS use cases.",
-    icon: Code,
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
-  },
-  {
-    title: "Custom Themes",
-    description:
-      "Choose from pre-built themes or customize every detail to match your brand.",
-    icon: Palette,
-    color: "text-indigo-500",
-    bgColor: "bg-indigo-500/10",
-  },
-  {
-    title: "Secure & Private",
-    description: "Your data is encrypted. We never store your Notion content.",
-    icon: Lock,
-    color: "text-red-500",
-    bgColor: "bg-red-500/10",
-  },
-  {
-    title: "Lightning Fast",
-    description:
-      "Edge-cached sites load in milliseconds. Optimized for performance.",
-    icon: Zap,
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
+    description: "RESTful API for fetching Notion content. Perfect for headless CMS use cases.",
+    icon: IconCode,
+    color: "text-foreground",
+    bgColor: "bg-secondary",
+    span: "md:col-span-3",
+    badge: "Coming soon",
   },
 ];
 
@@ -82,71 +88,66 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: "easeOut" as const,
+      duration: 0.4,
+      ease: [0.4, 0, 0.2, 1] as const,
     },
   },
 };
 
 export function FeaturesGrid() {
   return (
-    <section id="features" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="py-24 sm:py-32">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <motion.div
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="max-w-5xl mx-auto  mb-16 text-left grid gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+          viewport={{ margin: "-100px" }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Everything you need
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            Powerful features for creators and developers. Build your site
-            without writing a single line of code.
+          <h2 className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]">Everything you need</h2>
+          <p className="text-sm  text-muted-foreground mb-12 max-w-md">
+            Powerful features for creators and developers. Build your site without writing code.
           </p>
         </motion.div>
 
         {/* Features Bento Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ margin: "-100px" }}
         >
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              variants={itemVariants}
-              className={index === 0 || index === 3 ? "md:col-span-2" : ""}
-            >
-              <Card className="h-full group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50 bg-background/50 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div
-                    className={`w-12 h-12 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}
-                  >
-                    <feature.icon className={`h-6 w-6 ${feature.color}`} />
+          {features.map((feature) => (
+            <motion.div key={feature.title} variants={itemVariants} className={feature.span}>
+              <Card className=" group transition-all duration-300   hover:bg-muted/50 rounded-none">
+                <CardContent className="p-5 sm:p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <Button size={"icon"} variant={"outline"} className={`dark:border-border`}>
+                      <feature.icon className={`size-5 ${feature.color}`} stroke={1.5} />
+                    </Button>
+                    {feature.badge && (
+                      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                        {feature.badge}
+                      </span>
+                    )}
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
+                  <h4 className="text-lg mb-2">{feature.title}</h4>
+                  <p className="text-muted-foreground text-xs max-w-xs">{feature.description}</p>
                 </CardContent>
               </Card>
             </motion.div>

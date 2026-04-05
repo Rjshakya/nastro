@@ -162,7 +162,7 @@
   --notion-header-text-color: oklch(0.145 0 0);
   --notion-header-btn-bg: oklch(0.967 0.001 286.375);
   --notion-header-btn-color: oklch(0.552 0.016 285.938);
-  --notion-header-height: 45px;
+  --notion-header-height: 25px;
   --notion-header-width: 100%;
 
   /* notion - sidebar */

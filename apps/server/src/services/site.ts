@@ -41,7 +41,7 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
     const page = yield* withCache({
       execute: getPage,
       key: KeyManager.getPageContent(pageId),
-      ttl: 60 * 60,
+      ttl: 60 * 2,
     });
     return { site, page };
   });

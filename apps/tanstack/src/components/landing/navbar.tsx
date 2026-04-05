@@ -4,6 +4,7 @@ import { cn } from "#/lib/utils";
 import { motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { Logo } from "../logo";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,6 +19,7 @@ export function Navbar() {
   const navLinks = [
     { href: "#features", label: "Features" },
     { href: "#pricing", label: "Pricing" },
+    { href: "#", label: "Cms" },
   ];
 
   return (
@@ -30,26 +32,21 @@ export function Navbar() {
         scrolled ? "bg-background/80 backdrop-blur-md border-b border-border/50" : "bg-transparent",
       )}
     >
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <nav className=" mx-auto py-2 px-4 flex items-center  justify-between border-b">
         {/* Logo */}
-        <motion.a
-          href="/"
-          className="text-xl font-bold tracking-tight"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          Nastro
+        <motion.a href="/" className="" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <Logo />
         </motion.a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex  items-center gap-8">
           {navLinks.map((link) => (
             <motion.a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors overflow-hidden"
               whileHover={{ y: -1 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               {link.label}
             </motion.a>
@@ -99,17 +96,15 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="pt-4 border-t border-border/50 space-y-3">
-            <a href="/login" className="block">
-              <Button variant="ghost" size="sm" className="w-full">
+          <div className="pt-4 border-t border-border/50 flex flex-col gap-2">
+            <Link className=" w-full" to="/login">
+              <Button className={"w-full"} variant="secondary">
                 Sign In
               </Button>
-            </a>
-            <a href="/login" className="block">
-              <Button size="sm" className="w-full">
-                Get Started
-              </Button>
-            </a>
+            </Link>
+            <Link className=" w-full" to="/dashboard">
+              <Button className={"w-full"}>Get Started</Button>
+            </Link>
           </div>
         </div>
       </motion.div>

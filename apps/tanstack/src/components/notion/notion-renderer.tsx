@@ -97,7 +97,7 @@ export function NotionRenderer({
                     variant={"ghost"}
                     size={"sm"}
                   >
-                    <IconFileDescription className=" stroke-muted-foreground size-5" />
+                    <IconFileDescription className="stroke-(--notion-custom-text)/70 size-5" />
                     <p>{title}</p>
                   </ShadBtn>
                 </Link>

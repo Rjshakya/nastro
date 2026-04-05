@@ -25,7 +25,7 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
   return (
     <header className="notion-header">
       <div className="flex items-center justify-between gap-1">
-        <div className="flex gap-1 items-center p-2">
+        <div className="flex gap-1 items-center px-2">
           <Avatar className={"size-5"}>
             <AvatarImage className={"rounded-sm"} src={header?.logo || defaultAvatars[0]} />
             <AvatarFallback />
@@ -90,8 +90,8 @@ function ThemeToggle() {
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-      {settings?.general?.isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+    <Button variant="ghost" size="icon-xs" onClick={toggleTheme} aria-label="Toggle theme">
+      {settings?.general?.isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}
     </Button>
   );
 }

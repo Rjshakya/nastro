@@ -76,9 +76,7 @@ export const pageIdLoader = createServerFn()
   .handler(async ({ data: input }) => {
     try {
       const { pageId, fresh, slug } = input;
-      if (!slug) {
-        return;
-      }
+
       const resolvedSlug = getSlugFromReq(slug || "");
       const { data } = await getSite({ pageId, slug: resolvedSlug, fresh });
       const site = data?.site as Site;

@@ -246,4 +246,10 @@ export interface NotionPageSettings {
   typography?: TypoSettingsUI;
   layout?: LayoutSettingsUI;
   seo?: SeoSettingsUI;
+  analytics?: AnalyticsSettingsUI;
+}
+
+export interface AnalyticsSettingsUI {
+  trackingId?: string;
+  type: "analytics";
 }

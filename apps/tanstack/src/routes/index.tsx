@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "#/components/landing/navbar";
 import { HeroSection } from "#/components/landing/hero-section";
+import { WhyNastroSection } from "#/components/landing/why-nastro-section";
 import { FeaturesGrid } from "#/components/landing/features-grid";
 import { Pricing } from "#/components/landing/pricing";
 import { Footer } from "#/components/landing/footer";
@@ -11,10 +12,11 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white dark:bg-black tracking-tight">
       <Navbar />
       <main>
         <HeroSection />
+        <WhyNastroSection />
         <FeaturesGrid />
         <Pricing />
       </main>

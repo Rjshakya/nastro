@@ -15,6 +15,7 @@ export const LiveSite = () => {
   const { slug } = liveSiteRoute.useLoaderDeps();
   const { pageId } = liveSiteRoute.useParams({});
   const { settings, updateSettings } = useNotionSettingsStore((s) => s);
+
   useLayoutEffect(() => {
     if (site?.siteSetting && page) {
       const localTheme = localStorage.getItem("nastro_theme") as "dark" | "light" | null;
