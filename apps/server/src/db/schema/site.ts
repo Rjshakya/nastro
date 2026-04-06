@@ -25,8 +25,11 @@ export const sites = pgTable(
       .$defaultFn(() => nanoid(13)),
     siteName: text("site_name").notNull(),
     siteSetting: jsonb("site_setting"),
+    siteThumbnailUrl: text("site_thumbnail_url)"),
     themeId: text().references(() => themeTable.id),
     templateId: text().references(() => templateTable.id),
+    customCssLink: text("custom_css_link"),
+    customScriptLink: text("custom_script_link"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()

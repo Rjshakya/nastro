@@ -1,4 +1,4 @@
-import { IconPlus, type Icon } from "@tabler/icons-react";
+import { IconPlus, IconTemplateFilled, type Icon } from "@tabler/icons-react";
 
 import {
   SidebarGroup,
@@ -60,6 +60,15 @@ export function NavMain({
               </Link>
             </SidebarMenuItem>
           ))}
+
+          <SidebarMenuItem className="flex items-center gap-2">
+            <SidebarMenuButton>
+              <Link className="w-full flex items-center gap-2" to="/templates">
+                <IconTemplateFilled />
+                <span>Templates</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

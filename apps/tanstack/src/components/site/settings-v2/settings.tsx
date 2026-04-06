@@ -29,15 +29,6 @@ import { useThemeStore } from "#/stores/theme-store";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useIsMobile } from "#/hooks/use-mobile";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "#/components/ui/drawer";
 
 export const SettingsV2 = ({
   pageSettings,
