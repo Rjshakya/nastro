@@ -65,6 +65,7 @@
     {
       "custom_domain": false,
       "pattern": "api.nastro.xyz/*",
+      "zone_name": "nastro.xyz",
     },
   ],
 }

@@ -19,9 +19,12 @@
 
   "routes": [
     {
+      
       "custom_domain": false,
       "pattern": "*.nastro.xyz/*",
+      "zone_name": "nastro.xyz"
     },
+    
   ],
 
   "services": [
