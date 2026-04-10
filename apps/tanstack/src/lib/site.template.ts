@@ -9,7 +9,7 @@ export interface CreateTemplateInput {
   createdBy: string;
   templateName: string;
   templateUrl: string;
-  templateThumbnailUrl: string | null;
+  templateThumbnailUrl: string;
   templateDescription: string | null;
   instructionsPageUrl: string | null;
   notionPageUrl: string;
@@ -25,7 +25,7 @@ export interface UpdateTemplateInput {
   templateUrl: string;
   templateDescription: string | null;
   instructionsPageUrl: string | null;
-  templateThumbnailUrl: string | null;
+  templateThumbnailUrl: string;
   notionPageUrl: string;
   isPaid: boolean | null;
   paymentLink: string | null;

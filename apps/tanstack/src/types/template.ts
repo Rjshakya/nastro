@@ -3,7 +3,7 @@ export type Template = {
   createdBy: string;
   templateName: string;
   templateUrl: string;
-  templateThumbnailUrl: string | null;
+  templateThumbnailUrl: string ;
   templateDescription: string | null;
   instructionsPageUrl: string | null;
   notionPageUrl: string;

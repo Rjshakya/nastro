@@ -1,4 +1,9 @@
-import { IconArrowUpRight, IconDownload, IconPhoto, IconTrash } from "@tabler/icons-react";
+import {
+  IconArrowUpRight,
+  IconDownload,
+  IconPhoto,
+  IconTrash,
+} from "@tabler/icons-react";
 
 import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +24,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "#/lib/auth-client";
 import { useDeleteTemplate } from "#/hooks/use-templates";
+import { EditTemplateDialog } from "./edit-template";
 
 interface TemplateCardProps {
   template: Template;
@@ -43,12 +49,12 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
           )}
         >
           {/* Thumbnail */}
-          <div className="relative aspect-video bg-muted">
+          <div className="relative bg-muted">
             {template.templateThumbnailUrl ? (
               <img
                 src={template.templateThumbnailUrl}
                 alt={template.templateName}
-                className="size-full rounded-md object-cover"
+                className="size-full rounded-md aspect-square object-cover"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
@@ -67,7 +73,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
         </Card>
       </DialogTrigger>
 
-      <DialogContent showCloseButton={true} className="max-w-lg px-0 py-0 gap-0">
+      <DialogContent
+        showCloseButton={true}
+        className="max-w-lg px-0 py-0 gap-0"
+      >
         <div className="space-y-4 overflow-hidden">
           {/* Large Thumbnail */}
           <div className="p-1 relative aspect-video overflow-hidden rounded-lg ">
@@ -95,12 +104,16 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
 
           <div className="px-2">
             <DialogHeader className="mb-4">
-              <DialogTitle className={"text-2xl flex items-center justify-between gap-1 "}>
+              <DialogTitle
+                className={"text-2xl flex items-center justify-between gap-1 "}
+              >
                 {template.templateName}
               </DialogTitle>
 
               {template.templateDescription && (
-                <DialogDescription>{template.templateDescription}</DialogDescription>
+                <DialogDescription>
+                  {template.templateDescription}
+                </DialogDescription>
               )}
             </DialogHeader>
 
@@ -118,8 +131,11 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
           {/* Price */}
         </div>
 
-        <DialogFooter className="p-2">
-          <Link to="/templates/install/$templateId" params={{ templateId: template.id }}>
+        <DialogFooter className="p-2 mt-4">
+          <Link
+            to="/templates/install/$templateId"
+            params={{ templateId: template.id }}
+          >
             <Button>
               <IconDownload />
               {template.isPaid ? "Buy Template" : "Install"}
@@ -127,16 +143,19 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
           </Link>
 
           {template.createdBy === sessionData?.user.id && (
-            <Button
-              variant={"destructive"}
-              onClick={() => {
-                setIsOpen(false);
-                setIsDeleteDialogOpen(true);
-              }}
-            >
-              <IconTrash />
-              <p>Delete</p>
-            </Button>
+            <>
+              <EditTemplateDialog template={template} />
+              <Button
+                variant={"destructive"}
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsDeleteDialogOpen(true);
+                }}
+              >
+                <IconTrash />
+                <p>Delete</p>
+              </Button>
+            </>
           )}
         </DialogFooter>
       </DialogContent>
@@ -146,7 +165,8 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
           <DialogHeader>
             <DialogTitle>Delete template</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this template . This action cannot be undone
+              Are you sure you want to delete this template . This action cannot
+              be undone
             </DialogDescription>
 
             <DialogFooter>
@@ -157,7 +177,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
               >
                 Confirm
               </Button>
-              <Button onClick={() => setIsDeleteDialogOpen(false)} variant={"secondary"}>
+              <Button
+                onClick={() => setIsDeleteDialogOpen(false)}
+                variant={"secondary"}
+              >
                 Cancel
               </Button>
             </DialogFooter>

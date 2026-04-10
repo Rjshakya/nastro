@@ -89,7 +89,18 @@ export const SettingsV2 = ({
       const findTheme = ths?.length && ths.find((t) => t?.id === search?.themeId);
 
       if (findTheme) {
-        setTheme(findTheme);
+        setTheme({
+          ...findTheme,
+          themeSetting: {
+            ...findTheme.themeSetting,
+            general: {
+              ...findTheme.themeSetting?.general,
+              type: "general",
+              slug: defaultSettings.general?.slug,
+            },
+            layout: defaultSettings?.layout,
+          },
+        });
       } else {
         setTheme(defTheme);
       }

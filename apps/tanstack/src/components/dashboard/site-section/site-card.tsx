@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface SiteCardProps {
   site: Site;
@@ -26,6 +27,16 @@ export function SiteCard({ site, className }: SiteCardProps) {
   const url = Env.isDev ? "/$pageId" : createSlugUrl(site.slug) + site.pageId;
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.pageId || "", siteId: site.id });
+  };
+
+  const handleCopyLink = ({ pageId, slug }: { pageId: string; slug: string }) => {
+    if (import.meta.env.VITE_PUBLIC_ENVIRONMENT === "development") {
+      navigator.clipboard.writeText(`${window.location.origin}/${pageId}?slug=${slug}`);
+    } else {
+      navigator.clipboard.writeText(`${slug}.nastro.xyz/${pageId}`);
+    }
+
+    toast.success("Link copied to clipboard");
   };
 
   return (
@@ -62,10 +73,19 @@ export function SiteCard({ site, className }: SiteCardProps) {
                   className="w-full flex items-center gap-2"
                 >
                   <DropdownMenuItem className={"w-full"}>
-                    <IconLink className="size-4" />
+                    <IconArrowUpRight className="size-4" />
                     <p>Link</p>
                   </DropdownMenuItem>
                 </Link>
+
+                <DropdownMenuItem
+                  closeOnClick={false}
+                  onClick={() => handleCopyLink({ pageId: site.pageId as string, slug: site.slug })}
+                  className={"w-full"}
+                >
+                  <IconLink className="size-4" />
+                  <p>Copy</p>
+                </DropdownMenuItem>
 
                 <Link
                   to="/site/$pageId"
