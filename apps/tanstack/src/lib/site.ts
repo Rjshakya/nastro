@@ -1,5 +1,4 @@
 import type { NotionPageSettings } from "#/types/notion-page-settings";
-import { toast } from "sonner";
 import { client } from "./api-client";
 import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
@@ -26,7 +25,7 @@ export interface GetSiteInput {
 }
 
 export const getSites = async () => {
-  const res = await client.api.site.all.$get({});
+  const res = await client.api.sites.all.$get({});
 
   if (!res.ok) {
     const error = await res.json();
@@ -43,7 +42,7 @@ export const getSites = async () => {
 };
 
 export const getSite = async ({ pageId, slug, fresh }: GetSiteInput) => {
-  const res = await client.api.site.$get({
+  const res = await client.api.sites.$get({
     query: { pageId, fresh, slug },
   });
 
@@ -68,7 +67,7 @@ export const createSite = async (
   _key: string,
   { arg }: { arg: CreateSiteInput },
 ) => {
-  const res = await client.api.site.$post({
+  const res = await client.api.sites.$post({
     json: arg,
   });
   if (!res.ok) {
@@ -89,7 +88,7 @@ export const updateSite = async (
   _key: string,
   { arg }: { arg: { siteId: string; input: UpdateSiteInput } },
 ) => {
-  const res = await client.api.site[":id"].$patch({
+  const res = await client.api.sites[":id"].$patch({
     param: { id: arg.siteId },
     json: arg.input,
   });
@@ -111,7 +110,7 @@ export const deleteSite = async (
   _key: string,
   { arg }: { arg: { siteId: string; pageId: string } },
 ) => {
-  const res = await client.api.site[":id"].$delete({
+  const res = await client.api.sites[":id"].$delete({
     param: { id: arg.siteId },
     query: { pageId: arg.pageId },
   });
@@ -131,7 +130,7 @@ export const deleteSite = async (
 };
 
 export const getIsSiteSlugAvailable = async (slug: string) => {
-  const res = await client.api.site.slug.available.$post({ json: { slug } });
+  const res = await client.api.sites.slug.available.$post({ json: { slug } });
 
   if (!res.ok) {
     const error = await res.json();

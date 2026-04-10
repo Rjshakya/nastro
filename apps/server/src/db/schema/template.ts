@@ -21,7 +21,9 @@ export const templateTable = pgTable("template", {
 
   templateName: text("template_name").notNull(),
   templateUrl: text("template_url").notNull(),
-  templateThumbnailUrl: text("template_thumbnail_url)"),
+  templateThumbnailUrl: text("template_thumbnail_url"),
+  templateDescription: text("template_description"),
+  instructionsPageUrl: text("instructions_page_url"),
   notionPageUrl: text("notion_page_url").notNull(),
   isPaid: boolean("is_paid").default(false),
   paymentLink: text("template_payment_link"),

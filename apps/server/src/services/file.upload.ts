@@ -8,6 +8,7 @@ import { Effect, Layer, ServiceMap } from "effect";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { FileUploadServiceError } from "@/errors/tagged.errors";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { env } from "cloudflare:workers";
 
 type BucketNames = "nastro-sites-assets" | "nastro-templates-assets";
 
@@ -19,9 +20,28 @@ export class S3clientService extends ServiceMap.Service<
   }
 >()("/file.upload.ts/S3clientService") {}
 
-const SiteAssetsBucketLive = Layer.succeed(S3clientService)({
+export const SiteAssetsBucketLive = Layer.succeed(S3clientService)({
   bucket: "nastro-sites-assets",
-  client: new S3Client({}),
+  client: new S3Client({
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY_ID,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY,
+    },
+    region: "auto",
+    endpoint: env.SITE_ASSETS_BUCKET_ENDPOINT,
+  }),
+});
+
+export const TemplateAssetsBucketLive = Layer.succeed(S3clientService)({
+  bucket: "nastro-templates-assets",
+  client: new S3Client({
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY_ID,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY,
+    },
+    region: "auto",
+    endpoint: env.TEMPLATE_ASSETS_BUCKET_ENDPOINT,
+  }),
 });
 
 export class FileUploadService extends ServiceMap.Service<
@@ -46,7 +66,7 @@ export const FileUploadServiceLive = Layer.effect(FileUploadService)(
       getPresignedUrl({ fileName, expiresIn }) {
         return Effect.tryPromise({
           try: async () => {
-            const key = `${fileName}-${Date.now()}`;
+            const key = fileName;
             const command = new PutObjectCommand({
               Bucket: storage.bucket,
               Key: key,

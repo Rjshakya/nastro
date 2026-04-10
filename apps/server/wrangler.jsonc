@@ -71,12 +71,12 @@
 	"r2_buckets": [
 		{
 			"bucket_name": "nastro-templates-assets",
-			"binding": "templates_bucket",
+			"binding": "TEMPLATES_BUCKET",
 			"remote": true
 		},
 		{
 			"bucket_name": "nastro-sites-assets",
-			"binding": "sites_bucket",
+			"binding": "SITES_BUCKET",
 			"remote": true
 		}
 	],

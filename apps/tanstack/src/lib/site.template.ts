@@ -1,4 +1,3 @@
-import type { NotionPageSettings } from "#/types/notion-page-settings";
 import type { Template } from "#/types/template";
 import { client } from "./api-client";
 
@@ -7,21 +6,31 @@ interface GetTemplateInput {
 }
 
 export interface CreateTemplateInput {
-  pageId: string;
-  slug: string;
+  createdBy: string;
   templateName: string;
-  databaseId?: string;
-  templateSetting?: NotionPageSettings;
-  isPaid?: boolean;
+  templateUrl: string;
+  templateThumbnailUrl: string | null;
+  templateDescription: string | null;
+  instructionsPageUrl: string | null;
+  notionPageUrl: string;
+  isPaid: boolean | null;
+  paymentLink: string | null;
+  price: number | null;
+  tags: string[] | null;
 }
 
 export interface UpdateTemplateInput {
-  pageId?: string;
-  slug?: string;
-  templateName?: string;
-  databaseId?: string;
-  templateSetting?: NotionPageSettings;
-  isPaid?: boolean;
+  createdBy: string;
+  templateName: string;
+  templateUrl: string;
+  templateDescription: string | null;
+  instructionsPageUrl: string | null;
+  templateThumbnailUrl: string | null;
+  notionPageUrl: string;
+  isPaid: boolean | null;
+  paymentLink: string | null;
+  price: number | null;
+  tags: string[] | null;
 }
 
 export const getAllTemplates = async ({

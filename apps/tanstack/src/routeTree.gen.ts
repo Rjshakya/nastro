@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TemplatesIndexRouteImport } from './routes/templates/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as SitePageIdRouteImport } from './routes/site/$pageId'
+import { Route as TemplatesInstallTemplateIdRouteImport } from './routes/templates/install/$templateId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -70,6 +71,12 @@ const SitePageIdRoute = SitePageIdRouteImport.update({
   path: '/$pageId',
   getParentRoute: () => SiteRouteRoute,
 } as any)
+const TemplatesInstallTemplateIdRoute =
+  TemplatesInstallTemplateIdRouteImport.update({
+    id: '/install/$templateId',
+    path: '/install/$templateId',
+    getParentRoute: () => TemplatesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/site/$pageId': typeof SitePageIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/templates/': typeof TemplatesIndexRoute
+  '/templates/install/$templateId': typeof TemplatesInstallTemplateIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/site/$pageId': typeof SitePageIdRoute
   '/dashboard': typeof DashboardIndexRoute
   '/templates': typeof TemplatesIndexRoute
+  '/templates/install/$templateId': typeof TemplatesInstallTemplateIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/site/$pageId': typeof SitePageIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/templates/': typeof TemplatesIndexRoute
+  '/templates/install/$templateId': typeof TemplatesInstallTemplateIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/site/$pageId'
     | '/dashboard/'
     | '/templates/'
+    | '/templates/install/$templateId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/site/$pageId'
     | '/dashboard'
     | '/templates'
+    | '/templates/install/$templateId'
   id:
     | '__root__'
     | '/'
@@ -141,6 +153,7 @@ export interface FileRouteTypes {
     | '/site/$pageId'
     | '/dashboard/'
     | '/templates/'
+    | '/templates/install/$templateId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitePageIdRouteImport
       parentRoute: typeof SiteRouteRoute
     }
+    '/templates/install/$templateId': {
+      id: '/templates/install/$templateId'
+      path: '/install/$templateId'
+      fullPath: '/templates/install/$templateId'
+      preLoaderRoute: typeof TemplatesInstallTemplateIdRouteImport
+      parentRoute: typeof TemplatesRouteRoute
+    }
   }
 }
 
@@ -254,10 +274,12 @@ const SiteRouteRouteWithChildren = SiteRouteRoute._addFileChildren(
 
 interface TemplatesRouteRouteChildren {
   TemplatesIndexRoute: typeof TemplatesIndexRoute
+  TemplatesInstallTemplateIdRoute: typeof TemplatesInstallTemplateIdRoute
 }
 
 const TemplatesRouteRouteChildren: TemplatesRouteRouteChildren = {
   TemplatesIndexRoute: TemplatesIndexRoute,
+  TemplatesInstallTemplateIdRoute: TemplatesInstallTemplateIdRoute,
 }
 
 const TemplatesRouteRouteWithChildren = TemplatesRouteRoute._addFileChildren(

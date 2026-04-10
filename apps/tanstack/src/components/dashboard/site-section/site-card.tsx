@@ -1,4 +1,4 @@
-import { IconTrash, IconSettings, IconArrowUpRight, IconDots } from "@tabler/icons-react";
+import { IconTrash, IconSettings, IconArrowUpRight, IconDots, IconLink } from "@tabler/icons-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -54,30 +54,30 @@ export function SiteCard({ site, className }: SiteCardProps) {
             />
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link
-                    to={url}
-                    params={{ pageId: site.pageId || "" }}
-                    search={{ slug: site.slug }}
-                    target="_blank"
-                    className="flex items-center gap-2"
-                  >
-                    <IconArrowUpRight />
+                <Link
+                  to={url}
+                  params={{ pageId: site.pageId || "" }}
+                  search={{ slug: site.slug }}
+                  target="_blank"
+                  className="w-full flex items-center gap-2"
+                >
+                  <DropdownMenuItem className={"w-full"}>
+                    <IconLink className="size-4" />
                     <p>Link</p>
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
 
-                <DropdownMenuItem>
-                  <Link
-                    to="/site/$pageId"
-                    params={{ pageId: site.pageId || "" }}
-                    search={{ slug: site.slug }}
-                    className="flex items-center gap-2"
-                  >
+                <Link
+                  to="/site/$pageId"
+                  params={{ pageId: site.pageId || "" }}
+                  search={{ slug: site.slug }}
+                  className="w-full flex items-center gap-2"
+                >
+                  <DropdownMenuItem className={"w-full"}>
                     <IconSettings className="h-4 w-4" />
                     <p>Edit</p>
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
 
                 <DropdownMenuItem
                   variant="destructive"

@@ -5,7 +5,6 @@ import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 export default function TemplateLayout() {
   return (
     <SidebarProvider
-      defaultOpen={false}
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 62)",

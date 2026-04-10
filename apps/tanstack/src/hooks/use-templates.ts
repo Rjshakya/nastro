@@ -1,5 +1,4 @@
-import { client } from "@/lib/api-client";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
 import type { Template } from "@/types/template";
@@ -10,17 +9,18 @@ import {
   updateTemplate,
   deleteTemplate,
   type CreateTemplateInput,
+  type UpdateTemplateInput,
 } from "#/lib/site.template";
 import { useRouter } from "@tanstack/react-router";
-import { useState } from "react";
 
 export const useTemplates = () => {
-  const fetcher = () => getAllTemplates();
+  const fetcher = () => getAllTemplates({ limit: 100 });
 
   const swr = useSWR("/templates", fetcher);
 
   return {
-    data: swr.data as Template[],
+    data: swr.data?.result as Template[],
+    prevToken: swr.data?.prevToken,
     error: swr.error,
     isLoading: swr.isLoading,
     mutate: swr.mutate,
@@ -49,11 +49,6 @@ export const useTemplate = (input: GetTemplateInput) => {
 
 export const useCreateTemplate = () => {
   const router = useRouter();
-  const [input, setInput] = useState<CreateTemplateInput>({
-    pageId: "",
-    slug: "",
-    templateName: "",
-  });
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/templates",
     async (_key: string, { arg }: { arg: CreateTemplateInput }) => {
@@ -68,8 +63,6 @@ export const useCreateTemplate = () => {
     isLoading: isMutating,
     error,
     reset,
-    input,
-    setInput,
   };
 };
 
@@ -84,14 +77,7 @@ export const useUpdateTemplate = () => {
       }: {
         arg: {
           templateId: string;
-          input: {
-            pageId?: string;
-            slug?: string;
-            templateName?: string;
-            databaseId?: string;
-            templateSetting?: any;
-            isPaid?: boolean;
-          };
+          input: UpdateTemplateInput;
         };
       },
     ) => {
