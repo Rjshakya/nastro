@@ -18,7 +18,7 @@ const getSite = async ({
   pageId: string;
   fresh?: string;
 }) => {
-  const url = new URL(`/api/site`, env.API_URL);
+  const url = new URL(`/api/sites`, env.API_URL);
   url.searchParams.set("slug", slug);
   url.searchParams.set("pageId", pageId);
   // url.searchParams.set("fresh", fresh ?? "");

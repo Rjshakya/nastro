@@ -12,11 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { loadFont } from "@/lib/fonts";
 import useSWR from "swr";
 import { Env } from "env";
@@ -48,9 +44,7 @@ interface VirtualizedCommandBoxProps {
 
 // --- Component ---
 const fetcher = (key: string) =>
-  fetch(
-    `https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=${key}`,
-  )
+  fetch(`https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=${key}`)
     .then((r) => r.json() as Promise<GoogleFontsResponse>)
     .then((d) => d.items)
     .catch((err) => console.error("Error fetching fonts:", err));
@@ -84,9 +78,7 @@ export const VirtualizedCommandBox = ({
   const handleSearch = (search: string) => {
     setIsKeyboardNavActive(false);
     setFilteredOptions(
-      options.filter((option) =>
-        option.family.toLowerCase().includes(search.toLowerCase() ?? []),
-      ),
+      options.filter((option) => option.family.toLowerCase().includes(search.toLowerCase() ?? [])),
     );
   };
 
@@ -96,8 +88,7 @@ export const VirtualizedCommandBox = ({
         event.preventDefault();
         setIsKeyboardNavActive(true);
         setFocusedIndex((prev) => {
-          const newIndex =
-            prev === -1 ? 0 : Math.min(prev + 1, filteredOptions.length - 1);
+          const newIndex = prev === -1 ? 0 : Math.min(prev + 1, filteredOptions.length - 1);
           scrollToIndex(newIndex);
           return newIndex;
         });
@@ -107,8 +98,7 @@ export const VirtualizedCommandBox = ({
         event.preventDefault();
         setIsKeyboardNavActive(true);
         setFocusedIndex((prev) => {
-          const newIndex =
-            prev === -1 ? filteredOptions.length - 1 : Math.max(prev - 1, 0);
+          const newIndex = prev === -1 ? filteredOptions.length - 1 : Math.max(prev - 1, 0);
           scrollToIndex(newIndex);
           return newIndex;
         });
@@ -128,9 +118,7 @@ export const VirtualizedCommandBox = ({
 
   React.useEffect(() => {
     if (selectedOption) {
-      const option = filteredOptions.find(
-        (option) => option.family === selectedOption,
-      );
+      const option = filteredOptions.find((option) => option.family === selectedOption);
       if (option) {
         const index = filteredOptions.indexOf(option);
         setFocusedIndex(index);
@@ -176,6 +164,7 @@ export const VirtualizedCommandBox = ({
                     isKeyboardNavActive &&
                       focusedIndex !== virtualOption.index &&
                       "aria-selected:bg-transparent aria-selected:text-primary",
+                    focusedIndex === virtualOption.index && "bg-primary text-accent-foreground",
                   )}
                   style={{
                     height: `${virtualOption.size}px`,
@@ -183,23 +172,18 @@ export const VirtualizedCommandBox = ({
                     fontFamily: font && `${font}`,
                   }}
                   value={font}
-                  onMouseEnter={() =>
-                    !isKeyboardNavActive && setFocusedIndex(virtualOption.index)
-                  }
-                  onMouseLeave={() =>
-                    !isKeyboardNavActive && setFocusedIndex(-1)
-                  }
+                  onMouseEnter={() => !isKeyboardNavActive && setFocusedIndex(virtualOption.index)}
+                  onMouseLeave={() => !isKeyboardNavActive && setFocusedIndex(-1)}
                   onSelect={() => {
                     onSelectOption?.(font);
                     loadFont(font);
-                    // setFocusedIndex(-1);
+                    setFocusedIndex(-1);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selectedOption ===
-                        filteredOptions[virtualOption.index].family
+                      selectedOption === filteredOptions[virtualOption.index].family
                         ? "opacity-100"
                         : "opacity-0",
                     )}

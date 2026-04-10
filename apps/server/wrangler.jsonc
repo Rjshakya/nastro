@@ -1,70 +1,83 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nastro-api",
-  "main": "src/app.ts",
-  "compatibility_date": "2026-02-24",
-  "compatibility_flags": ["nodejs_compat"],
-  // "preview_urls": true,
-  "kv_namespaces": [
-    {
-      "binding": "NASTRO_KV",
-      "id": "900150f7ccde422b83778ed0b0234262",
-      "remote": false,
-    },
-  ],
-  "hyperdrive": [
-    {
-      "binding": "HYPERDRIVE",
-      "id": "6f48b19ec8ed4ca3b5c3310531995d9c",
-      "localConnectionString": "postgresql://postgres:postgres@localhost:5444/postgres",
-    },
-  ],
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-    },
-    "traces": {
-      "enabled": true,
-    },
-  },
-  "dev": {
-    "port": 8000,
-  },
-
-  "ratelimits": [
-    {
-      "name": "SITE_READ_LIMITER",
-      "namespace_id": "1001",
-      "simple": {
-        "limit": 1000,
-        "period": 60,
-      },
-    },
-    {
-      "name": "SITE_WRITE_LIMITER",
-      "namespace_id": "1002",
-      "simple": {
-        "limit": 100,
-        "period": 60,
-      },
-    },
-    {
-      "name": "NOTION_PAGES_API_READ_LIMITER",
-      "namespace_id": "1003",
-      "simple": {
-        "limit": 1000,
-        "period": 60,
-      },
-    },
-  ],
-
-  "routes": [
-    {
-      "custom_domain": false,
-      "pattern": "api.nastro.xyz/*",
-    },
-  ],
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "nastro-api",
+	"main": "src/app.ts",
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	// "preview_urls": true,
+	"kv_namespaces": [
+		{
+			"binding": "NASTRO_KV",
+			"id": "900150f7ccde422b83778ed0b0234262",
+			"remote": false,
+		},
+	],
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "6f48b19ec8ed4ca3b5c3310531995d9c",
+			"localConnectionString": "postgresql://postgres:postgres@localhost:5444/postgres",
+		},
+	],
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1,
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+		},
+		"traces": {
+			"enabled": true,
+		},
+	},
+	"dev": {
+		"port": 8000,
+	},
+	"ratelimits": [
+		{
+			"name": "SITE_READ_LIMITER",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 1000,
+				"period": 60,
+			},
+		},
+		{
+			"name": "SITE_WRITE_LIMITER",
+			"namespace_id": "1002",
+			"simple": {
+				"limit": 100,
+				"period": 60,
+			},
+		},
+		{
+			"name": "NOTION_PAGES_API_READ_LIMITER",
+			"namespace_id": "1003",
+			"simple": {
+				"limit": 1000,
+				"period": 60,
+			},
+		},
+	],
+	"routes": [
+		{
+			"custom_domain": false,
+			"pattern": "api.nastro.xyz/*",
+			"zone_name": "nastro.xyz",
+		},
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "nastro-templates-assets",
+			"binding": "TEMPLATES_BUCKET",
+			"remote": true
+		},
+		{
+			"bucket_name": "nastro-sites-assets",
+			"binding": "SITES_BUCKET",
+			"remote": true
+		}
+	],
 }

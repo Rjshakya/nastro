@@ -84,11 +84,10 @@ export const Route = createFileRoute("/$pageId")({
       scripts,
     };
   },
-
-  ssr: true,
   errorComponent: ({ error }) => (
     <Error message={error.message} onRetry={() => window.location.reload()} />
   ),
+  ssr: true,
 });
 
 function RouteComponent() {

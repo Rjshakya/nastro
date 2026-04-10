@@ -77,3 +77,13 @@ export class CacheError extends Data.TaggedError("CacheError")<{
   type: CacheErrorType;
   code?: number;
 }> {}
+
+export type FileUploadServiceErrorType = "PRESIGNED_URL_GENERATION_FAILED";
+
+export class FileUploadServiceError extends Data.TaggedError(
+  "FileUploadServiceError",
+)<{
+  message: string;
+  type: FileUploadServiceErrorType;
+  code?: number;
+}> {}

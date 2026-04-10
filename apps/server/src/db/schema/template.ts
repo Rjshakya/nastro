@@ -5,44 +5,36 @@ import {
   timestamp,
   jsonb,
   boolean,
-  index,
+  integer,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { v7 } from "uuid";
-import { nanoid } from "nanoid";
 
-export const templateTable = pgTable(
-  "template",
-  {
-    id: text()
-      .primaryKey()
-      .$defaultFn(() => v7()),
-    createdBy: text("created_by")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    pageId: text("page_id").notNull(),
-    slug: text().unique().notNull(),
-    databaseId: text("database_id"),
-    shortId: text("short_id")
-      .notNull()
-      .unique()
-      .$defaultFn(() => nanoid(13)),
+export const templateTable = pgTable("template", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => v7()),
+  createdBy: text("created_by")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
 
-    templateName: text("template_name").notNull(),
-    templateSetting: jsonb("template_setting"),
-    isPaid: boolean("is_paid").default(false),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-  },
-  (table) => [
-    index("template_slug_idx").on(table.slug),
-    index("template_pageId_idx").on(table.pageId),
-  ],
-);
+  templateName: text("template_name").notNull(),
+  templateUrl: text("template_url").notNull(),
+  templateThumbnailUrl: text("template_thumbnail_url"),
+  templateDescription: text("template_description"),
+  instructionsPageUrl: text("instructions_page_url"),
+  notionPageUrl: text("notion_page_url").notNull(),
+  isPaid: boolean("is_paid").default(false),
+  paymentLink: text("template_payment_link"),
+  price: integer(),
+  tags: jsonb().$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
 
 export const templateTableRelations = relations(templateTable, ({ one }) => ({
   user: one(user, {

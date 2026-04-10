@@ -261,7 +261,10 @@ export const defaultLayoutSettings = (
   type: "layout",
 });
 
-export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
+export const defaultGeneralSettings = (
+  siteName?: string,
+  slug?: string,
+): NotionPageSettings["general"] => ({
   siteName,
   slug: slug,
   header: true,
@@ -269,6 +272,7 @@ export const defaultGeneralSettings = (siteName?: string, slug?: string) => ({
   isDark: false,
   pageWidth: 768,
   pageCoverHeight: 40,
+  type: "general",
 });
 
 export const getPureDefaultSettings = (
@@ -297,7 +301,10 @@ export const getPureDefaultSettings = (
     layout: defaultLayout,
     typography: defaultTypographySettings(existingSettings?.typography),
     seo: existingSettings?.seo,
-    analytics: existingSettings?.analytics || { type: "analytics", trackingId: "" },
+    analytics: existingSettings?.analytics || {
+      type: "analytics",
+      trackingId: "",
+    },
   };
 };
 
@@ -353,7 +360,7 @@ export const defaultNotionSettings = (
     },
     analytics: {
       type: "analytics",
-      trackingId: ""
+      trackingId: "",
     },
   };
 };

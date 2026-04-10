@@ -23,6 +23,7 @@ export const Route = createFileRoute("/site/$pageId")({
   loader: async ({ params, deps }) => {
     const { pageId } = params;
     const { slug } = deps;
+
     const { data } = await getSite({ slug, pageId });
 
     const site = data?.site as Site;

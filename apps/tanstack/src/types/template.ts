@@ -1,15 +1,16 @@
-import type { NotionPageSettings } from "./notion-page-settings";
-
 export type Template = {
   id: string;
   createdBy: string;
-  pageId: string;
-  slug: string;
-  databaseId: string | null;
-  shortId: string;
   templateName: string;
-  templateSetting: NotionPageSettings | null;
+  templateUrl: string;
+  templateThumbnailUrl: string ;
+  templateDescription: string | null;
+  instructionsPageUrl: string | null;
+  notionPageUrl: string;
   isPaid: boolean | null;
+  paymentLink: string | null;
+  price: number | null;
+  tags: string[] | null;
   createdAt: string;
   updatedAt: string;
 };

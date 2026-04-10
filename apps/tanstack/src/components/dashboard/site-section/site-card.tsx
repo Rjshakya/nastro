@@ -1,4 +1,4 @@
-import { IconTrash, IconSettings, IconArrowUpRight, IconDots } from "@tabler/icons-react";
+import { IconTrash, IconSettings, IconArrowUpRight, IconDots, IconLink } from "@tabler/icons-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface SiteCardProps {
   site: Site;
@@ -26,6 +27,16 @@ export function SiteCard({ site, className }: SiteCardProps) {
   const url = Env.isDev ? "/$pageId" : createSlugUrl(site.slug) + site.pageId;
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.pageId || "", siteId: site.id });
+  };
+
+  const handleCopyLink = ({ pageId, slug }: { pageId: string; slug: string }) => {
+    if (import.meta.env.VITE_PUBLIC_ENVIRONMENT === "development") {
+      navigator.clipboard.writeText(`${window.location.origin}/${pageId}?slug=${slug}`);
+    } else {
+      navigator.clipboard.writeText(`${slug}.nastro.xyz/${pageId}`);
+    }
+
+    toast.success("Link copied to clipboard");
   };
 
   return (
@@ -54,30 +65,39 @@ export function SiteCard({ site, className }: SiteCardProps) {
             />
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link
-                    to={url}
-                    params={{ pageId: site.pageId || "" }}
-                    search={{ slug: site.slug }}
-                    target="_blank"
-                    className="flex items-center gap-2"
-                  >
-                    <IconArrowUpRight />
+                <Link
+                  to={url}
+                  params={{ pageId: site.pageId || "" }}
+                  search={{ slug: site.slug }}
+                  target="_blank"
+                  className="w-full flex items-center gap-2"
+                >
+                  <DropdownMenuItem className={"w-full"}>
+                    <IconArrowUpRight className="size-4" />
                     <p>Link</p>
-                  </Link>
+                  </DropdownMenuItem>
+                </Link>
+
+                <DropdownMenuItem
+                  closeOnClick={false}
+                  onClick={() => handleCopyLink({ pageId: site.pageId as string, slug: site.slug })}
+                  className={"w-full"}
+                >
+                  <IconLink className="size-4" />
+                  <p>Copy</p>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
-                  <Link
-                    to="/site/$pageId"
-                    params={{ pageId: site.pageId || "" }}
-                    search={{ slug: site.slug }}
-                    className="flex items-center gap-2"
-                  >
+                <Link
+                  to="/site/$pageId"
+                  params={{ pageId: site.pageId || "" }}
+                  search={{ slug: site.slug }}
+                  className="w-full flex items-center gap-2"
+                >
+                  <DropdownMenuItem className={"w-full"}>
                     <IconSettings className="h-4 w-4" />
                     <p>Edit</p>
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
 
                 <DropdownMenuItem
                   variant="destructive"

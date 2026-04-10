@@ -242,9 +242,18 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     "/",
     zValidator(
       "json",
-      sitesInsertSchema.omit({ userId: true }).extend({
-        slug: SlugSchema,
-      }),
+      sitesInsertSchema
+        .omit({ userId: true })
+        .extend({
+          slug: SlugSchema,
+        })
+        .refine((arg) => {
+          if (!arg.pageId || arg?.pageId.length < 3) {
+            return false;
+          }
+
+          return true;
+        }),
     ),
     async (c) => {
       const userId = c.get("user")?.id as string;
@@ -293,9 +302,18 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("param", siteParamsSchema),
     zValidator(
       "json",
-      sitesInsertSchema.omit({ userId: true }).extend({
-        slug: SlugSchema,
-      }),
+      sitesInsertSchema
+        .omit({ userId: true })
+        .extend({
+          slug: SlugSchema,
+        })
+        .refine((arg) => {
+          if (!arg.pageId || arg?.pageId.length < 3) {
+            return false;
+          }
+
+          return true;
+        }),
     ),
     async (c) => {
       const userId = c.get("user")?.id as string;
