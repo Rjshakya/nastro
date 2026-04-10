@@ -31,9 +31,9 @@ export function SiteCard({ site, className }: SiteCardProps) {
 
   const handleCopyLink = ({ pageId, slug }: { pageId: string; slug: string }) => {
     if (import.meta.env.VITE_PUBLIC_ENVIRONMENT === "development") {
-      navigator.clipboard.writeText(`${window.location.origin}/${pageId}?slug=${slug}`);
+      navigator.clipboard.writeText(`https://${window.location.origin}/${pageId}?slug=${slug}`);
     } else {
-      navigator.clipboard.writeText(`${slug}.nastro.xyz/${pageId}`);
+      navigator.clipboard.writeText(`https://${slug}.nastro.xyz/${pageId}`);
     }
 
     toast.success("Link copied to clipboard");
