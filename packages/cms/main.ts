@@ -309,7 +309,8 @@ const run = (
 };
 
 // CLI execution
-run("")(
+
+run(process.env.NOTION_API_TOKEN as string)(
   "33785bde259380c3a809d850fc018dbf",
   "page",
 ).then((result) => {
