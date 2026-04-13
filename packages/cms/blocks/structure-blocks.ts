@@ -17,8 +17,9 @@ import type { DividerContent } from "../types.js";
  * Content is empty, children (columns) hold the actual content
  */
 export const handleColumnList =
-  (block: () => ColumnListBlockObjectResponse) => (): Record<string, never> => {
-    return {};
+  (block: () => ColumnListBlockObjectResponse) =>
+  (): Record<string, never> | null => {
+    return null;
   };
 
 /**

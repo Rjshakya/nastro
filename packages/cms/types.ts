@@ -3,6 +3,8 @@
  * Pure content only - no metadata
  */
 
+import type { PageObjectResponse } from "@notionhq/client";
+
 export interface RichText {
   text: string;
   href: string | null;
@@ -80,11 +82,11 @@ export interface TableRowContent {
 
 // Navigation blocks
 export interface ChildPageContent {
-  title: string;
+  id: string;
 }
 
 export interface ChildDatabaseContent {
-  title: string;
+  id: string;
 }
 
 export interface LinkToPageContent {
@@ -110,3 +112,43 @@ export interface DividerContent {
 export interface UnsupportedContent {
   type: string;
 }
+
+// Page processing result
+export interface ProcessPageResult {
+  id: string;
+  cover: { url: string } | null;
+  icon: { url: string } | null;
+  url: string;
+  publicUrl: string | null;
+  properties: PageObjectResponse["properties"];
+  blocks: ProcessedBlock[];
+}
+
+// ProcessPage function type
+export type ProcessPage = (
+  pageId: string,
+) => (token: string) => Promise<ProcessPageResult>;
+
+export type PageBlock = {
+  id: string;
+  type: string;
+  content: unknown;
+  hasChildren: boolean;
+  childblocks?: PageBlock[];
+};
+
+export type Page = {
+  id: string;
+  cover: PageObjectResponse["cover"];
+  icon: PageObjectResponse["icon"];
+  url: PageObjectResponse["url"];
+  publicUrl: PageObjectResponse["public_url"];
+  properties: PageObjectResponse["properties"];
+  blocks: PageBlock[];
+};
+
+export type Database = {
+  id: string;
+  title: string;
+  pages: Page[];
+};

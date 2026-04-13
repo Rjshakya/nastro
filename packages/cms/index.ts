@@ -2,53 +2,24 @@
  * CMS Module - Notion Content Management
  *
  * This module provides functionality to fetch and process content from Notion.
- * Uses better-result for type-safe error handling with TaggedError.
+ * Simplified architecture with recursive block processing.
  *
  * @example
  * ```typescript
- * import { run, NotionApiError, FileSystemError } from "@nastro/cms";
+ * import { run } from "@nastro/cms";
  *
- * const result = await run(token)(sourceId, "page");
- *
- * result.match({
- *   ok: (data) => console.log("Success:", data),
- *   err: (error) => {
- *     if (NotionApiError.is(error)) {
- *       console.error("Notion API error:", error.message);
- *     } else if (FileSystemError.is(error)) {
- *       console.error("File system error:", error.message);
- *     }
- *   },
- * });
+ * const result = await run(token)(pageId);
+ * console.log(result.blocks); // All blocks including deeply nested ones
  * ```
  */
 
 // Main exports
-export {
-  run,
-  getPage,
-  getBlock,
-  getDB,
-  getDSPages,
-  createFetchChildren,
-  createLocalFile,
-  processDatabaseSource,
-  processPageSource,
-} from "./main.ts";
-
-// Error types
-export {
-  NotionApiError,
-  FileSystemError,
-  DataSourceNotFoundError,
-  DatabaseDataSourceError,
-} from "./errors.ts";
-export type { CmsError } from "./errors.ts";
+export { run, getPage, getBlocks, processPage } from "./main.ts";
 
 // Block processing
 export {
   processBlock,
-  processBlocks,
+  // processBlocks,
   BlockProcessingError,
 } from "./blocks/index.ts";
 export type { FetchChildrenFn } from "./blocks/index.ts";
@@ -60,6 +31,8 @@ export { extractRichText, hasChildren } from "./blocks/utils.ts";
 export type {
   RichText,
   ProcessedBlock,
+  ProcessPageResult,
+  ProcessPage,
   ParagraphContent,
   HeadingContent,
   QuoteContent,

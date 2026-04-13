@@ -1,339 +1,187 @@
-import { Client, type BlockObjectResponse } from "@notionhq/client";
-import { existsSync, writeFile } from "node:fs";
-import path from "node:path";
-import { Result } from "better-result";
-import { processBlocks } from "./blocks/index.ts";
-import type { ProcessedBlock } from "./types";
 import {
-  NotionApiError,
-  FileSystemError,
-  DataSourceNotFoundError,
-  DatabaseDataSourceError,
-  type CmsError,
-} from "./errors.ts";
+  BlockObjectResponse,
+  Client,
+  DatabaseObjectResponse,
+  PageObjectResponse,
+} from "@notionhq/client";
+import { processBlock } from "./blocks";
+import { Page, PageBlock } from "./types";
+import { loadEnvFile } from "node:process";
+import path from "node:path";
+import { existsSync, writeFile } from "node:fs";
 
-const notion = (token: string) =>
-  new Client({
+loadEnvFile();
+
+export function getNotionClient(token: string) {
+  return new Client({
     auth: token,
   });
+}
 
-/**
- * Fetch a page from Notion
- */
-const getPage = (pageId: string) => {
-  return async (token: string) => {
-    return Result.tryPromise({
-      try: async () => {
-        const res = await notion(token).pages.retrieve({ page_id: pageId });
-        return res;
-      },
-      catch: (cause) => new NotionApiError({ operation: "getPage", cause }),
-    });
-  };
-};
-
-/**
- * Fetch block children from Notion
- */
-const getBlock = (blockId: string) => {
-  return async (token: string) => {
-    return Result.tryPromise({
-      try: async () => {
-        const res = await notion(token).blocks.children.list({
-          block_id: blockId,
-        });
-        return res;
-      },
-      catch: (cause) => new NotionApiError({ operation: "getBlock", cause }),
-    });
-  };
-};
-
-/**
- * Fetch a database from Notion
- */
-const getDB = (dbId: string) => {
-  return async (token: string) => {
-    return Result.tryPromise({
-      try: async () => {
-        const res = await notion(token).databases.retrieve({
-          database_id: dbId,
-        });
-        return res;
-      },
-      catch: (cause) => new NotionApiError({ operation: "getDB", cause }),
-    });
-  };
-};
-
-/**
- * Fetch data source pages from a database
- */
-const getDSPages = (dbId: string) => {
-  return async (tokenId: string) => {
-    return Result.tryPromise({
-      try: async () => {
-        const res = await notion(tokenId).dataSources.query({
-          data_source_id: dbId,
-        });
-        return res;
-      },
-      catch: (cause) => new NotionApiError({ operation: "getDSPages", cause }),
-    });
-  };
-};
-
-/**
- * Create a fetch children function for recursive block processing
- */
-export const createFetchChildren =
-  (token: string) =>
-  async (
-    blockId: string,
-  ): Promise<Result<BlockObjectResponse[], NotionApiError>> => {
-    return Result.tryPromise({
-      try: async () => {
-        const response = await notion(token).blocks.children.list({
-          block_id: blockId,
-        });
-        return response.results as BlockObjectResponse[];
-      },
-      catch: (cause) =>
-        new NotionApiError({ operation: "fetchChildren", cause }),
-    });
-  };
-
-/**
- * Generate a unique file path, handling duplicates
- */
-const generateFilePath = (fileName: string): Result<string, never> => {
-  const filePath = path.join("./", fileName);
-
-  if (existsSync(filePath)) {
-    console.warn(`File ${fileName} already exists, modifying file name`);
-    const fileNameWithoutExt = path.parse(fileName).name;
-    const fileExt = path.parse(fileName).ext;
-    const timestamp = Date.now();
-    const newPath = path.join(
-      "./",
-      `${fileNameWithoutExt}-${timestamp.toString().slice(5)}${fileExt}`,
-    );
-    return Result.ok(newPath);
-  }
-
-  return Result.ok(filePath);
-};
-
-/**
- * Write data to a local JSON file
- */
-const createLocalFile = (
-  fileName: string,
-  data: unknown,
-): Result<void, FileSystemError> => {
-  const filePathResult = generateFilePath(fileName);
-
-  // generateFilePath never returns Err, but we handle it for type safety
-  if (filePathResult.isErr()) {
-    return Result.err(
-      new FileSystemError({
-        operation: "generatePath",
-        path: fileName,
-        cause: filePathResult.error,
-      }),
-    );
-  }
-
-  const filePath = filePathResult.value;
-
-  return Result.try({
-    try: () => {
-      writeFile(filePath, JSON.stringify(data, null, 2), (err) => {
-        if (err) {
-          throw err;
+export function getRawDatabase(dbId: string) {
+  return (f: () => Client) => {
+    return f()
+      .databases.retrieve({ database_id: dbId })
+      .then((d) => {
+        return d as DatabaseObjectResponse;
+      })
+      .then((d) => {
+        if (!d.data_sources.length) {
+          return null;
         }
+
+        return d;
       });
-    },
-    catch: (cause) =>
-      new FileSystemError({
-        operation: "writeFile",
-        path: filePath,
-        cause,
-      }),
-  });
-};
-
-/**
- * Result type for database source processing
- */
-type DatabaseSourceResult = {
-  results: unknown[];
-  blocks: ProcessedBlock[];
-};
-
-/**
- * Process a database source and return all blocks from its pages
- */
-const processDatabaseSource = async (
-  dbId: string,
-  token: string,
-): Promise<
-  Result<DatabaseSourceResult, NotionApiError | DatabaseDataSourceError>
-> => {
-  const dbResult = await getDB(dbId)(token);
-
-  if (dbResult.isErr()) {
-    return Result.err(dbResult.error);
-  }
-
-  const db = dbResult.value;
-
-  // @ts-ignore - data_sources is not typed
-  const dataSourceId = db.data_sources?.[0]?.id;
-
-  if (!dataSourceId) {
-    return Result.err(new DatabaseDataSourceError({ dbId }));
-  }
-
-  const pagesResult = await getDSPages(dataSourceId)(token);
-
-  if (pagesResult.isErr()) {
-    return Result.err(pagesResult.error);
-  }
-
-  const pages = pagesResult.value;
-  const blocks: ProcessedBlock[] = [];
-
-  for (const page of pages.results) {
-    const blockResponseResult = await getBlock(page.id)(token);
-
-    if (blockResponseResult.isErr()) {
-      return Result.err(blockResponseResult.error);
-    }
-
-    const blockResponse = blockResponseResult.value;
-    const fetchChildrenFn = createFetchChildren(token);
-    const processedBlocksResult = await processBlocks(
-      () => blockResponse.results as BlockObjectResponse[],
-    )(fetchChildrenFn)();
-
-    if (processedBlocksResult.isErr()) {
-      return Result.err(
-        new NotionApiError({
-          operation: "processBlocks",
-          cause: processedBlocksResult.error,
-        }),
-      );
-    }
-
-    blocks.push(...processedBlocksResult.value);
-  }
-
-  return Result.ok({ results: pages.results, blocks });
-};
-
-/**
- * Result type for page source processing
- */
-type PageSourceResult = unknown & { blocks: ProcessedBlock[] };
-
-/**
- * Process a page source and return all blocks
- */
-const processPageSource = async (
-  pageId: string,
-  token: string,
-): Promise<Result<PageSourceResult, NotionApiError>> => {
-  const pageResult = await getPage(pageId)(token);
-
-  if (pageResult.isErr()) {
-    return Result.err(pageResult.error);
-  }
-
-  const page = pageResult.value;
-
-  const blockResponseResult = await getBlock(page.id)(token);
-
-  if (blockResponseResult.isErr()) {
-    return Result.err(blockResponseResult.error);
-  }
-
-  const blockResponse = blockResponseResult.value;
-  const fetchChildrenFn = createFetchChildren(token);
-
-  const processedBlocksResult = await processBlocks(
-    () => blockResponse.results as BlockObjectResponse[],
-  )(fetchChildrenFn)();
-
-  if (processedBlocksResult.isErr()) {
-    return Result.err(
-      new NotionApiError({
-        operation: "processBlocks",
-        cause: processedBlocksResult.error,
-      }),
-    );
-  }
-
-  return Result.ok({ ...page, blocks: processedBlocksResult.value });
-};
-
-/**
- * Run the CMS fetch and processing pipeline
- */
-const run = (
-  token: string,
-): ((
-  sourceId: string,
-  source: "page" | "db",
-) => Promise<Result<unknown, CmsError>>) => {
-  return async (sourceId, source) => {
-    if (source === "db") {
-      const result = await processDatabaseSource(sourceId, token);
-
-      if (result.isErr()) {
-        return Result.err(result.error);
-      }
-
-      return Result.ok(result.value);
-    }
-
-    // source === "page"
-    const result = await processPageSource(sourceId, token);
-
-    if (result.isErr()) {
-      return Result.err(result.error);
-    }
-
-    return Result.ok(result.value);
   };
-};
+}
 
-// CLI execution
+export function getDatabasePages(
+  dsId: string,
+  startCursor?: string,
+  pageSize?: number,
+) {
+  return (f: () => Client) => {
+    do {
+      return f()
+        .dataSources.query({
+          data_source_id: dsId,
+          start_cursor: startCursor,
+          page_size: pageSize,
+        })
+        .then((d) => d.results as PageObjectResponse[])
+        .then((d) => d);
+    } while (startCursor);
+  };
+}
 
-run(process.env.NOTION_API_TOKEN as string)(
-  "33785bde259380c3a809d850fc018dbf",
-  "page",
-).then((result) => {
-  result.match({
-    ok: (data) => {
-      const writeResult = createLocalFile("nastro.demo.json", data);
-      writeResult.match({
-        ok: () => console.log("File written successfully"),
-        err: (e) => console.error(`File write error: ${e.message}`),
-      });
-    },
-    err: (e) => console.error(`CMS Error: ${e.message}`),
-  });
-});
+export function getRawPage(pageId: string) {
+  return (f: () => Client) => {
+    return f().pages.retrieve({ page_id: pageId });
+  };
+}
 
-export {
-  getPage,
-  getBlock,
-  getDB,
-  getDSPages,
-  createLocalFile,
-  processDatabaseSource,
-  processPageSource,
-  run,
-};
-export type { CmsError };
+export function getBlocks(
+  blockId: string,
+  pageSize?: number,
+  startCursor?: string,
+) {
+  return (f: () => Client) => {
+    return f().blocks.children.list({
+      block_id: blockId,
+      start_cursor: startCursor,
+      page_size: pageSize,
+    });
+  };
+}
+
+export function processBlockRecursively(block: BlockObjectResponse) {
+  return async (f: () => Client): Promise<PageBlock> => {
+    const blockContent = await processBlock(() => block)(f);
+
+    if (!block.has_children) {
+      //  process the block without children
+
+      return {
+        id: block.id,
+        type: block.type,
+        content: blockContent,
+        hasChildren: block.has_children,
+      } satisfies PageBlock;
+    }
+
+    const childblocks: any[] = await getPageContent(block.id)(f);
+
+    return {
+      id: block.id,
+      type: block.type,
+      content: blockContent,
+      hasChildren: block.has_children,
+      childblocks,
+    } satisfies PageBlock;
+  };
+}
+
+export function getPageContent(
+  pageId: string,
+  startCursor?: string,
+  pageSize?: number,
+) {
+  return async (f: () => Client): Promise<PageBlock[]> => {
+    do {
+      return getBlocks(
+        pageId,
+        pageSize,
+        startCursor,
+      )(f)
+        .then((v) => v.results)
+        .then((res) => {
+          return Promise.all(
+            res.map((b) =>
+              processBlockRecursively(b as BlockObjectResponse)(f),
+            ),
+          ).then((d) => d);
+        })
+        .then((d) => {
+          return d;
+        });
+    } while (startCursor);
+  };
+}
+
+export function getPage(pageId: string) {
+  return async (f: () => Client): Promise<Page> => {
+    const rawpage = (await getRawPage(pageId)(f)) as PageObjectResponse;
+    const blocks = await getPageContent(pageId)(f);
+
+    return {
+      id: rawpage.id,
+      cover: rawpage.cover,
+      icon: rawpage.icon,
+      url: rawpage.url,
+      publicUrl: rawpage.public_url,
+      properties: rawpage.properties,
+      blocks,
+    } satisfies Page;
+  };
+}
+
+export function runPage(token: string) {
+  return (pageId: string) => {
+    const client = getNotionClient(token);
+    return getPage(pageId)(() => client);
+  };
+}
+
+export function writeLocalFile(fileName: string, ext: "json") {
+  return (data: unknown) => {
+    let filePath = path.join("./", `${fileName}.${ext}`);
+
+    if (existsSync(filePath)) {
+      console.warn(`File ${filePath} already exists. Skipping write.`);
+
+      const parsed = path.parse(filePath);
+      const parsedFileName = parsed.name;
+
+      const last = parsedFileName[parsedFileName.length - 1];
+      const isNumber = Number.isInteger(last);
+
+      const newFileName = isNumber
+        ? `${parsedFileName}-${parseInt(last) + 1}${parsed.ext}`
+        : `${parsedFileName}-${1}${parsed.ext}`;
+
+      filePath = path.join("./", newFileName);
+    }
+
+    writeFile(filePath, JSON.stringify(data), (err) => {
+      if (err) {
+        console.error(`Error writing file ${filePath}:`, err);
+      }
+    });
+  };
+}
+
+runPage(process.env.NOTION_API_TOKEN as string)(
+  "34185bde2593804e9bf8fc1a468f0514",
+)
+  .then((d) => writeLocalFile("page2", "json")(d))
+  .catch(console.error);

@@ -1,7 +1,7 @@
 {
   "name": "@nastro/cms",
   "version": "1.0.0",
-  "description": "Notion CMS module with better-result error handling",
+  "description": "Notion CMS module with simplified architecture",
   "main": "./index.ts",
   "types": "./index.ts",
   "type": "module",
@@ -9,10 +9,6 @@
     ".": {
       "import": "./index.ts",
       "types": "./index.ts"
-    },
-    "./errors": {
-      "import": "./errors.ts",
-      "types": "./errors.ts"
     }
   },
   "scripts": {
@@ -23,14 +19,12 @@
   },
   "keywords": [
     "notion",
-    "cms",
-    "better-result"
+    "cms"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@notionhq/client": "^5.11.0",
-    "better-result": "^2.8.2"
+    "@notionhq/client": "^5.11.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
