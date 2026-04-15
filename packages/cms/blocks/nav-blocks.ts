@@ -9,14 +9,21 @@ import type {
   LinkToPageBlockObjectResponse,
   Client,
 } from "@notionhq/client";
-import type { Database, LinkToPageContent, Page } from "../types";
+import type {
+  ChildDatabaseContent,
+  ChildPageContent,
+  LinkToPageContent,
+  Page,
+} from "../types";
 import { getDatabasePages, getPageContent, getRawDatabase } from "../main";
 
 /**
  * Handle child page block
  * Returns just the ID - children are processed recursively at the page level
  */
-export const handleChildPage = (block: () => ChildPageBlockObjectResponse) => {
+export const handleChildPage = (
+  block: () => ChildPageBlockObjectResponse,
+): ChildPageContent => {
   const b = block();
 
   return {
@@ -29,7 +36,7 @@ export const handleChildPage = (block: () => ChildPageBlockObjectResponse) => {
  */
 export const handleChildDatabase =
   (block: () => ChildDatabaseBlockObjectResponse) =>
-  async (f: () => Client) => {
+  async (f: () => Client): Promise<ChildDatabaseContent> => {
     const b = block();
 
     const pages = await getRawDatabase(b.id)(f)
@@ -53,7 +60,7 @@ export const handleChildDatabase =
       .then((pages) => {
         return Promise.all(
           pages.map((p) => {
-            return getPageContent(p.id)(f).then((blocks) => ({
+            return getPageContent({ pageId: p.id })(f).then((blocks) => ({
               ...p,
               blocks,
             }));
@@ -63,10 +70,8 @@ export const handleChildDatabase =
       .then((pages) => pages as Page[]);
 
     return {
-      id: b.id,
-      title: b.child_database.title,
       pages,
-    } satisfies Database;
+    };
   };
 
 /**

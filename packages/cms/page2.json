@@ -1,14 +1,26 @@
 {
   "id": "34185bde-2593-804e-9bf8-fc1a468f0514",
-  "cover": {
-    "type": "external",
-    "external": {
-      "url": "https://www.notion.so/images/page-cover/met_canaletto_1720.jpg"
-    }
+  "title": {
+    "text": [
+      {
+        "type": "text",
+        "text": { "content": "Nastro cms", "link": null },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "Nastro cms",
+        "href": null
+      }
+    ],
+    "fullText": "Nastro cms"
   },
+  "cover": "https://www.notion.so/images/page-cover/met_canaletto_1720.jpg",
   "icon": null,
-  "url": "https://www.notion.so/Nastro-cms-34185bde2593804e9bf8fc1a468f0514",
-  "publicUrl": null,
   "properties": {
     "title": {
       "id": "title",
@@ -31,10 +43,10 @@
       ]
     }
   },
+  "url": "https://www.notion.so/Nastro-cms-34185bde2593804e9bf8fc1a468f0514",
+  "publicUrl": null,
   "blocks": [
     {
-      "id": "34185bde-2593-8010-91a0-e5056dd53583",
-      "type": "paragraph",
       "content": {
         "text": [
           {
@@ -43,169 +55,142 @@
           },
           { "text": "nastro", "href": "http://nastro.xyz/" },
           { "text": ". so seat back , relax ,and chill. ", "href": null }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "This is nastro , showcasing what can u do to your notion pages with \n<link href=http://nastro.xyz/>nastro<link>\n. so seat back , relax ,and chill. "
+      }
     },
     {
-      "id": "34185bde-2593-809c-b97c-ee94b10b2a93",
-      "type": "paragraph",
       "content": {
         "text": [
           {
             "text": "Thing u can do with nastro , customize theme , literally u can customize everything in nastro , from background colors , notion button color to text selection.",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "Thing u can do with nastro , customize theme , literally u can customize everything in nastro , from background colors , notion button color to text selection."
+      }
     },
     {
-      "id": "34185bde-2593-80ef-a5dd-c1b1c81efac5",
-      "type": "paragraph",
       "content": {
         "text": [
           {
             "text": "U can do seo , that for free , yes this is not a bait , notion charges for it , but with nastro u can do it easily and u can also add google analytics that is also free. ",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "U can do seo , that for free , yes this is not a bait , notion charges for it , but with nastro u can do it easily and u can also add google analytics that is also free. "
+      }
     },
     {
-      "id": "34185bde-2593-80a3-a25b-c2375331f499",
-      "type": "paragraph",
       "content": {
         "text": [
           {
             "text": "Nastro , provide some custom themes , and  templates .",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "Nastro , provide some custom themes , and  templates ."
+      }
     },
     {
-      "id": "34185bde-2593-8096-b885-c308f655f219",
-      "type": "heading_2",
       "content": {
         "level": 2,
-        "text": [{ "text": "why nastro exist ?", "href": null }]
-      },
-      "hasChildren": false
+        "text": [{ "text": "why nastro exist ?", "href": null }],
+        "fullText": "why nastro exist ?"
+      }
     },
     {
-      "id": "34185bde-2593-80be-bac7-d689693e92ac",
-      "type": "bulleted_list_item",
       "content": {
         "text": [
           {
             "text": "nastro help you to represent notion’s pages truly yours ,",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "nastro help you to represent notion’s pages truly yours ,"
+      }
     },
     {
-      "id": "34185bde-2593-80ba-a21a-d91cffab78a4",
-      "type": "bulleted_list_item",
       "content": {
-        "text": [{ "text": "you can add your own taste to it.", "href": null }]
-      },
-      "hasChildren": false
+        "text": [{ "text": "you can add your own taste to it.", "href": null }],
+        "fullText": "you can add your own taste to it."
+      }
     },
     {
-      "id": "34185bde-2593-80a0-ba87-cf82f23d0c8b",
-      "type": "bulleted_list_item",
       "content": {
         "text": [
           {
             "text": "nastro can help to make your fist website , that represent truly you , ",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "nastro can help to make your fist website , that represent truly you , "
+      }
     },
     {
-      "id": "34185bde-2593-8078-a938-e286bb0b5a28",
-      "type": "bulleted_list_item",
       "content": {
         "text": [
           {
             "text": "it can help you to publish blog on your name , (eliza.nastro.xyz)",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "it can help you to publish blog on your name , (eliza.nastro.xyz)"
+      }
     },
     {
-      "id": "34185bde-2593-806b-8a1b-fa3e8766edbc",
-      "type": "bulleted_list_item",
       "content": {
         "text": [
           {
             "text": "it can help you to validate your idea without wasting thousands on just validations. (you can literally make small ecommerce website.",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "it can help you to validate your idea without wasting thousands on just validations. (you can literally make small ecommerce website."
+      }
     },
     {
-      "id": "34185bde-2593-8004-aa09-fd8a7f48d15d",
-      "type": "bulleted_list_item",
       "content": {
         "text": [
           {
             "text": "it can help you to customize your notion journal ,which feels  good to you.",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "it can help you to customize your notion journal ,which feels  good to you."
+      }
     },
     {
-      "id": "34185bde-2593-80ee-9ee8-d4f4f84db3e6",
-      "type": "paragraph",
       "content": {
         "text": [
           {
             "text": "Here we have blog posts in different views.",
             "href": null
           }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "Here we have blog posts in different views."
+      }
     },
     {
-      "id": "34185bde-2593-8048-a6a9-fbe0a832c046",
-      "type": "heading_3",
       "content": {
         "level": 3,
-        "text": [{ "text": "2 - columns ", "href": null }]
-      },
-      "hasChildren": false
+        "text": [{ "text": "2 - columns ", "href": null }],
+        "fullText": "2 - columns "
+      }
     },
     {
-      "id": "34185bde-2593-809d-8c69-ce5b311163ac",
-      "type": "column_list",
-      "content": {},
-      "hasChildren": true,
-      "childblocks": [
+      "content": null,
+      "childBlocks": [
         {
           "id": "34185bde-2593-81ea-8560-f6388cf9aff6",
           "type": "column",
           "content": {},
           "hasChildren": true,
-          "childblocks": [
+          "childBlocks": [
             {
               "id": "34185bde-2593-8178-bdf1-dd3775f1545c",
               "type": "paragraph",
-              "content": { "text": [] },
+              "content": { "text": [], "fullText": "" },
               "hasChildren": false
             },
             {
@@ -213,14 +198,15 @@
               "type": "child_page",
               "content": { "title": "Table view" },
               "hasChildren": true,
-              "childblocks": [
+              "childBlocks": [
                 {
                   "id": "34185bde-2593-81fe-9d64-e7fa5e2bec1b",
                   "type": "paragraph",
                   "content": {
                     "text": [
                       { "text": "hi there this is table view", "href": null }
-                    ]
+                    ],
+                    "fullText": "hi there this is table view"
                   },
                   "hasChildren": false
                 },
@@ -229,7 +215,7 @@
                   "type": "child_page",
                   "content": { "title": "Inside table view" },
                   "hasChildren": true,
-                  "childblocks": [
+                  "childBlocks": [
                     {
                       "id": "34185bde-2593-81e3-8299-e65cf76c4568",
                       "type": "paragraph",
@@ -239,7 +225,8 @@
                             "text": "hi i am inside the table view ;",
                             "href": null
                           }
-                        ]
+                        ],
+                        "fullText": "hi i am inside the table view ;"
                       },
                       "hasChildren": false
                     },
@@ -248,7 +235,7 @@
                       "type": "child_page",
                       "content": { "title": "2nd Inside the table view" },
                       "hasChildren": true,
-                      "childblocks": [
+                      "childBlocks": [
                         {
                           "id": "34185bde-2593-81ca-aee9-c96a084ee557",
                           "type": "paragraph",
@@ -258,7 +245,8 @@
                                 "text": "hi i am 2nd inside the table view",
                                 "href": null
                               }
-                            ]
+                            ],
+                            "fullText": "hi i am 2nd inside the table view"
                           },
                           "hasChildren": false
                         }
@@ -270,120 +258,12 @@
                   "id": "34185bde-2593-8074-818e-e58f297847d0",
                   "type": "child_database",
                   "content": {
-                    "id": "34185bde-2593-8074-818e-e58f297847d0",
-                    "title": "Inline - db",
                     "pages": [
-                      {
-                        "id": "34185bde-2593-80d7-b41a-f824608de9cb",
-                        "cover": null,
-                        "icon": null,
-                        "url": "https://app.notion.com/p/name-1-34185bde259380d7b41af824608de9cb",
-                        "publicUrl": null,
-                        "properties": {
-                          "text": {
-                            "id": "%3CnWW",
-                            "type": "rich_text",
-                            "rich_text": [
-                              {
-                                "type": "text",
-                                "text": {
-                                  "content": "text for name - 1",
-                                  "link": null
-                                },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "text for name - 1",
-                                "href": null
-                              }
-                            ]
-                          },
-                          "Name": {
-                            "id": "title",
-                            "type": "title",
-                            "title": [
-                              {
-                                "type": "text",
-                                "text": { "content": "name - 1", "link": null },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "name - 1",
-                                "href": null
-                              }
-                            ]
-                          }
-                        },
-                        "blocks": []
-                      },
-                      {
-                        "id": "34185bde-2593-8098-8126-fb39fd54e2ee",
-                        "cover": null,
-                        "icon": null,
-                        "url": "https://app.notion.com/p/name-2-34185bde259380988126fb39fd54e2ee",
-                        "publicUrl": null,
-                        "properties": {
-                          "text": {
-                            "id": "%3CnWW",
-                            "type": "rich_text",
-                            "rich_text": [
-                              {
-                                "type": "text",
-                                "text": {
-                                  "content": "text for name - 2",
-                                  "link": null
-                                },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "text for name - 2",
-                                "href": null
-                              }
-                            ]
-                          },
-                          "Name": {
-                            "id": "title",
-                            "type": "title",
-                            "title": [
-                              {
-                                "type": "text",
-                                "text": { "content": "name - 2", "link": null },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "name - 2",
-                                "href": null
-                              }
-                            ]
-                          }
-                        },
-                        "blocks": []
-                      },
                       {
                         "id": "34185bde-2593-803c-a534-c58be09377eb",
                         "cover": null,
                         "icon": null,
-                        "url": "https://app.notion.com/p/name-3-34185bde2593803ca534c58be09377eb",
+                        "url": "https://www.notion.so/name-3-34185bde2593803ca534c58be09377eb",
                         "publicUrl": null,
                         "properties": {
                           "text": {
@@ -434,6 +314,112 @@
                           }
                         },
                         "blocks": []
+                      },
+                      {
+                        "id": "34185bde-2593-8098-8126-fb39fd54e2ee",
+                        "cover": null,
+                        "icon": null,
+                        "url": "https://www.notion.so/name-2-34185bde259380988126fb39fd54e2ee",
+                        "publicUrl": null,
+                        "properties": {
+                          "text": {
+                            "id": "%3CnWW",
+                            "type": "rich_text",
+                            "rich_text": [
+                              {
+                                "type": "text",
+                                "text": {
+                                  "content": "text for name - 2",
+                                  "link": null
+                                },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "text for name - 2",
+                                "href": null
+                              }
+                            ]
+                          },
+                          "Name": {
+                            "id": "title",
+                            "type": "title",
+                            "title": [
+                              {
+                                "type": "text",
+                                "text": { "content": "name - 2", "link": null },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "name - 2",
+                                "href": null
+                              }
+                            ]
+                          }
+                        },
+                        "blocks": []
+                      },
+                      {
+                        "id": "34185bde-2593-80d7-b41a-f824608de9cb",
+                        "cover": null,
+                        "icon": null,
+                        "url": "https://www.notion.so/name-1-34185bde259380d7b41af824608de9cb",
+                        "publicUrl": null,
+                        "properties": {
+                          "text": {
+                            "id": "%3CnWW",
+                            "type": "rich_text",
+                            "rich_text": [
+                              {
+                                "type": "text",
+                                "text": {
+                                  "content": "text for name - 1",
+                                  "link": null
+                                },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "text for name - 1",
+                                "href": null
+                              }
+                            ]
+                          },
+                          "Name": {
+                            "id": "title",
+                            "type": "title",
+                            "title": [
+                              {
+                                "type": "text",
+                                "text": { "content": "name - 1", "link": null },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "name - 1",
+                                "href": null
+                              }
+                            ]
+                          }
+                        },
+                        "blocks": []
                       }
                     ]
                   },
@@ -442,7 +428,7 @@
                 {
                   "id": "34185bde-2593-806d-895e-df967e9b5ca4",
                   "type": "paragraph",
-                  "content": { "text": [] },
+                  "content": { "text": [], "fullText": "" },
                   "hasChildren": false
                 }
               ]
@@ -452,15 +438,11 @@
               "type": "child_page",
               "content": { "title": "Gallery view" },
               "hasChildren": true,
-              "childblocks": [
+              "childBlocks": [
                 {
                   "id": "34185bde-2593-8131-aad3-f9fb677a1642",
                   "type": "child_database",
-                  "content": {
-                    "id": "34185bde-2593-8131-aad3-f9fb677a1642",
-                    "title": "Untitled",
-                    "pages": []
-                  },
+                  "content": { "pages": [] },
                   "hasChildren": false
                 }
               ]
@@ -470,14 +452,1013 @@
               "type": "child_page",
               "content": { "title": "List view" },
               "hasChildren": true,
-              "childblocks": [
+              "childBlocks": [
                 {
                   "id": "34185bde-2593-8084-96f4-f9cbe29154c7",
                   "type": "child_database",
                   "content": {
-                    "id": "34185bde-2593-8084-96f4-f9cbe29154c7",
-                    "title": "Inline - db ",
                     "pages": [
+                      {
+                        "id": "34185bde-2593-800e-a3c6-d697b4e4f9ec",
+                        "cover": null,
+                        "icon": null,
+                        "url": "https://www.notion.so/The-Most-Underrated-Skill-Asking-Better-Questions-1-34185bde2593800ea3c6d697b4e4f9ec",
+                        "publicUrl": null,
+                        "properties": {
+                          "text": {
+                            "id": "%3CnWW",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Name": {
+                            "id": "title",
+                            "type": "title",
+                            "title": [
+                              {
+                                "type": "text",
+                                "text": {
+                                  "content": "The Most Underrated Skill: Asking Better Questions (1)",
+                                  "link": null
+                                },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "The Most Underrated Skill: Asking Better Questions (1)",
+                                "href": null
+                              }
+                            ]
+                          },
+                          "Status": {
+                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
+                            "type": "status",
+                            "status": {
+                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
+                              "name": "Not started",
+                              "color": "default"
+                            }
+                          },
+                          "Publish date": {
+                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
+                            "type": "date",
+                            "date": null
+                          },
+                          "Slug": {
+                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Topic": {
+                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
+                            "type": "select",
+                            "select": null
+                          },
+                          "Excerpt": {
+                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
+                            "type": "rich_text",
+                            "rich_text": []
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "id": "34185bde-2593-80a2-8ff1-cd36f00e38a3",
+                            "type": "heading_3",
+                            "content": {
+                              "level": 3,
+                              "text": [
+                                {
+                                  "text": "The Most Underrated Skill: Asking Better Questions",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "The Most Underrated Skill: Asking Better Questions"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8012-b75f-db4db935e422",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "There’s a quiet skill that upgrades almost everything: learning, communication, decision-making, even creativity.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "There’s a quiet skill that upgrades almost everything: learning, communication, decision-making, even creativity."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80e5-aaec-f0a5d590a443",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "It’s not speed. It’s not intelligence. It’s asking better questions.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "It’s not speed. It’s not intelligence. It’s asking better questions."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-804b-adf0-c4a35f66a6e9",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "A good question doesn’t just request information—it shapes attention. It decides what you will notice and what you will ignore.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "A good question doesn’t just request information—it shapes attention. It decides what you will notice and what you will ignore."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8048-a552-d2ec53c5edea",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80f6-ba7d-e69d511c3c5a",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Answers are usually specific to a moment. Questions are reusable. If you learn a powerful question, you can apply it to a hundred situations.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Answers are usually specific to a moment. Questions are reusable. If you learn a powerful question, you can apply it to a hundred situations."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80c6-9b57-e5f1ed8f6685",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "In teams, better questions reduce confusion:",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "In teams, better questions reduce confusion:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80bb-ba1b-f02ff619134f",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What does success look like?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What does success look like?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-805c-9ba8-cbd9190071ff",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What are we optimizing for?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What are we optimizing for?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-800a-81ae-d5c87928a096",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What constraints are real vs. assumed?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What constraints are real vs. assumed?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8005-b54d-db2a4b616e17",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "In learning, better questions create faster progress:",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "In learning, better questions create faster progress:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-801a-956d-c74a549160e3",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What’s the smallest thing I can build to test this?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What’s the smallest thing I can build to test this?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-809d-9f65-f0642553fc42",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What concept am I missing that makes this feel hard?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What concept am I missing that makes this feel hard?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-808d-bc8d-c7cc35176b45",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8066-aef6-cd9a22cf809a",
+                            "type": "numbered_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Replace “How do I do this?” with “What’s the next smallest step?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Replace “How do I do this?” with “What’s the next smallest step?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-803f-b143-f84f15ae35d6",
+                            "type": "numbered_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Replace “Is this right?” with “What would make this obviously wrong?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Replace “Is this right?” with “What would make this obviously wrong?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-808f-b491-f527ed643f58",
+                            "type": "numbered_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Replace “What should I choose?” with “What would I regret not trying?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Replace “What should I choose?” with “What would I regret not trying?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8040-b6e1-cfefd4af650f",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8024-926a-c9355c7d132b",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "At the end of the day, write one question you wish you had asked earlier. Over time, you’ll start asking it sooner—while it still changes the outcome.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "At the end of the day, write one question you wish you had asked earlier. Over time, you’ll start asking it sooner—while it still changes the outcome."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-809c-b9e0-c6345eb4219c",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Better questions don’t guarantee perfect answers. But they reliably produce better thinking.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Better questions don’t guarantee perfect answers. But they reliably produce better thinking."
+                            },
+                            "hasChildren": false
+                          }
+                        ]
+                      },
+                      {
+                        "id": "34185bde-2593-8027-91b7-c742f3eafbad",
+                        "cover": null,
+                        "icon": null,
+                        "url": "https://www.notion.so/The-Quiet-Power-of-Micro-Habits-1-34185bde2593802791b7c742f3eafbad",
+                        "publicUrl": null,
+                        "properties": {
+                          "text": {
+                            "id": "%3CnWW",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Name": {
+                            "id": "title",
+                            "type": "title",
+                            "title": [
+                              {
+                                "type": "text",
+                                "text": {
+                                  "content": "The Quiet Power of Micro-Habits (1)",
+                                  "link": null
+                                },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "The Quiet Power of Micro-Habits (1)",
+                                "href": null
+                              }
+                            ]
+                          },
+                          "Status": {
+                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
+                            "type": "status",
+                            "status": {
+                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
+                              "name": "Not started",
+                              "color": "default"
+                            }
+                          },
+                          "Publish date": {
+                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
+                            "type": "date",
+                            "date": null
+                          },
+                          "Slug": {
+                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Topic": {
+                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
+                            "type": "select",
+                            "select": null
+                          },
+                          "Excerpt": {
+                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
+                            "type": "rich_text",
+                            "rich_text": []
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "id": "34185bde-2593-80c6-8797-f3d0d6630f86",
+                            "type": "heading_3",
+                            "content": {
+                              "level": 3,
+                              "text": [
+                                {
+                                  "text": "The Quiet Power of Micro-Habits",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "The Quiet Power of Micro-Habits"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-800b-980a-cad4ade5c3bc",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Most people think change has to be dramatic to be real. New year, new routine, new identity. But the truth is less cinematic and more useful: the smallest behaviors often create the biggest shifts—because they’re the ones that actually stick.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Most people think change has to be dramatic to be real. New year, new routine, new identity. But the truth is less cinematic and more useful: the smallest behaviors often create the biggest shifts—because they’re the ones that actually stick."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80aa-9c2d-de1f879d20fe",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "A micro-habit is a habit so small it feels almost too easy. Think: doing one push-up, writing one sentence, reading one page, drinking one glass of water, or tidying one surface. On its own, it seems insignificant. But the point isn’t the single action—it’s the pattern you’re building.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "A micro-habit is a habit so small it feels almost too easy. Think: doing one push-up, writing one sentence, reading one page, drinking one glass of water, or tidying one surface. On its own, it seems insignificant. But the point isn’t the single action—it’s the pattern you’re building."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80f1-b4d6-ce78b7714f3e",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8007-aed9-f9b4f01e0123",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Micro-habits reduce friction. When a goal feels heavy, the brain looks for escape routes: “I’ll start tomorrow,” “I’m too tired,” “I don’t have enough time.” Micro-habits shrink the “start” step until there’s nothing to negotiate with.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Micro-habits reduce friction. When a goal feels heavy, the brain looks for escape routes: “I’ll start tomorrow,” “I’m too tired,” “I don’t have enough time.” Micro-habits shrink the “start” step until there’s nothing to negotiate with."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8056-89f0-e348aa06ed00",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "They also create identity momentum. When you do a small habit repeatedly, you start to see yourself differently:",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "They also create identity momentum. When you do a small habit repeatedly, you start to see yourself differently:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80dd-8fc0-e5668a9c30b5",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "You’re not “trying to exercise,” you’re someone who shows up daily.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "You’re not “trying to exercise,” you’re someone who shows up daily."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80bb-b4e9-fc07da37cc95",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "You’re not “hoping to write,” you’re someone who writes.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "You’re not “hoping to write,” you’re someone who writes."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80f6-a6ea-d478e1b6a1e9",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "You’re not “planning to learn,” you’re someone who learns consistently.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "You’re not “planning to learn,” you’re someone who learns consistently."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-807f-ae0f-c9ebbf992742",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-804a-893a-ec75c5baa01f",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Micro-habits often trigger a second behavior. One sentence becomes a paragraph. One push-up becomes five. One minute becomes twenty. Not always—but often enough that progress compounds.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Micro-habits often trigger a second behavior. One sentence becomes a paragraph. One push-up becomes five. One minute becomes twenty. Not always—but often enough that progress compounds."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8095-844d-cda685d7b31e",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "The key is to avoid turning the micro-habit into a performance test. If you tell yourself “I must do more,” you’ll recreate pressure. The micro-habit must remain a win even when it stays small.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "The key is to avoid turning the micro-habit into a performance test. If you tell yourself “I must do more,” you’ll recreate pressure. The micro-habit must remain a win even when it stays small."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8068-91d0-edb15634c89b",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80ac-b8a9-cf9bbbb70739",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "A good micro-habit is:",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "A good micro-habit is:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80d0-95c0-c2f395e34d9a",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Specific (easy to measure)",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Specific (easy to measure)"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80d7-a367-e05fe334ccf4",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Ridiculously small (hard to fail)",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Ridiculously small (hard to fail)"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80cd-b705-d0f0d3b39a78",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Tied to a bigger direction (health, creativity, skills, calm)",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Tied to a bigger direction (health, creativity, skills, calm)"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80aa-a07d-e0485a39ae4b",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [{ "text": "Examples:", "href": null }],
+                              "fullText": "Examples:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-808c-a3d1-f0310860a9fc",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“Open my notes app and write one sentence.”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“Open my notes app and write one sentence.”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8083-99c6-e4aa0a7de614",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“Put on my walking shoes.”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“Put on my walking shoes.”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80ad-8ef6-df54e634c2c4",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“Read one paragraph of a book.”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“Read one paragraph of a book.”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8038-a61f-cc94f5225ee0",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“Spend one minute organizing my desk.”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“Spend one minute organizing my desk.”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80c6-bbbe-e2e490f0d70d",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Micro-habits aren’t about intensity. They’re about consistency—and consistency is where transformation hides.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Micro-habits aren’t about intensity. They’re about consistency—and consistency is where transformation hides."
+                            },
+                            "hasChildren": false
+                          }
+                        ]
+                      },
+                      {
+                        "id": "34185bde-2593-80f7-9981-f756fe6e6654",
+                        "cover": null,
+                        "icon": null,
+                        "url": "https://www.notion.so/Why-Your-Best-Ideas-Show-Up-in-the-Shower-1-34185bde259380f79981f756fe6e6654",
+                        "publicUrl": null,
+                        "properties": {
+                          "text": {
+                            "id": "%3CnWW",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Name": {
+                            "id": "title",
+                            "type": "title",
+                            "title": [
+                              {
+                                "type": "text",
+                                "text": {
+                                  "content": "Why Your Best Ideas Show Up in the Shower (1)",
+                                  "link": null
+                                },
+                                "annotations": {
+                                  "bold": false,
+                                  "italic": false,
+                                  "strikethrough": false,
+                                  "underline": false,
+                                  "code": false,
+                                  "color": "default"
+                                },
+                                "plain_text": "Why Your Best Ideas Show Up in the Shower (1)",
+                                "href": null
+                              }
+                            ]
+                          },
+                          "Status": {
+                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
+                            "type": "status",
+                            "status": {
+                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
+                              "name": "Not started",
+                              "color": "default"
+                            }
+                          },
+                          "Publish date": {
+                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
+                            "type": "date",
+                            "date": null
+                          },
+                          "Slug": {
+                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
+                            "type": "rich_text",
+                            "rich_text": []
+                          },
+                          "Topic": {
+                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
+                            "type": "select",
+                            "select": null
+                          },
+                          "Excerpt": {
+                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
+                            "type": "rich_text",
+                            "rich_text": []
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "id": "34185bde-2593-80d5-963c-c19d6474671e",
+                            "type": "heading_3",
+                            "content": {
+                              "level": 3,
+                              "text": [
+                                {
+                                  "text": "Why Your Best Ideas Show Up in the Shower (and What to Do About It)",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Why Your Best Ideas Show Up in the Shower (and What to Do About It)"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80ca-bf39-e49932848bb8",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "You can stare at a problem for hours and get nowhere—then suddenly, while shampooing your hair, the solution appears like it was waiting in the steam.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "You can stare at a problem for hours and get nowhere—then suddenly, while shampooing your hair, the solution appears like it was waiting in the steam."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-809a-acbc-d6c5b8946a7a",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "That isn’t magic. It’s a predictable feature of how attention works.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "That isn’t magic. It’s a predictable feature of how attention works."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80a8-9198-d51dbcddd807",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80e2-b559-c6d665af8ab8",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "When you’re working hard, you’re in a focused, analytical state. It’s great for executing steps, but it can trap you in the same mental grooves.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "When you’re working hard, you’re in a focused, analytical state. It’s great for executing steps, but it can trap you in the same mental grooves."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80ae-9b4b-ebd0f5adcdc9",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "When you relax—showering, walking, washing dishes—your mind shifts into a more diffuse mode. Ideas can connect across wider parts of memory, and the brain can try combinations you wouldn’t consciously attempt.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "When you relax—showering, walking, washing dishes—your mind shifts into a more diffuse mode. Ideas can connect across wider parts of memory, and the brain can try combinations you wouldn’t consciously attempt."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8098-b660-db96384553d0",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8092-86fa-cd25ecf38db1",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "For creative problems, effort can become a filter. You keep rejecting weird options too early. You keep forcing the solution to look familiar.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "For creative problems, effort can become a filter. You keep rejecting weird options too early. You keep forcing the solution to look familiar."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8021-a12a-c1ccd04470c1",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Relaxed states reduce that filter. The mind becomes more willing to propose a half-formed idea—which is often the seed of the real answer.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Relaxed states reduce that filter. The mind becomes more willing to propose a half-formed idea—which is often the seed of the real answer."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-801b-9709-fbf2dfebe1cf",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80d6-932d-d46de58dfef5",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "You can intentionally build an “insight pipeline”:",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "You can intentionally build an “insight pipeline”:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80f1-9ffc-f32618cee3dc",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Choose one question before a break. Write it down in one sentence.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Choose one question before a break. Write it down in one sentence."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8079-9526-d917a7280ac1",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Do a low-effort activity for 10–20 minutes (walk, shower, stretch).",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Do a low-effort activity for 10–20 minutes (walk, shower, stretch)."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80a2-b8b4-f405fb4622aa",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "Capture the first idea immediately after. Don’t judge it yet.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "Capture the first idea immediately after. Don’t judge it yet."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8058-959d-fca3a9aa399f",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                { "text": "Two helpful prompts:", "href": null }
+                              ],
+                              "fullText": "Two helpful prompts:"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-802a-b3f9-c922e06884d0",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What’s the simplest version of this?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What’s the simplest version of this?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-800d-8077-d204bd6ed1e4",
+                            "type": "bulleted_list_item",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "“What would I try if I wasn’t afraid of being wrong?”",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "“What would I try if I wasn’t afraid of being wrong?”"
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-80d6-a469-f005d2110a04",
+                            "type": "heading_4",
+                            "content": { "type": "heading_4" },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8039-aee8-caa81bc214af",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "The brain gives insights quickly and forgets them quickly. Keep a notes app widget, a tiny notebook, or a voice memo habit.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "The brain gives insights quickly and forgets them quickly. Keep a notes app widget, a tiny notebook, or a voice memo habit."
+                            },
+                            "hasChildren": false
+                          },
+                          {
+                            "id": "34185bde-2593-8016-9ca9-c812035ccb83",
+                            "type": "paragraph",
+                            "content": {
+                              "text": [
+                                {
+                                  "text": "The real superpower isn’t getting ideas—it’s catching them before they disappear.",
+                                  "href": null
+                                }
+                              ],
+                              "fullText": "The real superpower isn’t getting ideas—it’s catching them before they disappear."
+                            },
+                            "hasChildren": false
+                          }
+                        ]
+                      },
                       {
                         "id": "51eb4fe1-2659-4567-bc7a-abaa2e35b78e",
                         "cover": null,
@@ -598,7 +1579,8 @@
                                   "text": "Building with AI: Treat Prompts Like Code",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Building with AI: Treat Prompts Like Code"
                             },
                             "hasChildren": false
                           },
@@ -611,7 +1593,8 @@
                                   "text": "If you’re using AI for coding, writing, or research, it’s tempting to treat prompts like casual messages. But the moment your output matters—shipping features, generating docs, automating workflows—prompts stop being chat and start being infrastructure.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "If you’re using AI for coding, writing, or research, it’s tempting to treat prompts like casual messages. But the moment your output matters—shipping features, generating docs, automating workflows—prompts stop being chat and start being infrastructure."
                             },
                             "hasChildren": false
                           },
@@ -624,7 +1607,8 @@
                                   "text": "A useful mental model: treat prompts like code.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "A useful mental model: treat prompts like code."
                             },
                             "hasChildren": false
                           },
@@ -643,7 +1627,8 @@
                                   "text": "Bad prompt: “Write a good blog post about X.”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Bad prompt: “Write a good blog post about X.”"
                             },
                             "hasChildren": false
                           },
@@ -656,7 +1641,8 @@
                                   "text": "Better prompt: “Write a 900–1200 word blog post for early-career developers. Tone: practical, non-hype. Include: 1 intro, 3 sections with headings, a short checklist, and a closing. Output in markdown.”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Better prompt: “Write a 900–1200 word blog post for early-career developers. Tone: practical, non-hype. Include: 1 intro, 3 sections with headings, a short checklist, and a closing. Output in markdown.”"
                             },
                             "hasChildren": false
                           },
@@ -669,7 +1655,8 @@
                                   "text": "When you specify audience, length, format, and constraints, you’re basically defining a function signature.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "When you specify audience, length, format, and constraints, you’re basically defining a function signature."
                             },
                             "hasChildren": false
                           },
@@ -688,7 +1675,8 @@
                                   "text": "Models don’t magically know your repo, your product decisions, or your style guide. If the AI is producing code, include:",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Models don’t magically know your repo, your product decisions, or your style guide. If the AI is producing code, include:"
                             },
                             "hasChildren": false
                           },
@@ -701,7 +1689,8 @@
                                   "text": "The tech stack (e.g., TypeScript + React + Drizzle)",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "The tech stack (e.g., TypeScript + React + Drizzle)"
                             },
                             "hasChildren": false
                           },
@@ -714,7 +1703,8 @@
                                   "text": "Existing patterns (folder structure, naming conventions)",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Existing patterns (folder structure, naming conventions)"
                             },
                             "hasChildren": false
                           },
@@ -727,7 +1717,8 @@
                                   "text": "Constraints (no new libraries, must be pure functions, must avoid breaking API)",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Constraints (no new libraries, must be pure functions, must avoid breaking API)"
                             },
                             "hasChildren": false
                           },
@@ -740,7 +1731,8 @@
                                   "text": "Examples (a similar file, a previous PR snippet)",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Examples (a similar file, a previous PR snippet)"
                             },
                             "hasChildren": false
                           },
@@ -753,7 +1745,8 @@
                                   "text": "Context is your dependency injection.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Context is your dependency injection."
                             },
                             "hasChildren": false
                           },
@@ -772,7 +1765,8 @@
                                   "text": "Instead of “make it better,” give checks:",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Instead of “make it better,” give checks:"
                             },
                             "hasChildren": false
                           },
@@ -785,7 +1779,8 @@
                                   "text": "“Must not change public API.”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "“Must not change public API.”"
                             },
                             "hasChildren": false
                           },
@@ -798,7 +1793,8 @@
                                   "text": "“Must handle empty input and nulls.”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "“Must handle empty input and nulls.”"
                             },
                             "hasChildren": false
                           },
@@ -811,7 +1807,8 @@
                                   "text": "“Time complexity should be O(n).”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "“Time complexity should be O(n).”"
                             },
                             "hasChildren": false
                           },
@@ -824,7 +1821,8 @@
                                   "text": "“Include 3 edge-case examples.”",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "“Include 3 edge-case examples.”"
                             },
                             "hasChildren": false
                           },
@@ -837,7 +1835,8 @@
                                   "text": "If you can’t describe what success looks like, neither can the model.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "If you can’t describe what success looks like, neither can the model."
                             },
                             "hasChildren": false
                           },
@@ -856,7 +1855,8 @@
                                   "text": "First output is rarely perfect. Treat it like a first draft PR:",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "First output is rarely perfect. Treat it like a first draft PR:"
                             },
                             "hasChildren": false
                           },
@@ -869,7 +1869,8 @@
                                   "text": "Ask for a smaller diff",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Ask for a smaller diff"
                             },
                             "hasChildren": false
                           },
@@ -882,7 +1883,8 @@
                                   "text": "Ask the AI to explain tradeoffs",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Ask the AI to explain tradeoffs"
                             },
                             "hasChildren": false
                           },
@@ -895,7 +1897,8 @@
                                   "text": "Ask for a second implementation with different constraints",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Ask for a second implementation with different constraints"
                             },
                             "hasChildren": false
                           },
@@ -908,7 +1911,8 @@
                                   "text": "Keep the good parts, delete the rest",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Keep the good parts, delete the rest"
                             },
                             "hasChildren": false
                           },
@@ -921,7 +1925,8 @@
                                   "text": "The win is not “one perfect prompt.” The win is a workflow where quality improves with small cycles.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "The win is not “one perfect prompt.” The win is a workflow where quality improves with small cycles."
                             },
                             "hasChildren": false
                           },
@@ -940,7 +1945,8 @@
                                   "text": "If a prompt consistently produces something valuable (a PR description template, a bug triage format, a release-note structure), save it. Tiny changes matter—just like code.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "If a prompt consistently produces something valuable (a PR description template, a bug triage format, a release-note structure), save it. Tiny changes matter—just like code."
                             },
                             "hasChildren": false
                           },
@@ -953,7 +1959,8 @@
                                   "text": "Prompts aren’t magic spells. They’re reusable interfaces.",
                                   "href": null
                                 }
-                              ]
+                              ],
+                              "fullText": "Prompts aren’t magic spells. They’re reusable interfaces."
                             },
                             "hasChildren": false
                           },
@@ -966,955 +1973,8 @@
                                   "text": "When you treat prompts like code, you get the same benefits you get from good engineering: repeatability, clarity, and fewer surprises.",
                                   "href": null
                                 }
-                              ]
-                            },
-                            "hasChildren": false
-                          }
-                        ]
-                      },
-                      {
-                        "id": "34185bde-2593-800e-a3c6-d697b4e4f9ec",
-                        "cover": null,
-                        "icon": null,
-                        "url": "https://www.notion.so/The-Most-Underrated-Skill-Asking-Better-Questions-1-34185bde2593800ea3c6d697b4e4f9ec",
-                        "publicUrl": null,
-                        "properties": {
-                          "text": {
-                            "id": "%3CnWW",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Name": {
-                            "id": "title",
-                            "type": "title",
-                            "title": [
-                              {
-                                "type": "text",
-                                "text": {
-                                  "content": "The Most Underrated Skill: Asking Better Questions (1)",
-                                  "link": null
-                                },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "The Most Underrated Skill: Asking Better Questions (1)",
-                                "href": null
-                              }
-                            ]
-                          },
-                          "Status": {
-                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
-                            "type": "status",
-                            "status": {
-                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
-                              "name": "Not started",
-                              "color": "default"
-                            }
-                          },
-                          "Publish date": {
-                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
-                            "type": "date",
-                            "date": null
-                          },
-                          "Slug": {
-                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Topic": {
-                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
-                            "type": "select",
-                            "select": null
-                          },
-                          "Excerpt": {
-                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
-                            "type": "rich_text",
-                            "rich_text": []
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "id": "34185bde-2593-80a2-8ff1-cd36f00e38a3",
-                            "type": "heading_3",
-                            "content": {
-                              "level": 3,
-                              "text": [
-                                {
-                                  "text": "The Most Underrated Skill: Asking Better Questions",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8012-b75f-db4db935e422",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "There’s a quiet skill that upgrades almost everything: learning, communication, decision-making, even creativity.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80e5-aaec-f0a5d590a443",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "It’s not speed. It’s not intelligence. It’s asking better questions.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-804b-adf0-c4a35f66a6e9",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "A good question doesn’t just request information—it shapes attention. It decides what you will notice and what you will ignore.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8048-a552-d2ec53c5edea",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80f6-ba7d-e69d511c3c5a",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Answers are usually specific to a moment. Questions are reusable. If you learn a powerful question, you can apply it to a hundred situations.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80c6-9b57-e5f1ed8f6685",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "In teams, better questions reduce confusion:",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80bb-ba1b-f02ff619134f",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What does success look like?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-805c-9ba8-cbd9190071ff",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What are we optimizing for?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-800a-81ae-d5c87928a096",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What constraints are real vs. assumed?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8005-b54d-db2a4b616e17",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "In learning, better questions create faster progress:",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-801a-956d-c74a549160e3",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What’s the smallest thing I can build to test this?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-809d-9f65-f0642553fc42",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What concept am I missing that makes this feel hard?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-808d-bc8d-c7cc35176b45",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8066-aef6-cd9a22cf809a",
-                            "type": "numbered_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Replace “How do I do this?” with “What’s the next smallest step?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-803f-b143-f84f15ae35d6",
-                            "type": "numbered_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Replace “Is this right?” with “What would make this obviously wrong?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-808f-b491-f527ed643f58",
-                            "type": "numbered_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Replace “What should I choose?” with “What would I regret not trying?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8040-b6e1-cfefd4af650f",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8024-926a-c9355c7d132b",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "At the end of the day, write one question you wish you had asked earlier. Over time, you’ll start asking it sooner—while it still changes the outcome.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-809c-b9e0-c6345eb4219c",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Better questions don’t guarantee perfect answers. But they reliably produce better thinking.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          }
-                        ]
-                      },
-                      {
-                        "id": "34185bde-2593-80f7-9981-f756fe6e6654",
-                        "cover": null,
-                        "icon": null,
-                        "url": "https://www.notion.so/Why-Your-Best-Ideas-Show-Up-in-the-Shower-1-34185bde259380f79981f756fe6e6654",
-                        "publicUrl": null,
-                        "properties": {
-                          "text": {
-                            "id": "%3CnWW",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Name": {
-                            "id": "title",
-                            "type": "title",
-                            "title": [
-                              {
-                                "type": "text",
-                                "text": {
-                                  "content": "Why Your Best Ideas Show Up in the Shower (1)",
-                                  "link": null
-                                },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "Why Your Best Ideas Show Up in the Shower (1)",
-                                "href": null
-                              }
-                            ]
-                          },
-                          "Status": {
-                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
-                            "type": "status",
-                            "status": {
-                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
-                              "name": "Not started",
-                              "color": "default"
-                            }
-                          },
-                          "Publish date": {
-                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
-                            "type": "date",
-                            "date": null
-                          },
-                          "Slug": {
-                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Topic": {
-                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
-                            "type": "select",
-                            "select": null
-                          },
-                          "Excerpt": {
-                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
-                            "type": "rich_text",
-                            "rich_text": []
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "id": "34185bde-2593-80d5-963c-c19d6474671e",
-                            "type": "heading_3",
-                            "content": {
-                              "level": 3,
-                              "text": [
-                                {
-                                  "text": "Why Your Best Ideas Show Up in the Shower (and What to Do About It)",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80ca-bf39-e49932848bb8",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "You can stare at a problem for hours and get nowhere—then suddenly, while shampooing your hair, the solution appears like it was waiting in the steam.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-809a-acbc-d6c5b8946a7a",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "That isn’t magic. It’s a predictable feature of how attention works.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80a8-9198-d51dbcddd807",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80e2-b559-c6d665af8ab8",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "When you’re working hard, you’re in a focused, analytical state. It’s great for executing steps, but it can trap you in the same mental grooves.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80ae-9b4b-ebd0f5adcdc9",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "When you relax—showering, walking, washing dishes—your mind shifts into a more diffuse mode. Ideas can connect across wider parts of memory, and the brain can try combinations you wouldn’t consciously attempt.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8098-b660-db96384553d0",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8092-86fa-cd25ecf38db1",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "For creative problems, effort can become a filter. You keep rejecting weird options too early. You keep forcing the solution to look familiar.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8021-a12a-c1ccd04470c1",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Relaxed states reduce that filter. The mind becomes more willing to propose a half-formed idea—which is often the seed of the real answer.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-801b-9709-fbf2dfebe1cf",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80d6-932d-d46de58dfef5",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "You can intentionally build an “insight pipeline”:",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80f1-9ffc-f32618cee3dc",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Choose one question before a break. Write it down in one sentence.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8079-9526-d917a7280ac1",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Do a low-effort activity for 10–20 minutes (walk, shower, stretch).",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80a2-b8b4-f405fb4622aa",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Capture the first idea immediately after. Don’t judge it yet.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8058-959d-fca3a9aa399f",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                { "text": "Two helpful prompts:", "href": null }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-802a-b3f9-c922e06884d0",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What’s the simplest version of this?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-800d-8077-d204bd6ed1e4",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“What would I try if I wasn’t afraid of being wrong?”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80d6-a469-f005d2110a04",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8039-aee8-caa81bc214af",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "The brain gives insights quickly and forgets them quickly. Keep a notes app widget, a tiny notebook, or a voice memo habit.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8016-9ca9-c812035ccb83",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "The real superpower isn’t getting ideas—it’s catching them before they disappear.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          }
-                        ]
-                      },
-                      {
-                        "id": "34185bde-2593-8027-91b7-c742f3eafbad",
-                        "cover": null,
-                        "icon": null,
-                        "url": "https://www.notion.so/The-Quiet-Power-of-Micro-Habits-1-34185bde2593802791b7c742f3eafbad",
-                        "publicUrl": null,
-                        "properties": {
-                          "text": {
-                            "id": "%3CnWW",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Name": {
-                            "id": "title",
-                            "type": "title",
-                            "title": [
-                              {
-                                "type": "text",
-                                "text": {
-                                  "content": "The Quiet Power of Micro-Habits (1)",
-                                  "link": null
-                                },
-                                "annotations": {
-                                  "bold": false,
-                                  "italic": false,
-                                  "strikethrough": false,
-                                  "underline": false,
-                                  "code": false,
-                                  "color": "default"
-                                },
-                                "plain_text": "The Quiet Power of Micro-Habits (1)",
-                                "href": null
-                              }
-                            ]
-                          },
-                          "Status": {
-                            "id": "1c49dfdb-3b99-4bfc-b1f5-33dd598a0d97",
-                            "type": "status",
-                            "status": {
-                              "id": "6cf34b52-6cdd-4ed8-99e0-9b4b434e25be",
-                              "name": "Not started",
-                              "color": "default"
-                            }
-                          },
-                          "Publish date": {
-                            "id": "3d10a374-9d85-4be9-83ec-d8cd57dbd30b",
-                            "type": "date",
-                            "date": null
-                          },
-                          "Slug": {
-                            "id": "9039a145-2507-4a9d-8330-e43999e96763",
-                            "type": "rich_text",
-                            "rich_text": []
-                          },
-                          "Topic": {
-                            "id": "a99bea36-5109-46ec-89f2-0e799720317e",
-                            "type": "select",
-                            "select": null
-                          },
-                          "Excerpt": {
-                            "id": "dab49acb-fab4-47ca-934a-95e2bd2bf761",
-                            "type": "rich_text",
-                            "rich_text": []
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "id": "34185bde-2593-80c6-8797-f3d0d6630f86",
-                            "type": "heading_3",
-                            "content": {
-                              "level": 3,
-                              "text": [
-                                {
-                                  "text": "The Quiet Power of Micro-Habits",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-800b-980a-cad4ade5c3bc",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Most people think change has to be dramatic to be real. New year, new routine, new identity. But the truth is less cinematic and more useful: the smallest behaviors often create the biggest shifts—because they’re the ones that actually stick.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80aa-9c2d-de1f879d20fe",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "A micro-habit is a habit so small it feels almost too easy. Think: doing one push-up, writing one sentence, reading one page, drinking one glass of water, or tidying one surface. On its own, it seems insignificant. But the point isn’t the single action—it’s the pattern you’re building.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80f1-b4d6-ce78b7714f3e",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8007-aed9-f9b4f01e0123",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Micro-habits reduce friction. When a goal feels heavy, the brain looks for escape routes: “I’ll start tomorrow,” “I’m too tired,” “I don’t have enough time.” Micro-habits shrink the “start” step until there’s nothing to negotiate with.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8056-89f0-e348aa06ed00",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "They also create identity momentum. When you do a small habit repeatedly, you start to see yourself differently:",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80dd-8fc0-e5668a9c30b5",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "You’re not “trying to exercise,” you’re someone who shows up daily.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80bb-b4e9-fc07da37cc95",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "You’re not “hoping to write,” you’re someone who writes.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80f6-a6ea-d478e1b6a1e9",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "You’re not “planning to learn,” you’re someone who learns consistently.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-807f-ae0f-c9ebbf992742",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-804a-893a-ec75c5baa01f",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Micro-habits often trigger a second behavior. One sentence becomes a paragraph. One push-up becomes five. One minute becomes twenty. Not always—but often enough that progress compounds.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8095-844d-cda685d7b31e",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "The key is to avoid turning the micro-habit into a performance test. If you tell yourself “I must do more,” you’ll recreate pressure. The micro-habit must remain a win even when it stays small.",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8068-91d0-edb15634c89b",
-                            "type": "heading_4",
-                            "content": { "type": "heading_4" },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80ac-b8a9-cf9bbbb70739",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "A good micro-habit is:",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80d0-95c0-c2f395e34d9a",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Specific (easy to measure)",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80d7-a367-e05fe334ccf4",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Ridiculously small (hard to fail)",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80cd-b705-d0f0d3b39a78",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Tied to a bigger direction (health, creativity, skills, calm)",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80aa-a07d-e0485a39ae4b",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [{ "text": "Examples:", "href": null }]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-808c-a3d1-f0310860a9fc",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“Open my notes app and write one sentence.”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8083-99c6-e4aa0a7de614",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“Put on my walking shoes.”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80ad-8ef6-df54e634c2c4",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“Read one paragraph of a book.”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-8038-a61f-cc94f5225ee0",
-                            "type": "bulleted_list_item",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "“Spend one minute organizing my desk.”",
-                                  "href": null
-                                }
-                              ]
-                            },
-                            "hasChildren": false
-                          },
-                          {
-                            "id": "34185bde-2593-80c6-bbbe-e2e490f0d70d",
-                            "type": "paragraph",
-                            "content": {
-                              "text": [
-                                {
-                                  "text": "Micro-habits aren’t about intensity. They’re about consistency—and consistency is where transformation hides.",
-                                  "href": null
-                                }
-                              ]
+                              ],
+                              "fullText": "When you treat prompts like code, you get the same benefits you get from good engineering: repeatability, clarity, and fewer surprises."
                             },
                             "hasChildren": false
                           }
@@ -1927,7 +1987,7 @@
                 {
                   "id": "34185bde-2593-80a7-a3c5-e485468089d3",
                   "type": "paragraph",
-                  "content": { "text": [] },
+                  "content": { "text": [], "fullText": "" },
                   "hasChildren": false
                 }
               ]
@@ -1935,7 +1995,7 @@
             {
               "id": "34185bde-2593-81fe-8cda-c3aaf594c6fe",
               "type": "paragraph",
-              "content": { "text": [] },
+              "content": { "text": [], "fullText": "" },
               "hasChildren": false
             }
           ]
@@ -1945,13 +2005,14 @@
           "type": "column",
           "content": {},
           "hasChildren": true,
-          "childblocks": [
+          "childBlocks": [
             {
               "id": "34185bde-2593-81aa-a09e-d64bc84ee98d",
               "type": "heading_3",
               "content": {
                 "level": 3,
-                "text": [{ "text": "To - do", "href": null }]
+                "text": [{ "text": "To - do", "href": null }],
+                "fullText": "To - do"
               },
               "hasChildren": false
             },
@@ -1960,7 +2021,8 @@
               "type": "to_do",
               "content": {
                 "text": [{ "text": "task - 1", "href": null }],
-                "checked": false
+                "checked": false,
+                "fullText": "task - 1"
               },
               "hasChildren": false
             },
@@ -1969,7 +2031,8 @@
               "type": "to_do",
               "content": {
                 "text": [{ "text": "task - 2", "href": null }],
-                "checked": true
+                "checked": true,
+                "fullText": "task - 2"
               },
               "hasChildren": false
             },
@@ -1978,14 +2041,15 @@
               "type": "to_do",
               "content": {
                 "text": [{ "text": "task - 3", "href": null }],
-                "checked": false
+                "checked": false,
+                "fullText": "task - 3"
               },
               "hasChildren": false
             },
             {
               "id": "34185bde-2593-810b-8f01-e8b3950b6707",
               "type": "paragraph",
-              "content": { "text": [] },
+              "content": { "text": [], "fullText": "" },
               "hasChildren": false
             }
           ]
@@ -1993,159 +2057,155 @@
       ]
     },
     {
-      "id": "34185bde-2593-800d-8eb1-ea10241ce53e",
-      "type": "heading_3",
-      "content": { "level": 3, "text": [{ "text": "Quote", "href": null }] },
-      "hasChildren": false
+      "content": {
+        "level": 3,
+        "text": [{ "text": "Quote", "href": null }],
+        "fullText": "Quote"
+      }
     },
     {
-      "id": "34185bde-2593-80d9-a00c-ed9771d0580d",
-      "type": "quote",
       "content": {
         "text": [
           { "text": "future of web is not css , it is js", "href": null }
-        ]
-      },
-      "hasChildren": false
+        ],
+        "fullText": "future of web is not css , it is js"
+      }
     },
     {
-      "id": "34185bde-2593-8000-9f9f-c1ae6258e36c",
-      "type": "callout",
       "content": {
         "text": [{ "text": "Call out block please", "href": null }],
-        "icon": "💡"
+        "icon": { "type": "emoji", "value": "💡" },
+        "fullText": "Call out block please"
       },
-      "hasChildren": false
+      "childBlocks": [
+        {
+          "id": "34285bde-2593-805b-bd94-c9523f740541",
+          "type": "paragraph",
+          "content": { "text": [], "fullText": "" },
+          "hasChildren": false
+        },
+        {
+          "id": "34285bde-2593-8031-a24f-e93ea50eea6a",
+          "type": "child_page",
+          "content": { "title": "page inside callout" },
+          "hasChildren": false
+        },
+        {
+          "id": "34285bde-2593-8084-b99b-c431ef253c49",
+          "type": "paragraph",
+          "content": { "text": [], "fullText": "" },
+          "hasChildren": false
+        }
+      ]
+    },
+    { "content": { "text": [], "fullText": "" } },
+    {
+      "content": {
+        "level": 3,
+        "text": [{ "text": "Toggle", "href": null }],
+        "fullText": "Toggle"
+      }
     },
     {
-      "id": "34185bde-2593-8077-aa91-efedafed391a",
-      "type": "heading_3",
-      "content": { "level": 3, "text": [{ "text": "Toggle", "href": null }] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-8058-aec9-cafb80d5d7ed",
-      "type": "toggle",
-      "content": { "text": [{ "text": "toggle-1", "href": null }] },
-      "hasChildren": true,
-      "childblocks": [
+      "content": {
+        "text": [{ "text": "toggle-1", "href": null }],
+        "fullText": "toggle-1"
+      },
+      "childBlocks": [
         {
           "id": "34185bde-2593-80a6-82a6-efc7165f5d9d",
           "type": "paragraph",
           "content": {
-            "text": [{ "text": "i am toggle - 1 content", "href": null }]
+            "text": [{ "text": "i am toggle - 1 content", "href": null }],
+            "fullText": "i am toggle - 1 content"
           },
           "hasChildren": false
         }
       ]
     },
     {
-      "id": "34185bde-2593-8041-8483-c73c0e2ad516",
-      "type": "toggle",
-      "content": { "text": [{ "text": "toggle-2", "href": null }] },
-      "hasChildren": true,
-      "childblocks": [
+      "content": {
+        "text": [{ "text": "toggle-2", "href": null }],
+        "fullText": "toggle-2"
+      },
+      "childBlocks": [
         {
           "id": "34185bde-2593-8005-9664-ebf904e19432",
           "type": "paragraph",
           "content": {
-            "text": [{ "text": "i am toggle - 2 content", "href": null }]
+            "text": [{ "text": "i am toggle - 2 content", "href": null }],
+            "fullText": "i am toggle - 2 content"
           },
           "hasChildren": false
         }
       ]
     },
     {
-      "id": "34185bde-2593-801a-9ea4-e159bc7033ab",
-      "type": "heading_3",
-      "content": { "level": 3, "text": [{ "text": "Media", "href": null }] },
-      "hasChildren": false
+      "content": {
+        "level": 3,
+        "text": [{ "text": "Media", "href": null }],
+        "fullText": "Media"
+      }
     },
     {
-      "id": "34185bde-2593-80dd-a54f-ff2f03e1a076",
-      "type": "image",
       "content": {
         "url": "https://images.unsplash.com/photo-1627302516506-c65ac687eb25?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
         "caption": []
-      },
-      "hasChildren": false
+      }
     },
     {
-      "id": "34185bde-2593-8009-be27-d3793d683b7f",
-      "type": "video",
       "content": {
         "url": "https://youtu.be/OFhUET45YWg?si=v4NT4lIAFuj6FsVa",
         "caption": []
-      },
-      "hasChildren": false
+      }
     },
     {
-      "id": "34185bde-2593-80da-bdd9-d90d94319d93",
-      "type": "embed",
       "content": {
         "url": "https://open.spotify.com/track/0cYohCh24y1aMjJmcS9RBl?si=722fab980a334119"
-      },
-      "hasChildren": false
+      }
+    },
+    { "content": { "text": [], "fullText": "" } },
+    {
+      "content": {
+        "level": 3,
+        "text": [{ "text": "Code", "href": null }],
+        "fullText": "Code"
+      }
     },
     {
-      "id": "34185bde-2593-8033-9ec3-ff7321e7e5d5",
-      "type": "paragraph",
-      "content": { "text": [] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-8069-bd7c-dece73b73ddb",
-      "type": "heading_3",
-      "content": { "level": 3, "text": [{ "text": "Code", "href": null }] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-8033-a664-ebedc7dd1a92",
-      "type": "code",
       "content": {
         "code": "namespace function_declaration_demo_1 {\n\n\tconsole.log(greetNamed(\"John\")); // OK\n\tconsole.log(greetUnnamed(\"John\")); // Error\n\t\n\tfunction greetNamed(name: string): string {\n\t    return `Hi! ${name}`;\n\t}\n\t\n\tlet greetUnnamed = function(name: string): string {\n\t    return `Hi! ${name}`;\n\t};\n\t\n}",
         "language": "typescript",
         "caption": []
-      },
-      "hasChildren": false
+      }
     },
     {
-      "id": "34185bde-2593-802f-99f9-e6f7c42ff6fd",
-      "type": "bookmark",
       "content": {
         "url": "https://en.wikipedia.org/wiki/Robert_C._Martin",
         "caption": []
-      },
-      "hasChildren": false
+      }
     },
+    { "content": { "text": [], "fullText": "" } },
+    { "content": { "type": "unsupported" } },
     {
-      "id": "34185bde-2593-8052-8437-f98486849da8",
-      "type": "paragraph",
-      "content": { "text": [] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-801c-bc82-ee24a9a9d17d",
-      "type": "unsupported",
-      "content": { "type": "unsupported" },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-8043-9a8a-fd565296ddbe",
-      "type": "tab",
       "content": { "type": "tab" },
-      "hasChildren": true,
-      "childblocks": [
+      "childBlocks": [
         {
           "id": "34185bde-2593-8050-b7dd-d7b021384250",
           "type": "paragraph",
-          "content": { "text": [{ "text": "Tab 1", "href": null }] },
+          "content": {
+            "text": [{ "text": "Tab 1", "href": null }],
+            "fullText": "Tab 1"
+          },
           "hasChildren": true,
-          "childblocks": [
+          "childBlocks": [
             {
               "id": "34185bde-2593-8029-9e9c-da377bc0214d",
               "type": "paragraph",
-              "content": { "text": [{ "text": "one ", "href": null }] },
+              "content": {
+                "text": [{ "text": "one ", "href": null }],
+                "fullText": "one "
+              },
               "hasChildren": false
             }
           ]
@@ -2153,13 +2213,19 @@
         {
           "id": "34185bde-2593-803a-9379-f0e873c647fa",
           "type": "paragraph",
-          "content": { "text": [{ "text": "Tab 2", "href": null }] },
+          "content": {
+            "text": [{ "text": "Tab 2", "href": null }],
+            "fullText": "Tab 2"
+          },
           "hasChildren": true,
-          "childblocks": [
+          "childBlocks": [
             {
               "id": "34185bde-2593-8082-be87-f7a3b08e5954",
               "type": "paragraph",
-              "content": { "text": [{ "text": "two", "href": null }] },
+              "content": {
+                "text": [{ "text": "two", "href": null }],
+                "fullText": "two"
+              },
               "hasChildren": false
             }
           ]
@@ -2167,36 +2233,27 @@
         {
           "id": "34185bde-2593-80cf-a90e-ee41f8777619",
           "type": "paragraph",
-          "content": { "text": [{ "text": "Tab 3", "href": null }] },
+          "content": {
+            "text": [{ "text": "Tab 3", "href": null }],
+            "fullText": "Tab 3"
+          },
           "hasChildren": true,
-          "childblocks": [
+          "childBlocks": [
             {
               "id": "34185bde-2593-80db-9236-f288e13a0b4a",
               "type": "paragraph",
-              "content": { "text": [{ "text": "three", "href": null }] },
+              "content": {
+                "text": [{ "text": "three", "href": null }],
+                "fullText": "three"
+              },
               "hasChildren": false
             }
           ]
         }
       ]
     },
-    {
-      "id": "34185bde-2593-805a-aa51-f65d73b49cd4",
-      "type": "paragraph",
-      "content": { "text": [] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-806d-91f7-d8da56e8a1b8",
-      "type": "paragraph",
-      "content": { "text": [] },
-      "hasChildren": false
-    },
-    {
-      "id": "34185bde-2593-8050-aa43-cbd10eebb7b0",
-      "type": "paragraph",
-      "content": { "text": [] },
-      "hasChildren": false
-    }
+    { "content": { "text": [], "fullText": "" } },
+    { "content": { "text": [], "fullText": "" } },
+    { "content": { "text": [], "fullText": "" } }
   ]
 }

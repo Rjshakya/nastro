@@ -9,7 +9,7 @@ import type {
   ToDoBlockObjectResponse,
   ToggleBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import { extractRichText, mapRichTextToFullText } from "./utils.js";
 import type { ListItemContent, ToDoContent, ToggleContent } from "../types.js";
 
 /**
@@ -20,6 +20,7 @@ export const handleBulletedListItem =
     const b = block();
     return {
       text: extractRichText(b.bulleted_list_item.rich_text),
+      fullText: mapRichTextToFullText(b.bulleted_list_item.rich_text),
     };
   };
 
@@ -31,6 +32,7 @@ export const handleNumberedListItem =
     const b = block();
     return {
       text: extractRichText(b.numbered_list_item.rich_text),
+      fullText: mapRichTextToFullText(b.numbered_list_item.rich_text),
     };
   };
 
@@ -43,6 +45,7 @@ export const handleToDo =
     return {
       text: extractRichText(b.to_do.rich_text),
       checked: b.to_do.checked,
+      fullText: mapRichTextToFullText(b.to_do.rich_text),
     };
   };
 
@@ -54,5 +57,6 @@ export const handleToggle =
     const b = block();
     return {
       text: extractRichText(b.toggle.rich_text),
+      fullText: mapRichTextToFullText(b.toggle.rich_text),
     };
   };

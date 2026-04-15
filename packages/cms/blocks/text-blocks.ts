@@ -11,7 +11,11 @@ import type {
   QuoteBlockObjectResponse,
   CalloutBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import {
+  extractPageIcon,
+  extractRichText,
+  mapRichTextToFullText,
+} from "./utils.js";
 import type {
   ParagraphContent,
   HeadingContent,
@@ -27,6 +31,7 @@ export const handleParagraph =
     const b = block();
     return {
       text: extractRichText(b.paragraph.rich_text),
+      fullText: mapRichTextToFullText(b.paragraph.rich_text),
     };
   };
 
@@ -39,6 +44,7 @@ export const handleHeading1 =
     return {
       level: 1,
       text: extractRichText(b.heading_1.rich_text),
+      fullText: mapRichTextToFullText(b.heading_1.rich_text),
     };
   };
 
@@ -51,6 +57,7 @@ export const handleHeading2 =
     return {
       level: 2,
       text: extractRichText(b.heading_2.rich_text),
+      fullText: mapRichTextToFullText(b.heading_2.rich_text),
     };
   };
 
@@ -63,6 +70,7 @@ export const handleHeading3 =
     return {
       level: 3,
       text: extractRichText(b.heading_3.rich_text),
+      fullText: mapRichTextToFullText(b.heading_3.rich_text),
     };
   };
 
@@ -74,6 +82,7 @@ export const handleQuote =
     const b = block();
     return {
       text: extractRichText(b.quote.rich_text),
+      fullText: mapRichTextToFullText(b.quote.rich_text),
     };
   };
 
@@ -83,23 +92,10 @@ export const handleQuote =
 export const handleCallout =
   (block: () => CalloutBlockObjectResponse) => (): CalloutContent => {
     const b = block();
-    const icon = b.callout.icon;
-    let iconString: string | null = null;
-
-    if (icon) {
-      if (icon.type === "emoji") {
-        iconString = icon.emoji;
-      } else if (icon.type === "external") {
-        iconString = icon.external.url;
-      } else if (icon.type === "file") {
-        iconString = icon.file.url;
-      } else if (icon.type === "custom_emoji") {
-        iconString = icon.custom_emoji.url;
-      }
-    }
 
     return {
       text: extractRichText(b.callout.rich_text),
-      icon: iconString,
+      icon: extractPageIcon(b.callout.icon),
+      fullText: mapRichTextToFullText(b.callout.rich_text),
     };
   };

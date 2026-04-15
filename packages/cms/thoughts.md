@@ -23,3 +23,7 @@
 - we will pass this for each block - simple pass this to blocks.map(getRecurBlockAndProcess)
 
 
+### cleanup
+
+- clean - the processblock 
+- this will take the block and return only the properties we need

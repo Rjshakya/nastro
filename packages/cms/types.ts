@@ -3,7 +3,10 @@
  * Pure content only - no metadata
  */
 
-import type { PageObjectResponse } from "@notionhq/client";
+import type {
+  PageObjectResponse,
+  RichTextItemResponse,
+} from "@notionhq/client";
 
 export interface RichText {
   text: string;
@@ -21,34 +24,41 @@ export interface ProcessedBlock {
 // Text blocks
 export interface ParagraphContent {
   text: RichText[];
+  fullText: string;
 }
 
 export interface HeadingContent {
   level: 1 | 2 | 3;
   text: RichText[];
+  fullText: string;
 }
 
 export interface QuoteContent {
   text: RichText[];
+  fullText: string;
 }
 
 export interface CalloutContent {
   text: RichText[];
-  icon: string | null;
+  icon: PageIcon;
+  fullText: string;
 }
 
 // List blocks
 export interface ListItemContent {
   text: RichText[];
+  fullText: string;
 }
 
 export interface ToDoContent {
   text: RichText[];
   checked: boolean;
+  fullText: string;
 }
 
 export interface ToggleContent {
   text: RichText[];
+  fullText: string;
 }
 
 // Media blocks
@@ -81,12 +91,12 @@ export interface TableRowContent {
 }
 
 // Navigation blocks
-export interface ChildPageContent {
-  id: string;
-}
+export type ChildPageContent = {
+  title: string;
+};
 
 export interface ChildDatabaseContent {
-  id: string;
+  pages: Page[];
 }
 
 export interface LinkToPageContent {
@@ -134,17 +144,51 @@ export type PageBlock = {
   type: string;
   content: unknown;
   hasChildren: boolean;
-  childblocks?: PageBlock[];
+  childBlocks?: PageBlock[];
 };
 
-export type Page = {
+export type PageBlockContentOnly = {
+  content: unknown;
+  childBlocks?: PageBlockContentOnly[];
+};
+
+export type PageIcon =
+  | {
+      type: "emoji" | "external" | "file";
+      value: string;
+    }
+  | {
+      type: "custom_emoji";
+      value: string;
+      name: string;
+    }
+  | null;
+
+export type PageTitle = {
+  text: RichTextItemResponse[];
+  fullText: string;
+};
+
+export type PageHeader = {
   id: string;
-  cover: PageObjectResponse["cover"];
-  icon: PageObjectResponse["icon"];
+  title: PageTitle;
+  icon: PageIcon;
+  cover: string | null;
   url: PageObjectResponse["url"];
   publicUrl: PageObjectResponse["public_url"];
   properties: PageObjectResponse["properties"];
+};
+
+export type Page = PageHeader & {
   blocks: PageBlock[];
+};
+
+export type PageContentOnly = PageHeader & {
+  blocks: PageBlockContentOnly[];
+};
+
+export type SimpleBlock = {
+  content: string | null;
 };
 
 export type Database = {
