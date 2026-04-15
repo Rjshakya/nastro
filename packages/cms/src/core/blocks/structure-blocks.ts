@@ -10,16 +10,21 @@ import type {
   BreadcrumbBlockObjectResponse,
   TableOfContentsBlockObjectResponse,
 } from "@notionhq/client";
-import type { DividerContent } from "../types.js";
+import type {
+  ColumnListContent,
+  ColumnContent,
+  DividerContent,
+  BreadcrumbContent,
+  TableOfContentsContent,
+} from "../types.js";
 
 /**
  * Handle column list block
  * Content is empty, children (columns) hold the actual content
  */
 export const handleColumnList =
-  (block: () => ColumnListBlockObjectResponse) =>
-  (): Record<string, never> | null => {
-    return null;
+  (block: () => ColumnListBlockObjectResponse) => (): ColumnListContent => {
+    return { type: "column_list" };
   };
 
 /**
@@ -27,8 +32,8 @@ export const handleColumnList =
  * Content is empty, children hold the actual content
  */
 export const handleColumn =
-  (block: () => ColumnBlockObjectResponse) => (): Record<string, never> => {
-    return {};
+  (block: () => ColumnBlockObjectResponse) => (): ColumnContent => {
+    return { type: "column" };
   };
 
 /**
@@ -36,15 +41,15 @@ export const handleColumn =
  */
 export const handleDivider =
   (block: () => DividerBlockObjectResponse) => (): DividerContent => {
-    return {};
+    return { type: "divider" };
   };
 
 /**
  * Handle breadcrumb block
  */
 export const handleBreadcrumb =
-  (block: () => BreadcrumbBlockObjectResponse) => (): Record<string, never> => {
-    return {};
+  (block: () => BreadcrumbBlockObjectResponse) => (): BreadcrumbContent => {
+    return { type: "breadcrumb" };
   };
 
 /**
@@ -52,6 +57,6 @@ export const handleBreadcrumb =
  */
 export const handleTableOfContents =
   (block: () => TableOfContentsBlockObjectResponse) =>
-  (): Record<string, never> => {
-    return {};
+  (): TableOfContentsContent => {
+    return { type: "table_of_contents" };
   };

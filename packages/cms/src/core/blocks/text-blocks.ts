@@ -15,7 +15,7 @@ import {
   extractPageIcon,
   extractRichText,
   mapRichTextToFullText,
-} from "./utils.js";
+} from "../utils.js";
 import type {
   ParagraphContent,
   HeadingContent,

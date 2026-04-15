@@ -13,14 +13,6 @@ export interface RichText {
   href: string | null;
 }
 
-export interface ProcessedBlock {
-  id: string;
-  type: string;
-  content: unknown;
-  hasChildren: boolean;
-  children?: ProcessedBlock[];
-}
-
 // Text blocks
 export interface ParagraphContent {
   text: RichText[];
@@ -93,10 +85,13 @@ export interface TableRowContent {
 // Navigation blocks
 export type ChildPageContent = {
   title: string;
+  url: string;
+  publicUrl: string | null;
+  icon: PageIcon;
 };
 
 export interface ChildDatabaseContent {
-  pages: Page[];
+  pages: Page[] | PageContentOnly[];
 }
 
 export interface LinkToPageContent {
@@ -114,41 +109,78 @@ export interface BookmarkContent {
   caption: RichText[];
 }
 
+// Structure blocks (no content, children hold the data)
+export interface ColumnListContent {
+  type: "column_list";
+}
+
+export interface ColumnContent {
+  type: "column";
+}
+
+export interface BreadcrumbContent {
+  type: "breadcrumb";
+}
+
+export interface TableOfContentsContent {
+  type: "table_of_contents";
+}
+
 // Special blocks
+export interface TemplateContent {
+  type: "template";
+}
+
+export interface SyncedBlockContent {
+  type: "synced_block";
+}
+
 export interface DividerContent {
-  // No content
+  type: "divider";
 }
 
 export interface UnsupportedContent {
   type: string;
 }
 
-// Page processing result
-export interface ProcessPageResult {
-  id: string;
-  cover: { url: string } | null;
-  icon: { url: string } | null;
-  url: string;
-  publicUrl: string | null;
-  properties: PageObjectResponse["properties"];
-  blocks: ProcessedBlock[];
-}
-
-// ProcessPage function type
-export type ProcessPage = (
-  pageId: string,
-) => (token: string) => Promise<ProcessPageResult>;
+export type BlockContent =
+  | ParagraphContent
+  | HeadingContent
+  | QuoteContent
+  | CalloutContent
+  | ListItemContent
+  | ToDoContent
+  | ToggleContent
+  | MediaContent
+  | CodeContent
+  | EquationContent
+  | TableContent
+  | TableRowContent
+  | ChildPageContent
+  | ChildDatabaseContent
+  | LinkToPageContent
+  | EmbedContent
+  | BookmarkContent
+  | ColumnListContent
+  | ColumnContent
+  | BreadcrumbContent
+  | TableOfContentsContent
+  | TemplateContent
+  | SyncedBlockContent
+  | DividerContent
+  | UnsupportedContent;
 
 export type PageBlock = {
   id: string;
   type: string;
-  content: unknown;
+  content: BlockContent;
   hasChildren: boolean;
   childBlocks?: PageBlock[];
 };
 
 export type PageBlockContentOnly = {
-  content: unknown;
+  type: string;
+  content: BlockContent;
   childBlocks?: PageBlockContentOnly[];
 };
 
@@ -181,14 +213,12 @@ export type PageHeader = {
 
 export type Page = PageHeader & {
   blocks: PageBlock[];
+  nextCursor?: string;
 };
 
 export type PageContentOnly = PageHeader & {
   blocks: PageBlockContentOnly[];
-};
-
-export type SimpleBlock = {
-  content: string | null;
+  nextCursor?: string;
 };
 
 export type Database = {

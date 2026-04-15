@@ -10,7 +10,7 @@ import type {
   PdfBlockObjectResponse,
   FileBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import { extractRichText } from "../utils.js";
 import type { MediaContent } from "../types.js";
 
 /**

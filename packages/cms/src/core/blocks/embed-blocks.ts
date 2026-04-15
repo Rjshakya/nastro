@@ -8,7 +8,7 @@ import type {
   BookmarkBlockObjectResponse,
   LinkPreviewBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import { extractRichText } from "../utils.js";
 import type { EmbedContent, BookmarkContent } from "../types.js";
 
 /**

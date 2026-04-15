@@ -9,7 +9,7 @@ import type {
   ToDoBlockObjectResponse,
   ToggleBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText, mapRichTextToFullText } from "./utils.js";
+import { extractRichText, mapRichTextToFullText } from "../utils.js";
 import type { ListItemContent, ToDoContent, ToggleContent } from "../types.js";
 
 /**

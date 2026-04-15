@@ -21,7 +21,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": [
     "dist", // Stop TSC from looking inside the output folder
     "node_modules"

@@ -10,10 +10,12 @@ import type {
   SyncedBlockBlockObjectResponse,
   UnsupportedBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import { extractRichText } from "../utils.js";
 import type {
   CodeContent,
   EquationContent,
+  TemplateContent,
+  SyncedBlockContent,
   UnsupportedContent,
 } from "../types.js";
 
@@ -46,17 +48,16 @@ export const handleEquation =
  * Handle template block
  */
 export const handleTemplate =
-  (block: () => TemplateBlockObjectResponse) => (): Record<string, never> => {
-    return {};
+  (block: () => TemplateBlockObjectResponse) => (): TemplateContent => {
+    return { type: "template" };
   };
 
 /**
  * Handle synced block
  */
 export const handleSyncedBlock =
-  (block: () => SyncedBlockBlockObjectResponse) =>
-  (): Record<string, never> => {
-    return {};
+  (block: () => SyncedBlockBlockObjectResponse) => (): SyncedBlockContent => {
+    return { type: "synced_block" };
   };
 
 /**

@@ -7,29 +7,29 @@ import type {
   BlockObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client";
-import type { PageIcon, PageTitle, RichText } from "../types.js";
+import type { PageHeader, PageIcon, PageTitle, RichText } from "./types.js";
 
 /**
  * Extract rich text content from a rich_text array
  * Returns plain text with href only (no annotations)
  */
-export const extractRichText = (
-  richText: RichTextItemResponse[],
-): RichText[] => {
+export const extractRichText = (richText: RichTextItemResponse[]): RichText[] => {
   return richText.map((rt) => ({
     text: rt.plain_text,
     href: rt.href,
   }));
 };
 
-export const mapRichTextToFullText = (richText: RichTextItemResponse[]):string => {
-  return richText.map((rt) => {
-    if (rt.href) {
-      return `<link href=${rt.href}>${rt.plain_text}<link>`;
-    }
+export const mapRichTextToFullText = (richText: RichTextItemResponse[]): string => {
+  return richText
+    .map((rt) => {
+      if (rt.href) {
+        return `<link href=${rt.href}>${rt.plain_text}<link>`;
+      }
 
-    return rt.plain_text;
-  }).join("\n")
+      return rt.plain_text;
+    })
+    .join(" \n ");
 };
 
 /**
@@ -39,11 +39,7 @@ export const hasChildren = (block: BlockObjectResponse): boolean => {
   return block.has_children;
 };
 
-
-
-export function extractCoverUrl(
-  cover: PageObjectResponse["cover"],
-): string | null {
+export function extractCoverUrl(cover: PageObjectResponse["cover"]): string | null {
   let url = null;
 
   if (cover?.type === "external") {
@@ -92,19 +88,39 @@ export function extractPageIcon(icon: PageObjectResponse["icon"]): PageIcon {
   return obj;
 }
 
-export function extractPageTitle(
-  props: PageObjectResponse["properties"],
-): PageTitle {
+export function extractPageTitle(props: PageObjectResponse["properties"]): PageTitle {
   const title = {} as PageTitle;
 
-  const titleProp = props["title"] as unknown as {
+  const getTitleProp = (props: PageObjectResponse["properties"]) => {
+    return props["title"] ?? props["Title"] ?? props["Name"];
+  };
+
+  const titleProp = getTitleProp(props) as unknown as {
     id: string;
     type: "title";
     title: RichTextItemResponse[];
   };
 
-  title.text = titleProp.title;
-  title.fullText = titleProp.title.map((rt) => rt.plain_text).join("\n");
+  title.text = titleProp?.title;
+  title.fullText = titleProp?.title?.length
+    ? titleProp?.title?.map((rt) => rt.plain_text).join("\n")
+    : "";
 
   return title;
 }
+
+export const extractPageMetaData = (page: PageObjectResponse): PageHeader => {
+  const title = extractPageTitle(page.properties);
+  const cover = extractCoverUrl(page.cover);
+  const icon = extractPageIcon(page.icon);
+
+  return {
+    id: page.id,
+    title,
+    cover,
+    icon,
+    properties: page.properties,
+    url: page.url,
+    publicUrl: page.public_url,
+  };
+};

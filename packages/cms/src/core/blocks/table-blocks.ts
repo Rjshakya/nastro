@@ -7,7 +7,7 @@ import type {
   TableBlockObjectResponse,
   TableRowBlockObjectResponse,
 } from "@notionhq/client";
-import { extractRichText } from "./utils.js";
+import { extractRichText } from "../utils.js";
 import type { TableContent, TableRowContent } from "../types.js";
 
 /**
