@@ -1,83 +1,89 @@
 import { BlockObjectResponse, Client, PageObjectResponse } from "@notionhq/client";
-import { Page, PageBlock, PageBlockContentOnly, PageContentOnly } from "./types";
+import { Page, PageBlock } from "./types";
 import { extractPageMetaData } from "./utils";
 import { getBlocks, getNotionClient, getRawPage } from "./notion";
-import { getBlockContentRecursively, getBlockContentRecursivelyForContentOnly } from "./blocks";
+import { getBlockContentRecursively } from "./blocks";
 
-export function getPageBlocks({
+/**
+ * Get page blocks with client-controlled pagination
+ * Returns one batch of blocks + nextCursor for next batch
+ */
+export function getPageBlocksPaginated({
   pageId,
-  contentOnly,
   pageSize,
+  startCursor,
 }: {
   pageId: string;
   pageSize?: number;
-  contentOnly?: boolean;
+  startCursor?: string;
 }) {
-  return async function* (
+  return async (
     f: () => Client,
-  ): AsyncGenerator<PageBlock | PageBlockContentOnly, void, unknown> {
-    let startCursor: string | undefined;
+  ): Promise<{
+    blocks: PageBlock[];
+    nextCursor?: string;
+  }> => {
+    const response = await getBlocks(pageId, pageSize, startCursor)(f);
 
-    do {
-      const response = await getBlocks(pageId, pageSize, startCursor)(f);
-
-      for (const block of response.results) {
-        const processedBlock = contentOnly
-          ? await getBlockContentRecursivelyForContentOnly(block as BlockObjectResponse)(f)
-          : await getBlockContentRecursively(block as BlockObjectResponse)(f);
-
-        yield processedBlock;
-      }
-
-      startCursor = response.next_cursor || undefined;
-    } while (startCursor);
-  };
-}
-
-export function getPage({
-  pageId,
-  contentOnly,
-  pageSize,
-}: {
-  pageId: string;
-  contentOnly?: boolean;
-  pageSize?: number;
-}) {
-  return async (f: () => Client): Promise<Page | PageContentOnly> => {
-    const rawpage = (await getRawPage(pageId)(f)) as PageObjectResponse;
-
-    // Collect all blocks from the async generator
-    const blocks: (PageBlock | PageBlockContentOnly)[] = [];
-    const blockGenerator = getPageBlocks({
-      pageId,
-      contentOnly,
-      pageSize,
-    })(f);
-
-    for await (const block of blockGenerator) {
-      blocks.push(block);
-    }
+    // Process all blocks from this batch
+    const blocks: PageBlock[] = await Promise.all(
+      response.results.map((block) => {
+        return getBlockContentRecursively(block as BlockObjectResponse)(f);
+      }),
+    );
 
     return {
-      ...extractPageMetaData(rawpage),
-      blocks: blocks as PageBlock[] | PageBlockContentOnly[],
-    } as Page | PageContentOnly;
+      blocks,
+      nextCursor: response.next_cursor || undefined,
+    };
   };
 }
 
-export function runPage<T extends boolean = false>({
-  token,
-  contentOnly,
+/**
+ * Get a page with client-controlled pagination
+ * Returns one batch of blocks + nextCursor for next batch
+ */
+export function getPagePaginated({
+  pageId,
   pageSize,
+  startCursor,
+}: {
+  pageId: string;
+  pageSize?: number;
+  startCursor?: string;
+}) {
+  return async (f: () => Client): Promise<Page> => {
+    const raw = (await getRawPage(pageId)(f)) as PageObjectResponse;
+
+    const { blocks, nextCursor } = await getPageBlocksPaginated({
+      pageId,
+      pageSize,
+      startCursor,
+    })(f);
+
+    return {
+      ...extractPageMetaData(raw),
+      blocks: blocks as PageBlock[],
+      nextCursor,
+    };
+  };
+}
+
+/**
+ * Run a paginated page fetch with client-controlled pagination
+ * Returns one batch of blocks + nextCursor for next batch
+ */
+export function runPage({
+  token,
+  pageSize,
+  startCursor,
 }: {
   token: string;
-  contentOnly?: T;
   pageSize?: number;
-}): (pageId: string) => Promise<T extends true ? PageContentOnly : Page> {
+  startCursor?: string;
+}): (pageId: string) => Promise<Page> {
   return (pageId: string) => {
     const client = getNotionClient(token);
-    return getPage({ pageId, contentOnly, pageSize })(() => client) as Promise<
-      T extends true ? PageContentOnly : Page
-    >;
+    return getPagePaginated({ pageId, pageSize, startCursor })(() => client) as Promise<Page>;
   };
 }

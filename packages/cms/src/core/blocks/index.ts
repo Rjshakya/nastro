@@ -4,7 +4,10 @@
  */
 
 import type { BlockObjectResponse, Client } from "@notionhq/client";
-import type { BlockContent, PageBlock, PageBlockContentOnly } from "../types.js";
+import type {
+  BlockContent,
+  PageBlock,
+} from "../types.js";
 
 // Import all handlers
 import {
@@ -46,7 +49,7 @@ import {
   handleSyncedBlock,
   handleUnsupported,
 } from "./special-blocks.js";
-import { getPageBlocks } from "../page.js";
+import { getPageBlocksPaginated } from "../page.js";
 
 /**
  * Type for function that fetches child blocks
@@ -195,62 +198,24 @@ export const getBlockContent =
 export function getBlockContentRecursively(block: BlockObjectResponse) {
   return async (f: () => Client): Promise<PageBlock> => {
     const blockContent = await getBlockContent(() => block)(f);
-
-    if (!block.has_children) {
-      //  process the block without children
-
-      return {
-        id: block.id,
-        type: block.type,
-        content: blockContent,
-        hasChildren: block.has_children,
-      } satisfies PageBlock;
-    }
-
-    // Collect all child blocks from the async generator
-    const childBlocks: PageBlock[] = [];
-    const blockGenerator = getPageBlocks({ pageId: block.id })(f);
-
-    for await (const childBlock of blockGenerator) {
-      childBlocks.push(childBlock as PageBlock);
-    }
-
-    return {
+    const result: PageBlock = {
       id: block.id,
       type: block.type,
       content: blockContent,
       hasChildren: block.has_children,
-      childBlocks,
-    } satisfies PageBlock;
-  };
-}
-
-export function getBlockContentRecursivelyForContentOnly(block: BlockObjectResponse) {
-  return async (f: () => Client): Promise<PageBlockContentOnly> => {
-    const blockContent = await getBlockContent(() => block, true)(f);
+    };
 
     if (!block.has_children) {
-      return {
-        type: block.type,
-        content: blockContent,
-      } satisfies PageBlockContentOnly;
+      //  process the block without children
+      return result;
     }
 
     // Collect all child blocks from the async generator
-    const childBlocks: PageBlockContentOnly[] = [];
-    const blockGenerator = getPageBlocks({
+    const { blocks: childBlocks } = await getPageBlocksPaginated({
       pageId: block.id,
-      contentOnly: true,
     })(f);
 
-    for await (const childBlock of blockGenerator) {
-      childBlocks.push(childBlock as PageBlockContentOnly);
-    }
-
-    return {
-      type: block.type,
-      content: blockContent,
-      childBlocks,
-    } satisfies PageBlockContentOnly;
+    result.childBlocks = childBlocks as PageBlock[];
+    return result;
   };
 }

@@ -23,6 +23,10 @@ export function getRawDatabase(dbId: string) {
   };
 }
 
+/**
+ * Fetch all database pages (internal use - fetches everything)
+ * @deprecated Use getDatabasePagesPaginated for client-controlled pagination
+ */
 export function getDatabasePages(dsId: string, pageSize?: number) {
   return async function* (f: () => Client) {
     let startCursor: string | undefined;
@@ -40,6 +44,35 @@ export function getDatabasePages(dsId: string, pageSize?: number) {
 
       startCursor = response.next_cursor || undefined;
     } while (startCursor);
+  };
+}
+
+/**
+ * Fetch database pages with client-controlled pagination
+ * Returns one batch of pages + nextCursor for next batch
+ */
+export function getDatabasePagesPaginated({
+  dsId,
+  pageSize,
+  startCursor,
+}: {
+  dsId: string;
+  pageSize?: number;
+  startCursor?: string;
+}) {
+  return async (
+    f: () => Client,
+  ): Promise<{ results: PageObjectResponse[]; nextCursor?: string }> => {
+    const response = await f().dataSources.query({
+      data_source_id: dsId,
+      start_cursor: startCursor,
+      page_size: pageSize,
+    });
+
+    return {
+      results: response.results as PageObjectResponse[],
+      nextCursor: response.next_cursor || undefined,
+    };
   };
 }
 

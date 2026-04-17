@@ -3,10 +3,7 @@
  * Pure content only - no metadata
  */
 
-import type {
-  PageObjectResponse,
-  RichTextItemResponse,
-} from "@notionhq/client";
+import type { PageObjectResponse, RichTextItemResponse } from "@notionhq/client";
 
 export interface RichText {
   text: string;
@@ -91,7 +88,8 @@ export type ChildPageContent = {
 };
 
 export interface ChildDatabaseContent {
-  pages: Page[] | PageContentOnly[];
+  pages: Page[];
+  nextCursor?: string | null;
 }
 
 export interface LinkToPageContent {
@@ -216,13 +214,10 @@ export type Page = PageHeader & {
   nextCursor?: string;
 };
 
-export type PageContentOnly = PageHeader & {
-  blocks: PageBlockContentOnly[];
-  nextCursor?: string;
-};
 
 export type Database = {
   id: string;
   title: string;
   pages: Page[];
+  nextCursor?: string;
 };

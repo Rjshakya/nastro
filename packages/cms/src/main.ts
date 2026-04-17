@@ -1,26 +1,37 @@
 import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { writeFile } from "node:fs";
-import { ContentSource, toHTML } from "./core";
+import { NotionApi } from "./core";
+import { toMarkdown } from "./core/plugins";
 
 loadEnvFile();
 
-new ContentSource({
+new NotionApi({
   token: process.env.NOTION_API_TOKEN as string,
 })
   .fetch("34185bde2593804e9bf8fc1a468f0514")
-  // .use(toHTML())
+  // .use(toMarkdown())
   .run()
-  .then((html) => {
-    writeLocalFile("page", "json")(html);
+  .then((result) => {
+    writeLocalFile("fullpage", "json")(result);
   });
 
 function writeLocalFile(fileName: string, ext: "json"): (data: unknown) => void;
-function writeLocalFile(fileName: string, ext: "html"): (data: string) => void;
+function writeLocalFile(fileName: string, ext: "html" | "md"): (data: string) => void;
 
-function writeLocalFile(fileName: string, ext: "json" | "html") {
+function writeLocalFile(fileName: string, ext: "json" | "html" | "md") {
   return (data: unknown) => {
     let filePath = path.join("./", `${fileName}.${ext}`);
+
+    if (ext === "md") {
+      return writeFile(filePath, String(data), (err) => {
+        if (err) {
+          console.error(`Error writing file ${filePath}:`, err);
+        } else {
+          console.log(`✅ MD file written: ${filePath}`);
+        }
+      });
+    }
 
     if (ext === "html") {
       writeFile(

@@ -1,6 +1,5 @@
 import type {
   Page,
-  PageContentOnly,
   PageBlock,
   PageBlockContentOnly,
   ParagraphContent,
@@ -464,7 +463,7 @@ function renderBlocks(blocks: PageBlockContentOnly[] | PageBlock[]): string {
 /**
  * Render database page to HTML
  */
-function renderDatabasePage(page: PageContentOnly): string {
+function renderDatabasePage(page: Page): string {
   const blocks = renderBlocks(page.blocks);
   const title = page.title?.fullText || "Untitled";
 
@@ -501,7 +500,7 @@ function extractFirstParagraph(blocks: PageBlockContentOnly[] | PageBlock[]): st
 /**
  * Wrap content with SEO-friendly container
  */
-function wrapWithContainer(content: string, page: Page | PageContentOnly): string {
+function wrapWithContainer(content: string, page: Page ): string {
   const title = page.title?.fullText || "Untitled";
 
   return `
@@ -531,7 +530,7 @@ function wrapWithContainer(content: string, page: Page | PageContentOnly): strin
  */
 
 export function toHTML() {
-  return (page: Page | PageContentOnly) => {
+  return (page: Page) => {
     const blocks = page.blocks || [];
     const contentHTML = renderBlocks(blocks);
     return wrapWithContainer(contentHTML, page);
