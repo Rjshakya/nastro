@@ -11,7 +11,7 @@ import type {
   PageObjectResponse,
 } from "@notionhq/client";
 import type { ChildDatabaseContent, ChildPageContent, LinkToPageContent } from "../types";
-import { getDatabasePagesPaginated, getRawDatabase, getRawPage } from "../notion";
+import { getDatabasePagesPaginated, getDataSource, getRawDatabase, getRawPage } from "../notion";
 import { getPagePaginated } from "../page";
 import { extractPageMetaData } from "../utils";
 
@@ -44,9 +44,10 @@ export const handleChildDatabase =
 
     const rawDb = await getRawDatabase(b.id)(f);
     if (!rawDb || !rawDb.data_sources.length) {
-      return { pages: [] };
+      return { pages: [], properties: {} };
     }
 
+    const properties = (await getDataSource(rawDb.data_sources[0].id)(f)).properties;
     const databasePages = await getDatabasePagesPaginated({ dsId: rawDb.data_sources[0].id })(f);
     const pages = await Promise.all(
       databasePages.results.map((page) => {
@@ -55,6 +56,7 @@ export const handleChildDatabase =
     );
 
     return {
+      properties,
       pages,
     };
   };

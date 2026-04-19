@@ -1,4 +1,9 @@
-import { Client, DatabaseObjectResponse, PageObjectResponse } from "@notionhq/client";
+import {
+  Client,
+  DatabaseObjectResponse,
+  DataSourceObjectResponse,
+  PageObjectResponse,
+} from "@notionhq/client";
 
 export function getNotionClient(token: string) {
   return new Client({
@@ -20,6 +25,14 @@ export function getRawDatabase(dbId: string) {
 
         return d;
       });
+  };
+}
+
+export function getDataSource(dsId: string) {
+  return (f: () => Client) => {
+    return f()
+      .dataSources.retrieve({ data_source_id: dsId })
+      .then((d) => d as DataSourceObjectResponse);
   };
 }
 

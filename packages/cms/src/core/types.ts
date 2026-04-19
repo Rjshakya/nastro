@@ -3,7 +3,11 @@
  * Pure content only - no metadata
  */
 
-import type { PageObjectResponse, RichTextItemResponse } from "@notionhq/client";
+import type {
+  DataSourceObjectResponse,
+  PageObjectResponse,
+  RichTextItemResponse,
+} from "@notionhq/client";
 
 export interface RichText {
   text: string;
@@ -88,6 +92,7 @@ export type ChildPageContent = {
 };
 
 export interface ChildDatabaseContent {
+  properties: DataSourceObjectResponse["properties"];
   pages: Page[];
   nextCursor?: string | null;
 }
@@ -156,6 +161,7 @@ export type BlockContent =
   | TableRowContent
   | ChildPageContent
   | ChildDatabaseContent
+  | ChildDatabaseContentWithBlockMap
   | LinkToPageContent
   | EmbedContent
   | BookmarkContent
@@ -214,10 +220,38 @@ export type Page = PageHeader & {
   nextCursor?: string;
 };
 
-
 export type Database = {
   id: string;
   title: string;
   pages: Page[];
   nextCursor?: string;
 };
+
+// BlockMap types - flat map structure for blocks
+export type BlockEntry = {
+  id: string;
+  type: string;
+  content: BlockContent;
+  hasChildren: boolean;
+  children?: BlockMap;
+};
+
+export type BlockMap = Record<string, BlockEntry>;
+
+export type PageWithBlockMap = PageHeader & {
+  blocks: BlockMap;
+  nextCursor?: string;
+};
+
+// Page inside a child_database - blocks as Record
+export type PageWithBlockMapInDatabase = PageHeader & {
+  blocks: BlockMap;
+  nextCursor?: string;
+};
+
+// Updated ChildDatabaseContent for BlockMap - pages as Record
+export interface ChildDatabaseContentWithBlockMap {
+  properties: DataSourceObjectResponse["properties"];
+  pages: Record<string, PageWithBlockMapInDatabase>;
+  nextCursor?: string | null;
+}

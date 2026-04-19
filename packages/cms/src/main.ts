@@ -2,18 +2,18 @@ import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { writeFile } from "node:fs";
 import { NotionApi } from "./core";
-import { toMarkdown } from "./core/plugins";
+import { toBlockMap, toMarkdown } from "./core/plugins";
 
 loadEnvFile();
 
 new NotionApi({
   token: process.env.NOTION_API_TOKEN as string,
 })
-  .fetch("34185bde2593804e9bf8fc1a468f0514")
-  // .use(toMarkdown())
+  .fetch("34185bde259381b889eec8975211ca3b")
+  .use(toBlockMap())
   .run()
   .then((result) => {
-    writeLocalFile("fullpage", "json")(result);
+    writeLocalFile("table-map", "json")(result);
   });
 
 function writeLocalFile(fileName: string, ext: "json"): (data: unknown) => void;

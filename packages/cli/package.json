@@ -1,0 +1,39 @@
+{
+  "name": "@nastro/notion-orm-cli",
+  "version": "0.1.0",
+  "description": "CLI for managing Notion databases using notion-orm",
+  "keywords": [
+    "cli",
+    "notion",
+    "orm"
+  ],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "build": "tsc --noEmit false",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "glob": "^13.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0"
+  }
+}
