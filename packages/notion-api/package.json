@@ -1,7 +1,7 @@
 {
-  "name": "@nastro/cms",
+  "name": "@nastro/notion-api",
   "version": "1.0.0",
-  "description": "Notion CMS module with simplified architecture",
+  "description": "Notion api",
   "keywords": [
     "cms",
     "notion"
@@ -13,21 +13,23 @@
   "types": "./index.ts",
   "exports": {
     ".": {
-      "import": "./index.ts",
-      "types": "./index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "oxlint --config oxlint.config.ts",
     "dev": "tsx src/main.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit false"
   },
   "dependencies": {
     "@notionhq/client": "^5.11.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.19.0"
   }
 }

@@ -15,7 +15,7 @@
     "outDir": "./dist",
     "types": ["@types/node"],
     "noEmit": true,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

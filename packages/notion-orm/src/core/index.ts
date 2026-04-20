@@ -1,7 +1,7 @@
 // Main exports for notion-orm/schema
 // All column builders and table definition
 
-export { table } from "./table.ts";
+export { table } from "./table.js";
 export type { InferType, NotionTable, InferInsertType } from "./table.ts";
 
 export {
@@ -26,7 +26,7 @@ export {
   title,
   uniqueId,
   url,
-} from "./columns.ts";
+} from "./columns.js";
 
 export type {
   CheckboxColumn,

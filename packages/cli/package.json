@@ -29,11 +29,15 @@
     "dev": "tsx src/index.ts"
   },
   "dependencies": {
+    "@nastro/notion-api": "workspace:*",
     "commander": "^14.0.3",
-    "glob": "^13.0.6"
+    "glob": "^13.0.6",
+    "notion-orm": "workspace:*"
   },
   "devDependencies": {
+    "@notionhq/client": "^5.11.0",
     "@types/node": "^25.6.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0"
   }
 }

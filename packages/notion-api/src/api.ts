@@ -1,5 +1,111 @@
+import {
+  CreateDatabaseParameters,
+  CreateDataSourceParameters,
+  CreatePageParameters,
+  DatabaseObjectResponse,
+  DataSourceObjectResponse,
+  PageObjectResponse,
+  QueryDataSourceParameters,
+} from "@notionhq/client";
 import { runPage } from "./page";
 import { Page } from "./types";
+import { getNotionClient } from "./notion";
+
+class BaseNotionApi {
+  constructor(private token: string) {}
+
+  createDatabase(params: CreateDatabaseParameters) {
+    return this.notionClient()
+      .databases.create(params)
+      .then((d) => d as DatabaseObjectResponse);
+  }
+
+  createDataSource(params: CreateDataSourceParameters) {
+    return this.notionClient()
+      .dataSources.create(params)
+      .then((d) => d as DataSourceObjectResponse);
+  }
+
+  createPage(params: CreatePageParameters) {
+    return this.notionClient()
+      .pages.create(params)
+      .then((p) => p as PageObjectResponse);
+  }
+
+  getPageBlocks({
+    pageId,
+    pageSize,
+    startCursor,
+  }: {
+    pageId: string;
+    pageSize?: number;
+    startCursor?: string;
+  }) {
+    return this.notionClient().blocks.children.list({
+      block_id: pageId,
+      start_cursor: startCursor,
+      page_size: pageSize,
+    });
+  }
+
+  getPage(id: string) {
+    return this.notionClient().pages.retrieve({ page_id: id });
+  }
+
+  async getDataBaseRows({
+    id,
+    pageSize,
+    startCursor,
+  }: {
+    id: string;
+    startCursor?: string;
+    pageSize?: number;
+  }) {
+    const response = await this.notionClient().dataSources.query({
+      data_source_id: id,
+      start_cursor: startCursor,
+      page_size: pageSize,
+    });
+
+    return {
+      pages: response.results as PageObjectResponse[],
+      nextCursor: response.next_cursor || undefined,
+    };
+  }
+
+  async queryDataBase(params: QueryDataSourceParameters) {
+    const result = await this.notionClient().dataSources.query(params);
+    return {
+      pages: result.results as PageObjectResponse[],
+      nextCursor: result.next_cursor || undefined,
+    };
+  }
+
+  getDataSource(id: string) {
+    return this.notionClient()
+      .dataSources.retrieve({ data_source_id: id })
+      .then((d) => d as DataSourceObjectResponse);
+  }
+
+  getDataBase(id: string) {
+    return this.notionClient()
+      .databases.retrieve({ database_id: id })
+      .then((d) => {
+        return d as DatabaseObjectResponse;
+      })
+      .then((d) => {
+        if (!d.data_sources.length) {
+          return null;
+        }
+
+        return d;
+      });
+  }
+
+  notionClient() {
+    return getNotionClient(this.token);
+  }
+}
 
 /**
  * NotionApi - Main class for fetching content from Notion
@@ -35,13 +141,12 @@ import { Page } from "./types";
  *
  */
 
-export class NotionApi<Output = Page> {
+export class NotionApi<Output = Page> extends BaseNotionApi {
   private plugins: Array<(input: unknown) => unknown> = [];
-  private token: string;
   private result: Promise<Output> | null;
 
-  constructor(options: { token: string }) {
-    this.token = options.token;
+  constructor(public options: { token: string }) {
+    super(options.token);
     this.result = null;
   }
 
@@ -55,7 +160,7 @@ export class NotionApi<Output = Page> {
   use<NextOutput>(
     plugin: (input: Output) => NextOutput | Promise<NextOutput>,
   ): NotionApi<NextOutput> {
-    const newSource = new NotionApi<NextOutput>({ token: this.token });
+    const newSource = new NotionApi<NextOutput>({ token: this.options.token });
     newSource.result = this.result as Promise<NextOutput> | null;
     newSource.plugins = [...this.plugins, plugin as (input: unknown) => unknown];
 
@@ -71,7 +176,7 @@ export class NotionApi<Output = Page> {
    */
   fetch(pageId: string, options?: { startCursor?: string }): this {
     // Fetch raw content from Notion
-    this.result = runPage({ token: this.token, ...options })(pageId) as Promise<Output>;
+    this.result = runPage({ token: this.options.token, ...options })(pageId) as Promise<Output>;
     return this;
   }
 
@@ -97,21 +202,6 @@ export class NotionApi<Output = Page> {
       throw e;
     }
   }
-
-  /**
-   * Clear all plugins from the chain
-   * @returns A new NotionApi with no plugins
-   */
-  private clear(): NotionApi<Page> {
-    return new NotionApi<Page>({ token: this.token });
-  }
-
-  /**
-   * Get the current number of plugins in the chain
-   */
-  private get pluginCount(): number {
-    return this.plugins.length;
-  }
 }
 
 /**
@@ -119,5 +209,5 @@ export class NotionApi<Output = Page> {
  * Convenience wrapper around the class constructor
  */
 export function createNotionApi(options: { token: string }): NotionApi<Page> {
-  return new NotionApi(options);
+  return new NotionApi(options)
 }

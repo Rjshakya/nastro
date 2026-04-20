@@ -252,6 +252,31 @@ export interface LastEditedByColumn extends ColumnBase {
   last_edited_by: {};
 }
 
+export interface LastVisitedTimeColumn extends ColumnBase {
+  type: "last_visited_time";
+  last_visited_time: {};
+}
+
+export interface PlaceColumn extends ColumnBase {
+  type: "place";
+  place: {};
+}
+
+export interface ButtonColumn extends ColumnBase {
+  type: "button";
+  button: {};
+}
+
+export interface LocationColumn extends ColumnBase {
+  type: "location";
+  location: {};
+}
+
+export interface VerificationColumn extends ColumnBase {
+  type: "verification";
+  verification: {};
+}
+
 // ============== Union Type ==============
 
 export type Column =
@@ -275,4 +300,9 @@ export type Column =
   | CreatedTimeColumn
   | CreatedByColumn
   | LastEditedTimeColumn
-  | LastEditedByColumn;
+  | LastEditedByColumn
+  | LastVisitedTimeColumn
+  | PlaceColumn
+  | ButtonColumn
+  | LocationColumn
+  | VerificationColumn;

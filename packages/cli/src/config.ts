@@ -44,7 +44,6 @@ export async function loadConfigFile(configPath: string): Promise<NotionOrmConfi
     // This works with tsx for .ts files and native ESM for .js/.mjs
     const fileUrl = pathToFileURL(resolve(configPath)).href;
     const configModule = await import(fileUrl);
-    console.log(configModule);
     const config = configModule.default || configModule;
 
     if (!config || typeof config !== "object") {
@@ -97,7 +96,7 @@ export async function resolveConfig(cliOptions: CliOptions): Promise<NotionOrmCo
 
   if (!rootPage) {
     throw new Error(
-      "Missing required field: rootPageId. Provide it via config file or --root-page flag.",
+      "Missing required field: rootPage. Provide it via config file or --root-page flag.",
     );
   }
 

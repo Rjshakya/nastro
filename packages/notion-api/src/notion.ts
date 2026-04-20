@@ -37,30 +37,6 @@ export function getDataSource(dsId: string) {
 }
 
 /**
- * Fetch all database pages (internal use - fetches everything)
- * @deprecated Use getDatabasePagesPaginated for client-controlled pagination
- */
-export function getDatabasePages(dsId: string, pageSize?: number) {
-  return async function* (f: () => Client) {
-    let startCursor: string | undefined;
-
-    do {
-      const response = await f().dataSources.query({
-        data_source_id: dsId,
-        start_cursor: startCursor,
-        page_size: pageSize,
-      });
-
-      for (const result of response.results) {
-        yield result as PageObjectResponse;
-      }
-
-      startCursor = response.next_cursor || undefined;
-    } while (startCursor);
-  };
-}
-
-/**
  * Fetch database pages with client-controlled pagination
  * Returns one batch of pages + nextCursor for next batch
  */

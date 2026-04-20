@@ -4,10 +4,7 @@
  */
 
 import type { BlockObjectResponse, Client } from "@notionhq/client";
-import type {
-  BlockContent,
-  PageBlock,
-} from "../types.js";
+import type { BlockContent, PageBlock } from "../types.js";
 
 // Import all handlers
 import {

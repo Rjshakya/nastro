@@ -19,11 +19,12 @@
     "outDir": "./dist",
     "types": ["@types/node"],
     "noEmit": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": false
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": [
     "dist", // Stop TSC from looking inside the output folder
-    "node_modules"
+    "node_modules",
+    // "tests"
   ]
 }

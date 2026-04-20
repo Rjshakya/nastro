@@ -1,8 +1,8 @@
 import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { writeFile } from "node:fs";
-import { NotionApi } from "./core";
-import { toBlockMap, toMarkdown } from "./core/plugins";
+import { NotionApi } from "../src";
+import { toBlockMap } from "../src/plugins";
 
 loadEnvFile();
 
@@ -18,7 +18,6 @@ new NotionApi({
 
 function writeLocalFile(fileName: string, ext: "json"): (data: unknown) => void;
 function writeLocalFile(fileName: string, ext: "html" | "md"): (data: string) => void;
-
 function writeLocalFile(fileName: string, ext: "json" | "html" | "md") {
   return (data: unknown) => {
     let filePath = path.join("./", `${fileName}.${ext}`);

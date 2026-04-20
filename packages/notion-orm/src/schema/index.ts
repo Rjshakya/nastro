@@ -1,11 +1,6 @@
-// Notion-ORM Schema Definition Demo
-// This file demonstrates all available column types
+import * as n from "../core/index.js";
 
-import * as n from "./core/index.ts";
-
-// ============== Example: Tasks Table ==============
-
-const tasksTable = n.table("Tasks", {
+export const tasksTable = n.table("Tasks", {
   // Required: exactly one title property
   title: n.title(),
 
@@ -41,12 +36,6 @@ const tasksTable = n.table("Tasks", {
   // Description
   description: n.richText(),
 
-  // Project relation (will be resolved during push)
-  project: n.relation({
-    name: "Project",
-    relatedTo: "projectsTable", // References the projectsTable export
-  }),
-
   // System properties
   createdAt: n.createdTime(),
   updatedAt: n.lastEditedTime(),
@@ -54,7 +43,7 @@ const tasksTable = n.table("Tasks", {
 
 // ============== Example: Projects Table ==============
 
-const projectsTable = n.table("Projects", {
+export const projectsTable = n.table("Projects", {
   // Title
   name: n.title({ name: "Project Name" }),
 
@@ -112,44 +101,12 @@ const projectsTable = n.table("Projects", {
   startDate: n.date({ name: "Start Date" }),
   endDate: n.date({ name: "End Date" }),
 
-  // Relation to tasks
-  tasks: n.relation({
-    name: "Tasks",
-    relatedTo: "tasksTable",
-  }),
-
-  // Formula: days until deadline
-  daysUntilDeadline: n.formula({
-    name: "Days Until Deadline",
-    expression: 'dateBetween(prop("End Date"), now(), "days")',
-  }),
-
-  // Rollup: count of tasks
-  taskCount: n.rollup({
-    name: "Task Count",
-    relationProperty: "Tasks",
-    rollupProperty: "id",
-    function: "count",
-  }),
-
-  // Rollup: completion percentage
-  completionRate: n.rollup({
-    name: "Completion Rate",
-    relationProperty: "Tasks",
-    rollupProperty: "Completed",
-    function: "percent_checked",
-  }),
-
-  // Unique ID with prefix
   projectId: n.uniqueId({
     name: "Project ID",
     prefix: "PROJ",
   }),
 
-  // Description
   description: n.richText({ name: "Description" }),
-
-  // System properties
   createdAt: n.createdTime({ name: "Created" }),
   createdBy: n.createdBy({ name: "Created By" }),
   updatedAt: n.lastEditedTime({ name: "Last Updated" }),
