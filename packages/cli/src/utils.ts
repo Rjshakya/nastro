@@ -42,6 +42,5 @@ export const convertSchemeToDataBaseParams = (
 };
 
 export const createDatabase = async (notion: NotionApi, params: CreateDatabaseParameters) => {
-  const db = await notion.createDatabase(params);
-  return db.id;
+  return notion.createDatabase(params).then((db) => db.id);
 };

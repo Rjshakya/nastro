@@ -202,6 +202,26 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
       throw e;
     }
   }
+
+  getDataBaseWithDataSource(id: string) {
+    return this.getDataBase(id)
+      .then((db) => {
+        if (!db) {
+          throw new Error(`Database with id ${id} not found or has no data sources`);
+        }
+
+        const datasource = db.data_sources[0].id;
+        return this.getDataSource(datasource).then((ds) => {
+          return {
+            db,
+            ds,
+          };
+        });
+      })
+      .catch(console.error);
+  }
+
+  
 }
 
 /**
@@ -209,5 +229,5 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
  * Convenience wrapper around the class constructor
  */
 export function createNotionApi(options: { token: string }): NotionApi<Page> {
-  return new NotionApi(options)
+  return new NotionApi(options);
 }

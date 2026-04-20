@@ -35,6 +35,7 @@ export const tasksTable = n.table("Tasks", {
 
   // Description
   description: n.richText(),
+  // something: n.richText(),
 
   // System properties
   createdAt: n.createdTime(),
@@ -45,7 +46,8 @@ export const tasksTable = n.table("Tasks", {
 
 export const projectsTable = n.table("Projects", {
   // Title
-  name: n.title({ name: "Project Name" }),
+  name: n.title(),
+  something: n.richText(),
 
   // Status
   status: n.status({
@@ -103,7 +105,7 @@ export const projectsTable = n.table("Projects", {
 
   projectId: n.uniqueId({
     name: "Project ID",
-    prefix: "PROJ",
+    prefix: "PRO",
   }),
 
   description: n.richText({ name: "Description" }),
