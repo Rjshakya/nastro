@@ -1,5 +1,8 @@
 import * as n from "../core/index.js";
 
+export type selectEnum = "Low" | "Medium" | "High";
+export type multiSelectEnum = "Bug" | "Feature" | "Documentation" | "Tech Debt";
+
 export const tasksTable = n.table("Tasks", {
   // Required: exactly one title property
   title: n.title(),

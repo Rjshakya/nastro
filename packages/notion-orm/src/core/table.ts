@@ -1,4 +1,4 @@
-import type { Column } from "./types.ts";
+import type { Column, SelectOption } from "./types.ts";
 
 /**
  * Table definition structure
@@ -87,18 +87,18 @@ export type InferType<T extends NotionTable> = {
  * // { name: string, status?: string, ... }
  * ```
  */
-export type InferInsertType<T extends NotionTable> = {
+export type InferInsertType<T extends NotionTable, MultiSelect, Select> = {
   // Always require title for inserts
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? K
-    : never]-?: InferColumnInsertType<T["properties"][K]>;
+    : never]-?: InferColumnInsertType<T["properties"][K], MultiSelect, Select>;
 } & {
   // Make all other writable columns optional, filter out read-only types (never)
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? never
-    : InferColumnInsertType<T["properties"][K]> extends never
+    : InferColumnInsertType<T["properties"][K], MultiSelect, Select> extends never
       ? never
-      : K]?: InferColumnInsertType<T["properties"][K]>;
+      : K]?: InferColumnInsertType<T["properties"][K], MultiSelect, Select>;
 };
 
 /**
@@ -106,7 +106,7 @@ export type InferInsertType<T extends NotionTable> = {
  * Maps Notion column types to TypeScript types for insertion
  * Returns never for read-only columns
  */
-type InferColumnInsertType<TColumn extends Column> = TColumn extends {
+type InferColumnInsertType<TColumn extends Column, MultiSelect, Select> = TColumn extends {
   type: "title";
 }
   ? string // Title is always required string for insert
@@ -115,9 +115,9 @@ type InferColumnInsertType<TColumn extends Column> = TColumn extends {
     : TColumn extends { type: "number" }
       ? number
       : TColumn extends { type: "select" }
-        ? string // Select option name
+        ? Select // Select option name
         : TColumn extends { type: "multi_select" }
-          ? string[] // Array of option names
+          ? Array<{ name: MultiSelect }> // Array of option names
           : TColumn extends { type: "status" }
             ? string // Status option name
             : TColumn extends { type: "date" }
@@ -138,8 +138,9 @@ type InferColumnInsertType<TColumn extends Column> = TColumn extends {
                         ? string
                         : TColumn extends { type: "phone_number" }
                           ? string
-                          : TColumn extends { type: "relation" }
-                            ? string[] // Array of related page IDs
+                          : // unsupported for now
+                            TColumn extends { type: "relation" }
+                            ? never
                             : // Read-only columns - filtered out
                               TColumn extends { type: "formula" }
                               ? never
@@ -159,7 +160,11 @@ type InferColumnInsertType<TColumn extends Column> = TColumn extends {
                                               type: "last_edited_by";
                                             }
                                           ? never
-                                          : never;
+                                          : TColumn extends {
+                                                type: "last_visited_time";
+                                              }
+                                            ? never
+                                            : never;
 
 /**
  * Infer the TypeScript type for a single column

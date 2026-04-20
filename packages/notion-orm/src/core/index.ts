@@ -58,3 +58,28 @@ export type {
   UniqueIdColumn,
   UrlColumn,
 } from "./types.ts";
+
+// Query builder
+export { DB } from "./db.js";
+export type { DBOptions } from "./db.ts";
+export { Insert, setMapping } from "./insert.js";
+
+// Page property conversion utilities
+export {
+  convertToPageProperties,
+  convertTitle,
+  convertRichText,
+  convertNumber,
+  convertSelect,
+  convertMultiSelect,
+  convertStatus,
+  convertDate,
+  convertPeople,
+  convertFiles,
+  convertCheckbox,
+  convertUrl,
+  convertEmail,
+  convertPhoneNumber,
+  convertRelation,
+  type NotionPageProperty,
+} from "./page-properties.js";
