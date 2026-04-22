@@ -117,3 +117,5 @@ export const projectsTable = n.table("Projects", {
   updatedAt: n.lastEditedTime({ name: "Last Updated" }),
   updatedBy: n.lastEditedBy({ name: "Last Updated By" }),
 });
+
+

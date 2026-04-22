@@ -1,5 +1,6 @@
 import type { NotionTable } from "./table.js";
 import { Insert } from "./insert.js";
+import { createNotionApi, NotionApi } from "@nastro/notion-api";
 
 // =============================================================================
 // DB - Main Query Builder Entry Point
@@ -35,16 +36,20 @@ export interface DBOptions {
  * ```
  */
 export class DB {
+  private notion: NotionApi;
+
   constructor(
-    private token: string,
+    token: string,
     public config?: Record<string, string>,
-  ) {}
+  ) {
+    this.notion = createNotionApi({ token });
+  }
 
   /**
    * Start an insert operation for the given table.
    * Returns an Insert builder with a `.values()` method.
    */
   insert<T extends NotionTable, M, S>(table: T): Insert<T, M, S> {
-    return new Insert(table, this.token, this.config);
+    return new Insert({ databaseMapping: {}, notion: this.notion, table });
   }
 }

@@ -2,8 +2,8 @@
 // Do not edit manually
 
 export const databaseMapping = {
-  "Tasks": "95ad2a96-869a-4804-8fcd-b27e3fffd1ba",
-  "Projects": "8be208b2-fd6f-4bda-ab30-9327e6befe17",
+  Tasks: "95ad2a96-869a-4804-8fcd-b27e3fffd1ba",
+  Projects: "8be208b2-fd6f-4bda-ab30-9327e6befe17",
 } as const;
 
 export type DatabaseMapping = typeof databaseMapping;

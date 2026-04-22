@@ -3,6 +3,8 @@
 
 // ============== Base Types ==============
 
+import type { QueryDataSourceParameters } from "@notionhq/client";
+
 export type NotionColor =
   | "default"
   | "gray"
@@ -377,6 +379,128 @@ export type InferColumnInsertType<
   ? ColumnTypeMap<MultiSelect, Select>[TColumn["type"]]
   : never;
 
+// ============== Select Types ==============
+
+/**
+ * Column type map for query/select result types.
+ * Includes read-only columns and handles nullability for optional fields.
+ * Excludes formula and rollup (not selectable).
+ */
+export type ColumnSelectTypeMap<MultiSelect, Select> = {
+  title: string;
+  rich_text: string;
+  number: number | null;
+  select: Select;
+  multi_select: Array<{ name: MultiSelect }>;
+  status: string;
+  date: string | null;
+  people: Array<{ id: string }>;
+  files: Array<{ name: string; url: string; type: "external" | "file" }>;
+  checkbox: boolean;
+  url: string | null;
+  email: string | null;
+  phone_number: string | null;
+  relation: Array<{ id: string }>;
+  unique_id: string;
+  created_time: string;
+  created_by: string;
+  last_edited_time: string;
+  last_edited_by: string;
+};
+
+/**
+ * Infer the TypeScript select type for a single column.
+ * Maps Notion column types to TypeScript types for query results.
+ * Excludes formula and rollup (they return never and are filtered out).
+ */
+export type InferColumnSelectType<
+  TColumn extends Column,
+  MultiSelect,
+  Select,
+> = TColumn["type"] extends keyof ColumnSelectTypeMap<MultiSelect, Select>
+  ? ColumnSelectTypeMap<MultiSelect, Select>[TColumn["type"]]
+  : never;
+
+/**
+ * Infer the TypeScript type for select/query operations from a table definition.
+ * - Always includes `id: string` (page ID)
+ * - Includes all columns except formula and rollup (read-only columns are present)
+ * - Nullable types for optional fields (number, date, url, email, phone_number)
+ *
+ * @example
+ * ```typescript
+ * const projectsTable = table({...});
+ * type Project = InferSelectType<typeof projectsTable, string, string>;
+ * // { id: string, name: string, status: string, budget: number | null, ... }
+ * ```
+ */
+export type InferSelectType<T extends NotionTable, MultiSelectEnum, SelectEnum> = {
+  id: string;
+} & {
+  [K in keyof T["properties"] as T["properties"][K] extends { type: "formula" } | { type: "rollup" }
+    ? never
+    : K]: InferColumnSelectType<T["properties"][K], MultiSelectEnum, SelectEnum>;
+};
+
+// ============== Filter Types ==============
+
+/** Column type map for filter operation value types (includes read-only columns) */
+export type FilterColumnTypeMap<MultiSelect = string, Select = string> = ColumnTypeMap<
+  MultiSelect,
+  Select
+> & {
+  unique_id: number;
+  created_time: string;
+  last_edited_time: string;
+};
+
+/** Column types supported by `eq` operator */
+export type EqColumnType =
+  | "title"
+  | "rich_text"
+  | "number"
+  | "select"
+  | "status"
+  | "date"
+  | "phone_number"
+  | "email"
+  | "url"
+  | "checkbox"
+  | "unique_id"
+  | "created_time"
+  | "last_edited_time";
+
+/** Column types supported by `ne` operator */
+export type NeColumnType =
+  | "title"
+  | "rich_text"
+  | "number"
+  | "select"
+  | "status"
+  | "phone_number"
+  | "email"
+  | "url"
+  | "checkbox"
+  | "unique_id";
+
+/** Column types that support gt/gte/lt/lte comparison in Notion API */
+export type ComparableColumnType =
+  | "number"
+  | "date"
+  | "unique_id"
+  | "created_time"
+  | "last_edited_time";
+
+/** Extract only the Column union members whose `type` is comparable */
+export type ComparableColumn = Extract<Column, { type: ComparableColumnType }>;
+
+/** Infer the value type for a comparable column */
+export type ComparableColumnValue<T extends ComparableColumn> = T["type"] extends
+  | "number"
+  | "unique_id"
+  ? number
+  : string;
+
 export type CheckboxPropertyRequest = {
   type?: "checkbox";
   checkbox: boolean;
@@ -517,3 +641,5 @@ export type NotionPageProperties =
   | StatusPropertyRequest
   | TitlePropertyRequest
   | UrlPropertyRequest;
+
+export type Filter = QueryDataSourceParameters["filter"];

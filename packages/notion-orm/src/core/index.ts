@@ -2,7 +2,7 @@
 // All column builders and table definition
 
 export { table } from "./table.js";
-export type { InferInsertType } from "./types.js";
+export type { InferInsertType, InferSelectType } from "./types.js";
 export type { NotionTable } from "./table.js";
 
 export {
@@ -60,10 +60,15 @@ export type {
   UrlColumn,
 } from "./types.ts";
 
-// Query builder
+// Filters
+export { eq, ne, gt, gte, lt, lte, and, or } from "./filters/index.js";
+export type { FilterCondition } from "./filters/index.js";
+
+// Select / Query builder
+export { Select, QueryBuilder, convertPageObjectToSelectType } from "./select.js";
 export { DB } from "./db.js";
 export type { DBOptions } from "./db.ts";
-export { Insert, setMapping } from "./insert.js";
+export { Insert } from "./insert.js";
 
 // Page property conversion utilities
 export { convertToPageProperties } from "./page-properties.js";

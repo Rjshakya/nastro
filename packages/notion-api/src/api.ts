@@ -220,8 +220,6 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
       })
       .catch(console.error);
   }
-
-  
 }
 
 /**
