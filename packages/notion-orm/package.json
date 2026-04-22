@@ -24,6 +24,7 @@
     "build": "tsc --noEmit false"
   },
   "dependencies": {
+    "@nastro/notion-api": "workspace:*",
     "@notionhq/client": "^5.11.0"
   },
   "devDependencies": {

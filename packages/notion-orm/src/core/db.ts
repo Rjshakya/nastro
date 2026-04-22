@@ -35,19 +35,16 @@ export interface DBOptions {
  * ```
  */
 export class DB {
-  private token: string;
-  private mapping?: Record<string, string>;
-
-  constructor(options: DBOptions) {
-    this.token = options.token;
-    this.mapping = options.mapping;
-  }
+  constructor(
+    private token: string,
+    public config?: Record<string, string>,
+  ) {}
 
   /**
    * Start an insert operation for the given table.
    * Returns an Insert builder with a `.values()` method.
    */
-  insert<T extends NotionTable>(table: T): Insert<T> {
-    return new Insert(table, this.token, this.mapping);
+  insert<T extends NotionTable, M, S>(table: T): Insert<T, M, S> {
+    return new Insert(table, this.token, this.config);
   }
 }

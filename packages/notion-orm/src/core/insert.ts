@@ -1,7 +1,9 @@
-import type { PageObjectResponse } from "@notionhq/client";
-import { Client } from "@notionhq/client";
-import type { NotionTable, InferInsertType } from "./table.js";
+import type { NotionTable } from "./table.js";
+import { InferInsertType, NotionPagePropertyRequest } from "./types.js";
 import { convertToPageProperties } from "./page-properties.js";
+import { createNotionApi, NotionApi } from "@nastro/notion-api";
+import path from "node:path";
+import { BlockObjectRequest } from "@notionhq/client";
 
 // =============================================================================
 // Mapping Resolution
@@ -12,22 +14,20 @@ import { convertToPageProperties } from "./page-properties.js";
 
 let _cachedMapping: Record<string, string> | null = null;
 
-async function resolveMapping(): Promise<Record<string, string>> {
+function resolveConfig(): Record<string, string> {
   if (_cachedMapping) return _cachedMapping;
 
-  try {
-    // @ts-expect-error Mapping file is generated at runtime by the CLI
-    const { databaseMapping } = await import("../../../notion-orm.generated.ts");
-    _cachedMapping = (databaseMapping as Record<string, string>) || {};
-  } catch {
-    _cachedMapping = {};
-  }
+  const filePath = path.join(process.cwd(), "notion-orm.generated.ts");
+  // @ts-expect-error Mapping file is generated at runtime by the CLI
+  const { databaseMapping } = import(filePath);
+  _cachedMapping = setMapping(databaseMapping);
 
   return _cachedMapping;
 }
 
-export function setMapping(mapping: Record<string, string>): void {
+export function setMapping(mapping: Record<string, string>): Record<string, string> {
   _cachedMapping = mapping;
+  return _cachedMapping;
 }
 
 // =============================================================================
@@ -50,26 +50,15 @@ export function setMapping(mapping: Record<string, string>): void {
  * });
  * ```
  */
-export class Insert<T extends NotionTable> {
-  private table: T;
-  private token: string;
-  private mappingOverride?: Record<string, string>;
+export class Insert<T extends NotionTable, M, S> {
+  constructor(
+    private table: T,
+    private token: string,
+    private config?: Record<string, string>,
+  ) {}
 
-  constructor(table: T, token: string, mappingOverride?: Record<string, string>) {
-    this.table = table;
-    this.token = token;
-    this.mappingOverride = mappingOverride;
-  }
-
-  /**
-   * Insert a new row into the Notion database.
-   *
-   * @param data - Typed insert values matching the table schema
-   * @returns The created Notion page object
-   * @throws Error if the table is not found in the mapping, or if the API call fails
-   */
-  async values(data: InferInsertType<T>): Promise<PageObjectResponse> {
-    const mapping = this.mappingOverride ?? (await resolveMapping());
+  values(data: InferInsertType<T, M, S>) {
+    const mapping = this.config ?? resolveConfig();
     const databaseId = mapping[this.table.title];
 
     if (!databaseId) {
@@ -79,20 +68,30 @@ export class Insert<T extends NotionTable> {
       );
     }
 
-    const notion = new Client({ auth: this.token });
-
-    const properties = convertToPageProperties(
-      this.table as unknown as { properties: T["properties"] },
-      data as Record<string, unknown>,
-    );
-
-    const response = await notion.pages.create({
-      parent: {
-        database_id: databaseId,
+    return {
+      execute: async () => {
+        const notion = createNotionApi({ token: this.token });
+        const props = convertToPageProperties(data, this.table);
+        return handleCreatePage({ dbId: databaseId, props, notion });
       },
-      properties,
-    });
-
-    return response as PageObjectResponse;
+    };
   }
+}
+
+function handleCreatePage({
+  dbId,
+  props,
+  notion,
+  content,
+}: {
+  dbId: string;
+  props: NotionPagePropertyRequest;
+  notion: NotionApi;
+  content?: BlockObjectRequest[];
+}) {
+  return notion.createPage({
+    parent: { type: "database_id", database_id: dbId },
+    properties: props,
+    content,
+  });
 }

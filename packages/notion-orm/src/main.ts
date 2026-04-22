@@ -1,9 +1,8 @@
-import { InferInsertType } from "./core/table.js";
-import { type multiSelectEnum, type selectEnum, tasksTable } from "./schema/index.js";
+import { InferInsertType } from "./core/types.js";
+import { type multiSelectEnum, type selectEnum, tasksTable, projectsTable } from "./schema/index.js";
 
-const createT = (data: InferInsertType<typeof tasksTable, multiSelectEnum, selectEnum>) => {};
-// const createP = (data: InferInsertType<typeof projectsTable>) => {};
+const _createT = (_data: InferInsertType<typeof tasksTable, multiSelectEnum, selectEnum>) => {};
+const _createP = (_data: InferInsertType<typeof projectsTable, multiSelectEnum, selectEnum>) => {};
 
-createT({ title: "", tags: [{ name: "Bug" }], priority: "High" });
-// createP({})
-  
+void _createT;
+void _createP;

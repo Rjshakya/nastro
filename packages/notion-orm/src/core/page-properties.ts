@@ -1,238 +1,24 @@
-import type { Column } from "./types.ts";
-import type { CreatePageParameters } from "@notionhq/client";
+import type {
+  CheckboxPropertyRequest,
+  Column,
+  ColumnTypeMap,
+  DatePropertyRequest,
+  EmailPropertyRequest,
+  FilesPropertyRequest,
+  InferInsertType,
+  MultiSelectPropertyRequest,
+  NotionPagePropertyRequest,
+  NotionTable,
+  NumberPropertyRequest,
+  PeoplePropertyRequest,
+  PhoneNumberPropertyRequest,
+  RichTextPropertyRequest,
+  SelectPropertyRequest,
+  StatusPropertyRequest,
+  TitlePropertyRequest,
+  UrlPropertyRequest,
+} from "./types.ts";
 
-// =============================================================================
-// Notion Page Property Types (for CreatePage / UpdatePage)
-// =============================================================================
-// These represent the shapes expected by the Notion API when writing page
-// properties. They mirror the union in CreatePageBodyParameters['properties'].
-// =============================================================================
-
-export type NotionPageProperty =
-  | { title: Array<{ text: { content: string } }>; type?: "title" }
-  | { rich_text: Array<{ text: { content: string } }>; type?: "rich_text" }
-  | { number: number | null; type?: "number" }
-  | { select: { name: string } | null; type?: "select" }
-  | { multi_select: Array<{ name: string }>; type?: "multi_select" }
-  | { status: { name: string } | null; type?: "status" }
-  | { date: { start: string; end?: string | null } | null; type?: "date" }
-  | { people: Array<{ id: string }>; type?: "people" }
-  | {
-      files: Array<
-        | { name: string; external: { url: string }; type?: "external" }
-        | { name: string; file: { url: string }; type?: "file" }
-      >;
-      type?: "files";
-    }
-  | { checkbox: boolean; type?: "checkbox" }
-  | { url: string | null; type?: "url" }
-  | { email: string | null; type?: "email" }
-  | { phone_number: string | null; type?: "phone_number" }
-  | { relation: Array<{ id: string }>; type?: "relation" };
-
-// =============================================================================
-// Individual Column Converters
-// Each function takes a typed value and returns a Notion page property object.
-// =============================================================================
-
-/**
- * Convert a string value to a Notion title property
- */
-export function convertTitle(value: string): Extract<NotionPageProperty, { title: unknown }> {
-  return {
-    title: [{ text: { content: value } }],
-  };
-}
-
-/**
- * Convert a string value to a Notion rich_text property
- */
-export function convertRichText(
-  value: string,
-): Extract<NotionPageProperty, { rich_text: unknown }> {
-  return {
-    rich_text: [{ text: { content: value } }],
-  };
-}
-
-/**
- * Convert a number value to a Notion number property
- */
-export function convertNumber(value: number): Extract<NotionPageProperty, { number: unknown }> {
-  return {
-    number: value,
-  };
-}
-
-/**
- * Convert a string value to a Notion select property
- */
-export function convertSelect(value: string): Extract<NotionPageProperty, { select: unknown }> {
-  return {
-    select: { name: value },
-  };
-}
-
-/**
- * Convert an array of strings to a Notion multi_select property
- */
-export function convertMultiSelect(
-  value: string[],
-): Extract<NotionPageProperty, { multi_select: unknown }> {
-  return {
-    multi_select: value.map((name) => ({ name })),
-  };
-}
-
-/**
- * Convert a string value to a Notion status property
- */
-export function convertStatus(value: string): Extract<NotionPageProperty, { status: unknown }> {
-  return {
-    status: { name: value },
-  };
-}
-
-/**
- * Convert a date string (or date object) to a Notion date property
- */
-export function convertDate(
-  value: string | { start: string; end?: string | null },
-): Extract<NotionPageProperty, { date: unknown }> {
-  if (typeof value === "string") {
-    return {
-      date: { start: value },
-    };
-  }
-  return {
-    date: { start: value.start, end: value.end ?? null },
-  };
-}
-
-/**
- * Convert an array of user objects to a Notion people property
- */
-export function convertPeople(
-  value: Array<{ id: string }>,
-): Extract<NotionPageProperty, { people: unknown }> {
-  return {
-    people: value.map((user) => ({ id: user.id })),
-  };
-}
-
-/**
- * Convert an array of file objects to a Notion files property
- */
-export function convertFiles(
-  value: Array<{ name: string; url: string; type?: "external" | "file" }>,
-): Extract<NotionPageProperty, { files: unknown }> {
-  return {
-    files: value.map((file) => {
-      if (file.type === "file") {
-        return { name: file.name, file: { url: file.url } };
-      }
-      return { name: file.name, external: { url: file.url } };
-    }),
-  };
-}
-
-/**
- * Convert a boolean value to a Notion checkbox property
- */
-export function convertCheckbox(
-  value: boolean,
-): Extract<NotionPageProperty, { checkbox: unknown }> {
-  return {
-    checkbox: value,
-  };
-}
-
-/**
- * Convert a string value to a Notion url property
- */
-export function convertUrl(value: string): Extract<NotionPageProperty, { url: unknown }> {
-  return {
-    url: value,
-  };
-}
-
-/**
- * Convert a string value to a Notion email property
- */
-export function convertEmail(value: string): Extract<NotionPageProperty, { email: unknown }> {
-  return {
-    email: value,
-  };
-}
-
-/**
- * Convert a string value to a Notion phone_number property
- */
-export function convertPhoneNumber(
-  value: string,
-): Extract<NotionPageProperty, { phone_number: unknown }> {
-  return {
-    phone_number: value,
-  };
-}
-
-/**
- * Convert an array of page IDs to a Notion relation property
- */
-export function convertRelation(
-  value: string[],
-): Extract<NotionPageProperty, { relation: unknown }> {
-  return {
-    relation: value.map((id) => ({ id })),
-  };
-}
-
-// =============================================================================
-// Main Converter: Convert a table schema + user values → Notion page properties
-// =============================================================================
-
-/**
- * Convert ORM insert values to Notion page properties for create/update.
- *
- * Iterates over the table schema, skipping read-only columns, and converts
- * each provided value into its Notion API page property shape.
- *
- * @param table - The NotionTable schema definition
- * @param values - The user-provided insert values
- * @returns A Record mapping property names to Notion page property objects
- */
-export function convertToPageProperties(
-  table: { properties: Record<string, Column> },
-  values: Record<string, unknown>,
-): Record<string, NotionPageProperty> {
-  const properties: Record<string, NotionPageProperty> = {};
-
-  for (const [key, column] of Object.entries(table.properties)) {
-    const propName = column.name || key;
-    const value = values[key];
-
-    // Skip undefined values
-    if (value === undefined) continue;
-
-    // Skip read-only / computed columns
-    if (isReadOnlyColumn(column)) continue;
-
-    const converted = convertValueByType(column.type, value);
-    if (converted) {
-      properties[propName] = converted;
-    }
-  }
-
-  return properties;
-}
-
-// =============================================================================
-// Internal Helpers
-// =============================================================================
-
-/**
- * Check if a column is read-only (formula, rollup, unique_id, system timestamps, etc.)
- */
 function isReadOnlyColumn(column: Column): boolean {
   switch (column.type) {
     case "formula":
@@ -253,91 +39,195 @@ function isReadOnlyColumn(column: Column): boolean {
   }
 }
 
-/**
- * Route a value to its type-specific converter based on the column type.
- * Returns null if the type is unsupported or read-only.
- */
-function convertValueByType(type: Column["type"], value: unknown): NotionPageProperty | null {
-  switch (type) {
-    case "title":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for title, got ${typeof value}`);
-      return convertTitle(value);
+export function convertToPageProperties<T extends NotionTable, M, S>(
+  data: InferInsertType<T, M, S>,
+  table: T,
+): NotionPagePropertyRequest {
+  const props = Object.entries(data).reduce((acc, curr) => {
+    const [name, value] = curr;
+    const col = table["properties"][name];
 
-    case "rich_text":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for rich_text, got ${typeof value}`);
-      return convertRichText(value);
+    if (isReadOnlyColumn(col)) return acc;
 
-    case "number":
-      if (typeof value !== "number")
-        throw new TypeError(`Expected number for number, got ${typeof value}`);
-      return convertNumber(value);
+    switch (col.type) {
+      case "title":
+        acc[name] = handleTitle(value as ColumnTypeMap<M, S>["title"]);
+        break;
+      case "checkbox":
+        acc[name] = handleCheckbox(value as ColumnTypeMap<M, S>["checkbox"]);
+        break;
+      case "rich_text":
+        acc[name] = handleRichText(value as ColumnTypeMap<M, S>["rich_text"]);
+        break;
+      case "number":
+        acc[name] = handleNumber(value as ColumnTypeMap<M, S>["number"]);
+        break;
+      case "select":
+        acc[name] = handleSelect(value as ColumnTypeMap<M, S>["select"]);
+        break;
+      case "multi_select":
+        acc[name] = handleMultiSelect(value as ColumnTypeMap<M, S>["multi_select"]);
+        break;
+      case "status":
+        acc[name] = handleStatus(value as ColumnTypeMap<M, S>["status"]);
+        break;
+      case "date":
+        acc[name] = handleDate(value as ColumnTypeMap<M, S>["date"]);
+        break;
+      case "people":
+        acc[name] = handlePeople(value as ColumnTypeMap<M, S>["people"]);
+        break;
+      case "files":
+        acc[name] = handleFiles(value as ColumnTypeMap<M, S>["files"]);
+        break;
+      case "url":
+        acc[name] = handleUrl(value as ColumnTypeMap<M, S>["url"]);
+        break;
+      case "email":
+        acc[name] = handleEmail(value as ColumnTypeMap<M, S>["email"]);
+        break;
+      case "phone_number":
+        acc[name] = handlePhoneNumber(value as ColumnTypeMap<M, S>["phone_number"]);
+        break;
+    }
 
-    case "select":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for select, got ${typeof value}`);
-      return convertSelect(value);
+    return acc;
+  }, {} as NotionPagePropertyRequest);
 
-    case "multi_select":
-      if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) {
-        throw new TypeError(`Expected string[] for multi_select`);
-      }
-      return convertMultiSelect(value as string[]);
+  return props;
+}
 
-    case "status":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for status, got ${typeof value}`);
-      return convertStatus(value);
+export function handleTitle<M, S>(value: ColumnTypeMap<M, S>["title"]): TitlePropertyRequest {
+  return {
+    type: "title",
+    title: [
+      {
+        type: "text",
+        text: {
+          content: value,
+        },
+      },
+    ],
+  };
+}
 
-    case "date":
-      if (typeof value === "string") {
-        return convertDate(value);
-      }
-      if (typeof value === "object" && value !== null && "start" in value) {
-        return convertDate(value as { start: string; end?: string | null });
-      }
-      throw new TypeError(`Expected string or date object for date, got ${typeof value}`);
+export function handleCheckbox<M, S>(
+  value: ColumnTypeMap<M, S>["checkbox"],
+): CheckboxPropertyRequest {
+  return {
+    type: "checkbox",
+    checkbox: value,
+  };
+}
 
-    case "people":
-      if (!Array.isArray(value))
-        throw new TypeError(`Expected array for people, got ${typeof value}`);
-      return convertPeople(value as Array<{ id: string }>);
+export function handleRichText<M, S>(
+  value: ColumnTypeMap<M, S>["rich_text"],
+): RichTextPropertyRequest {
+  return {
+    type: "rich_text",
+    rich_text: [
+      {
+        type: "text",
+        text: {
+          content: value,
+        },
+        annotations: {
+          bold: false,
+          italic: false,
+          strikethrough: false,
+          underline: false,
+          code: false,
+          color: "default",
+        },
+      },
+    ],
+  };
+}
 
-    case "files":
-      if (!Array.isArray(value))
-        throw new TypeError(`Expected array for files, got ${typeof value}`);
-      return convertFiles(
-        value as Array<{ name: string; url: string; type?: "external" | "file" }>,
-      );
+export function handleNumber<M, S>(value: ColumnTypeMap<M, S>["number"]): NumberPropertyRequest {
+  return {
+    type: "number",
+    number: value,
+  };
+}
 
-    case "checkbox":
-      if (typeof value !== "boolean")
-        throw new TypeError(`Expected boolean for checkbox, got ${typeof value}`);
-      return convertCheckbox(value);
+export function handleSelect<M, S>(value: ColumnTypeMap<M, S>["select"]): SelectPropertyRequest {
+  return {
+    type: "select",
+    select: {
+      name: value as string,
+    },
+  };
+}
 
-    case "url":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for url, got ${typeof value}`);
-      return convertUrl(value);
+export function handleMultiSelect<M, S>(
+  value: ColumnTypeMap<M, S>["multi_select"],
+): MultiSelectPropertyRequest {
+  return {
+    type: "multi_select",
+    multi_select: value.map((v) => ({ name: v.name as string })),
+  };
+}
 
-    case "email":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for email, got ${typeof value}`);
-      return convertEmail(value);
+export function handleStatus<M, S>(value: ColumnTypeMap<M, S>["status"]): StatusPropertyRequest {
+  return {
+    type: "status",
+    status: {
+      name: value,
+    },
+  };
+}
 
-    case "phone_number":
-      if (typeof value !== "string")
-        throw new TypeError(`Expected string for phone_number, got ${typeof value}`);
-      return convertPhoneNumber(value);
+export function handleDate<M, S>(value: ColumnTypeMap<M, S>["date"]): DatePropertyRequest {
+  return {
+    type: "date",
+    date: {
+      start: value,
+    },
+  };
+}
 
-    case "relation":
-      if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) {
-        throw new TypeError(`Expected string[] for relation`);
-      }
-      return convertRelation(value as string[]);
+export function handlePeople<M, S>(value: ColumnTypeMap<M, S>["people"]): PeoplePropertyRequest {
+  return {
+    type: "people",
+    people: value.map((v) => ({
+      object: "user",
+      id: v.id,
+    })),
+  };
+}
 
-    default:
-      return null;
-  }
+export function handleFiles<M, S>(value: ColumnTypeMap<M, S>["files"]): FilesPropertyRequest {
+  return {
+    type: "files",
+    files: value.map((v) => ({
+      name: v.name,
+      external: {
+        url: v.url,
+      },
+    })),
+  };
+}
+
+export function handleUrl<M, S>(value: ColumnTypeMap<M, S>["url"]): UrlPropertyRequest {
+  return {
+    type: "url",
+    url: value,
+  };
+}
+
+export function handleEmail<M, S>(value: ColumnTypeMap<M, S>["email"]): EmailPropertyRequest {
+  return {
+    type: "email",
+    email: value,
+  };
+}
+
+export function handlePhoneNumber<M, S>(
+  value: ColumnTypeMap<M, S>["phone_number"],
+): PhoneNumberPropertyRequest {
+  return {
+    type: "phone_number",
+    phone_number: value,
+  };
 }

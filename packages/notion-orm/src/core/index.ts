@@ -2,7 +2,8 @@
 // All column builders and table definition
 
 export { table } from "./table.js";
-export type { InferType, NotionTable, InferInsertType } from "./table.ts";
+export type { InferInsertType } from "./types.js";
+export type { NotionTable } from "./table.js";
 
 export {
   checkbox,
@@ -65,21 +66,4 @@ export type { DBOptions } from "./db.ts";
 export { Insert, setMapping } from "./insert.js";
 
 // Page property conversion utilities
-export {
-  convertToPageProperties,
-  convertTitle,
-  convertRichText,
-  convertNumber,
-  convertSelect,
-  convertMultiSelect,
-  convertStatus,
-  convertDate,
-  convertPeople,
-  convertFiles,
-  convertCheckbox,
-  convertUrl,
-  convertEmail,
-  convertPhoneNumber,
-  convertRelation,
-  type NotionPageProperty,
-} from "./page-properties.js";
+export { convertToPageProperties } from "./page-properties.js";

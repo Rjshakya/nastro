@@ -323,6 +323,9 @@ importers:
 
   packages/notion-orm:
     dependencies:
+      '@nastro/notion-api':
+        specifier: workspace:*
+        version: link:../notion-api
       '@notionhq/client':
         specifier: ^5.11.0
         version: 5.11.0
