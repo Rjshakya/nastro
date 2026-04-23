@@ -1,4 +1,4 @@
-import { Filter, FilterColumnTypeMap, NeColumnType } from "../types.js";
+import { Filter, FilterColumnTypeMap, NeColumnType } from "./types.js";
 import type { Column } from "../types.js";
 
 export function ne<T extends Extract<Column, { type: NeColumnType }>>(

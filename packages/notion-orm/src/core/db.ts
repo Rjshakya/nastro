@@ -1,6 +1,7 @@
 import type { NotionTable } from "./table.js";
 import { Insert } from "./insert.js";
 import { createNotionApi, NotionApi } from "@nastro/notion-api";
+import { Select } from "./select.js";
 
 // =============================================================================
 // DB - Main Query Builder Entry Point
@@ -40,7 +41,8 @@ export class DB {
 
   constructor(
     token: string,
-    public config?: Record<string, string>,
+    public overrideMapping?: Record<string, string>,
+    private fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>,
   ) {
     this.notion = createNotionApi({ token });
   }
@@ -49,7 +51,25 @@ export class DB {
    * Start an insert operation for the given table.
    * Returns an Insert builder with a `.values()` method.
    */
-  insert<T extends NotionTable, M, S>(table: T): Insert<T, M, S> {
-    return new Insert({ databaseMapping: {}, notion: this.notion, table });
+  insert<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum>(
+    table: T,
+  ): Insert<T, MultiSelectEnum, SelectEnum, StatusEnum> {
+    return new Insert({ notion: this.notion, table });
   }
+
+  select() {
+    return new Select({ notion: this.notion });
+  }
+}
+
+export function createNotionDB({
+  token,
+  overrideMapping,
+  fetcher,
+}: {
+  token: string;
+  overrideMapping?: Record<string, string>;
+  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+}) {
+  return new DB(token, overrideMapping, fetcher);
 }

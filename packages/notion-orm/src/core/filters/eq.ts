@@ -1,4 +1,4 @@
-import { EqColumnType, Filter, FilterColumnTypeMap } from "../types.js";
+import { EqColumnType, Filter, FilterColumnTypeMap } from "./types.js";
 import type { Column } from "../types.js";
 
 export function eq<T extends Extract<Column, { type: EqColumnType }>>(

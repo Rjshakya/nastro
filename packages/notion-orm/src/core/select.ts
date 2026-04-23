@@ -1,172 +1,104 @@
-import { InferSelectType, NotionTable } from "./types.js";
-import { PageObjectResponse, QueryDataSourceParameters } from "@notionhq/client";
-import { FilterCondition } from "./filters/logical.js";
+import { NotionTable } from "./types.js";
+import { QueryDataSourceParameters } from "@notionhq/client";
+import { Filter } from "./filters/types.js";
 import { NotionApi } from "@nastro/notion-api";
+import { convertPageObjectToSelectType } from "./page-properties.js";
+import { getGeneratedDBMapping } from "./utils.js";
 
-export class Select<T extends NotionTable> {
+export class Select<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
   constructor(
-    _databaseMapping: Record<string, string>,
-    _notion: NotionApi,
-    _fields: T["properties"],
+    private config: {
+      notion: NotionApi;
+    },
   ) {}
 
-  from(_table: T) {}
+  from(table: T) {
+    return new QueryBuilder<T, MultiSelectEnum, SelectEnum, StatusEnum>({
+      notion: this.config.notion,
+      table,
+    });
+  }
 }
 
-export class QueryBuilder<T extends NotionTable> {
+export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
   private query: QueryDataSourceParameters;
 
   constructor(
     private config: {
-      fields: T["properties"];
+      table: T;
       notion: NotionApi;
-      datasourceId: string;
     },
   ) {
-    this.query = { data_source_id: this.config.datasourceId };
+    // it will provided in execute()
+    this.query = { data_source_id: "" };
   }
 
-  where(condition: FilterCondition | null): this {
+  where(condition: Filter | null): this {
     if (condition) {
       this.query.filter = condition;
     }
     return this;
   }
 
+  limit(size: number) {
+    this.query = { ...this.query, page_size: size };
+    return this;
+  }
+
+  setCursor(cursor?: string) {
+    this.query = { ...this.query, start_cursor: cursor };
+    return this;
+  }
+
+  sort(key: keyof T["properties"], order: "asc" | "desc") {
+    const direction = order === "asc" ? "ascending" : "descending";
+    const property = key as string;
+    this.query = {
+      ...this.query,
+      sorts: [...(this.query?.sorts ?? []), { property: property, direction }],
+    };
+    return this;
+  }
+
   raw(filter: QueryDataSourceParameters["filter"]) {
     this.query.filter = filter;
+    return this;
   }
 
   execute() {
-    return this.config.notion
-      .queryDataBase(this.query)
-      .then(({ pages }) =>
-        pages.map((page) => convertPageObjectToSelectType(this.config.fields, page)),
-      );
-  }
-}
+    return this.getDatabaseMapping()
+      .then((mapping) => {
+        const databaseId = mapping[this.config.table.title];
+        if (!databaseId) {
+          throw new Error(
+            `No database ID found for table "${this.config.table.title}". Did you run the push command?`,
+          );
+        }
 
-export function convertPageObjectToSelectType<T extends NotionTable, M, S>(
-  props: T["properties"],
-  page: PageObjectResponse,
-): InferSelectType<T, M, S> {
-  const result = { id: page.id } as InferSelectType<T, M, S>;
-
-  for (const [key, column] of Object.entries(props)) {
-    const propValue = page.properties[key];
-
-    // Property missing from page → set null
-    if (!propValue) {
-      (result as Record<string, unknown>)[key] = null;
-      continue;
-    }
-
-    const v = propValue as { type: string } & Record<string, unknown>;
-
-    switch (column.type) {
-      case "title": {
-        const items = v.title as Array<{ plain_text: string }>;
-        (result as Record<string, unknown>)[key] = items.map((t) => t.plain_text).join("");
-        break;
-      }
-      case "rich_text": {
-        const items = v.rich_text as Array<{ plain_text: string }>;
-        (result as Record<string, unknown>)[key] = items.map((t) => t.plain_text).join("");
-        break;
-      }
-      case "number": {
-        (result as Record<string, unknown>)[key] = v.number ?? null;
-        break;
-      }
-      case "select": {
-        const sel = v.select as { name: string } | null;
-        (result as Record<string, unknown>)[key] = sel?.name ?? null;
-        break;
-      }
-      case "multi_select": {
-        const items = (v.multi_select as Array<{ name: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((x) => ({ name: x.name }));
-        break;
-      }
-      case "status": {
-        const st = v.status as { name: string } | null;
-        (result as Record<string, unknown>)[key] = st?.name ?? "";
-        break;
-      }
-      case "date": {
-        const d = v.date as { start: string } | null;
-        (result as Record<string, unknown>)[key] = d?.start ?? null;
-        break;
-      }
-      case "people": {
-        const items = (v.people as Array<{ id: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((p) => ({ id: p.id }));
-        break;
-      }
-      case "files": {
-        const items =
-          (v.files as Array<{
-            name: string;
-            type: "external" | "file";
-            external?: { url: string };
-            file?: { url: string };
-          }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((f) => ({
-          name: f.name,
-          url: f.type === "external" ? f.external!.url : f.file!.url,
-          type: f.type,
-        }));
-        break;
-      }
-      case "checkbox": {
-        (result as Record<string, unknown>)[key] = v.checkbox ?? false;
-        break;
-      }
-      case "url": {
-        (result as Record<string, unknown>)[key] = (v.url as string | null) ?? null;
-        break;
-      }
-      case "email": {
-        (result as Record<string, unknown>)[key] = (v.email as string | null) ?? null;
-        break;
-      }
-      case "phone_number": {
-        (result as Record<string, unknown>)[key] = (v.phone_number as string | null) ?? null;
-        break;
-      }
-      case "relation": {
-        const items = (v.relation as Array<{ id: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((r) => ({ id: r.id }));
-        break;
-      }
-      case "unique_id": {
-        const uid = v.unique_id as { prefix: string | null; number: number | null } | null;
-        (result as Record<string, unknown>)[key] = uid?.number ?? null;
-        break;
-      }
-      case "created_time": {
-        (result as Record<string, unknown>)[key] = (v.created_time as string) ?? "";
-        break;
-      }
-      case "created_by": {
-        const cb = v.created_by as { id: string } | null;
-        (result as Record<string, unknown>)[key] = cb?.id ?? "";
-        break;
-      }
-      case "last_edited_time": {
-        (result as Record<string, unknown>)[key] = (v.last_edited_time as string) ?? "";
-        break;
-      }
-      case "last_edited_by": {
-        const leb = v.last_edited_by as { id: string } | null;
-        (result as Record<string, unknown>)[key] = leb?.id ?? "";
-        break;
-      }
-      // formula / rollup are excluded from InferSelectType — skip
-      default:
-        break;
-    }
+        return databaseId;
+      })
+      .then((id) => this.config.notion.getDataBase(id))
+      .then((db) => {
+        const datasourceId = db?.data_sources[0].id as string;
+        return datasourceId;
+      })
+      .then((dsId) => this.config.notion.queryDataBase({ ...this.query, data_source_id: dsId }))
+      .then(({ pages, nextCursor }) => {
+        const rows = pages.map((page) =>
+          convertPageObjectToSelectType<T, MultiSelectEnum, SelectEnum, StatusEnum>(
+            this.config.table.properties,
+            page,
+          ),
+        );
+        return { rows, nextCursor };
+      })
+      .catch((e) => {
+        console.error("Error executing select operation:", e);
+        throw e;
+      });
   }
 
-  return result;
+  private getDatabaseMapping() {
+    return getGeneratedDBMapping();
+  }
 }

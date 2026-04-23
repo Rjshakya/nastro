@@ -69,6 +69,7 @@ async function handlePush(config: NotionOrmConfig, force: boolean): Promise<void
       if (!existingMapping[title]) {
         console.log(`New table "${title}", will create.`);
         tablesToCreate.push({ table, title });
+        continue;
       }
 
       const existingId = existingMapping[title];
@@ -119,8 +120,9 @@ async function handlePush(config: NotionOrmConfig, force: boolean): Promise<void
       const createPromises = tablesToCreate.map(async ({ table, title }) => {
         try {
           const params = convertSchemeToDataBaseParams(table, rootPage);
-          const id = await createDatabase(notion, params);
+          const { id, dataSourceId } = await createDatabase(notion, params);
           newMapping[title] = id;
+          newMapping[id] = dataSourceId;
           results.push({ tableTitle: title, status: "created", databaseId: id });
           console.log(`  ✓ Created "${title}": ${id}`);
           return { title, id, success: true as const };

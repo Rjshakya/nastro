@@ -1,4 +1,4 @@
-import { ComparableColumn, ComparableColumnValue, Filter } from "../types.js";
+import { ComparableColumn, ComparableColumnValue, Filter } from "./types.js";
 
 function createComparisonFilter(
   column: ComparableColumn,

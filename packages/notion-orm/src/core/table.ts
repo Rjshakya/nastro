@@ -36,17 +36,23 @@ export function table<T extends Record<string, Column>>(
   properties: T,
 ): NotionTable<T> {
   const props = Object.entries(properties);
-  const record: Record<string, Column> = {};
+  const record = props.reduce(
+    (acc, curr, i) => {
+      const [name, col] = curr;
 
-  for (const prop of props) {
-    const [name, column] = prop;
-    const columnWithName = column;
+      if (!col.name) {
+        col.name = name;
+      }
 
-    if (!column.name) {
-      columnWithName.name = name;
-    }
-    record[name] = columnWithName;
-  }
+      if (!col.id) {
+        col.id = `col_${i}`;
+      }
+
+      acc[name] = col;
+      return acc;
+    },
+    {} as Record<string, Column>,
+  );
 
   return {
     _type: "table",

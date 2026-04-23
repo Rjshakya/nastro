@@ -6,6 +6,7 @@ import {
   DataSourceObjectResponse,
   PageObjectResponse,
   QueryDataSourceParameters,
+  UpdateDataSourceParameters,
 } from "@notionhq/client";
 import { runPage } from "./page";
 import { Page } from "./types";
@@ -13,6 +14,10 @@ import { getNotionClient } from "./notion";
 
 class BaseNotionApi {
   constructor(private token: string) {}
+
+  updateDataSource(params: UpdateDataSourceParameters) {
+    return this.notionClient().dataSources.update(params);
+  }
 
   createDatabase(params: CreateDatabaseParameters) {
     return this.notionClient()

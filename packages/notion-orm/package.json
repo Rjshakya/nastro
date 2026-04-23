@@ -1,5 +1,5 @@
 {
-  "name": "notion-orm",
+  "name": "@nastro/notion-orm",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -8,20 +8,15 @@
   "type": "module",
   "main": "src/main.ts",
   "exports": {
-    "./core": {
-      "import": "./dist/core/index.js",
-      "types": "./dist/core/index.d.ts"
-    },
-    "./schema": {
-      "import": "./dist/schema/index.js",
-      "types": "./dist/schema/index.d.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx src/main.ts",
     "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit false"
+    "build": "tsup"
   },
   "dependencies": {
     "@nastro/notion-api": "workspace:*",

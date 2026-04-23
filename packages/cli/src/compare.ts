@@ -1,4 +1,4 @@
-import type { NotionTable } from "notion-orm/core";
+import type { NotionTable } from "@nastro/notion-orm";
 import type { DataSourceObjectResponse } from "@notionhq/client";
 
 /**
@@ -29,14 +29,12 @@ export function compareProperties(
   const existingProps = new Map<string, string>();
 
   for (const [name, prop] of Object.entries(dataSource.properties)) {
-    // if (prop.type === "title") continue;
     existingProps.set(name, prop.type);
   }
 
   // Build map of new properties (name -> type), skip title
   const newProps = new Map<string, string>();
   for (const [key, column] of Object.entries(newTable.properties)) {
-    // if (column.type === "title") continue;
     const propName = key ?? column.name;
     newProps.set(propName, column.type);
   }

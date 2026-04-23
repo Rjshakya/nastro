@@ -9,7 +9,7 @@
 import { glob } from "glob";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { NotionTable } from "notion-orm/core";
+import type { NotionTable } from "@nastro/notion-orm";
 
 /**
  * Represents a loaded table schema with its export name and source file

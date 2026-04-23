@@ -3,6 +3,7 @@ import { InferInsertType } from "./types.js";
 import { convertToPageProperties } from "./page-properties.js";
 import { NotionApi } from "@nastro/notion-api";
 import { BlockObjectRequest, PageObjectResponse } from "@notionhq/client";
+import { getGeneratedDBMapping } from "./utils.js";
 
 // =============================================================================
 // Insert Builder
@@ -24,33 +25,53 @@ import { BlockObjectRequest, PageObjectResponse } from "@notionhq/client";
  * });
  * ```
  */
-export class Insert<T extends NotionTable, M, S> {
-  constructor(
-    private config: { table: T; notion: NotionApi; databaseMapping: Record<string, string> },
-  ) {}
+export class Insert<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
+  private data: InferInsertType<T, MultiSelectEnum, SelectEnum, StatusEnum> | undefined;
+  private content: BlockObjectRequest[] | undefined;
+  constructor(private config: { table: T; notion: NotionApi }) {}
 
   values(
-    data: InferInsertType<T, M, S>,
+    data: InferInsertType<T, MultiSelectEnum, SelectEnum, StatusEnum>,
     content?: BlockObjectRequest[],
-  ): { execute: () => Promise<PageObjectResponse> } {
-    const databaseId = this.config.databaseMapping[this.config.table.title];
+  ): this {
+    this.data = data;
+    this.content = content;
+    return this;
+  }
 
-    if (!databaseId) {
-      throw new Error(
-        `Database ID not found for table "${this.config.table.title}". ` +
-          `Run 'nastro-orm push' first to generate the mapping file.`,
-      );
-    }
+  execute() {
+    return this.getDatabaseMapping()
+      .then((mapping) => {
+        const databaseId = mapping[this.config.table.title];
+        if (!databaseId) {
+          throw new Error(
+            `No database ID found for table "${this.config.table.title}". Did you run the push command?`,
+          );
+        }
 
-    return {
-      execute: () => {
+        if (!this.data) {
+          throw new Error(
+            `No data provided for insert operation on table "${this.config.table.title}". Please call .values() with the data to insert.`,
+          );
+        }
+
+        return { databaseId, data: this.data };
+      })
+      .then(({ data, databaseId }) => {
         const props = convertToPageProperties(data, this.config.table);
         return this.config.notion.createPage({
           parent: { type: "database_id", database_id: databaseId },
           properties: props,
-          content,
+          content: this.content,
         });
-      },
-    };
+      })
+      .catch((e) => {
+        console.error("Error executing insert operation:", e);
+        throw e;
+      });
+  }
+
+  private async getDatabaseMapping() {
+    return await getGeneratedDBMapping();
   }
 }

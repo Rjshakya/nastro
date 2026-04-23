@@ -3,8 +3,6 @@
 
 // ============== Base Types ==============
 
-import type { QueryDataSourceParameters } from "@notionhq/client";
-
 export type NotionColor =
   | "default"
   | "gray"
@@ -101,6 +99,7 @@ export interface StatusOption {
 // ============== Column Base Interface ==============
 
 export interface ColumnBase {
+  id?: string;
   name?: string;
   description?: string;
 }
@@ -333,27 +332,32 @@ export interface NotionTable<TProperties extends Record<string, Column> = Record
  * // { name: string, status?: string, ... }
  * ```
  */
-export type InferInsertType<T extends NotionTable, MultiSelectEnum, SelectEnum> = {
+export type InferInsertType<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> = {
   // Always require title for inserts
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? K
-    : never]-?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum>;
+    : never]-?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum, StatusEnum>;
 } & {
   // Make all other writable columns optional, filter out read-only types (never)
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? never
-    : InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum> extends never
+    : InferColumnInsertType<
+          T["properties"][K],
+          MultiSelectEnum,
+          SelectEnum,
+          StatusEnum
+        > extends never
       ? never
-      : K]?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum>;
+      : K]?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum, StatusEnum>;
 };
 
-export type ColumnTypeMap<MultiSelect, Select> = {
+export type ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum> = {
   title: string;
   rich_text: string;
   number: number;
-  select: Select;
-  multi_select: Array<{ name: MultiSelect }>;
-  status: string;
+  select: SelectEnum;
+  multi_select: Array<{ name: MultiSelectEnum }>;
+  status: StatusEnum;
   date: string;
   people: Array<{ id: string }>;
   files: Array<{
@@ -375,8 +379,9 @@ export type InferColumnInsertType<
   TColumn extends Column,
   MultiSelect,
   Select,
-> = TColumn["type"] extends keyof ColumnTypeMap<MultiSelect, Select>
-  ? ColumnTypeMap<MultiSelect, Select>[TColumn["type"]]
+  StatusEnum,
+> = TColumn["type"] extends keyof ColumnTypeMap<MultiSelect, Select, StatusEnum>
+  ? ColumnTypeMap<MultiSelect, Select, StatusEnum>[TColumn["type"]]
   : never;
 
 // ============== Select Types ==============
@@ -441,65 +446,6 @@ export type InferSelectType<T extends NotionTable, MultiSelectEnum, SelectEnum> 
     ? never
     : K]: InferColumnSelectType<T["properties"][K], MultiSelectEnum, SelectEnum>;
 };
-
-// ============== Filter Types ==============
-
-/** Column type map for filter operation value types (includes read-only columns) */
-export type FilterColumnTypeMap<MultiSelect = string, Select = string> = ColumnTypeMap<
-  MultiSelect,
-  Select
-> & {
-  unique_id: number;
-  created_time: string;
-  last_edited_time: string;
-};
-
-/** Column types supported by `eq` operator */
-export type EqColumnType =
-  | "title"
-  | "rich_text"
-  | "number"
-  | "select"
-  | "status"
-  | "date"
-  | "phone_number"
-  | "email"
-  | "url"
-  | "checkbox"
-  | "unique_id"
-  | "created_time"
-  | "last_edited_time";
-
-/** Column types supported by `ne` operator */
-export type NeColumnType =
-  | "title"
-  | "rich_text"
-  | "number"
-  | "select"
-  | "status"
-  | "phone_number"
-  | "email"
-  | "url"
-  | "checkbox"
-  | "unique_id";
-
-/** Column types that support gt/gte/lt/lte comparison in Notion API */
-export type ComparableColumnType =
-  | "number"
-  | "date"
-  | "unique_id"
-  | "created_time"
-  | "last_edited_time";
-
-/** Extract only the Column union members whose `type` is comparable */
-export type ComparableColumn = Extract<Column, { type: ComparableColumnType }>;
-
-/** Infer the value type for a comparable column */
-export type ComparableColumnValue<T extends ComparableColumn> = T["type"] extends
-  | "number"
-  | "unique_id"
-  ? number
-  : string;
 
 export type CheckboxPropertyRequest = {
   type?: "checkbox";
@@ -641,5 +587,3 @@ export type NotionPageProperties =
   | StatusPropertyRequest
   | TitlePropertyRequest
   | UrlPropertyRequest;
-
-export type Filter = QueryDataSourceParameters["filter"];

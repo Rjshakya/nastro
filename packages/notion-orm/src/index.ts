@@ -1,9 +1,9 @@
 // Main exports for notion-orm/schema
 // All column builders and table definition
 
-export { table } from "./table.js";
-export type { InferInsertType, InferSelectType } from "./types.js";
-export type { NotionTable } from "./table.js";
+export { table } from "./core/table.js";
+export type { InferInsertType, InferSelectType } from "./core/types.js";
+export type { NotionTable } from "./core/table.js";
 
 export {
   checkbox,
@@ -27,7 +27,7 @@ export {
   title,
   uniqueId,
   url,
-} from "./columns.js";
+} from "./core/columns.js";
 
 export type {
   CheckboxColumn,
@@ -58,17 +58,13 @@ export type {
   TitleColumn,
   UniqueIdColumn,
   UrlColumn,
-} from "./types.ts";
+} from "./core/types.ts";
 
 // Filters
-export { eq, ne, gt, gte, lt, lte, and, or } from "./filters/index.js";
-export type { FilterCondition } from "./filters/index.js";
+export { eq, ne, gt, gte, lt, lte, and, or } from "./core/filters/index.js";
 
-// Select / Query builder
-export { Select, QueryBuilder, convertPageObjectToSelectType } from "./select.js";
-export { DB } from "./db.js";
-export type { DBOptions } from "./db.ts";
-export { Insert } from "./insert.js";
+export { DB, createNotionDB } from "./core/db.js";
+export type { DBOptions } from "./core/db.ts";
 
 // Page property conversion utilities
-export { convertToPageProperties } from "./page-properties.js";
+export { convertToPageProperties } from "./core/page-properties.js";

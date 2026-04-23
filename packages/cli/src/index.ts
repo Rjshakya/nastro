@@ -20,3 +20,4 @@ const program = new Command()
   .parse();
 
 export default program;
+export type { CliOptions, NotionOrmConfig } from "./types.js";

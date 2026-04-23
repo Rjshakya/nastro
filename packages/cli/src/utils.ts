@@ -1,5 +1,5 @@
-import { NotionTable } from "notion-orm/core";
-import { type NotionApi } from "@nastro/notion-api";
+import type { NotionTable } from "@nastro/notion-orm";
+import type { NotionApi } from "@nastro/notion-api";
 import type { CreateDatabaseParameters, CreateDataSourceParameters } from "@notionhq/client";
 
 export const convertSchemeToDataSourceProperties = (
@@ -42,5 +42,8 @@ export const convertSchemeToDataBaseParams = (
 };
 
 export const createDatabase = async (notion: NotionApi, params: CreateDatabaseParameters) => {
-  return notion.createDatabase(params).then((db) => db.id);
+  return notion.createDatabase(params).then((db) => ({
+    id: db.id,
+    dataSourceId: db.data_sources[0].id,
+  }));
 };
