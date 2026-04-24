@@ -5,9 +5,13 @@ import {
   PageObjectResponse,
 } from "@notionhq/client";
 
-export function getNotionClient(token: string) {
+export function getNotionClient(
+  token: string,
+  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>,
+) {
   return new Client({
     auth: token,
+    fetch: fetcher,
   });
 }
 

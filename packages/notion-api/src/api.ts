@@ -236,6 +236,9 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
  * Factory function to create a NotionApi instance
  * Convenience wrapper around the class constructor
  */
-export function createNotionApi(options: { token: string }): NotionApi<Page> {
+export function createNotionApi(options: {
+  token: string;
+  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+}): NotionApi<Page> {
   return new NotionApi(options);
 }
