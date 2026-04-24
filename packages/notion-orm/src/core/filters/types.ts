@@ -1,16 +1,14 @@
 import { QueryDataSourceParameters } from "@notionhq/client";
 import { Column, ColumnTypeMap } from "../types.js";
 
+export type FilterByID = { _filter: "filter_by_id"; value: string };
+
 export type Filter = NonNullable<QueryDataSourceParameters["filter"]>;
 
 // ============== Filter Types ==============
 
 /** Column type map for filter operation value types (includes read-only columns) */
-export type FilterColumnTypeMap<
-  MultiSelectEnum = string,
-  SelectEnum = string,
-  StatusEnum = string,
-> = ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum> & {
+export type FilterColumnTypeMap = ColumnTypeMap & {
   unique_id: number;
   created_time: string;
   last_edited_time: string;

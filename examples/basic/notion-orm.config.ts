@@ -17,7 +17,6 @@ import type { NotionOrmConfig } from "@nastro/notion-orm-cli";
 const config: NotionOrmConfig = {
   // @ts-ignore
   token: process.env.NOTION_API_TOKEN,
-  // @ts-ignore
   rootPage: "34885bde25938063a17adbd36e86c96e",
   schema: "src/schemas/**/*.ts",
 };

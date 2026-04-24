@@ -39,4 +39,6 @@ export interface CliOptions {
   rootPage?: string;
   /** Path to schema file (overrides config) */
   schema?: string;
+  /** Property renames in format "oldName=newName" */
+  rename?: string[];
 }

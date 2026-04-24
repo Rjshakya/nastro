@@ -5,10 +5,11 @@ import type { DataSourceObjectResponse } from "@notionhq/client";
  * Represents a detected difference between existing and new schema properties
  */
 export interface PropertyDiff {
-  type: "added" | "removed" | "type_changed";
+  type: "added" | "removed" | "type_changed" | "renamed";
   property: string;
   oldType?: string;
   newType?: string;
+  newName?: string;
 }
 
 /**
@@ -34,6 +35,7 @@ export function compareProperties(
 
   // Build map of new properties (name -> type), skip title
   const newProps = new Map<string, string>();
+
   for (const [key, column] of Object.entries(newTable.properties)) {
     const propName = key ?? column.name;
     newProps.set(propName, column.type);
@@ -101,6 +103,9 @@ export function formatDiffs(diffs: PropertyDiff[]): string {
         break;
       case "type_changed":
         lines.push(`  ~ ${diff.property}: ${diff.oldType} → ${diff.newType}`);
+        break;
+      case "renamed":
+        lines.push(`  → ${diff.property} → ${diff.newName} (${diff.newType})`);
         break;
     }
   }

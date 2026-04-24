@@ -2,6 +2,8 @@ import type { NotionTable } from "./table.js";
 import { Insert } from "./insert.js";
 import { createNotionApi, NotionApi } from "@nastro/notion-api";
 import { Select } from "./select.js";
+import { Update } from "./update.js";
+import { Delete } from "./delete.js";
 
 // =============================================================================
 // DB - Main Query Builder Entry Point
@@ -51,10 +53,16 @@ export class DB {
    * Start an insert operation for the given table.
    * Returns an Insert builder with a `.values()` method.
    */
-  insert<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum>(
-    table: T,
-  ): Insert<T, MultiSelectEnum, SelectEnum, StatusEnum> {
+  insert<T extends NotionTable>(table: T): Insert<T> {
     return new Insert({ notion: this.notion, table });
+  }
+
+  update<T extends NotionTable>(table: T) {
+    return new Update({ notion: this.notion, table });
+  }
+
+  delete<T extends NotionTable>(table: T) {
+    return new Delete({ notion: this.notion, table });
   }
 
   select() {

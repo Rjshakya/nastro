@@ -1,4 +1,13 @@
-import { table, title, richText, select, date, checkbox } from "@nastro/notion-orm";
+import {
+  table,
+  title,
+  richText,
+  select,
+  date,
+  checkbox,
+  InferInsertType,
+  InferSelectType,
+} from "@nastro/notion-orm";
 
 export const tasksTable = table("Tasks", {
   name: title(),
@@ -12,3 +21,6 @@ export const tasksTable = table("Tasks", {
   dueDate: date(),
   completed: checkbox(),
 });
+
+export type InsertTaskType = InferInsertType<typeof tasksTable>;
+export type SelectTaskType = InferSelectType<typeof tasksTable>;

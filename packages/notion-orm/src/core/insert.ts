@@ -2,7 +2,7 @@ import type { NotionTable } from "./table.js";
 import { InferInsertType } from "./types.js";
 import { convertToPageProperties } from "./page-properties.js";
 import { NotionApi } from "@nastro/notion-api";
-import { BlockObjectRequest, PageObjectResponse } from "@notionhq/client";
+import { BlockObjectRequest } from "@notionhq/client";
 import { getGeneratedDBMapping } from "./utils.js";
 
 // =============================================================================
@@ -25,15 +25,12 @@ import { getGeneratedDBMapping } from "./utils.js";
  * });
  * ```
  */
-export class Insert<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
-  private data: InferInsertType<T, MultiSelectEnum, SelectEnum, StatusEnum> | undefined;
+export class Insert<T extends NotionTable> {
+  private data: InferInsertType<T> | undefined;
   private content: BlockObjectRequest[] | undefined;
   constructor(private config: { table: T; notion: NotionApi }) {}
 
-  values(
-    data: InferInsertType<T, MultiSelectEnum, SelectEnum, StatusEnum>,
-    content?: BlockObjectRequest[],
-  ): this {
+  values(data: InferInsertType<T>, content?: BlockObjectRequest[]): this {
     this.data = data;
     this.content = content;
     return this;
@@ -71,7 +68,7 @@ export class Insert<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEn
       });
   }
 
-  private async getDatabaseMapping() {
-    return await getGeneratedDBMapping();
+  private getDatabaseMapping() {
+    return getGeneratedDBMapping();
   }
 }

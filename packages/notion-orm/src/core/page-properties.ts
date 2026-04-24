@@ -21,16 +21,11 @@ import type {
   UrlPropertyRequest,
 } from "./types.ts";
 
-export function convertPageObjectToSelectType<
-  T extends NotionTable,
-  MultiSelectEnum,
-  SelectEnum,
-  StatusEnum,
->(
+export function convertPageObjectToSelectType<T extends NotionTable>(
   props: T["properties"],
   page: PageObjectResponse,
-): InferSelectType<T, MultiSelectEnum, SelectEnum> {
-  const result = { id: page.id } as InferSelectType<T, MultiSelectEnum, SelectEnum>;
+): InferSelectType<T> {
+  const result = { id: page.id } as InferSelectType<T>;
 
   for (const [key, column] of Object.entries(props)) {
     const propValue = page.properties[key];
@@ -121,7 +116,9 @@ export function convertPageObjectToSelectType<
       }
       case "unique_id": {
         const uid = v.unique_id as { prefix: string | null; number: number | null } | null;
-        (result as Record<string, unknown>)[key] = uid?.number ?? null;
+        (result as Record<string, unknown>)[key] = uid?.number
+          ? `${uid?.prefix}${uid?.number}`
+          : null;
         break;
       }
       case "created_time": {
@@ -171,13 +168,18 @@ function isReadOnlyColumn(column: Column): boolean {
   }
 }
 
-export function convertToPageProperties<
-  T extends NotionTable,
-  MultiSelectEnum,
-  SelectEnum,
-  StatusEnum,
->(
-  data: InferInsertType<T, MultiSelectEnum, SelectEnum, StatusEnum>,
+export function convertToPageProperties<T extends NotionTable>(
+  data: InferInsertType<T>,
+  table: T,
+): NotionPagePropertyRequest;
+
+export function convertToPageProperties<T extends NotionTable>(
+  data: Partial<InferInsertType<T>>,
+  table: T,
+): NotionPagePropertyRequest;
+
+export function convertToPageProperties<T extends NotionTable>(
+  data: InferInsertType<T>,
   table: T,
 ): NotionPagePropertyRequest {
   const props = Object.entries(data).reduce((acc, curr) => {
@@ -188,69 +190,43 @@ export function convertToPageProperties<
 
     switch (col.type) {
       case "title":
-        acc[name] = handleTitle(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["title"],
-        );
+        acc[name] = handleTitle(value as ColumnTypeMap["title"]);
         break;
       case "checkbox":
-        acc[name] = handleCheckbox(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["checkbox"],
-        );
+        acc[name] = handleCheckbox(value as ColumnTypeMap["checkbox"]);
         break;
       case "rich_text":
-        acc[name] = handleRichText(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["rich_text"],
-        );
+        acc[name] = handleRichText(value as ColumnTypeMap["rich_text"]);
         break;
       case "number":
-        acc[name] = handleNumber(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["number"],
-        );
+        acc[name] = handleNumber(value as ColumnTypeMap["number"]);
         break;
       case "select":
-        acc[name] = handleSelect(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["select"],
-        );
+        acc[name] = handleSelect(value as ColumnTypeMap["select"]);
         break;
       case "multi_select":
-        acc[name] = handleMultiSelect(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["multi_select"],
-        );
+        acc[name] = handleMultiSelect(value as ColumnTypeMap["multi_select"]);
         break;
       case "status":
-        acc[name] = handleStatus(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["status"],
-        );
+        acc[name] = handleStatus(value as ColumnTypeMap["status"]);
         break;
       case "date":
-        acc[name] = handleDate(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["date"],
-        );
+        acc[name] = handleDate(value as ColumnTypeMap["date"]);
         break;
       case "people":
-        acc[name] = handlePeople(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["people"],
-        );
+        acc[name] = handlePeople(value as ColumnTypeMap["people"]);
         break;
       case "files":
-        acc[name] = handleFiles(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["files"],
-        );
+        acc[name] = handleFiles(value as ColumnTypeMap["files"]);
         break;
       case "url":
-        acc[name] = handleUrl(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["url"],
-        );
+        acc[name] = handleUrl(value as ColumnTypeMap["url"]);
         break;
       case "email":
-        acc[name] = handleEmail(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["email"],
-        );
+        acc[name] = handleEmail(value as ColumnTypeMap["email"]);
         break;
       case "phone_number":
-        acc[name] = handlePhoneNumber(
-          value as ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["phone_number"],
-        );
+        acc[name] = handlePhoneNumber(value as ColumnTypeMap["phone_number"]);
         break;
     }
 
@@ -260,9 +236,7 @@ export function convertToPageProperties<
   return props;
 }
 
-export function handleTitle<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["title"],
-): TitlePropertyRequest {
+export function handleTitle(value: ColumnTypeMap["title"]): TitlePropertyRequest {
   return {
     type: "title",
     title: [
@@ -276,18 +250,14 @@ export function handleTitle<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleCheckbox<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["checkbox"],
-): CheckboxPropertyRequest {
+export function handleCheckbox(value: ColumnTypeMap["checkbox"]): CheckboxPropertyRequest {
   return {
     type: "checkbox",
     checkbox: value,
   };
 }
 
-export function handleRichText<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["rich_text"],
-): RichTextPropertyRequest {
+export function handleRichText(value: ColumnTypeMap["rich_text"]): RichTextPropertyRequest {
   return {
     type: "rich_text",
     rich_text: [
@@ -309,18 +279,14 @@ export function handleRichText<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleNumber<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["number"],
-): NumberPropertyRequest {
+export function handleNumber(value: ColumnTypeMap["number"]): NumberPropertyRequest {
   return {
     type: "number",
     number: value,
   };
 }
 
-export function handleSelect<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["select"],
-): SelectPropertyRequest {
+export function handleSelect(value: ColumnTypeMap["select"]): SelectPropertyRequest {
   return {
     type: "select",
     select: {
@@ -329,8 +295,8 @@ export function handleSelect<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleMultiSelect<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["multi_select"],
+export function handleMultiSelect(
+  value: ColumnTypeMap["multi_select"],
 ): MultiSelectPropertyRequest {
   return {
     type: "multi_select",
@@ -338,9 +304,7 @@ export function handleMultiSelect<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleStatus<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["status"],
-): StatusPropertyRequest {
+export function handleStatus(value: ColumnTypeMap["status"]): StatusPropertyRequest {
   return {
     type: "status",
     status: {
@@ -349,9 +313,7 @@ export function handleStatus<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleDate<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["date"],
-): DatePropertyRequest {
+export function handleDate(value: ColumnTypeMap["date"]): DatePropertyRequest {
   return {
     type: "date",
     date: {
@@ -360,9 +322,7 @@ export function handleDate<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handlePeople<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["people"],
-): PeoplePropertyRequest {
+export function handlePeople(value: ColumnTypeMap["people"]): PeoplePropertyRequest {
   return {
     type: "people",
     people: value.map((v) => ({
@@ -372,9 +332,7 @@ export function handlePeople<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleFiles<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["files"],
-): FilesPropertyRequest {
+export function handleFiles(value: ColumnTypeMap["files"]): FilesPropertyRequest {
   return {
     type: "files",
     files: value.map((v) => ({
@@ -386,26 +344,22 @@ export function handleFiles<MultiSelectEnum, SelectEnum, StatusEnum>(
   };
 }
 
-export function handleUrl<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["url"],
-): UrlPropertyRequest {
+export function handleUrl(value: ColumnTypeMap["url"]): UrlPropertyRequest {
   return {
     type: "url",
     url: value,
   };
 }
 
-export function handleEmail<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["email"],
-): EmailPropertyRequest {
+export function handleEmail(value: ColumnTypeMap["email"]): EmailPropertyRequest {
   return {
     type: "email",
     email: value,
   };
 }
 
-export function handlePhoneNumber<MultiSelectEnum, SelectEnum, StatusEnum>(
-  value: ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum>["phone_number"],
+export function handlePhoneNumber(
+  value: ColumnTypeMap["phone_number"],
 ): PhoneNumberPropertyRequest {
   return {
     type: "phone_number",

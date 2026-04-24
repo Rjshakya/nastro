@@ -1,22 +1,32 @@
-import { EqColumnType, Filter, FilterColumnTypeMap } from "./types.js";
+import { EqColumnType, Filter, FilterByID, FilterColumnTypeMap } from "./types.js";
 import type { Column } from "../types.js";
 
+export function eq(column: "id", value: string): FilterByID;
 export function eq<T extends Extract<Column, { type: EqColumnType }>>(
   column: T,
   value: FilterColumnTypeMap[T["type"]],
-): Filter | null {
+): Filter | null;
+
+export function eq<T extends Extract<Column, { type: EqColumnType }>>(
+  column: T & "id",
+  value: FilterColumnTypeMap[T["type"]] & string,
+): Filter | FilterByID | null {
   const property = column.name as string;
   const type = column.type;
+
+  if (column === "id") {
+    return { _filter: "filter_by_id", value };
+  }
 
   switch (type) {
     case "email":
       return { property, email: { equals: value as string } };
     case "checkbox":
-      return { property, checkbox: { equals: value as boolean } };
+      return { property, checkbox: { equals: value as unknown as boolean } };
     case "date":
       return { property, date: { equals: value as string } };
     case "number":
-      return { property, number: { equals: value as number } };
+      return { property, number: { equals: value as unknown as number } };
     case "title":
       return { property, title: { equals: value as string } };
     case "phone_number":
@@ -28,7 +38,7 @@ export function eq<T extends Extract<Column, { type: EqColumnType }>>(
     case "status":
       return { property, status: { equals: value as string } };
     case "unique_id":
-      return { property, unique_id: { equals: value as number } };
+      return { property, unique_id: { equals: value as unknown as number } };
     case "url":
       return { property, url: { equals: value as string } };
     case "created_time":

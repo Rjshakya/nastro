@@ -332,32 +332,27 @@ export interface NotionTable<TProperties extends Record<string, Column> = Record
  * // { name: string, status?: string, ... }
  * ```
  */
-export type InferInsertType<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> = {
+export type InferInsertType<T extends NotionTable> = {
   // Always require title for inserts
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? K
-    : never]-?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum, StatusEnum>;
+    : never]-?: InferColumnInsertType<T["properties"][K]>;
 } & {
   // Make all other writable columns optional, filter out read-only types (never)
   [K in keyof T["properties"] as T["properties"][K] extends { type: "title" }
     ? never
-    : InferColumnInsertType<
-          T["properties"][K],
-          MultiSelectEnum,
-          SelectEnum,
-          StatusEnum
-        > extends never
+    : InferColumnInsertType<T["properties"][K]> extends never
       ? never
-      : K]?: InferColumnInsertType<T["properties"][K], MultiSelectEnum, SelectEnum, StatusEnum>;
+      : K]?: InferColumnInsertType<T["properties"][K]>;
 };
 
-export type ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum> = {
+export type ColumnTypeMap = {
   title: string;
   rich_text: string;
   number: number;
-  select: SelectEnum;
-  multi_select: Array<{ name: MultiSelectEnum }>;
-  status: StatusEnum;
+  select: string;
+  multi_select: Array<{ name: string }>;
+  status: string;
   date: string;
   people: Array<{ id: string }>;
   files: Array<{
@@ -375,14 +370,8 @@ export type ColumnTypeMap<MultiSelectEnum, SelectEnum, StatusEnum> = {
  * Infer the TypeScript insert type for a single column
  * Maps Notion column types to TypeScript types for insertion
  */
-export type InferColumnInsertType<
-  TColumn extends Column,
-  MultiSelect,
-  Select,
-  StatusEnum,
-> = TColumn["type"] extends keyof ColumnTypeMap<MultiSelect, Select, StatusEnum>
-  ? ColumnTypeMap<MultiSelect, Select, StatusEnum>[TColumn["type"]]
-  : never;
+export type InferColumnInsertType<TColumn extends Column> =
+  TColumn["type"] extends keyof ColumnTypeMap ? ColumnTypeMap[TColumn["type"]] : never;
 
 // ============== Select Types ==============
 
@@ -391,13 +380,13 @@ export type InferColumnInsertType<
  * Includes read-only columns and handles nullability for optional fields.
  * Excludes formula and rollup (not selectable).
  */
-export type ColumnSelectTypeMap<MultiSelect, Select> = {
+export type ColumnSelectTypeMap = {
   title: string;
   rich_text: string;
   number: number | null;
-  select: Select;
-  multi_select: Array<{ name: MultiSelect }>;
-  status: string;
+  select: string | null;
+  multi_select: Array<{ name: string | null }>;
+  status: string | null;
   date: string | null;
   people: Array<{ id: string }>;
   files: Array<{ name: string; url: string; type: "external" | "file" }>;
@@ -406,7 +395,7 @@ export type ColumnSelectTypeMap<MultiSelect, Select> = {
   email: string | null;
   phone_number: string | null;
   relation: Array<{ id: string }>;
-  unique_id: string;
+  unique_id: string | null;
   created_time: string;
   created_by: string;
   last_edited_time: string;
@@ -418,13 +407,8 @@ export type ColumnSelectTypeMap<MultiSelect, Select> = {
  * Maps Notion column types to TypeScript types for query results.
  * Excludes formula and rollup (they return never and are filtered out).
  */
-export type InferColumnSelectType<
-  TColumn extends Column,
-  MultiSelect,
-  Select,
-> = TColumn["type"] extends keyof ColumnSelectTypeMap<MultiSelect, Select>
-  ? ColumnSelectTypeMap<MultiSelect, Select>[TColumn["type"]]
-  : never;
+export type InferColumnSelectType<TColumn extends Column> =
+  TColumn["type"] extends keyof ColumnSelectTypeMap ? ColumnSelectTypeMap[TColumn["type"]] : never;
 
 /**
  * Infer the TypeScript type for select/query operations from a table definition.
@@ -439,12 +423,12 @@ export type InferColumnSelectType<
  * // { id: string, name: string, status: string, budget: number | null, ... }
  * ```
  */
-export type InferSelectType<T extends NotionTable, MultiSelectEnum, SelectEnum> = {
+export type InferSelectType<T extends NotionTable> = {
   id: string;
 } & {
   [K in keyof T["properties"] as T["properties"][K] extends { type: "formula" } | { type: "rollup" }
     ? never
-    : K]: InferColumnSelectType<T["properties"][K], MultiSelectEnum, SelectEnum>;
+    : K]: InferColumnSelectType<T["properties"][K]>;
 };
 
 export type CheckboxPropertyRequest = {

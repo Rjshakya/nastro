@@ -1,27 +1,28 @@
-import { NotionTable } from "./types.js";
-import { QueryDataSourceParameters } from "@notionhq/client";
-import { Filter } from "./filters/types.js";
+import { InferSelectType, NotionTable } from "./types.js";
+import { PageObjectResponse, QueryDataSourceParameters } from "@notionhq/client";
+import { Filter, FilterByID } from "./filters/types.js";
 import { NotionApi } from "@nastro/notion-api";
 import { convertPageObjectToSelectType } from "./page-properties.js";
 import { getGeneratedDBMapping } from "./utils.js";
 
-export class Select<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
+export class Select {
   constructor(
     private config: {
       notion: NotionApi;
     },
   ) {}
 
-  from(table: T) {
-    return new QueryBuilder<T, MultiSelectEnum, SelectEnum, StatusEnum>({
+  from<T extends NotionTable>(table: T) {
+    return new QueryBuilder<T>({
       notion: this.config.notion,
       table,
     });
   }
 }
 
-export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, StatusEnum> {
+export class QueryBuilder<T extends NotionTable> {
   private query: QueryDataSourceParameters;
+  private pageId: string | undefined;
 
   constructor(
     private config: {
@@ -33,9 +34,13 @@ export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, St
     this.query = { data_source_id: "" };
   }
 
-  where(condition: Filter | null): this {
+  where(condition: Filter | FilterByID | null): this {
     if (condition) {
-      this.query.filter = condition;
+      if ("_filter" in condition) {
+        this.pageId = condition.value;
+      } else {
+        this.query.filter = condition;
+      }
     }
     return this;
   }
@@ -65,7 +70,16 @@ export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, St
     return this;
   }
 
-  execute() {
+  execute(): Promise<{
+    rows: InferSelectType<T>[];
+    nextCursor: string | undefined;
+  }> {
+    if (this.pageId) {
+      return this.getPage(this.pageId).then((row) => {
+        return { rows: [row], nextCursor: undefined };
+      });
+    }
+
     return this.getDatabaseMapping()
       .then((mapping) => {
         const databaseId = mapping[this.config.table.title];
@@ -79,16 +93,18 @@ export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, St
       })
       .then((id) => this.config.notion.getDataBase(id))
       .then((db) => {
-        const datasourceId = db?.data_sources[0].id as string;
+        const datasourceId = db?.data_sources[0]?.id;
+        if (!datasourceId) {
+          throw new Error(
+            `No data source found for database "${this.config.table.title}". Did you run the push command?`,
+          );
+        }
         return datasourceId;
       })
       .then((dsId) => this.config.notion.queryDataBase({ ...this.query, data_source_id: dsId }))
       .then(({ pages, nextCursor }) => {
         const rows = pages.map((page) =>
-          convertPageObjectToSelectType<T, MultiSelectEnum, SelectEnum, StatusEnum>(
-            this.config.table.properties,
-            page,
-          ),
+          convertPageObjectToSelectType<T>(this.config.table.properties, page),
         );
         return { rows, nextCursor };
       })
@@ -100,5 +116,12 @@ export class QueryBuilder<T extends NotionTable, MultiSelectEnum, SelectEnum, St
 
   private getDatabaseMapping() {
     return getGeneratedDBMapping();
+  }
+
+  private getPage(pageId: string) {
+    return this.config.notion
+      .getPage(pageId)
+      .then((page) => page as PageObjectResponse)
+      .then((page) => convertPageObjectToSelectType<T>(this.config.table.properties, page));
   }
 }
