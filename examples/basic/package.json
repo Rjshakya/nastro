@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.0.0",
-    "@nastro/notion-orm": "workspace:*",
+    "@nastro-dev/notion-orm": "workspace:*",
     "hono": "^4.12.2"
   },
   "devDependencies": {
-    "@nastro/notion-orm-cli": "workspace:*",
+    "@nastro-dev/notion-orm-cli": "workspace:*",
     "@types/node": "^25.6.0",
     "tsx": "^4.21.0"
   }

@@ -1,7 +1,7 @@
 import type { NotionTable } from "./table.js";
 import { InferInsertType } from "./types.js";
 import { convertToPageProperties } from "./page-properties.js";
-import { NotionApi } from "@nastro/notion-api";
+import { NotionApi } from "@nastro-dev/notion-api";
 import { BlockObjectRequest } from "@notionhq/client";
 import { getGeneratedDBMapping } from "./utils.js";
 

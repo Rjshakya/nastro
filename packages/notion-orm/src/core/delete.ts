@@ -1,4 +1,4 @@
-import { NotionApi } from "@nastro/notion-api";
+import { NotionApi } from "@nastro-dev/notion-api";
 import { NotionTable } from "./types";
 import { getGeneratedDBMapping } from "./utils";
 import { Filter } from "./filters";

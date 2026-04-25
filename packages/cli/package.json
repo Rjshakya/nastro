@@ -1,5 +1,5 @@
 {
-  "name": "@nastro/notion-orm-cli",
+  "name": "@nastro-dev/notion-orm-cli",
   "version": "0.1.0",
   "description": "CLI for managing Notion databases using notion-orm",
   "keywords": [
@@ -15,6 +15,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": ["dist"],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -32,12 +33,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nastro/notion-api": "workspace:*",
+    "@nastro-dev/notion-api": "workspace:*",
     "commander": "^14.0.3",
     "glob": "^13.0.6"
   },
   "devDependencies": {
-    "@nastro/notion-orm": "workspace:*",
+    "@nastro-dev/notion-orm": "workspace:*",
     "@notionhq/client": "^5.11.0",
     "@types/node": "^25.6.0",
     "tsup": "^8.5.1",

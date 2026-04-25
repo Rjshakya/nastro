@@ -1,5 +1,5 @@
-import type { Column, NotionTable } from "@nastro/notion-orm";
-import type { NotionApi } from "@nastro/notion-api";
+import type { Column, NotionTable } from "@nastro-dev/notion-orm";
+import type { NotionApi } from "@nastro-dev/notion-api";
 import type {
   CreateDatabaseParameters,
   CreateDataSourceParameters,

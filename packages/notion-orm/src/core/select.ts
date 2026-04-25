@@ -1,7 +1,7 @@
 import { InferSelectType, NotionTable } from "./types.js";
 import { PageObjectResponse, QueryDataSourceParameters } from "@notionhq/client";
 import { Filter, FilterByID } from "./filters/types.js";
-import { NotionApi } from "@nastro/notion-api";
+import { NotionApi } from "@nastro-dev/notion-api";
 import { convertPageObjectToSelectType } from "./page-properties.js";
 import { getGeneratedDBMapping } from "./utils.js";
 

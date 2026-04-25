@@ -1,6 +1,6 @@
 import type { NotionTable } from "./table.js";
 import { Insert } from "./insert.js";
-import { createNotionApi, NotionApi } from "@nastro/notion-api";
+import { createNotionApi, NotionApi } from "@nastro-dev/notion-api";
 import { Select } from "./select.js";
 import { Update } from "./update.js";
 import { Delete } from "./delete.js";

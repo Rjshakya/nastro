@@ -3,10 +3,10 @@ import { resolveConfig } from "./config.js";
 import { loadSchemasFromGlob } from "./schema-loader.js";
 import type { NotionOrmConfig } from "./types.js";
 import { convertSchemeToDataBaseParams, createDatabase, buildUpdateProperty } from "./utils.js";
-import { createNotionApi } from "@nastro/notion-api";
+import { createNotionApi } from "@nastro-dev/notion-api";
 import { loadMapping, writeMapping } from "./mapping.js";
 import { compareProperties, hasDeletions, formatDiffs, type PropertyDiff } from "./compare.js";
-import type { NotionTable } from "@nastro/notion-orm";
+import type { NotionTable } from "@nastro-dev/notion-orm";
 import type { UpdateDataSourceParameters } from "@notionhq/client";
 
 const pushCommand = new Command()

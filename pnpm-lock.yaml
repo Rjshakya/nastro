@@ -282,14 +282,14 @@ importers:
       '@hono/node-server':
         specifier: ^2.0.0
         version: 2.0.0(hono@4.12.2)
-      '@nastro/notion-orm':
+      '@nastro-dev/notion-orm':
         specifier: workspace:*
         version: link:../../packages/notion-orm
       hono:
         specifier: ^4.12.2
         version: 4.12.2
     devDependencies:
-      '@nastro/notion-orm-cli':
+      '@nastro-dev/notion-orm-cli':
         specifier: workspace:*
         version: link:../../packages/cli
       '@types/node':
@@ -301,7 +301,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@nastro/notion-api':
+      '@nastro-dev/notion-api':
         specifier: workspace:*
         version: link:../notion-api
       commander:
@@ -311,7 +311,7 @@ importers:
         specifier: ^13.0.6
         version: 13.0.6
     devDependencies:
-      '@nastro/notion-orm':
+      '@nastro-dev/notion-orm':
         specifier: workspace:*
         version: link:../notion-orm
       '@notionhq/client':
@@ -345,7 +345,7 @@ importers:
 
   packages/notion-orm:
     dependencies:
-      '@nastro/notion-api':
+      '@nastro-dev/notion-api':
         specifier: workspace:*
         version: link:../notion-api
       '@notionhq/client':

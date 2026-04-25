@@ -1,4 +1,4 @@
-import type { NotionTable } from "@nastro/notion-orm";
+import type { NotionTable } from "@nastro-dev/notion-orm";
 import type { DataSourceObjectResponse } from "@notionhq/client";
 
 /**
