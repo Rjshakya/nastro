@@ -1,12 +1,17 @@
 {
-  "name": "@nastro/notion-orm",
+  "name": "@nastro/notion-api",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Notion api",
+  "keywords": [
+    "cms",
+    "notion"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "src/main.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -15,16 +20,17 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "oxlint --config oxlint.config.ts",
+    "dev": "tsx src/main.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsup"
   },
   "dependencies": {
-    "@nastro/notion-api": "workspace:*",
     "@notionhq/client": "^5.11.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.19.0"
   }
 }

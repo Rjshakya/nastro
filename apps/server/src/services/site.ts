@@ -12,20 +12,14 @@ import { SiteError } from "@/errors/tagged.errors";
 export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
   Effect.gen(function* () {
     const siteRepo = yield* SiteRepo();
-    const site = yield* siteRepo.execute<SiteSelect | null, SiteError>(
-      (db, sites) =>
-        Effect.tryPromise({
-          try: async () => {
-            const result = await db
-              .select()
-              .from(sites)
-              .where(eq(sites.slug, slug))
-              .limit(1);
-            return result.length ? result[0] : null;
-          },
-          catch: (e) =>
-            new SiteError({ type: "NOT_FOUND", message: `${e}`, code: 404 }),
-        }),
+    const site = yield* siteRepo.execute<SiteSelect | null, SiteError>((db, sites) =>
+      Effect.tryPromise({
+        try: async () => {
+          const result = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
+          return result.length ? result[0] : null;
+        },
+        catch: (e) => new SiteError({ type: "NOT_FOUND", message: `${e}`, code: 404 }),
+      }),
     );
 
     if (!site) {
@@ -50,9 +44,7 @@ export const createUniqueSlug = (baseSlug: string) => {
   return Effect.succeed(`${baseSlug}-${nanoid(5)}`);
 };
 
-export const createSite = Effect.fn("services/site/createSite")((
-  data: SiteInsert,
-) => {
+export const createSite = Effect.fn("services/site/createSite")((data: SiteInsert) => {
   return Effect.gen(function* () {
     const pageId = data?.pageId as string;
     yield* checkIsPagePublic(pageId);

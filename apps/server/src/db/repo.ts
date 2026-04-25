@@ -3,21 +3,14 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Effect } from "effect";
 import { RepoError } from "@/errors/tagged.errors";
 
-export interface Repo<
-  T extends Table<any>,
-  ResultType extends InferSelectModel<T>,
-> {
+export interface Repo<T extends Table<any>, ResultType extends InferSelectModel<T>> {
   findAll: (limit?: number) => Effect.Effect<ResultType[], RepoError, never>;
   findById: (
     key: keyof InferSelectModel<T>,
     id: string,
   ) => Effect.Effect<ResultType[], RepoError, never>;
-  insert: (
-    data: InferInsertModel<T>,
-  ) => Effect.Effect<ResultType[], RepoError, never>;
-  insertVoid: (
-    data: InferInsertModel<T>,
-  ) => Effect.Effect<void, RepoError, never>;
+  insert: (data: InferInsertModel<T>) => Effect.Effect<ResultType[], RepoError, never>;
+  insertVoid: (data: InferInsertModel<T>) => Effect.Effect<void, RepoError, never>;
   updateById: (
     key: keyof InferSelectModel<T>,
     id: string,
@@ -32,10 +25,7 @@ export interface Repo<
   ) => Effect.Effect<R, E, never>;
 }
 
-export const makeRepo = <
-  T extends Table<any>,
-  ResultType extends InferSelectModel<T>,
->(
+export const makeRepo = <T extends Table<any>, ResultType extends InferSelectModel<T>>(
   db: NodePgDatabase,
   table: T,
 ): Repo<T, ResultType> => {
@@ -58,13 +48,11 @@ export const makeRepo = <
   const findById = (key: keyof InferSelectModel<T>, id: string) =>
     Effect.tryPromise({
       try: async () => {
-        return (
-          (await db
-            .select()
-            .from(table as Table<any>)
-            // @ts-expect-error  column type error
-            .where(eq(table[key], id))) as ResultType[]
-        );
+        return (await db
+          .select()
+          .from(table as Table<any>)
+          // @ts-expect-error  column type error
+          .where(eq(table[key], id))) as ResultType[];
       },
       catch: (error) => {
         console.error(error);
@@ -79,10 +67,7 @@ export const makeRepo = <
   const insert = (data: InferInsertModel<T>) =>
     Effect.tryPromise({
       try: async () => {
-        const res = (await db
-          .insert(table)
-          .values(data)
-          .returning()) as unknown as ResultType[];
+        const res = (await db.insert(table).values(data).returning()) as unknown as ResultType[];
         return res;
       },
       catch: (error) =>
@@ -106,21 +91,16 @@ export const makeRepo = <
         }),
     });
 
-  const updateById = (
-    key: keyof InferSelectModel<T>,
-    id: string,
-    data: InferInsertModel<T>,
-  ) =>
+  const updateById = (key: keyof InferSelectModel<T>, id: string, data: InferInsertModel<T>) =>
     Effect.tryPromise({
       try: async () => {
-        return (
-          (await db
-            .update(table)
-            .set(data)
-            // @ts-expect-error  column type error
-            .where(eq(table[key], id))
-            .returning()) as unknown as ResultType[]
-        );
+        return (await db
+          .update(table)
+          // @ts-expect-error  column type error
+          .set(data)
+          // @ts-expect-error  column type error
+          .where(eq(table[key], id))
+          .returning()) as unknown as ResultType[];
       },
       catch: (error) =>
         new RepoError({
@@ -133,13 +113,11 @@ export const makeRepo = <
   const deleteById = (key: keyof InferSelectModel<T>, id: string) =>
     Effect.tryPromise({
       try: async () => {
-        return (
-          (await db
-            .delete(table)
-            // @ts-expect-error  column type error
-            .where(eq(table[key], id))
-            .returning()) as unknown as ResultType[]
-        );
+        return (await db
+          .delete(table)
+          // @ts-expect-error  column type error
+          .where(eq(table[key], id))
+          .returning()) as unknown as ResultType[];
       },
       catch: (error) =>
         new RepoError({
@@ -149,9 +127,7 @@ export const makeRepo = <
         }),
     });
 
-  const execute = <R, E>(
-    f: (db: NodePgDatabase, table: T) => Effect.Effect<R, E>,
-  ) =>
+  const execute = <R, E>(f: (db: NodePgDatabase, table: T) => Effect.Effect<R, E>) =>
     Effect.tryPromise({
       try: async () => {
         return f(db, table);

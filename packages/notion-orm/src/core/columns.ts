@@ -234,6 +234,8 @@ export function phoneNumber(params?: ColumnBase): PhoneNumberColumn {
  * Relation property
  * Contains references to pages in another data source
  * The relatedTo field is the export name of the related schema (deferred resolution)
+ *
+ * @description Not supported for now;
  */
 export function relation(params: ColumnBase & { relatedTo?: string }): RelationColumn {
   return {

@@ -36,11 +36,14 @@ export function findConfigFile(cwd: string = process.cwd()): string | null {
  */
 export async function loadConfigFile(configPath: string): Promise<NotionOrmConfig> {
   try {
+    if (!(configPath?.endsWith(".ts") || configPath?.endsWith(".js"))) {
+      throw new Error("Invalid config file extension. Supported extensions are .ts and .js");
+    }
+
     // Convert to file URL for proper ESM imports
     // This works with tsx for .ts files and native ESM for .js/.mjs
     const fileUrl = pathToFileURL(resolve(configPath)).href;
     const configModule = await import(fileUrl);
-    console.log(configModule);
     const config = configModule.default || configModule;
 
     if (!config || typeof config !== "object") {
@@ -68,10 +71,6 @@ export async function resolveConfig(cliOptions: CliOptions): Promise<NotionOrmCo
   // Load config from file if path provided, otherwise auto-discover
   let config: Partial<NotionOrmConfig> | undefined;
 
-  if (!(cliOptions.config?.endsWith(".ts") || cliOptions.config?.endsWith(".js"))) {
-    throw new Error("Invalid config file extension. Supported extensions are .ts and .js");
-  }
-
   if (cliOptions.config) {
     config = await loadConfigFile(cliOptions.config);
   } else {
@@ -97,7 +96,7 @@ export async function resolveConfig(cliOptions: CliOptions): Promise<NotionOrmCo
 
   if (!rootPage) {
     throw new Error(
-      "Missing required field: rootPageId. Provide it via config file or --root-page flag.",
+      "Missing required field: rootPage. Provide it via config file or --root-page flag.",
     );
   }
 
