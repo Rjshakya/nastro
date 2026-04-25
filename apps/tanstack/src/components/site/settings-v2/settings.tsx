@@ -13,7 +13,7 @@ import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { NotionPageSettings } from "#/types/notion-page-settings";
 
 import { useUpdateSite } from "#/hooks/use-sites";
-import { getEntries } from "#/lib/utils";
+import { clientThemeToggle, getEntries } from "#/lib/utils";
 import { TabGeneral } from "./tabs/tab-general";
 import { TabTheme } from "./tabs/tab-theme";
 import { TabLayout } from "./tabs/tab-layout";
@@ -142,6 +142,9 @@ export const SettingsV2 = ({
               },
               params: (prev) => ({ pageId: prev.pageId || "page" }),
             });
+
+            const isDark = th.themeSetting.general?.isDark ?? false;
+            clientThemeToggle(isDark);
           }}
         />
 

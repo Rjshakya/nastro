@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nastro",
+  "compatibility_date": "2026-03-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/server.ts",
+  // "preview_urls": true,
+  "observability": {
+    "enabled": true,
+    // "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      //  "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+    },
+  },
+
+  "routes": [
+    {
+      
+      "custom_domain": false,
+      "pattern": "*.nastro.xyz/*",
+      "zone_name": "nastro.xyz"
+    },
+    
+  ],
+
+  "services": [
+    {
+      "service": "nastro-api",
+      "binding": "NASTRO_API_WORKER",
+    },
+  ],
+}

@@ -1,5 +1,5 @@
 import { serve } from "@hono/node-server";
-import { createNotionDB, eq } from "@nastro/notion-orm";
+import { createNotionDB, eq } from "@nastro-dev/notion-orm";
 import { Hono } from "hono";
 import { tasksTable } from "./schemas/tasks";
 import { projectsTable } from "./schemas/projects";

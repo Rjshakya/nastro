@@ -1,4 +1,10 @@
-import { IconTrash, IconSettings, IconArrowUpRight, IconDots, IconLink } from "@tabler/icons-react";
+import {
+  IconTrash,
+  IconSettings,
+  IconArrowUpRight,
+  IconDots,
+  IconLink,
+} from "@tabler/icons-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,9 +35,17 @@ export function SiteCard({ site, className }: SiteCardProps) {
     await deleteSite({ pageId: site.pageId || "", siteId: site.id });
   };
 
-  const handleCopyLink = ({ pageId, slug }: { pageId: string; slug: string }) => {
+  const handleCopyLink = ({
+    pageId,
+    slug,
+  }: {
+    pageId: string;
+    slug: string;
+  }) => {
     if (import.meta.env.VITE_PUBLIC_ENVIRONMENT === "development") {
-      navigator.clipboard.writeText(`https://${window.location.origin}/${pageId}?slug=${slug}`);
+      navigator.clipboard.writeText(
+        `https://${window.location.origin}/${pageId}?slug=${slug}`,
+      );
     } else {
       navigator.clipboard.writeText(`https://${slug}.nastro.xyz/${pageId}`);
     }
@@ -80,7 +94,12 @@ export function SiteCard({ site, className }: SiteCardProps) {
 
                 <DropdownMenuItem
                   closeOnClick={false}
-                  onClick={() => handleCopyLink({ pageId: site.pageId as string, slug: site.slug })}
+                  onClick={() =>
+                    handleCopyLink({
+                      pageId: site.pageId as string,
+                      slug: site.slug,
+                    })
+                  }
                   className={"w-full"}
                 >
                   <IconLink className="size-4" />

@@ -89,9 +89,7 @@ export function getNotionPageIcon(page: ExtendedRecordMap, pageId: string) {
   return icon;
 }
 
-export function covertPageSettingsIntoStyles(
-  settings: NotionPageSettings | null,
-) {
+export function covertPageSettingsIntoStyles(settings: NotionPageSettings | null) {
   if (!settings) return;
 
   // get styles from settings

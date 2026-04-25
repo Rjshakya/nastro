@@ -96,7 +96,7 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
       try: async () => {
         return (await db
           .update(table)
-          // @ts-expect-error  column type error
+          //@ts-ignore
           .set(data)
           // @ts-expect-error  column type error
           .where(eq(table[key], id))

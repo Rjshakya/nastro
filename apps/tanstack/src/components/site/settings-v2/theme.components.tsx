@@ -10,8 +10,16 @@ import {
 } from "#/components/ui/dialog";
 import { Input } from "#/components/ui/input";
 import { Label } from "#/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "#/components/ui/popover";
-import { useCreateTheme, useUpdateTheme, useDeleteTheme } from "#/hooks/use-themes";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "#/components/ui/popover";
+import {
+  useCreateTheme,
+  useUpdateTheme,
+  useDeleteTheme,
+} from "#/hooks/use-themes";
 import type { CreateThemeInput, UpdateThemeInput } from "#/lib/site.theme";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { Theme } from "#/types/theme";
@@ -19,13 +27,22 @@ import { useRef, useState } from "react";
 import { useThemeStore } from "#/stores/theme-store";
 import { toast } from "sonner";
 import { cn } from "#/lib/utils";
-import { IconCheck, IconChevronDown, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconChevronDown,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { authClient } from "#/lib/auth-client";
 import { getThemeRelatedSettingsOnly } from "./theme";
 import { ButtonGroup } from "#/components/ui/button-group";
 import { siteEditorRoute } from "../editor";
 
-export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) => void }) => {
+export const SelectThemes = ({
+  onThemeChange,
+}: {
+  onThemeChange: (theme: Theme) => void;
+}) => {
   const { themes, theme, setTheme, hasThemeChanged } = useThemeStore((s) => s);
   const { deleteTheme } = useDeleteTheme();
   const [open, setOpen] = useState(false);
@@ -51,18 +68,30 @@ export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) 
 
   const themeActionButtons = () => {
     const createThemeTrigger = (
-      <Button size={"icon-xs"} variant={"secondary"} onClick={() => setOpenCreateTheme(true)}>
+      <Button
+        size={"icon-xs"}
+        variant={"secondary"}
+        onClick={() => setOpenCreateTheme(true)}
+      >
         <IconPlus stroke={2.5} />
       </Button>
     );
 
     const saveThemeTrigger = (
-      <Button size={"xs"} variant={"secondary"} onClick={() => setOpenSaveTheme(true)}>
+      <Button
+        size={"xs"}
+        variant={"secondary"}
+        onClick={() => setOpenSaveTheme(true)}
+      >
         Save
       </Button>
     );
 
-    if (search?.themeId === theme?.id && session?.user.id === theme?.createdBy && hasThemeChanged) {
+    if (
+      search?.themeId === theme?.id &&
+      session?.user.id === theme?.createdBy &&
+      hasThemeChanged
+    ) {
       return [createThemeTrigger, saveThemeTrigger];
     }
 
@@ -74,7 +103,9 @@ export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) 
       <div className="flex items-center justify-between gap-2">
         <Label>Theme</Label>
         <div>
-          <ButtonGroup>{themeActionButtons().map((actions) => actions)}</ButtonGroup>
+          <ButtonGroup>
+            {themeActionButtons().map((actions) => actions)}
+          </ButtonGroup>
         </div>
       </div>
       <Popover open={open} onOpenChange={setOpen}>
@@ -116,12 +147,16 @@ export const SelectThemes = ({ onThemeChange }: { onThemeChange: (theme: Theme) 
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <span className="capitalize truncate">{t.name}</span>
-                      {isSelected && <IconCheck className="h-3 w-3 text-primary shrink-0" />}
+                      {isSelected && (
+                        <IconCheck className="h-3 w-3 text-primary shrink-0" />
+                      )}
                     </div>
                     <Button
                       variant="ghost"
                       size="icon-xs"
-                      className={cn(`shrink-0 text-muted-foreground hover:text-destructive`)}
+                      className={cn(
+                        `shrink-0 text-muted-foreground hover:text-destructive`,
+                      )}
                       onClick={(e) => handleDeleteTheme(t.id, e)}
                       disabled={session?.user.id !== t.createdBy}
                     >
@@ -185,7 +220,9 @@ export const SaveTheme = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Save as theme</DialogTitle>
-          <DialogDescription>Save your current setting as theme</DialogDescription>
+          <DialogDescription>
+            Save your current setting as theme
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 mb-4">
@@ -211,7 +248,9 @@ export const SaveTheme = ({
         </div>
 
         <DialogFooter>
-          <Button onClick={handleSave}>{isLoading ? "Saving..." : "Save"}</Button>
+          <Button onClick={handleSave}>
+            {isLoading ? "Saving..." : "Save"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -249,7 +288,9 @@ export const CreateTheme = ({
       <DialogContent className={""}>
         <DialogHeader>
           <DialogTitle>Create theme</DialogTitle>
-          <DialogDescription>Create theme from your current settings</DialogDescription>
+          <DialogDescription>
+            Create theme from your current settings
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 mb-4">
@@ -276,7 +317,9 @@ export const CreateTheme = ({
         </div>
 
         <DialogFooter>
-          <Button onClick={handleCreate}>{isLoading ? "Creating..." : "Create"}</Button>
+          <Button onClick={handleCreate}>
+            {isLoading ? "Creating..." : "Create"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

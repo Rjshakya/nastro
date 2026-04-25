@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useNotionSettingsStore } from "#/stores/notion-settings";
 import type { LayoutHeaderUI } from "#/types/notion-page-settings";
 import { Button } from "../ui/button";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +27,10 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
       <div className="flex items-center justify-between gap-1">
         <div className="flex gap-1 items-center px-2">
           <Avatar className={"size-5"}>
-            <AvatarImage className={"rounded-sm"} src={header?.logo || defaultAvatars[0]} />
+            <AvatarImage
+              className={"rounded-sm"}
+              src={header?.logo || defaultAvatars[0]}
+            />
             <AvatarFallback />
           </Avatar>
 
@@ -42,7 +45,11 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
                 <DropdownMenu key={i}>
                   <DropdownMenuTrigger
                     render={
-                      <Button variant={"link"} className={"notion-header-btn"} size={"sm"}>
+                      <Button
+                        variant={"link"}
+                        className={"notion-header-btn"}
+                        size={"sm"}
+                      >
                         {l?.text}
                         <IconChevronDown stroke={1} />
                       </Button>
@@ -53,7 +60,9 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
                       {l?.links &&
                         l.links.length > 0 &&
                         l.links.map((link) => {
-                          return <DropdownMenuItem>{link.text}</DropdownMenuItem>;
+                          return (
+                            <DropdownMenuItem>{link.text}</DropdownMenuItem>
+                          );
                         })}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
@@ -66,7 +75,11 @@ export const SiteHeader = ({ header }: { header?: LayoutHeaderUI }) => {
             header.links.map((l, i) => {
               return (
                 <Link key={i} target="_blank" to={l?.url}>
-                  <Button variant={l.variant} className={"notion-header-btn"} size={"sm"}>
+                  <Button
+                    variant={l.variant}
+                    className={"notion-header-btn"}
+                    size={"sm"}
+                  >
                     {l?.text}
                   </Button>
                 </Link>
@@ -90,8 +103,17 @@ function ThemeToggle() {
   }
 
   return (
-    <Button variant="ghost" size="icon-xs" onClick={toggleTheme} aria-label="Toggle theme">
-      {settings?.general?.isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}
+    <Button
+      variant="ghost"
+      size="icon-xs"
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+    >
+      {settings?.general?.isDark ? (
+        <Moon className="size-4" />
+      ) : (
+        <Sun className="size-4" />
+      )}
     </Button>
   );
 }
