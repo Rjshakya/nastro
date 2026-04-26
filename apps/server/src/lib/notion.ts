@@ -1,14 +1,5 @@
-import { NotionCMS } from "@mikemajara/notion-cms";
 import { Effect, Layer, ServiceMap } from "effect";
 import { NotionAPI } from "notion-client";
-
-/**
- *
- *
- * Notion as cms client
- * - for notion - page as cms
- */
-export const getNotionCms = (token: string) => new NotionCMS(token);
 
 /**
  *
@@ -27,11 +18,8 @@ export class NotionClient extends ServiceMap.Service<
   {
     getClient: (token?: string, accountId?: string) => NotionAPI;
   }
->()("lib/notionRendererCleint") {}
+>()("lib/notion") {}
 
-export const NotionClientLive = Layer.effect(
-  NotionClient,
-  Effect.succeed({
-    getClient: getNotionClient,
-  }),
-);
+export const NotionClientLive = Layer.succeed(NotionClient, {
+  getClient: getNotionClient,
+});

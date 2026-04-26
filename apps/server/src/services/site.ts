@@ -1,4 +1,4 @@
-import { SiteInsert, SiteSelect } from "@/db/schema/site";
+import { SiteTableInsert, SiteTableSelect } from "@/db/schema/site";
 import { eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { nanoid } from "nanoid";
@@ -9,16 +9,16 @@ import { SlugService } from "./slug";
 
 import { SiteError } from "@/errors/tagged.errors";
 
-export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
+export const getSiteBySlugWithPage = (slug: string, rootPageId: string) =>
   Effect.gen(function* () {
-    const siteRepo = yield* SiteRepo();
-    const site = yield* siteRepo.execute<SiteSelect | null, SiteError>((db, sites) =>
+    const siteRepo = yield* SiteRepo;
+    const site = yield* siteRepo.execute<SiteTableSelect | null, SiteError>((db, sites) =>
       Effect.tryPromise({
         try: async () => {
           const result = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
           return result.length ? result[0] : null;
         },
-        catch: (e) => new SiteError({ type: "NOT_FOUND", message: `${e}`, code: 404 }),
+        catch: (e) => new SiteError({ type: "NOT_FOUND", message: String(e), code: 404 }),
       }),
     );
 
@@ -31,10 +31,10 @@ export const getSiteBySlugWithPage = (slug: string, pageId: string) =>
     }
 
     const notion = yield* NotionService;
-    const getPage = notion.getPage(pageId);
+    const getPage = notion.getPage(rootPageId);
     const page = yield* withCache({
       execute: getPage,
-      key: KeyManager.getPageContent(pageId),
+      key: KeyManager.getPageContentKey(rootPageId),
       ttl: 60 * 2,
     });
     return { site, page };
@@ -44,16 +44,16 @@ export const createUniqueSlug = (baseSlug: string) => {
   return Effect.succeed(`${baseSlug}-${nanoid(5)}`);
 };
 
-export const createSite = Effect.fn("services/site/createSite")((data: SiteInsert) => {
+export const createSite = Effect.fn("services/site/createSite")((data: SiteTableInsert) => {
   return Effect.gen(function* () {
-    const pageId = data?.pageId as string;
+    const pageId = data.rootPageId;
     yield* checkIsPagePublic(pageId);
 
     const slugService = yield* SlugService;
-    const slug = yield* slugService.storeSlug(data?.slug);
+    const slug = yield* slugService.storeSlug(data.slug);
 
-    const repo = yield* SiteRepo();
-    const site = yield* repo.insert({ ...data, slug }).pipe(
+    const repo = yield* SiteRepo;
+    return yield* repo.insert({ ...data, slug }).pipe(
       Effect.catch((e) =>
         Effect.gen(function* () {
           yield* slugService.deleteSlug(slug);
@@ -61,11 +61,17 @@ export const createSite = Effect.fn("services/site/createSite")((data: SiteInser
         }),
       ),
     );
+  });
+});
 
-    return site;
+export const checkIsPagePublic = (pageId: string) =>
+  Effect.gen(function* () {
+    const notion = yield* NotionService;
+    const page = yield* notion.getPage(pageId);
+    return { page, pageId, isPublic: !!page };
   }).pipe(
-    Effect.catchTag("NotionError", (e) => {
-      if (e.type === "PAGE_ERROR") {
+    Effect.andThen((res) => {
+      if (!res.isPublic) {
         return Effect.fail(
           new SiteError({
             type: "NOT_PUBLIC",
@@ -74,24 +80,9 @@ export const createSite = Effect.fn("services/site/createSite")((data: SiteInser
           }),
         );
       }
-
-      return Effect.fail(
-        new SiteError({
-          type: "NOTION_ERROR",
-          message: "notion error",
-          code: 500,
-        }),
-      );
+      return Effect.succeed(res);
     }),
   );
-});
-
-export const checkIsPagePublic = (pageId: string) =>
-  Effect.gen(function* () {
-    const notion = yield* NotionService;
-    const page = yield* notion.getPage(pageId);
-    return { page, pageId, isPublic: !!page };
-  });
 
 export const isSlugAvailable = (slug: string) =>
   Effect.gen(function* () {

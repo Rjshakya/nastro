@@ -2,6 +2,7 @@ import { env } from "cloudflare:workers";
 import { Effect } from "effect";
 
 import { CacheError } from "@/errors/tagged.errors";
+import { KVStore } from "@/services/kv-store";
 
 /**
  * withCache : helper function for caching.
@@ -17,7 +18,6 @@ export const withCache = Effect.fn("withCache")(<T, E, R>({
   execute,
   key,
   ttl,
-  forceFresh,
 }: {
   execute: Effect.Effect<T, E, R>;
   key: string;
@@ -25,44 +25,28 @@ export const withCache = Effect.fn("withCache")(<T, E, R>({
   ttl?: number;
 }) => {
   return Effect.gen(function* () {
-    if (forceFresh) {
-      const res = yield* execute;
-      yield* Effect.tryPromise(
-        async () =>
-          await env.NASTRO_KV.put(key, JSON.stringify(res), {
-            expirationTtl: ttl,
-          }),
-      );
-      return res;
-    }
-
-    const cached = yield* Effect.tryPromise(
-      async () => await env.NASTRO_KV.get<string>(key),
-    );
+    const store = yield* KVStore;
+    const cached = yield* store.get<string>(key);
 
     if (cached) {
       return yield* Effect.sync<T>(() => JSON.parse(cached));
     }
 
     const res = yield* execute;
-    yield* Effect.tryPromise(
-      async () =>
-        await env.NASTRO_KV.put(key, JSON.stringify(res), {
-          expirationTtl: ttl,
-        }),
-    );
+    const stringify = yield* Effect.sync(() => JSON.stringify(res));
+    yield* store.set(key, stringify, ttl);
     return res;
   }).pipe(
-    Effect.catchTag("UnknownError", (e) =>
-      Effect.fail(
+    Effect.catchTag("KVStoreError", (e) => {
+      console.error(e);
+      return Effect.fail(
         new CacheError({
-          message: "Cache Error",
+          message: "lib/withCache",
           type: "CACHE_ERROR",
           code: 500,
         }),
-      ),
-    ),
-    Effect.catchTag("CacheError", (e) => Effect.fail(e)),
+      );
+    }),
   );
 });
 
@@ -78,22 +62,9 @@ const deleteKeyFromCache = (key: string) =>
   });
 
 export const KeyManager = {
-  getUserNotionPages: (userId: string) => `notion:pages:${userId}`,
-  getPageContent: (pageId: string) => `notion:page:content:${pageId}`,
-  getSiteById: (siteId: string) => `notion:site:${siteId}`,
-  getUserSites: (userId: string) => `notion:sites:${userId}`,
-  getSlug: (slug: string) => `notion:site:slug:${slug}`,
-
-  delete: {
-    getSiteById: (siteId: string) =>
-      Effect.runPromise(deleteKeyFromCache(KeyManager.getSiteById(siteId))),
-    getPageContent: (pageId: string) =>
-      Effect.runPromise(deleteKeyFromCache(KeyManager.getPageContent(pageId))),
-    getUserNotionPages: (userId: string) =>
-      Effect.runPromise(
-        deleteKeyFromCache(KeyManager.getUserNotionPages(userId)),
-      ),
-    getUserSites: (userId: string) =>
-      Effect.runPromise(deleteKeyFromCache(KeyManager.getUserSites(userId))),
-  },
+  getUserNotionPagesKey: (userId: string) => `notion:pages:${userId}`,
+  getPageContentKey: (pageId: string) => `notion:page:content:${pageId}`,
+  getSiteByIdKey: (siteId: string) => `notion:site:${siteId}`,
+  getUserSitesKey: (userId: string) => `notion:sites:${userId}`,
+  getSlugKey: (slug: string) => `notion:site:slug:${slug}`,
 };

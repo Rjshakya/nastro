@@ -7,7 +7,7 @@ import { uploadApp } from "./upload";
 
 const api = new Hono()
   .route("/notion", notionApp)
-  .route("/sites", sitesApp)
+  .route("/site", sitesApp)
   .route("/theme", themeApp)
   .route("/template", templateApp)
   .route("/upload", uploadApp);

@@ -13,7 +13,7 @@ export const themeTable = pgTable("theme", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: text().notNull(),
   isPublic: boolean("is_public").default(false),
-  themeSetting: jsonb("theme_setting"),
+  setting: jsonb("theme_setting"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -28,9 +28,7 @@ export const themeTableRelations = relations(themeTable, ({ one }) => ({
   }),
 }));
 
-export const themeTableInsertSchema = createInsertSchema(themeTable).omit({
-  id: true,
-});
+export const themeTableInsertSchema = createInsertSchema(themeTable);
 export const themeTableSelectSchema = createSelectSchema(themeTable);
 
 export type ThemeTableSelect = typeof themeTable.$inferSelect;

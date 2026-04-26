@@ -27,30 +27,20 @@ const notionApp = new Hono<{ Variables: Vars }>()
       message: "Rate limit exceed",
     }),
   )
-  .get("/pages", async (c) => {
+  .get("/page", async (c) => {
     const userId = c.get("user")?.id;
 
     const program = Effect.gen(function* () {
       const notion = yield* NotionService;
       return yield* notion.getNotionPages();
     }).pipe(
-      Effect.provide(
-        NotionServiceLive(getAccessToken(userId as string, "notion")),
-      ),
+      Effect.provide(NotionServiceLive(getAccessToken(userId as string, "notion"))),
       Effect.provide(NotionClientLive),
     );
 
     const pages = await Effect.runPromise(program);
 
     return c.json(ApiResponse({ data: pages, message: "success" }));
-  })
-  .get("/pages/:pageId", zValidator("param", pageParamsSchema), async (c) => {
-    return c.json(
-      ApiResponse({
-        data: {},
-        message: "Page content fetched successfully",
-      }),
-    );
   });
 
 export { notionApp };

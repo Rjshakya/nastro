@@ -17,12 +17,12 @@ function App() {
       </div>
 
       <div className="">
-         <Card className="w-full">
-           <CardHeader>
-              <CardTitle>Hi there</CardTitle>
-              <CardDescription>this is description for card</CardDescription>
-           </CardHeader>
-         </Card>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Hi there</CardTitle>
+            <CardDescription>this is description for card</CardDescription>
+          </CardHeader>
+        </Card>
       </div>
     </div>
   );

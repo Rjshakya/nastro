@@ -6,6 +6,11 @@
       "default": "./dist/hc.js",
       "types": "./dist/hc.d.ts",
       "import": "./dist/hc.js"
+    },
+    "./domain": {
+      "default": "./dist/domain.js",
+      "types": "./dist/domain.d.ts",
+      "import": "./dist/hc.js"
     }
   },
   "scripts": {
@@ -25,7 +30,6 @@
     "@aws-sdk/client-s3": "^3.1024.0",
     "@aws-sdk/s3-request-presigner": "^3.1024.0",
     "@hono/zod-validator": "^0.7.6",
-    "@mikemajara/notion-cms": "^0.2.6",
     "@notionhq/client": "^5.11.0",
     "better-auth": "^1.4.19",
     "dotenv": "^17.3.1",

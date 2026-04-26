@@ -5,16 +5,7 @@ import { Effect, Layer, ServiceMap } from "effect";
 import { DatabaseError } from "@/errors/tagged.errors";
 
 export const getDB = async (connectionString?: string) =>
-  drizzle(env.HYPERDRIVE.connectionString);
-export const getDBeffect = Effect.tryPromise({
-  try: async () => getDB(),
-  catch: (e) =>
-    new DatabaseError({
-      message: String(e),
-      type: "CONNECTION_FAILED",
-      code: 500,
-    }),
-});
+  drizzle(connectionString ?? env.HYPERDRIVE.connectionString);
 
 export class DataBase extends ServiceMap.Service<
   DataBase,

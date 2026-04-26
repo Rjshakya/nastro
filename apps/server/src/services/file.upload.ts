@@ -12,15 +12,15 @@ import { env } from "cloudflare:workers";
 
 type BucketNames = "nastro-sites-assets" | "nastro-templates-assets";
 
-export class S3clientService extends ServiceMap.Service<
-  S3clientService,
+export class S3Service extends ServiceMap.Service<
+  S3Service,
   {
     client: S3Client;
     bucket: BucketNames;
   }
->()("/file.upload.ts/S3clientService") {}
+>()("/file.upload.ts/S3Service") {}
 
-export const SiteAssetsBucketLive = Layer.succeed(S3clientService)({
+export const SiteAssetsBucketLive = Layer.succeed(S3Service)({
   bucket: "nastro-sites-assets",
   client: new S3Client({
     credentials: {
@@ -32,7 +32,7 @@ export const SiteAssetsBucketLive = Layer.succeed(S3clientService)({
   }),
 });
 
-export const TemplateAssetsBucketLive = Layer.succeed(S3clientService)({
+export const TemplateAssetsBucketLive = Layer.succeed(S3Service)({
   bucket: "nastro-templates-assets",
   client: new S3Client({
     credentials: {
@@ -50,17 +50,13 @@ export class FileUploadService extends ServiceMap.Service<
     getPresignedUrl: (fileMetadata: {
       fileName: string;
       expiresIn: number;
-    }) => Effect.Effect<
-      { uploadUrl: string; fileUrl: string },
-      FileUploadServiceError,
-      never
-    >;
+    }) => Effect.Effect<{ uploadUrl: string; fileUrl: string }, FileUploadServiceError, never>;
   }
 >()("/file.upload.ts/FileUploadService") {}
 
 export const FileUploadServiceLive = Layer.effect(FileUploadService)(
   Effect.gen(function* () {
-    const storage = yield* S3clientService;
+    const storage = yield* S3Service;
 
     return {
       getPresignedUrl({ fileName, expiresIn }) {

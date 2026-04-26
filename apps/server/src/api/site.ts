@@ -1,155 +1,26 @@
 import { DatabaseLive } from "@/db";
 import { sitesInsertSchema } from "@/db/schema/site";
 import { ApiResponse } from "@/lib/api";
-import { KeyManager } from "@/lib/cache";
 import { Vars } from "@/lib/hono-types";
 import { NotionClientLive } from "@/lib/notion";
 import { authMiddleWare } from "@/middlewares/auth";
 import { SiteRepo } from "@/repo/site";
 import { KVStoreLive } from "@/services/kv-store";
 import { NotionServiceLive } from "@/services/notion/main";
-import {
-  createSite,
-  getSiteBySlugWithPage,
-  isSlugAvailable,
-} from "@/services/site";
+import { createSite, getSiteBySlugWithPage, isSlugAvailable } from "@/services/site";
 import { SlugService, SlugServiceLive } from "@/services/slug";
 
 import { zValidator } from "@hono/zod-validator";
-import { Effect, pipe } from "effect";
+import { Effect, Layer } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
 import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
+import { BANNED_SUBDOMAINS, SLUG_REGEX } from "@/lib/utils";
 
 const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
 });
-
-const SLUG_REGEX = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/;
-const BANNED_SUBDOMAINS = new Set([
-  // ── Product & brand ──────────────────────────────────────
-  "nastro",
-  "nastro-app",
-  "getnastro",
-  "trynastro",
-
-  // ── Core pages / marketing ───────────────────────────────
-  "www",
-  "app",
-  "home",
-  "landing",
-  "site",
-  "web",
-
-  // ── Auth ─────────────────────────────────────────────────
-  "auth",
-  "login",
-  "logout",
-  "signin",
-  "signup",
-  "register",
-  "sso",
-  "oauth",
-  "callback",
-  "verify",
-  "confirm",
-  "reset",
-  "forgot",
-  "password",
-  "2fa",
-  "mfa",
-
-  // ── Product sections ─────────────────────────────────────
-  "dashboard",
-  "admin",
-  "console",
-  "panel",
-  "settings",
-  "account",
-  "profile",
-  "billing",
-  "checkout",
-  "upgrade",
-  "plans",
-  "pricing",
-  "onboarding",
-
-  // ── Docs / legal / support ───────────────────────────────
-  "docs",
-  "documentation",
-  "help",
-  "support",
-  "faq",
-  "status",
-  "roadmap",
-  "changelog",
-  "blog",
-  "news",
-  "press",
-  "terms",
-  "privacy",
-  "legal",
-  "security",
-  "abuse",
-  "dmca",
-
-  // ── Infrastructure ───────────────────────────────────────
-  "api",
-  "cdn",
-  "assets",
-  "static",
-  "media",
-  "uploads",
-  "files",
-  "storage",
-  "mail",
-  "email",
-  "smtp",
-  "imap",
-  "ns",
-  "ns1",
-  "ns2",
-  "dns",
-  "ftp",
-  "sftp",
-  "ssh",
-  "vpn",
-  "proxy",
-  "gateway",
-
-  // ── Internal / system ────────────────────────────────────
-  "internal",
-  "intranet",
-  "dev",
-  "develop",
-  "development",
-  "staging",
-  "stage",
-  "test",
-  "testing",
-  "sandbox",
-  "preview",
-  "beta",
-  "alpha",
-  "canary",
-  "local",
-  "localhost",
-
-  // ── Common squatting targets ─────────────────────────────
-  "about",
-  "contact",
-  "careers",
-  "jobs",
-  "team",
-  "investors",
-  "partners",
-  "affiliate",
-  "store",
-  "shop",
-  "pay",
-  "payments",
-]);
 
 const SlugSchema = z
   .string()
@@ -160,7 +31,6 @@ const SlugSchema = z
 
 const getSiteQuerySchema = z.object({
   slug: z.string().min(1, "Slug is required"),
-  pageId: z.string().min(1, "Page ID is required"),
   fresh: z
     .preprocess((v) => {
       if (v === "true") return true;
@@ -171,7 +41,7 @@ const getSiteQuerySchema = z.object({
 
 const sitesApp = new Hono<{ Variables: Vars }>()
   .get(
-    "/",
+    "/:rootPageId",
     rateLimiter({
       binding: env.SITE_READ_LIMITER,
       keyGenerator(c) {
@@ -180,15 +50,22 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       message: "Rate limit exceeded",
     }),
     zValidator("query", getSiteQuerySchema),
+    zValidator(
+      "param",
+      z.object({
+        rootPageId: z.string().min(1, "Root Page ID is required"),
+      }),
+    ),
     async (c) => {
-      const { pageId, slug } = c.req.valid("query");
+      const { slug } = c.req.valid("query");
+      const { rootPageId } = c.req.valid("param");
 
-      const program = pipe(
-        getSiteBySlugWithPage(slug, pageId),
-        Effect.provide(DatabaseLive()),
-        Effect.provide(NotionServiceLive()),
-        Effect.provide(NotionClientLive),
+      const programLayer = Layer.mergeAll(
+        DatabaseLive(),
+        KVStoreLive,
+        NotionServiceLive().pipe(Layer.provideMerge(Layer.mergeAll(NotionClientLive))),
       );
+      const program = getSiteBySlugWithPage(slug, rootPageId).pipe(Effect.provide(programLayer));
 
       const site = await Effect.runPromise(program);
       return c.json(
@@ -201,7 +78,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   )
   .use(authMiddleWare())
   .get(
-    "/all",
+    "/",
     rateLimiter<{ Variables: Vars }>({
       binding: env.SITE_READ_LIMITER,
       keyGenerator(c) {
@@ -214,10 +91,11 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const userId = c.get("user")?.id;
 
       const program = Effect.gen(function* () {
-        const repo = yield* SiteRepo();
+        const repo = yield* SiteRepo;
         const userSites = yield* repo.findById("userId", userId as string);
         return userSites;
       }).pipe(Effect.provide(DatabaseLive()));
+
       const sites = await Effect.runPromise(program);
 
       return c.json(
@@ -238,46 +116,26 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       message: "Rate limit exceeded",
     }),
   )
-  .post(
-    "/",
-    zValidator(
-      "json",
-      sitesInsertSchema
-        .omit({ userId: true })
-        .extend({
-          slug: SlugSchema,
-        })
-        .refine((arg) => {
-          if (!arg.pageId || arg?.pageId.length < 3) {
-            return false;
-          }
+  .post("/", zValidator("json", sitesInsertSchema), async (c) => {
+    const userId = c.get("user")?.id as string;
+    const input = c.req.valid("json");
 
-          return true;
-        }),
-    ),
-    async (c) => {
-      const userId = c.get("user")?.id as string;
-      const input = c.req.valid("json");
+    const programLayer = Layer.mergeAll(
+      DatabaseLive(),
+      NotionServiceLive().pipe(Layer.provideMerge(Layer.mergeAll(NotionClientLive))),
+      SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
+    );
+    const program = createSite({ ...input, userId }).pipe(Effect.provide(programLayer));
 
-      const program = createSite({ ...input, userId }).pipe(
-        Effect.provide(DatabaseLive()),
-        Effect.provide(NotionServiceLive()),
-        Effect.provide(NotionClientLive),
-        Effect.provide(SlugServiceLive),
-        Effect.provide(KVStoreLive),
-      );
+    const site = await Effect.runPromise(program);
 
-      const site = await Effect.runPromise(program);
-      await KeyManager.delete.getUserSites(userId as string);
-
-      return c.json(
-        ApiResponse({
-          data: site,
-          message: "Site created successfully",
-        }),
-      );
-    },
-  )
+    return c.json(
+      ApiResponse({
+        data: site,
+        message: "Site created successfully",
+      }),
+    );
+  })
   .post(
     "/slug/available",
     zValidator(
@@ -288,10 +146,10 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     ),
     async (c) => {
       const { slug } = c.req.valid("json");
-      const program = isSlugAvailable(slug).pipe(
-        Effect.provide(SlugServiceLive),
-        Effect.provide(KVStoreLive),
-      );
+
+      const programLayer = Layer.mergeAll(SlugServiceLive.pipe(Layer.provideMerge(KVStoreLive)));
+
+      const program = isSlugAvailable(slug).pipe(Effect.provide(programLayer));
 
       const res = await Effect.runPromise(program);
       return c.json(ApiResponse({ data: res, message: "success" }));
@@ -300,52 +158,36 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   .patch(
     "/:id",
     zValidator("param", siteParamsSchema),
-    zValidator(
-      "json",
-      sitesInsertSchema
-        .omit({ userId: true })
-        .extend({
-          slug: SlugSchema,
-        })
-        .refine((arg) => {
-          if (!arg.pageId || arg?.pageId.length < 3) {
-            return false;
-          }
-
-          return true;
-        }),
-    ),
+    zValidator("json", sitesInsertSchema),
     async (c) => {
       const userId = c.get("user")?.id as string;
       const { id } = c.req.valid("param");
       const input = c.req.valid("json");
 
+      const programLayer = Layer.mergeAll(
+        DatabaseLive(),
+        SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
+      );
+
       const program = Effect.gen(function* () {
-        const repo = yield* SiteRepo();
+        const repo = yield* SiteRepo;
         const existing = yield* repo.findById("id", id);
 
         if (!existing || !existing.length) {
-          return yield* Effect.fail("site/update/id no data error");
+          return yield* Effect.fail("no site found with the provided id");
         }
 
         if (input.slug !== existing[0].slug) {
           const slugService = yield* SlugService;
-          const storedSlug = yield* slugService.storeSlug(input.slug);
-          const deletedSlug = yield* slugService.deleteSlug(existing[0].slug);
+          yield* slugService.storeSlug(input.slug);
+          yield* slugService.deleteSlug(existing[0].slug);
         }
 
         const site = yield* repo.updateById("id", id, { ...input, userId });
         return site.length ? site[0] : null;
-      }).pipe(
-        Effect.provide(DatabaseLive()),
-        Effect.provide(SlugServiceLive),
-        Effect.provide(KVStoreLive),
-      );
+      }).pipe(Effect.provide(programLayer));
 
       const site = await Effect.runPromise(program);
-      await KeyManager.delete.getUserSites(userId as string);
-      await KeyManager.delete.getSiteById(input.pageId ?? "");
-      await KeyManager.delete.getPageContent(input.pageId ?? "");
 
       return c.json(
         ApiResponse({
@@ -364,31 +206,20 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const { id } = c.req.valid("param");
       const { pageId } = c.req.valid("query");
 
-      const program = Effect.gen(function* () {
-        const repo = yield* SiteRepo();
-        const site = yield* repo.deleteById("id", id);
-        return site.length ? site[0] : null;
-      }).pipe(
-        Effect.tap((data) =>
-          Effect.gen(function* () {
-            if (!data) {
-              return yield* Effect.fail("site/delete/id no data error");
-            }
-
-            const slugService = yield* SlugService;
-            yield* slugService.deleteSlug(data.slug);
-          }),
-        ),
-
-        Effect.provide(DatabaseLive()),
-        Effect.provide(SlugServiceLive),
-        Effect.provide(KVStoreLive),
+      const programLayer = Layer.mergeAll(
+        DatabaseLive(),
+        SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
       );
 
+      const program = Effect.gen(function* () {
+        const repo = yield* SiteRepo;
+        const slugService = yield* SlugService;
+        const site = yield* repo.deleteById("id", id);
+        yield* slugService.deleteSlug(site[0].slug);
+        return site.length ? site[0] : null;
+      }).pipe(Effect.provide(programLayer));
+
       const site = await Effect.runPromise(program);
-      await KeyManager.delete.getUserSites(userId as string);
-      await KeyManager.delete.getSiteById(id);
-      await KeyManager.delete.getPageContent(pageId);
 
       return c.json(
         ApiResponse({

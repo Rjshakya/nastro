@@ -16,16 +16,16 @@ export const sites = pgTable(
     userId: text()
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    pageId: text(),
+    rootPageId: text().notNull(),
     slug: text().unique().notNull(),
     databaseId: text(),
     shortId: text("short_id")
       .notNull()
       .unique()
       .$defaultFn(() => nanoid(13)),
-    siteName: text("site_name").notNull(),
-    siteSetting: jsonb("site_setting"),
-    siteThumbnailUrl: text("site_thumbnail_url)"),
+    name: text("site_name").notNull(),
+    setting: jsonb("site_setting"),
+    thumbnail: text("site_thumbnail_url)"),
     themeId: text().references(() => themeTable.id),
     templateId: text().references(() => templateTable.id),
     customCssLink: text("custom_css_link"),
@@ -36,10 +36,7 @@ export const sites = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [
-    index("site_slug_idx").on(table.slug),
-    index("site_pageId_idx").on(table.pageId),
-  ],
+  (table) => [index("site_slug_idx").on(table.slug), index("site_pageId_idx").on(table.rootPageId)],
 );
 
 export const sitesRelations = relations(sites, ({ one }) => ({
@@ -49,8 +46,8 @@ export const sitesRelations = relations(sites, ({ one }) => ({
   }),
 }));
 
-export const sitesInsertSchema = createInsertSchema(sites).omit({ id: true });
+export const sitesInsertSchema = createInsertSchema(sites);
 export const sitesSelectSchema = createSelectSchema(sites);
 
-export type SiteSelect = typeof sites.$inferSelect;
-export type SiteInsert = typeof sites.$inferInsert;
+export type SiteTableSelect = typeof sites.$inferSelect;
+export type SiteTableInsert = typeof sites.$inferInsert;

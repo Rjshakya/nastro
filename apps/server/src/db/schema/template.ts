@@ -19,10 +19,10 @@ export const templateTable = pgTable("template", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
 
-  templateName: text("template_name").notNull(),
-  templateUrl: text("template_url").notNull(),
-  templateThumbnailUrl: text("template_thumbnail_url"),
-  templateDescription: text("template_description"),
+  name: text("template_name").notNull(),
+  url: text("template_url").notNull(),
+  thumbnail: text("template_thumbnail_url"),
+  description: text("template_description"),
   instructionsPageUrl: text("instructions_page_url"),
   notionPageUrl: text("notion_page_url").notNull(),
   isPaid: boolean("is_paid").default(false),
@@ -43,9 +43,7 @@ export const templateTableRelations = relations(templateTable, ({ one }) => ({
   }),
 }));
 
-export const templateTableInsetSchema = createInsertSchema(templateTable).omit({
-  id: true,
-});
+export const templateTableInsetSchema = createInsertSchema(templateTable)
 export const templateTableSelectSchema = createSelectSchema(templateTable);
 
 export type TemplateTableSelect = typeof templateTable.$inferSelect;

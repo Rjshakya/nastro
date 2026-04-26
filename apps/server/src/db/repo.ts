@@ -67,8 +67,8 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
   const insert = (data: InferInsertModel<T>) =>
     Effect.tryPromise({
       try: async () => {
-        const res = (await db.insert(table).values(data).returning()) as unknown as ResultType[];
-        return res;
+        const res = await db.insert(table).values(data).returning();
+        return res as unknown as ResultType[];
       },
       catch: (error) =>
         new RepoError({
@@ -81,7 +81,7 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
   const insertVoid = (data: InferInsertModel<T>) =>
     Effect.tryPromise({
       try: async () => {
-        await db.insert(table).values({ ...data, id: "" });
+        await db.insert(table).values({ ...data });
       },
       catch: (error) =>
         new RepoError({
