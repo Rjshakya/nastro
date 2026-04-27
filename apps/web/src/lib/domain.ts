@@ -1,3 +1,5 @@
+import type { SiteTableSelect } from "server/domain";
+
 export type {
   SiteTableInsert,
   SiteTableSelect,
@@ -6,3 +8,5 @@ export type {
   ThemeTableInsert,
   ThemeTableSelect,
 } from "server/domain";
+
+

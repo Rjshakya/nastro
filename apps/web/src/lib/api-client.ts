@@ -1,8 +1,9 @@
-import { env } from "cloudflare:workers";
+import { Env } from "@/lib/env";
 import { hcWithType, type serverTypes } from "server/hc";
 
-export const client = hcWithType(env.API_URL, {
+export const client = hcWithType(Env.apiUrl, {
   init: { credentials: "include" },
+  
 });
 
 export type { serverTypes as ApiTypes };

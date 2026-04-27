@@ -30,6 +30,7 @@ const SlugSchema = z
   .refine((s) => !BANNED_SUBDOMAINS.has(s));
 
 const getSiteQuerySchema = z.object({
+  rootPageId: z.string().min(1, "Root Page ID is required"),
   slug: z.string().min(1, "Slug is required"),
   fresh: z
     .preprocess((v) => {
@@ -41,7 +42,7 @@ const getSiteQuerySchema = z.object({
 
 const sitesApp = new Hono<{ Variables: Vars }>()
   .get(
-    "/:rootPageId",
+    "/",
     rateLimiter({
       binding: env.SITE_READ_LIMITER,
       keyGenerator(c) {
@@ -50,15 +51,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       message: "Rate limit exceeded",
     }),
     zValidator("query", getSiteQuerySchema),
-    zValidator(
-      "param",
-      z.object({
-        rootPageId: z.string().min(1, "Root Page ID is required"),
-      }),
-    ),
     async (c) => {
-      const { slug } = c.req.valid("query");
-      const { rootPageId } = c.req.valid("param");
+      const { slug, rootPageId } = c.req.valid("query");
 
       const programLayer = Layer.mergeAll(
         DatabaseLive(),
@@ -78,7 +72,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   )
   .use(authMiddleWare())
   .get(
-    "/",
+    "/all",
     rateLimiter<{ Variables: Vars }>({
       binding: env.SITE_READ_LIMITER,
       keyGenerator(c) {
@@ -202,9 +196,9 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     zValidator("param", siteParamsSchema),
     zValidator("query", z.object({ pageId: z.string() })),
     async (c) => {
-      const userId = c.get("user")?.id;
+      // const userId = c.get("user")?.id;
       const { id } = c.req.valid("param");
-      const { pageId } = c.req.valid("query");
+      // const { pageId } = c.req.valid("query");
 
       const programLayer = Layer.mergeAll(
         DatabaseLive(),

@@ -9,50 +9,142 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppSiteSiteIdRouteImport } from './routes/_app/site.$siteId'
 
-const IndexRoute = IndexRouteImport.update({
+const MarketingRouteRoute = MarketingRouteRouteImport.update({
+  id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSiteSiteIdRoute = AppSiteSiteIdRouteImport.update({
+  id: '/site/$siteId',
+  path: '/site/$siteId',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteRouteWithChildren
+  '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_marketing/': typeof MarketingIndexRoute
+  '/_app/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/dashboard' | '/site/$siteId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/dashboard' | '/site/$siteId'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_marketing'
+    | '/_app/dashboard'
+    | '/_marketing/'
+    | '/_app/site/$siteId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/site/$siteId': {
+      id: '/_app/site/$siteId'
+      path: '/site/$siteId'
+      fullPath: '/site/$siteId'
+      preLoaderRoute: typeof AppSiteSiteIdRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppSiteSiteIdRoute: typeof AppSiteSiteIdRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppSiteSiteIdRoute: AppSiteSiteIdRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+interface MarketingRouteRouteChildren {
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
+  MarketingRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  MarketingRouteRoute: MarketingRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
