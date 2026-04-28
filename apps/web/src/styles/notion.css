@@ -1,0 +1,393 @@
+@import "react-notion-x/src/styles.css";
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 1. BASE THEME MAPPINGS                                         */
+/*    Maps --ns-* vars to react-notion-x internal variables       */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion {
+  --bg-color: var(--ns-page-bg);
+  --fg-color: var(--ns-text);
+
+  --fg-color-0: color-mix(in srgb, var(--fg-color), transparent 91%);
+  --fg-color-1: color-mix(in srgb, var(--fg-color), transparent 84%);
+  --fg-color-2: color-mix(in srgb, var(--fg-color), transparent 60%);
+  --fg-color-3: oklch(0.556 0 0);
+  --fg-color-4: var(--fg-color);
+
+  --bg-color-0: var(--muted);
+  --bg-color-1: var(--accent);
+
+  --select-color-0: var(--ns-checkbox);
+
+  --notion-red: var(--ns-notion-red);
+  --notion-pink: var(--ns-notion-pink);
+  --notion-blue: var(--ns-notion-blue);
+  --notion-purple: var(--ns-notion-purple);
+  --notion-teal: var(--ns-notion-teal);
+  --notion-yellow: var(--ns-notion-yellow);
+  --notion-orange: var(--ns-notion-orange);
+  --notion-brown: var(--ns-notion-brown);
+  --notion-gray: var(--ns-notion-gray);
+
+  --notion-red_background: var(--ns-notion-red-bg);
+  --notion-pink_background: var(--ns-notion-pink-bg);
+  --notion-blue_background: var(--ns-notion-blue-bg);
+  --notion-purple_background: var(--ns-notion-purple-bg);
+  --notion-teal_background: var(--ns-notion-teal-bg);
+  --notion-yellow_background: var(--ns-notion-yellow-bg);
+  --notion-orange_background: var(--ns-notion-orange-bg);
+  --notion-brown_background: var(--ns-notion-brown-bg);
+  --notion-gray_background: var(--ns-notion-gray-bg);
+
+  --primary-font: var(--ns-font-primary);
+  --secondary-font: var(--ns-font-secondary);
+
+  --notion-max-width: var(--ns-page-width);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 2. TYPOGRAPHY                                                  */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion {
+  font-size: var(--ns-size-base);
+  font-family: var(--ns-font-secondary);
+  letter-spacing: var(--ns-spacing-base);
+}
+
+.notion-title {
+  font-size: var(--ns-size-title);
+  letter-spacing: var(--ns-spacing-title);
+  font-family: var(--primary-font);
+}
+
+.notion-h1 {
+  font-size: var(--ns-size-h1);
+  margin-top: 1.08em;
+  letter-spacing: var(--ns-spacing-heading);
+  font-family: var(--primary-font);
+}
+
+.notion-h2 {
+  font-size: var(--ns-size-h2);
+  margin-top: 1.1em;
+  letter-spacing: var(--ns-spacing-heading);
+  font-family: var(--primary-font);
+}
+
+.notion-h3 {
+  font-size: var(--ns-size-h3);
+  margin-top: 1em;
+  letter-spacing: var(--ns-spacing-heading);
+  font-family: var(--primary-font);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 3. PAGE DIMENSIONS                                             */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.notion-page-cover {
+  height: var(--ns-cover-height, 40vh);
+  max-height: none;
+}
+
+.notion-page-cover-wrapper {
+  height: var(--ns-cover-height, 40vh);
+  max-height: none;
+}
+
+.notion-page-cover-wrapper span,
+.notion-page-cover-wrapper img {
+  width: 100% !important;
+  height: var(--ns-cover-height) !important;
+  min-height: var(--ns-cover-height) !important;
+  max-height: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 4. LAYOUT (Header / Footer)                                    */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-header {
+  position: sticky;
+  top: 1;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  overflow: hidden;
+  height: fit-content;
+  min-height: fit-content;
+  margin-inline: auto;
+}
+
+.notion-footer {
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  overflow: hidden;
+  margin-inline: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 4. CARD (Collection Cards)                                     */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-collection-card {
+  background-color: var(--ns-card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--ns-radius) !important;
+  color: var(--ns-card-text);
+  box-shadow: none !important;
+}
+
+.notion-collection-card .notion-page-title {
+  color: var(--ns-card-text);
+}
+
+.notion-collection-card .notion-page-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--ns-card-text);
+}
+
+.notion-collection-card:hover {
+  background-color: var(--ns-card-hover) !important;
+}
+
+.notion-collection-card-cover {
+  position: relative;
+  width: 100%;
+  border-bottom: none !important;
+  overflow: hidden;
+}
+
+.notion-collection-card-cover img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--ns-radius);
+  object-fit: cover;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 5. GALLERY                                                     */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-gallery-grid {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-auto-rows: 1fr;
+  border-top: 1px solid var(--fg-color-1);
+  padding-top: 16px;
+  padding-bottom: 4px;
+}
+
+.notion-gallery-grid-size-small {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.notion-gallery-grid-size-large {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 6. TABS (Collection View Tabs)                                 */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-collection-view-tabs-row {
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.notion-collection-view-tabs-row .notion-collection-view-type-icon {
+  display: none;
+}
+
+.notion-collection-view-tabs-row .notion-collection-view-tabs-content-item {
+  line-height: normal;
+  border-radius: var(--ns-radius);
+  display: grid;
+  padding: 12px;
+  height: fit-content;
+  background-color: var(--ns-tab-bg);
+  transition: background-color 350ms ease-in-out;
+}
+
+.notion-collection-view-tabs-row
+  .notion-collection-view-tabs-content-item:hover {
+  background-color: var(--ns-tab-active);
+  border-radius: var(--ns-radius);
+}
+
+.notion-collection-view-tabs-row
+  .notion-collection-view-tabs-content-item-active {
+  border-bottom: 0;
+  background-color: var(--ns-tab-active);
+  border-radius: var(--ns-radius);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 7. BUTTON                                                      */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-button {
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  border-radius: var(--ns-radius);
+  color: var(--ns-btn-text);
+  border: 1px solid var(--border);
+}
+
+.notion-button.notion-default {
+  background-color: var(--ns-btn-bg);
+  transition: all 300ms ease-in-out;
+  border-color: var(--border);
+}
+
+.notion-button.notion-default:hover {
+  background-color: var(--ns-btn-hover);
+  filter: brightness(0.8);
+}
+
+.notion-button.notion-default:active {
+  transform: scale(0.98);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 8. SELECTION                                                   */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion *::selection {
+  background: var(--ns-selection-bg);
+  color: var(--ns-selection-text);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 9. MISC & UTILITIES                                            */
+/* ═══════════════════════════════════════════════════════════════ */
+.notion-asset-wrapper img {
+  border-radius: var(--ns-radius);
+}
+
+.notion-to-do-item .notion-property-checkbox-checked,
+.notion-to-do-item .notion-property-checkbox-unchecked {
+  border-radius: calc(var(--ns-radius) - 6px);
+}
+
+.notion-quote {
+  display: block;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-left: 4px solid var(--fg-color);
+  padding: 0.8em 1em;
+  margin: 6px 0;
+  font-size: 1.2em;
+  /* border-radius: var(--ns-radius); */
+}
+
+.notion-row {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* .notion-callout .notion-page-icon-inline {
+  display: none;
+} */
+
+.notion-list-item-property .notion-page-title {
+  display: none;
+}
+
+.notion-list-body .notion-page-link {
+  transition: all 300ms ease-in-out;
+}
+
+.notion-list-body .notion-page-link,
+.notion-list-body .notion-page-link:hover {
+  padding-inline: 4px;
+  border-radius: calc(var(--ns-radius) - 6px);
+}
+
+.notion-list-body .notion-list-item-title {
+  gap: 4px;
+}
+
+.notion-callout-text .notion-text {
+  padding: 0px;
+}
+
+.notion-collection-header .notion-page-icon-inline {
+  display: none;
+}
+
+.notion-collection-header .notion-collection-header-title {
+  font-weight: 500;
+}
+
+.notion-page-icon-hero {
+  position: absolute;
+  top: 0;
+  left: 0%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.notion-page-icon-hero.notion-page-icon-image {
+  width: 124px;
+  height: 124px;
+  margin-left: 16px;
+}
+
+.notion-table-header {
+  z-index: 10;
+}
+
+.notion-simple-table-row td {
+  border: 1px solid var(--border);
+}
+
+.notion-page-content-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.notion-text {
+  border-radius: calc(var(--radius) - 4px);
+}
+
+.notion-yt-lite {
+  border-radius: var(--ns-radius);
+}
+
+/* ── Responsive ── */
+
+@media (min-width: 1300px) and (min-height: 300px) {
+  .notion-page-content-has-aside {
+    display: flex;
+    flex-direction: row;
+    width: calc((90vw + var(--ns-page-width)) / 2);
+  }
+
+  .notion-page-content-has-aside .notion-aside {
+    display: flex;
+  }
+
+  .notion-page-content-has-aside .notion-page-content-inner {
+    width: var(--ns-page-width);
+    max-width: var(--ns-page-width);
+  }
+}
+
+@media (min-width: 1000px) {
+  .notion-table[style] {
+    width: var(--ns-page-width, 786px) !important;
+    max-width: var(--ns-page-width, 786px) !important;
+  }
+
+  .notion-table .notion-table-view {
+    padding-left: 18px !important;
+    padding-right: 12px !important;
+  }
+}

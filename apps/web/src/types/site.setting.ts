@@ -107,6 +107,15 @@ export interface LayoutConfig {
   sidebarConfig?: NavConfig;
 }
 
+// General Configuration
+// ─────────────────────────────────────────────────────────────
+
+export interface GeneralConfig {
+  isDark?: boolean;
+  pageWidth?: number;
+  pageCoverHeight?: number;
+}
+
 // SEO Configuration
 // ─────────────────────────────────────────────────────────────
 
@@ -124,6 +133,64 @@ export interface AnalyticsConfig {
   trackingId?: string;
 }
 
+// Populated / Deeply Required Types
+// ─────────────────────────────────────────────────────────────
+
+export interface PopulatedThemeConfig {
+  background: ThemeColorConfig;
+  foreground: ThemeColorConfig;
+  checkbox: ThemeColorConfig;
+  notionColors: Required<NotionPaletteConfig>;
+  notionBackgroundColors: Required<NotionPaletteConfig>;
+  card: Required<CardConfig>;
+  defaultButton: Required<DefaultButtonConfig>;
+  tab: Required<TabConfig>;
+  textSelection: Required<TextSelectionConfig>;
+  roundness: number;
+}
+
+export interface PopulatedTypographyConfig {
+  font: Required<FontConfig>;
+  size: Required<SizeConfig>;
+  letterSpacing: Required<LetterSpacingConfig>;
+}
+
+export interface PopulatedLayoutConfig {
+  header: boolean;
+  headerConfig: NavConfig;
+  footer: boolean;
+  footerConfig: NavConfig;
+  sidebar: boolean;
+  sidebarConfig: NavConfig;
+}
+
+export interface PopulatedSeoConfig {
+  title: string;
+  description: string;
+  url: string;
+  ogImage: string;
+}
+
+export interface PopulatedAnalyticsConfig {
+  trackingId: string;
+}
+
+export interface PopulatedGeneralConfig {
+  isDark: boolean;
+  pageWidth: number;
+  pageCoverHeight: number;
+}
+
+export interface PopulatedSiteSetting {
+  theme: PopulatedThemeConfig;
+  darkTheme: PopulatedThemeConfig;
+  typography: PopulatedTypographyConfig;
+  layout: PopulatedLayoutConfig;
+  general: PopulatedGeneralConfig;
+  seo: PopulatedSeoConfig;
+  analytics: PopulatedAnalyticsConfig;
+}
+
 // Site Setting
 // ─────────────────────────────────────────────────────────────
 
@@ -132,6 +199,7 @@ export interface SiteSetting {
   darkTheme?: ThemeConfig;
   typography?: TypographyConfig;
   layout?: LayoutConfig;
+  general?: GeneralConfig;
   seo?: SeoConfig;
   analytics?: AnalyticsConfig;
 }

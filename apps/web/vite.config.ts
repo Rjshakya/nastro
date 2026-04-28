@@ -14,8 +14,8 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tailwindcss(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart(),
     viteReact(),
   ],

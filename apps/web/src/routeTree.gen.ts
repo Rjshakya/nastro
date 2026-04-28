@@ -9,12 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PageIdRouteImport } from './routes/$pageId'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
-import { Route as AppSiteSiteIdRouteImport } from './routes/_app/site.$siteId'
+import { Route as MarketingLoginRouteImport } from './routes/_marketing/login'
+import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/route'
+import { Route as AppSiteSiteIdRouteImport } from './routes/_app/site/$siteId'
 
+const PageIdRoute = PageIdRouteImport.update({
+  id: '/$pageId',
+  path: '/$pageId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
   getParentRoute: () => rootRouteImport,
@@ -28,7 +35,12 @@ const MarketingIndexRoute = MarketingIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MarketingRouteRoute,
 } as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
+const MarketingLoginRoute = MarketingLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const AppDashboardRouteRoute = AppDashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AppRouteRoute,
@@ -41,32 +53,40 @@ const AppSiteSiteIdRoute = AppSiteSiteIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/$pageId': typeof PageIdRoute
+  '/dashboard': typeof AppDashboardRouteRoute
+  '/login': typeof MarketingLoginRoute
   '/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/$pageId': typeof PageIdRoute
+  '/dashboard': typeof AppDashboardRouteRoute
+  '/login': typeof MarketingLoginRoute
   '/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
-  '/_app/dashboard': typeof AppDashboardRoute
+  '/$pageId': typeof PageIdRoute
+  '/_app/dashboard': typeof AppDashboardRouteRoute
+  '/_marketing/login': typeof MarketingLoginRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_app/site/$siteId': typeof AppSiteSiteIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/site/$siteId'
+  fullPaths: '/' | '/$pageId' | '/dashboard' | '/login' | '/site/$siteId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/site/$siteId'
+  to: '/' | '/$pageId' | '/dashboard' | '/login' | '/site/$siteId'
   id:
     | '__root__'
     | '/_app'
     | '/_marketing'
+    | '/$pageId'
     | '/_app/dashboard'
+    | '/_marketing/login'
     | '/_marketing/'
     | '/_app/site/$siteId'
   fileRoutesById: FileRoutesById
@@ -74,10 +94,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
+  PageIdRoute: typeof PageIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$pageId': {
+      id: '/$pageId'
+      path: '/$pageId'
+      fullPath: '/$pageId'
+      preLoaderRoute: typeof PageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_marketing': {
       id: '/_marketing'
       path: ''
@@ -99,11 +127,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof MarketingRouteRoute
     }
+    '/_marketing/login': {
+      id: '/_marketing/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof MarketingLoginRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
+      preLoaderRoute: typeof AppDashboardRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/site/$siteId': {
@@ -117,12 +152,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteRouteChildren {
-  AppDashboardRoute: typeof AppDashboardRoute
+  AppDashboardRouteRoute: typeof AppDashboardRouteRoute
   AppSiteSiteIdRoute: typeof AppSiteSiteIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppDashboardRoute: AppDashboardRoute,
+  AppDashboardRouteRoute: AppDashboardRouteRoute,
   AppSiteSiteIdRoute: AppSiteSiteIdRoute,
 }
 
@@ -131,10 +166,12 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 )
 
 interface MarketingRouteRouteChildren {
+  MarketingLoginRoute: typeof MarketingLoginRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
 const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
+  MarketingLoginRoute: MarketingLoginRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
 
@@ -145,6 +182,7 @@ const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   MarketingRouteRoute: MarketingRouteRouteWithChildren,
+  PageIdRoute: PageIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,6 @@
 import { client } from "./api-client";
 import type { Site } from "@/types/site";
-import type { SiteSetting } from "@/types/setting";
+import type { SiteSetting } from "@/types/site.setting";
 import type { ExtendedRecordMap } from "notion-types";
 import { handleHttpError } from "./error";
 

@@ -1,4 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "./-components/navbar";
+import { HeroSection } from "./-components/hero-section";
+import { WhyNastroSection } from "./-components/why-nastro-section";
+import { FeaturesGrid } from "./-components/features-grid";
+import { Pricing } from "./-components/pricing";
+import { Footer } from "./-components/footer";
 
 export const Route = createFileRoute("/_marketing/")({
   component: LandingPage,
@@ -6,11 +12,15 @@ export const Route = createFileRoute("/_marketing/")({
 
 function LandingPage() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
-      <h1 className="text-4xl font-bold">Nastro</h1>
-      <p className="text-muted-foreground">
-        Fastest way from notion doc to published site.
-      </p>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main>
+        <HeroSection />
+        <WhyNastroSection />
+        <FeaturesGrid />
+        <Pricing />
+      </main>
+      <Footer />
     </div>
   );
 }

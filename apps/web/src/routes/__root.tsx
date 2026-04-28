@@ -1,6 +1,8 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "../styles.css?url";
+import rcp from "react-color-palette/css?url";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -21,6 +23,10 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "stylesheet",
+        href: rcp,
+      },
     ],
   }),
   notFoundComponent: () => (
@@ -34,12 +40,14 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body className="bg-background text-foreground">
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>

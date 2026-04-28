@@ -1,5 +1,5 @@
 import type { Theme } from "@/types/theme";
-import type { ThemeConfig } from "@/types/setting";
+import type { ThemeSetting } from "@/types/theme";
 import { client } from "./api-client";
 
 interface GetThemeInput {
@@ -8,23 +8,17 @@ interface GetThemeInput {
 
 export interface CreateThemeInput {
   name: string;
-  setting?: ThemeConfig;
+  setting?: ThemeSetting;
   isPublic?: boolean;
 }
 
 export interface UpdateThemeInput {
   name?: string;
-  setting?: ThemeConfig;
+  setting?: ThemeSetting;
   isPublic?: boolean;
 }
 
-export const getAllThemes = async ({
-  limit,
-  prev,
-}: {
-  limit: number;
-  prev?: Date;
-}) => {
+export const getAllThemes = async ({ limit, prev }: { limit: number; prev?: Date }) => {
   const res = await client.api.theme.$get({
     query: {
       limit: limit.toString(),
@@ -39,7 +33,7 @@ export const getAllThemes = async ({
   }
 
   const json = await res.json();
-  return json.data as {
+  return json.data as unknown as {
     result: Theme[];
     prevToken?: string;
   };
@@ -57,13 +51,10 @@ export const getTheme = async (input: GetThemeInput) => {
   }
 
   const json = await res.json();
-  return json.data as Theme;
+  return json.data as unknown as Theme;
 };
 
-export const createTheme = async (
-  _key: string,
-  { arg }: { arg: CreateThemeInput },
-) => {
+export const createTheme = async (_key: string, { arg }: { arg: CreateThemeInput }) => {
   const res = await client.api.theme.$post({
     json: arg,
   });
@@ -95,10 +86,7 @@ export const updateTheme = async (
   return res.json();
 };
 
-export const deleteTheme = async (
-  _key: string,
-  { arg }: { arg: { themeId: string } },
-) => {
+export const deleteTheme = async (_key: string, { arg }: { arg: { themeId: string } }) => {
   const res = await client.api.theme[":id"].$delete({
     param: { id: arg.themeId },
   });

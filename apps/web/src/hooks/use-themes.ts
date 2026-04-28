@@ -2,7 +2,7 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
 import type { Theme } from "@/types/theme";
-import type { ThemeConfig } from "@/types/setting";
+import type { ThemeSetting } from "@/types/theme";
 import {
   getAllThemes,
   getTheme,
@@ -35,10 +35,7 @@ interface GetThemeInput {
 export const useTheme = (input: GetThemeInput) => {
   const fetcher = () => getTheme(input);
 
-  const swr = useSWR(
-    input.themeId ? `/themes/${input.themeId}` : null,
-    fetcher,
-  );
+  const swr = useSWR(input.themeId ? `/themes/${input.themeId}` : null, fetcher);
 
   return {
     data: swr.data as Theme,
@@ -83,7 +80,7 @@ export const useUpdateTheme = () => {
       }: {
         arg: {
           themeId: string;
-          input: { name?: string; setting?: ThemeConfig; isPublic?: boolean };
+          input: { name?: string; setting?: ThemeSetting; isPublic?: boolean };
         };
       },
     ) => {
