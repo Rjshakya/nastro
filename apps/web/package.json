@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "deploy": "pnpm run lint && pnpm run fmt && pnpm run build && wrangler deploy --minify",
+    "deploy": "pnpm run lint && pnpm run build && wrangler deploy --minify",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",

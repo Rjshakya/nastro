@@ -7,23 +7,17 @@ import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 
 const resolveSlug = (baseSlug: string) => {
-  if (baseSlug && baseSlug.length > 0) {
+  if (baseSlug) {
     return baseSlug;
   }
 
   const req = getRequest();
-  if (!req) return "";
-
   const url = new URL(req.url);
   const host = url.hostname;
-  const originHost = new URL("/", Env.clientUrl).hostname;
 
-  if (host === originHost) {
-    return "";
-  }
-
-  if (host.endsWith(`.${originHost}`)) {
-    return host.slice(0, -(originHost.length + 1));
+  if (host.includes(Env.subdomain)) {
+    const slug = host.split(`.${Env.subdomain}`)[0].trim();
+    return slug;
   }
 
   return "";
@@ -82,6 +76,6 @@ export const liveSiteLoader = createServerFn()
       };
     } catch (e) {
       console.error(e);
-      throw new Error("Oops! Failed to load your site");
+      throw new Error(String(e));
     }
   });

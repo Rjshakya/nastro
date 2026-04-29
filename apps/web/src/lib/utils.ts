@@ -10,8 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function createSlugUrl(slug: string) {
-  const originHost = new URL("/", Env.clientUrl).hostname;
-  const host = `${slug}.${originHost}`;
+  const host = `${slug}.${Env.subdomain}`;
 
   const origin = `https://${host}`;
   return new URL("/", origin).href;

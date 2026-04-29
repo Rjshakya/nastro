@@ -4,11 +4,7 @@ import { cors } from "hono/cors";
 import { env } from "cloudflare:workers";
 import { api } from "./api";
 import { ApiResponse } from "./lib/api";
-import {
-  SiteError,
-  NotionError,
-  SlugServiceError,
-} from "@/errors/tagged.errors";
+import { SiteError, NotionError, SlugServiceError } from "@/errors/tagged.errors";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 
 export const app = new Hono()
@@ -17,7 +13,7 @@ export const app = new Hono()
     "*",
     cors({
       origin: (origin) => {
-        if (origin.includes(".nastro.xyz")) {
+        if (origin.includes(".nastro.xyz") || origin.includes("nastro.site")) {
           return origin;
         }
 
