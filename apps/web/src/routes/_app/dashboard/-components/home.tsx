@@ -12,7 +12,7 @@ export const DashboardHome = () => {
               <h1 className="text-2xl tracking-tight">Dashboard</h1>
               <p className="text-sm text-muted-foreground mt-1">Manage your sites</p>
             </div>
-            <div className="flex ">
+            <div className="flex items-center ">
               <ThemeToggle />
               <SidebarTrigger />
             </div>

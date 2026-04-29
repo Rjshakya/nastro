@@ -261,7 +261,7 @@ export function WhyNastroSection() {
           }}
         >
           <Link to="/dashboard" className="">
-            <Button size="lg" className="rounded-sm  px-4 flex items-center gap-1">
+            <Button size="lg" className=" px-4 flex items-center gap-1">
               <p>Start building for free</p>
               <IconArrowUpRight />
             </Button>

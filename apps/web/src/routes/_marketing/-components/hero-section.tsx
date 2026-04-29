@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { IconArrowRight, IconArrowUpRight } from "@tabler/icons-react";
+import { IconArrowUpRight } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Comparison, ComparisonHandle, ComparisonItem } from "@/components/kibo-ui/comparison";
@@ -46,7 +46,7 @@ export function HeroSection() {
             className="md:px-.5 flex items-center justify-start gap-4 "
           >
             <Link to="/dashboard">
-              <Button size="lg" className="rounded-sm px-4 flex items-center gap-1">
+              <Button size="lg" className=" px-4 flex items-center gap-1">
                 <p>Get Started Free</p>
                 <IconArrowUpRight />
               </Button>

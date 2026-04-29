@@ -1,0 +1,252 @@
+import { useState } from "react";
+import { IconPencil } from "@tabler/icons-react";
+import { toast } from "sonner";
+import type { Tag } from "emblor";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useUpdateTemplate } from "@/hooks/use-templates";
+import type { Template } from "@/types/template";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import type { UpdateTemplateInput } from "@/lib/site.template";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import InputWithTags from "@/components/comp-56";
+import { validateTemplateForm } from "@/schemas/template";
+
+interface EditTemplateDialogProps {
+  template: Template;
+}
+
+export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState<UpdateTemplateInput>({
+    name: template.name,
+    url: template.url,
+    thumbnail: template.thumbnail,
+    description: template.description,
+    instructionsPageUrl: template.instructionsPageUrl,
+    notionPageUrl: template.notionPageUrl,
+    isPaid: template.isPaid,
+    paymentLink: template.paymentLink,
+    price: template.price,
+    tags: template.tags,
+  });
+
+  const { updateTemplate, isLoading } = useUpdateTemplate();
+
+  const handleUpdate = async () => {
+    const validation = validateTemplateForm(input);
+    if (!validation.success) {
+      toast.error(validation.error);
+      return;
+    }
+
+    try {
+      await updateTemplate({
+        templateId: template.id,
+        input,
+      });
+
+      toast.success("Template updated successfully");
+      setOpen(false);
+    } catch (error) {
+      toast.error("Failed to update template. Please try again.");
+    }
+  };
+
+  const handleTagsChange = (tags: Tag[]) => {
+    const tagTexts = tags.map((tag) => tag.text);
+    setInput({ ...input, tags: tagTexts.length > 0 ? tagTexts : null });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <Button variant="secondary">
+            <IconPencil className="mr-2 h-4 w-4" />
+            Edit
+          </Button>
+        }
+      />
+      <DialogContent className="px-4 py-4 font-sans tracking-tighter max-w-lg">
+        <DialogHeader className="px-0">
+          <DialogTitle className="font-medium">Edit Template</DialogTitle>
+          <DialogDescription>Update your template details.</DialogDescription>
+        </DialogHeader>
+
+        <div className="">
+          <ScrollArea className={"h-70 grid gap-2"}>
+            {/* Template Name */}
+            <div className="mb-3 grid gap-2 px-2">
+              <Label htmlFor="templateName">Template Name</Label>
+              <Input
+                id="templateName"
+                placeholder="My Awesome Template"
+                value={input.name}
+                onChange={(e) => setInput({ ...input, name: e.target.value })}
+              />
+            </div>
+
+            {/* Description */}
+            <div className="mb-3 grid gap-2 px-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                placeholder="describe your template"
+                value={input.description ?? ""}
+                onChange={(e) =>
+                  setInput((prev) => ({
+                    ...prev,
+                    description: e.target.value || null,
+                  }))
+                }
+              />
+            </div>
+
+            {/* Template URL - Read Only */}
+            <div className="mb-4 grid gap-2 px-2">
+              <Label htmlFor="templateUrl">Template URL</Label>
+              <Input
+                id="templateUrl"
+                value={input.url}
+                disabled
+                readOnly
+                className="bg-muted"
+              />
+              <p className="text-xs text-muted-foreground">Template URL cannot be changed</p>
+            </div>
+
+            {/* Notion Page URL */}
+            <div className="mb-3 grid gap-2 px-2">
+              <Label htmlFor="notionPageUrl">Notion Page URL</Label>
+              <div className="my-2">
+                <Input
+                  id="notionPageUrl"
+                  placeholder="https://notion.so/page-id"
+                  value={input.notionPageUrl}
+                  onChange={(e) => setInput({ ...input, notionPageUrl: e.target.value })}
+                />
+              </div>
+            </div>
+
+            {/* Instructions page url */}
+            <div className="mb-3 grid gap-2 px-2">
+              <Label htmlFor="instructionsPageUrl">Instructions page url </Label>
+              <div className="my-2">
+                <Input
+                  id="instructionsPageUrl"
+                  placeholder="https://notion.so/page-id"
+                  value={input.instructionsPageUrl ?? ""}
+                  onChange={(e) =>
+                    setInput({
+                      ...input,
+                      instructionsPageUrl: e.target.value || null,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Thumbnail URL */}
+            <div className="mb-3 grid gap-2 px-2">
+              <Label htmlFor="thumbnailUrl">Thumbnail URL</Label>
+              <Input
+                id="thumbnailUrl"
+                placeholder="https://example.com/image.jpg"
+                value={input.thumbnail || ""}
+                onChange={(e) =>
+                  setInput({
+                    ...input,
+                    thumbnail: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="mb-4 px-2">
+              <InputWithTags
+                label="Tags"
+                placeholder="Add a tag (press Enter)"
+                defaultTags={
+                  input.tags?.map((tag, index) => ({
+                    id: String(index),
+                    text: tag,
+                  })) ?? []
+                }
+                onChange={handleTagsChange}
+              />
+            </div>
+
+            {/* Is Paid Toggle */}
+            <div className="flex items-center justify-between rounded-lg border p-3 mx-2">
+              <Label htmlFor="isPaid" className="grid gap-2 flex-1">
+                <span>Paid Template</span>
+                <span className="text-sm text-muted-foreground">Mark this as a paid template</span>
+              </Label>
+              <Switch
+                id="isPaid"
+                checked={input.isPaid || false}
+                onCheckedChange={(checked) => setInput({ ...input, isPaid: checked })}
+              />
+            </div>
+
+            {/* Price (only if paid) */}
+            {input.isPaid && (
+              <div className="grid gap-2 mt-3 px-2">
+                <Label htmlFor="price">Price ($)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  min="1"
+                  step="0.1"
+                  placeholder="29.99"
+                  value={input.price || ""}
+                  onChange={(e) =>
+                    setInput({
+                      ...input,
+                      price: e.target.value ? parseFloat(e.target.value) : null,
+                    })
+                  }
+                />
+              </div>
+            )}
+
+            {/* Payment Link (only if paid) */}
+            {input.isPaid && (
+              <div className="grid gap-2 mt-3 mb-3 px-2">
+                <Label htmlFor="paymentLink">Payment Link</Label>
+                <Input
+                  id="paymentLink"
+                  placeholder="https://stripe.com/pay/..."
+                  value={input.paymentLink || ""}
+                  onChange={(e) => setInput({ ...input, paymentLink: e.target.value || null })}
+                />
+              </div>
+            )}
+          </ScrollArea>
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleUpdate} disabled={isLoading}>
+            {isLoading ? "Updating..." : "Update Template"}
+          </Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

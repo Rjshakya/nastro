@@ -14,8 +14,10 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as MarketingLoginRouteImport } from './routes/_marketing/login'
 import { Route as Live_sitePageIdRouteImport } from './routes/_live_site/$pageId'
+import { Route as AppTemplatesRouteRouteImport } from './routes/_app/templates/route'
 import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/route'
 import { Route as AppSitePageIdRouteImport } from './routes/_app/site/$pageId'
+import { Route as AppTemplatesInstallTemplateIdRouteImport } from './routes/_app/templates/install/$templateId'
 
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
@@ -40,6 +42,11 @@ const Live_sitePageIdRoute = Live_sitePageIdRouteImport.update({
   path: '/$pageId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTemplatesRouteRoute = AppTemplatesRouteRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppDashboardRouteRoute = AppDashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -50,45 +57,73 @@ const AppSitePageIdRoute = AppSitePageIdRouteImport.update({
   path: '/site/$pageId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppTemplatesInstallTemplateIdRoute =
+  AppTemplatesInstallTemplateIdRouteImport.update({
+    id: '/install/$templateId',
+    path: '/install/$templateId',
+    getParentRoute: () => AppTemplatesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/templates': typeof AppTemplatesRouteRouteWithChildren
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
   '/site/$pageId': typeof AppSitePageIdRoute
+  '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/templates': typeof AppTemplatesRouteRouteWithChildren
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
   '/site/$pageId': typeof AppSitePageIdRoute
+  '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRouteRoute
+  '/_app/templates': typeof AppTemplatesRouteRouteWithChildren
   '/_live_site/$pageId': typeof Live_sitePageIdRoute
   '/_marketing/login': typeof MarketingLoginRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_app/site/$pageId': typeof AppSitePageIdRoute
+  '/_app/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/$pageId' | '/login' | '/site/$pageId'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/templates'
+    | '/$pageId'
+    | '/login'
+    | '/site/$pageId'
+    | '/templates/install/$templateId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/$pageId' | '/login' | '/site/$pageId'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/templates'
+    | '/$pageId'
+    | '/login'
+    | '/site/$pageId'
+    | '/templates/install/$templateId'
   id:
     | '__root__'
     | '/_app'
     | '/_marketing'
     | '/_app/dashboard'
+    | '/_app/templates'
     | '/_live_site/$pageId'
     | '/_marketing/login'
     | '/_marketing/'
     | '/_app/site/$pageId'
+    | '/_app/templates/install/$templateId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -134,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Live_sitePageIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/templates': {
+      id: '/_app/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof AppTemplatesRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -148,16 +190,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSitePageIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/templates/install/$templateId': {
+      id: '/_app/templates/install/$templateId'
+      path: '/install/$templateId'
+      fullPath: '/templates/install/$templateId'
+      preLoaderRoute: typeof AppTemplatesInstallTemplateIdRouteImport
+      parentRoute: typeof AppTemplatesRouteRoute
+    }
   }
 }
 
+interface AppTemplatesRouteRouteChildren {
+  AppTemplatesInstallTemplateIdRoute: typeof AppTemplatesInstallTemplateIdRoute
+}
+
+const AppTemplatesRouteRouteChildren: AppTemplatesRouteRouteChildren = {
+  AppTemplatesInstallTemplateIdRoute: AppTemplatesInstallTemplateIdRoute,
+}
+
+const AppTemplatesRouteRouteWithChildren =
+  AppTemplatesRouteRoute._addFileChildren(AppTemplatesRouteRouteChildren)
+
 interface AppRouteRouteChildren {
   AppDashboardRouteRoute: typeof AppDashboardRouteRoute
+  AppTemplatesRouteRoute: typeof AppTemplatesRouteRouteWithChildren
   AppSitePageIdRoute: typeof AppSitePageIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRouteRoute: AppDashboardRouteRoute,
+  AppTemplatesRouteRoute: AppTemplatesRouteRouteWithChildren,
   AppSitePageIdRoute: AppSitePageIdRoute,
 }
 

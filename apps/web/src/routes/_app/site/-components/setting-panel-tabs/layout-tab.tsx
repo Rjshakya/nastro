@@ -45,6 +45,13 @@ function NavLinkEditor({
 
   return (
     <div className="space-y-3 border rounded-md p-3">
+      <Label>Text</Label>
+      <Input
+        value={config?.logo?.text ?? ""}
+        onChange={(e) => {
+          onChange({ ...config, logo: { text: e.currentTarget.value } });
+        }}
+      />
       <h4 className="text-sm font-medium">{title}</h4>
       <div className="space-y-2">
         {Object.entries(links).map(([name, link]) => (

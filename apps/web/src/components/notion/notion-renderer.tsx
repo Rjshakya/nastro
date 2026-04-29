@@ -20,7 +20,7 @@ interface NotionRendererProps {
 }
 
 export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps) {
-  const { settings, isDark, styles } = useSiteSettingStore();
+  const { settings, styles } = useSiteSettingStore();
   const { pathname } = useLocation();
   const { origin } = useRouter();
   const host = new URL("/", origin).hostname;
@@ -63,29 +63,6 @@ export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps)
           Equation,
           Collection,
           PageLink: ({ href, children, ...props }: any) => {
-            const block = children?.props?.block as Block;
-            if (block?.type === "page") {
-              if (block.parent_table !== "block") {
-                return (
-                  <Link to={href} {...props}>
-                    {children}
-                  </Link>
-                );
-              }
-              const title = block.properties?.title?.[0] || "";
-              return (
-                <Link {...props} to={href}>
-                  <ShadBtn
-                    className="w-full flex justify-start rounded-xs px-2"
-                    variant="ghost"
-                    size="sm"
-                  >
-                    <IconFileDescription className="stroke-(--ns-text)/70 size-5" />
-                    <p>{title}</p>
-                  </ShadBtn>
-                </Link>
-              );
-            }
             return (
               <Link to={href} {...props}>
                 {children}
@@ -94,7 +71,6 @@ export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps)
           },
           Header: SiteHeader,
           Code,
-          // Code: renderCodeBlock(recordMap),
         }}
         mapPageUrl={handlePageUrl}
         header={showHeader ? <SiteHeader header={settings.layout?.headerConfig} /> : undefined}

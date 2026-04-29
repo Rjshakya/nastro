@@ -19,7 +19,7 @@ export function LiveSite() {
 
     console.log(JSON.stringify(data.site, null, 2));
     setSettings(data.site.setting);
-  }, [data]);
+  }, []);
 
   if (!data.page || !data.site) {
     return (

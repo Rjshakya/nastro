@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
-import type { Template } from "@/types/template";
+import type { Template, TemplateInsert } from "@/types/template";
 import {
   getAllTemplates,
   getTemplate,
@@ -34,10 +34,7 @@ interface GetTemplateInput {
 export const useTemplate = (input: GetTemplateInput) => {
   const fetcher = () => getTemplate(input);
 
-  const swr = useSWR(
-    input.templateId ? `/templates/${input.templateId}` : null,
-    fetcher,
-  );
+  const swr = useSWR(input.templateId ? `/templates/${input.templateId}` : null, fetcher);
 
   return {
     data: swr.data as Template,
@@ -51,7 +48,7 @@ export const useCreateTemplate = () => {
   const router = useRouter();
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/templates",
-    async (_key: string, { arg }: { arg: CreateTemplateInput }) => {
+    async (_key: string, { arg }: { arg: TemplateInsert }) => {
       const template = await createTemplate(_key, { arg });
       router.invalidate({ sync: true });
       return template.data;

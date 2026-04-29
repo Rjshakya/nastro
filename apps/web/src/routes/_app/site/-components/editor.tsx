@@ -17,7 +17,7 @@ export function SiteEditor() {
   const { setThemes } = useThemeStore();
   useEffect(() => {
     setThemes(themes);
-    setIsDark(theme === "dark");
+    console.log(theme);
     setSettings(site.setting);
 
     if (!themes || !themes?.length) {
@@ -26,6 +26,7 @@ export function SiteEditor() {
 
     const siteTheme = themes.find((theme) => theme.id === site?.themeId);
     useThemeStore.setState({ theme: siteTheme });
+    setIsDark(theme === "dark");
   }, []);
 
   if (!site) {

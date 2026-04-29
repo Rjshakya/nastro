@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IconInnerShadowTop, IconLayoutDashboardFilled } from "@tabler/icons-react";
+import { IconLayoutDashboardFilled, IconTemplate } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -27,6 +27,11 @@ const data = {
       title: "Dashboard",
       url: "/dashboard",
       icon: IconLayoutDashboardFilled,
+    },
+    {
+      title: "Templates",
+      url: "/templates",
+      icon: IconTemplate,
     },
   ],
 };

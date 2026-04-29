@@ -391,3 +391,45 @@
     padding-right: 12px !important;
   }
 }
+
+/* column title */
+.notion-collection-column-title-body {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--ns-text);
+  opacity: 0.7;
+}
+
+/* icon */
+.notion-page-icon {
+  font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji",
+    "Segoe UI Symbol", "Android Emoji", EmojiSymbols;
+  font-size: 1.1em;
+  fill: var(--ns-text);
+  color: var(--fg-color-icon);
+}
+
+/* page title icon */
+.notion-page-title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: var(--notion-corner-radius);
+  flex-shrink: 0;
+}
+
+/* column title icon */
+
+.notion-collection-column-title-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  fill: var(--ns-text);
+  margin-right: 6px;
+}
