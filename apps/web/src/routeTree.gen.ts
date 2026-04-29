@@ -9,19 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PageIdRouteImport } from './routes/$pageId'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as MarketingLoginRouteImport } from './routes/_marketing/login'
+import { Route as Live_sitePageIdRouteImport } from './routes/_live_site/$pageId'
 import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/route'
-import { Route as AppSiteSiteIdRouteImport } from './routes/_app/site/$siteId'
+import { Route as AppSitePageIdRouteImport } from './routes/_app/site/$pageId'
 
-const PageIdRoute = PageIdRouteImport.update({
-  id: '/$pageId',
-  path: '/$pageId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
   getParentRoute: () => rootRouteImport,
@@ -40,72 +35,70 @@ const MarketingLoginRoute = MarketingLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => MarketingRouteRoute,
 } as any)
+const Live_sitePageIdRoute = Live_sitePageIdRouteImport.update({
+  id: '/_live_site/$pageId',
+  path: '/$pageId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppDashboardRouteRoute = AppDashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppSiteSiteIdRoute = AppSiteSiteIdRouteImport.update({
-  id: '/site/$siteId',
-  path: '/site/$siteId',
+const AppSitePageIdRoute = AppSitePageIdRouteImport.update({
+  id: '/site/$pageId',
+  path: '/site/$pageId',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
-  '/$pageId': typeof PageIdRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
-  '/site/$siteId': typeof AppSiteSiteIdRoute
+  '/site/$pageId': typeof AppSitePageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
-  '/$pageId': typeof PageIdRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
-  '/site/$siteId': typeof AppSiteSiteIdRoute
+  '/site/$pageId': typeof AppSitePageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
-  '/$pageId': typeof PageIdRoute
   '/_app/dashboard': typeof AppDashboardRouteRoute
+  '/_live_site/$pageId': typeof Live_sitePageIdRoute
   '/_marketing/login': typeof MarketingLoginRoute
   '/_marketing/': typeof MarketingIndexRoute
-  '/_app/site/$siteId': typeof AppSiteSiteIdRoute
+  '/_app/site/$pageId': typeof AppSitePageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$pageId' | '/dashboard' | '/login' | '/site/$siteId'
+  fullPaths: '/' | '/dashboard' | '/$pageId' | '/login' | '/site/$pageId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$pageId' | '/dashboard' | '/login' | '/site/$siteId'
+  to: '/' | '/dashboard' | '/$pageId' | '/login' | '/site/$pageId'
   id:
     | '__root__'
     | '/_app'
     | '/_marketing'
-    | '/$pageId'
     | '/_app/dashboard'
+    | '/_live_site/$pageId'
     | '/_marketing/login'
     | '/_marketing/'
-    | '/_app/site/$siteId'
+    | '/_app/site/$pageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
-  PageIdRoute: typeof PageIdRoute
+  Live_sitePageIdRoute: typeof Live_sitePageIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/$pageId': {
-      id: '/$pageId'
-      path: '/$pageId'
-      fullPath: '/$pageId'
-      preLoaderRoute: typeof PageIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_marketing': {
       id: '/_marketing'
       path: ''
@@ -134,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingLoginRouteImport
       parentRoute: typeof MarketingRouteRoute
     }
+    '/_live_site/$pageId': {
+      id: '/_live_site/$pageId'
+      path: '/$pageId'
+      fullPath: '/$pageId'
+      preLoaderRoute: typeof Live_sitePageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -141,11 +141,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/site/$siteId': {
-      id: '/_app/site/$siteId'
-      path: '/site/$siteId'
-      fullPath: '/site/$siteId'
-      preLoaderRoute: typeof AppSiteSiteIdRouteImport
+    '/_app/site/$pageId': {
+      id: '/_app/site/$pageId'
+      path: '/site/$pageId'
+      fullPath: '/site/$pageId'
+      preLoaderRoute: typeof AppSitePageIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
@@ -153,12 +153,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppDashboardRouteRoute: typeof AppDashboardRouteRoute
-  AppSiteSiteIdRoute: typeof AppSiteSiteIdRoute
+  AppSitePageIdRoute: typeof AppSitePageIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRouteRoute: AppDashboardRouteRoute,
-  AppSiteSiteIdRoute: AppSiteSiteIdRoute,
+  AppSitePageIdRoute: AppSitePageIdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -182,7 +182,7 @@ const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   MarketingRouteRoute: MarketingRouteRouteWithChildren,
-  PageIdRoute: PageIdRoute,
+  Live_sitePageIdRoute: Live_sitePageIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

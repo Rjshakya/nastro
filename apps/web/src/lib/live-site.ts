@@ -34,24 +34,18 @@ export const liveSiteLoader = createServerFn()
     z.object({
       pageId: z.string(),
       slug: z.string().optional(),
-      fresh: z.enum(["true", "false"]).optional(),
+      // fresh: z.enum(["true", "false"]).optional(),
     }),
   )
   .handler(async ({ data: input }) => {
     try {
-      const { pageId, fresh, slug } = input;
+      const { pageId, slug } = input;
       const resolvedSlug = resolveSlug(slug || "");
 
-      if (!resolvedSlug) {
-        throw new Error("Could not resolve site slug");
-      }
 
       const apiUrl = new URL("/api/site", Env.apiUrl);
       apiUrl.searchParams.set("slug", resolvedSlug);
       apiUrl.searchParams.set("rootPageId", pageId);
-      if (fresh) {
-        apiUrl.searchParams.set("fresh", fresh);
-      }
 
       const res = await fetch(apiUrl, {
         headers: {

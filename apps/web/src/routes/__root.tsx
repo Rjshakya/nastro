@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "../styles.css?url";
 import rcp from "react-color-palette/css?url";
+import { Toaster } from "sonner";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -46,7 +47,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <main>{children}</main>
+          <Toaster />
         </ThemeProvider>
         <Scripts />
       </body>

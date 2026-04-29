@@ -9,25 +9,15 @@ import type {
   GeneralConfig,
   PopulatedSiteSetting,
 } from "@/types/site.setting";
-import type { Theme } from "@/types/theme";
 import type { CSSProperties } from "react";
 import { computeStyles } from "../lib/compute-styles";
 import { getDefaultSettings } from "@/lib/default-settings";
-import { getThemeRelatedSettingsOnly } from "@/lib/theme-settings";
-
-function settingsEqual(a: PopulatedSiteSetting, b: PopulatedSiteSetting): boolean {
-  return (
-    JSON.stringify(getThemeRelatedSettingsOnly(a)) ===
-    JSON.stringify(getThemeRelatedSettingsOnly(b))
-  );
-}
+import { loadSiteFonts } from "@/lib/fonts";
 
 interface SiteSettingStore {
   settings: PopulatedSiteSetting;
   isDark: boolean;
   styles: CSSProperties;
-  appliedTheme: Theme | null;
-  hasThemeChanged: boolean;
 
   setSettings: (settings: SiteSetting) => void;
 
@@ -39,11 +29,9 @@ interface SiteSettingStore {
   updateAnalytics: (analytics: AnalyticsConfig) => void;
   updateGeneral: (general: GeneralConfig) => void;
 
-  applyTheme: (theme: Theme) => void;
-
   setIsDark: (isDark: boolean) => void;
 
-  reset: () => void;
+  reset: (currentSettings?: SiteSetting) => void;
 }
 
 const defaultSettings = getDefaultSettings({});
@@ -51,44 +39,25 @@ export const useSiteSettingStore = create<SiteSettingStore>((set, get) => ({
   settings: defaultSettings,
   isDark: defaultSettings.general.isDark,
   styles: computeStyles(defaultSettings, defaultSettings.general.isDark ? "dark" : "light"),
-  appliedTheme: null,
-  hasThemeChanged: false,
 
   setSettings(settings) {
     const withDefaults = getDefaultSettings(settings);
     const isDark = withDefaults.general.isDark;
     const styles = computeStyles(withDefaults, isDark ? "dark" : "light");
+    loadSiteFonts(settings);
     set({ settings: withDefaults, isDark, styles });
   },
 
   updateTheme(theme) {
-    const next = { ...get().settings, theme };
-    get().setSettings(next);
-    const applied = get().appliedTheme;
-    if (applied) {
-      const changed = !settingsEqual(getDefaultSettings(next), getDefaultSettings(applied.setting));
-      set({ hasThemeChanged: changed });
-    }
+    get().setSettings({ ...get().settings, theme });
   },
 
   updateDarkTheme(darkTheme) {
-    const next = { ...get().settings, darkTheme };
-    get().setSettings(next);
-    const applied = get().appliedTheme;
-    if (applied) {
-      const changed = !settingsEqual(getDefaultSettings(next), getDefaultSettings(applied.setting));
-      set({ hasThemeChanged: changed });
-    }
+    get().setSettings({ ...get().settings, darkTheme });
   },
 
   updateTypography(typography) {
-    const next = { ...get().settings, typography };
-    get().setSettings(next);
-    const applied = get().appliedTheme;
-    if (applied) {
-      const changed = !settingsEqual(getDefaultSettings(next), getDefaultSettings(applied.setting));
-      set({ hasThemeChanged: changed });
-    }
+    get().setSettings({ ...get().settings, typography });
   },
 
   updateLayout(layout) {
@@ -107,19 +76,6 @@ export const useSiteSettingStore = create<SiteSettingStore>((set, get) => ({
     get().setSettings({ ...get().settings, general });
   },
 
-  applyTheme(theme) {
-    const currentSettings = get().settings;
-    const merged = getDefaultSettings({
-      ...currentSettings,
-      theme: theme.setting.theme,
-      darkTheme: theme.setting.darkTheme,
-      typography: theme.setting.typography,
-    });
-    const isDark = merged.general.isDark;
-    const styles = computeStyles(merged, isDark ? "dark" : "light");
-    set({ settings: merged, isDark, styles, appliedTheme: theme, hasThemeChanged: false });
-  },
-
   setIsDark(isDark) {
     const settings = { ...get().settings, general: { ...get().settings.general, isDark } };
     const styles = computeStyles(settings, isDark ? "dark" : "light");
@@ -129,7 +85,7 @@ export const useSiteSettingStore = create<SiteSettingStore>((set, get) => ({
   reset() {
     const settings = getDefaultSettings({});
     const styles = computeStyles(settings, "light");
-    set({ settings, isDark: false, styles, appliedTheme: null, hasThemeChanged: false });
+    set({ settings, isDark: false, styles });
   },
 }));
 

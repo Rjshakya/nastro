@@ -3,7 +3,7 @@
   "name": "nastro",
   "compatibility_date": "2026-03-01",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts",
+  "main": "@tanstack/react-start/server-entry",
   // "preview_urls": true,
   "observability": {
     "enabled": true,
@@ -19,12 +19,10 @@
 
   "routes": [
     {
-      
       "custom_domain": false,
       "pattern": "*.nastro.xyz/*",
-      "zone_name": "nastro.xyz"
+      "zone_name": "nastro.xyz",
     },
-    
   ],
 
   "services": [

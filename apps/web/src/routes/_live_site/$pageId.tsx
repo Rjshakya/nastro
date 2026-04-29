@@ -1,22 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { liveSiteLoader } from "@/lib/live-site";
-import { LiveSite } from "@/components/site/live-site";
+import { LiveSite } from "./-components/live-site";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
-  fresh: z.enum(["true", "false"]).optional(),
 });
 
-export const Route = createFileRoute("/$pageId")({
+export const Route = createFileRoute("/_live_site/$pageId")({
   validateSearch: siteSearchSchema,
-  loaderDeps({ search: { slug, fresh } }) {
-    return { slug, fresh };
+  loaderDeps({ search: { slug } }) {
+    return { slug };
   },
   loader: async ({ params, deps }) => {
     const { pageId } = params;
-    const { slug, fresh } = deps;
-    return liveSiteLoader({ data: { pageId, slug, fresh } });
+    const { slug } = deps;
+    return await liveSiteLoader({ data: { pageId, slug } });
   },
   component: LiveSitePage,
   head: ({ loaderData }) => {
@@ -67,6 +66,7 @@ export const Route = createFileRoute("/$pageId")({
       scripts,
     };
   },
+
   ssr: true,
 });
 

@@ -8,33 +8,49 @@ interface ThemeStore {
   themes: Theme[];
   setTheme: (theme: Theme | null) => void;
   setThemes: (themes: Theme[]) => void;
+  unsetTheme: () => void;
 }
 
-export const useThemeStore = create<ThemeStore>((set) => ({
+export const useThemeStore = create<ThemeStore>((set, get) => ({
   theme: null,
   themes: [],
 
-  setTheme(t) {
-    if (!t) {
+  setTheme(theme) {
+    if (!theme) {
       set({ theme: null });
       return;
     }
 
-    const currentSettings = useSiteSettingStore.getState().settings;
+    console.log(JSON.stringify(theme, null, 2));
+
+    const { settings: currentSettings, setSettings } = useSiteSettingStore.getState();
 
     // Merge theme preset into current settings, preserving layout/general/seo/analytics
-    const merged = getDefaultSettings({
+    const siteSettingWithDefaultsAndNewTheme = getDefaultSettings({
       ...currentSettings,
-      theme: t.setting.theme,
-      darkTheme: t.setting.darkTheme,
-      typography: t.setting.typography,
+      theme: theme.setting.theme,
+      darkTheme: theme.setting.darkTheme,
+      typography: theme.setting.typography,
     });
 
-    useSiteSettingStore.getState().setSettings(merged);
-    set({ theme: t });
+    setSettings(siteSettingWithDefaultsAndNewTheme);
+    set({ theme: theme });
   },
 
   setThemes(themes) {
     set({ themes });
   },
+  unsetTheme() {
+    const { theme } = get();
+    if (!theme) {
+      return;
+    }
+
+    const { settings, setSettings } = useSiteSettingStore.getState();
+    const { general, analytics, seo, layout } = settings;
+    const defaultSiteSetting = getDefaultSettings({ general, analytics, seo, layout });
+    setSettings(defaultSiteSetting);
+    set({ theme: null });
+  },
+  
 }));

@@ -1,24 +1,31 @@
 import { NotionRenderer } from "@/components/notion/notion-renderer";
 import "@/styles/notion.css";
 import { SiteEditorHeader } from "./editor-header";
-import type { Site } from "@/types/site";
-import type { ExtendedRecordMap } from "notion-types";
 import { SettingsPanel } from "./editor-setting-panel";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
+import { getRouteApi } from "@tanstack/react-router";
+import { useThemeStore } from "@/stores/theme-store";
 
-interface SiteEditorProps {
-  site: Site;
-  page: ExtendedRecordMap;
-  slug: string;
-}
+const siteRoute = getRouteApi("/_app/site/$pageId");
 
-export function SiteEditor({ site, page, slug }: SiteEditorProps) {
+export function SiteEditor() {
+  const { page, site, slug, themes } = siteRoute.useLoaderData();
   const { theme } = useTheme();
-  const { setIsDark } = useSiteSettingStore();
+  const { setIsDark, setSettings } = useSiteSettingStore();
+  const { setThemes } = useThemeStore();
   useEffect(() => {
+    setThemes(themes);
     setIsDark(theme === "dark");
+    setSettings(site.setting);
+
+    if (!themes || !themes?.length) {
+      return;
+    }
+
+    const siteTheme = themes.find((theme) => theme.id === site?.themeId);
+    useThemeStore.setState({ theme: siteTheme });
   }, []);
 
   if (!site) {

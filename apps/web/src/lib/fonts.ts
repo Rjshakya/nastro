@@ -10,6 +10,7 @@ export interface GoogleFont {
 }
 
 import { Env } from "@/lib/env";
+import type { SiteSetting } from "@/types/site.setting";
 
 const API_KEY = Env.googleFontApiKey;
 const API_URL = "https://www.googleapis.com/webfonts/v1/webfonts";
@@ -106,3 +107,17 @@ export const FONT_WEIGHTS = [
 ] as const;
 
 export type FontWeight = (typeof FONT_WEIGHTS)[number];
+
+export function loadSiteFonts(setting: SiteSetting): void {
+  const fontsToLoad = new Set<string>();
+  if (setting.typography?.font?.primary) {
+    fontsToLoad.add(setting.typography.font.primary);
+  }
+
+  if (setting.typography?.font?.secondary) {
+    fontsToLoad.add(setting.typography.font.secondary);
+  }
+
+  fontsToLoad.forEach((font) => loadFont(font).catch(console.error));
+  return;
+}

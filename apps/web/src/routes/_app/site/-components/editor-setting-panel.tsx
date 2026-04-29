@@ -22,14 +22,16 @@ import {
 } from "@/components/ui/sheet";
 import type { Site } from "@/types/site";
 import { authClient } from "@/lib/auth-client";
-import { ThemeSelector } from "@/components/site/theme-selector";
+import { ThemeSelector } from "./theme/theme-selector";
+import { useThemeStore } from "@/stores/theme-store";
 
 interface SettingsDrawerProps {
   site: Site;
 }
 
 export function SettingsPanel({ site }: SettingsDrawerProps) {
-  const { settings } = useSiteSettingStore();
+  const { settings } = useSiteSettingStore((s) => s);
+  const { theme } = useThemeStore();
   const { open, onOpenChange } = useSiteSettingPanel();
   const { updateSite, isLoading } = useUpdateSite();
   const { data: session } = authClient.useSession();
@@ -40,6 +42,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
 
   const handleSave = async () => {
     try {
+      console.log(JSON.stringify(settings, null, 2));
       await updateSite({
         siteId: site.id,
         input: {
@@ -48,6 +51,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
           name: siteName,
           slug,
           setting: settings,
+          themeId: theme?.id ?? null,
         },
       });
       toast.success("Settings saved");

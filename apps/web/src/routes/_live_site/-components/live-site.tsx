@@ -1,13 +1,25 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { NotionRenderer } from "@/components/notion/notion-renderer";
 import "@/styles/notion.css";
+import { useEffect } from "react";
+import { useSiteSettingStore } from "@/stores/site.setting.store";
 
-const liveSiteRoute = getRouteApi("/$pageId");
+const liveSiteRoute = getRouteApi("/_live_site/$pageId");
 
 export function LiveSite() {
   const data = liveSiteRoute.useLoaderData();
   const { pageId } = liveSiteRoute.useParams();
   const { slug } = liveSiteRoute.useLoaderDeps();
+  const { setSettings } = useSiteSettingStore();
+
+  useEffect(() => {
+    if (!data?.site) {
+      return;
+    }
+
+    console.log(JSON.stringify(data.site, null, 2));
+    setSettings(data.site.setting);
+  }, [data]);
 
   if (!data.page || !data.site) {
     return (

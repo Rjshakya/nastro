@@ -1,5 +1,5 @@
 import { client } from "./api-client";
-import type { Site } from "@/types/site";
+import type { Site, SiteInsert } from "@/types/site";
 import type { SiteSetting } from "@/types/site.setting";
 import type { ExtendedRecordMap } from "notion-types";
 import { handleHttpError } from "./error";
@@ -71,7 +71,7 @@ export const getSite = async ({ rootPageId, slug, fresh }: GetSiteInput) => {
   };
 };
 
-export const createSite = async (_key: string, { arg }: { arg: CreateSiteInput }) => {
+export const createSite = async (_key: string, { arg }: { arg: SiteInsert }) => {
   const res = await client.api.site.$post({
     json: arg,
   });
@@ -91,7 +91,7 @@ export const createSite = async (_key: string, { arg }: { arg: CreateSiteInput }
 
 export const updateSite = async (
   _key: string,
-  { arg }: { arg: { siteId: string; input: UpdateSiteInput } },
+  { arg }: { arg: { siteId: string; input: SiteInsert } },
 ) => {
   const res = await client.api.site[":id"].$patch({
     param: { id: arg.siteId },

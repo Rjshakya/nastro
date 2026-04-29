@@ -4,31 +4,34 @@ import { getSite } from "@/lib/site";
 import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "./-components/editor";
+import { getAllThemes } from "@/lib/site.theme";
 
 const siteSearchSchema = z.object({
   slug: z.string(),
 });
 
-export const Route = createFileRoute("/_app/site/$siteId")({
+export const Route = createFileRoute("/_app/site/$pageId")({
   validateSearch: siteSearchSchema,
   loaderDeps({ search: { slug } }) {
     return { slug };
   },
   loader: async ({ params, deps }) => {
-    const { siteId } = params;
+    const { pageId } = params;
     const { slug } = deps;
 
-    const { data } = await getSite({ rootPageId: siteId, slug });
+    const { data } = await getSite({ rootPageId: pageId, slug });
+    const { result } = await getAllThemes({ limit: 50 });
+
     return {
       site: data?.site as Site,
       page: data?.page as ExtendedRecordMap,
       slug,
+      themes: result,
     };
   },
   component: SiteEditorPage,
 });
 
 function SiteEditorPage() {
-  const { site, page, slug } = Route.useLoaderData();
-  return <SiteEditor site={site} page={page} slug={slug} />;
+  return <SiteEditor />;
 }

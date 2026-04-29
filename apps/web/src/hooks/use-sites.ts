@@ -1,7 +1,7 @@
 import useSWR, { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 
-import type { Site } from "@/types/site";
+import type { Site, SiteInsert } from "@/types/site";
 import {
   getSites,
   createSite,
@@ -44,12 +44,13 @@ export const useSite = (input: GetSiteInput) => {
 
 export const useCreateSite = () => {
   const router = useRouter();
-  const [input, setInput] = useState<CreateSiteInput>({
+  const [input, setInput] = useState<SiteInsert>({
     userId: "",
     rootPageId: "",
     name: "",
     slug: "",
   });
+
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/sites",
     async (_key: string, { arg }: { arg: CreateSiteInput }) => {
