@@ -1,10 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { TemplatesHome } from "./-components/templates-home";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/templates")({
-  component: TemplatesPage,
+  component: TemplatesLayout,
 });
 
-function TemplatesPage() {
-  return <TemplatesHome />;
+function TemplatesLayout() {
+  return <Outlet />;
 }

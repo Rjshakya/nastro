@@ -96,6 +96,8 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
 
   return (
     <div className="mx-auto max-w-2xl p-6">
+
+      <p>this install page</p>
       {/* Back Link */}
       <Link
         to="/templates"
