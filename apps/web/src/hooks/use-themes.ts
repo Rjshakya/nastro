@@ -35,7 +35,10 @@ interface GetThemeInput {
 export const useTheme = (input: GetThemeInput) => {
   const fetcher = () => getTheme(input);
 
-  const swr = useSWR(input.themeId ? `/themes/${input.themeId}` : null, fetcher);
+  const swr = useSWR(
+    input.themeId ? `/themes/${input.themeId}` : null,
+    fetcher,
+  );
 
   return {
     data: swr.data as Theme,

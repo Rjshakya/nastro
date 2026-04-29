@@ -44,8 +44,14 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
   const userId = session?.user?.id || "";
 
   const { data: pages } = useNotionPages();
-  const { createSite, isLoading: isCreating, input, setInput } = useCreateSite();
-  const { isAvailable, value, setValue, isLoading } = useIsSiteSlugAvailable("");
+  const {
+    createSite,
+    isLoading: isCreating,
+    input,
+    setInput,
+  } = useCreateSite();
+  const { isAvailable, value, setValue, isLoading } =
+    useIsSiteSlugAvailable("");
 
   const handleCreate = async () => {
     if (!input || !selectedPageId || !value) return;
@@ -89,7 +95,9 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
       <DialogContent className=" px-4 py-4 font-sans tracking-tighter">
         <DialogHeader className="px-0">
           <DialogTitle className="font-medium">Create New Site</DialogTitle>
-          <DialogDescription>Select a Notion page to create your site from.</DialogDescription>
+          <DialogDescription>
+            Select a Notion page to create your site from.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="py-4 space-y-4">

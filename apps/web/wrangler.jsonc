@@ -7,10 +7,10 @@
   // "preview_urls": true,
   "observability": {
     "enabled": true,
-    // "head_sampling_rate": 1,
+    "head_sampling_rate": 1,
     "logs": {
       "enabled": true,
-      //  "head_sampling_rate": 1
+      "head_sampling_rate": 1,
     },
     "traces": {
       "enabled": true,
@@ -19,16 +19,9 @@
 
   "routes": [
     {
-      "custom_domain": false,
-      "pattern": "*.nastro.xyz/*",
+      "custom_domain": true,
+      "pattern": "nastro.xyz",
       "zone_name": "nastro.xyz",
-    },
-  ],
-
-  "services": [
-    {
-      "service": "nastro-api",
-      "binding": "NASTRO_API_WORKER",
     },
   ],
 }

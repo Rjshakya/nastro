@@ -71,7 +71,10 @@ export const useCreateSite = () => {
 };
 
 export const useUpdateSite = () => {
-  const { trigger, isMutating, error, reset } = useSWRMutation("/sites", updateSite);
+  const { trigger, isMutating, error, reset } = useSWRMutation(
+    "/sites",
+    updateSite,
+  );
 
   return {
     updateSite: trigger,
@@ -85,7 +88,10 @@ export const useDeleteSite = () => {
   const router = useRouter();
   const { trigger, isMutating, error, reset } = useSWRMutation(
     "/sites",
-    async (_key: string, { arg }: { arg: { siteId: string; pageId: string } }) => {
+    async (
+      _key: string,
+      { arg }: { arg: { siteId: string; pageId: string } },
+    ) => {
       await deleteSite(_key, { arg });
       await router.invalidate({ sync: true });
     },
@@ -236,7 +242,10 @@ export const useIsSiteSlugAvailable = (slug: string) => {
       return Promise.resolve(false);
     }
 
-    if (BANNED_SUBDOMAINS.has(v.toLowerCase().trim()) || !isValidSubdomainSlug(v)) {
+    if (
+      BANNED_SUBDOMAINS.has(v.toLowerCase().trim()) ||
+      !isValidSubdomainSlug(v)
+    ) {
       return Promise.resolve(false);
     }
 
@@ -265,11 +274,14 @@ export const useIsSiteSlugAvailable = (slug: string) => {
         }
 
         timer = setTimeout(
-          () => setData((prev) => ({ ...prev, isAvailable: v, isLoading: false })),
+          () =>
+            setData((prev) => ({ ...prev, isAvailable: v, isLoading: false })),
           300,
         );
       })
-      .catch((r) => setData((prev) => ({ ...prev, error: r, isLoading: false })));
+      .catch((r) =>
+        setData((prev) => ({ ...prev, error: r, isLoading: false })),
+      );
 
     return () => {
       if (timer) {

@@ -8,7 +8,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useCreateSiteStore } from "@/stores/create-site";
-import { Link, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 
 export function NavMain({
   items,
@@ -60,8 +65,6 @@ export function NavMain({
               </Link>
             </SidebarMenuItem>
           ))}
-
-
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

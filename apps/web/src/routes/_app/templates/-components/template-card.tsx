@@ -1,4 +1,9 @@
-import { IconArrowUpRight, IconDownload, IconPhoto, IconTrash } from "@tabler/icons-react";
+import {
+  IconArrowUpRight,
+  IconDownload,
+  IconPhoto,
+  IconTrash,
+} from "@tabler/icons-react";
 
 import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -68,7 +73,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
         </Card>
       </DialogTrigger>
 
-      <DialogContent showCloseButton={true} className="max-w-lg px-0 py-0 gap-0">
+      <DialogContent
+        showCloseButton={true}
+        className="max-w-lg px-0 py-0 gap-0"
+      >
         <div className="space-y-4 overflow-hidden">
           {/* Large Thumbnail */}
           <div className="p-1 relative aspect-video overflow-hidden rounded-lg ">
@@ -96,7 +104,9 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
 
           <div className="px-2">
             <DialogHeader className="mb-4">
-              <DialogTitle className={"text-2xl flex items-center justify-between gap-1 "}>
+              <DialogTitle
+                className={"text-2xl flex items-center justify-between gap-1 "}
+              >
                 {template.name}
               </DialogTitle>
 
@@ -120,7 +130,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
         </div>
 
         <DialogFooter className="p-2 mt-4">
-          <Link to="/templates/install/$templateId" params={{ templateId: template.id }}>
+          <Link
+            to="/templates/install/$templateId"
+            params={{ templateId: template.id }}
+          >
             <Button>
               <IconDownload />
               {template.isPaid ? "Buy Template" : "Install"}
@@ -150,7 +163,8 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
           <DialogHeader>
             <DialogTitle>Delete template</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this template. This action cannot be undone
+              Are you sure you want to delete this template. This action cannot
+              be undone
             </DialogDescription>
 
             <DialogFooter>
@@ -161,7 +175,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
               >
                 Confirm
               </Button>
-              <Button onClick={() => setIsDeleteDialogOpen(false)} variant={"secondary"}>
+              <Button
+                onClick={() => setIsDeleteDialogOpen(false)}
+                variant={"secondary"}
+              >
                 Cancel
               </Button>
             </DialogFooter>

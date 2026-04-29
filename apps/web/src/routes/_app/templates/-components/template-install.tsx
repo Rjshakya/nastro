@@ -20,7 +20,9 @@ interface TemplateInstallPageProps {
   templateId: string;
 }
 
-export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) => {
+export const TemplateInstallPage = ({
+  templateId,
+}: TemplateInstallPageProps) => {
   const {
     template,
     isLoadingTemplate,
@@ -33,7 +35,9 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
     error,
   } = useTemplateInstall({ templateId });
 
-  const { isAvailable, setValue, isLoading } = useIsSiteSlugAvailable(state.slug);
+  const { isAvailable, setValue, isLoading } = useIsSiteSlugAvailable(
+    state.slug,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +90,8 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
             </div>
             <h2 className="mb-2 text-xl font-semibold">Paid Template</h2>
             <p className="text-muted-foreground">
-              This is a paid template. Payment and checkout will be available soon.
+              This is a paid template. Payment and checkout will be available
+              soon.
             </p>
           </CardContent>
         </Card>
@@ -96,7 +101,6 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
 
   return (
     <div className="mx-auto max-w-2xl p-6">
-
       <p>this install page</p>
       {/* Back Link */}
       <Link
@@ -123,8 +127,12 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
           )}
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{template?.name}</h1>
-          <p className="text-muted-foreground">Install this template to your workspace</p>
+          <h1 className="text-2xl font-bold tracking-tight">
+            {template?.name}
+          </h1>
+          <p className="text-muted-foreground">
+            Install this template to your workspace
+          </p>
         </div>
       </div>
 
@@ -156,7 +164,12 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
           <p className="text-sm text-muted-foreground">
             Open the template in Notion to begin the installation process.
           </p>
-          <Link to={template?.notionPageUrl} target="_blank" rel="noopener noreferrer" className="">
+          <Link
+            to={template?.notionPageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className=""
+          >
             <Button variant={"outline"} className={"dark:border-border"}>
               Open in Notion
               <IconExternalLink className="h-4 w-4" />
@@ -168,8 +181,8 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
         <div className="space-y-2">
           <h3 className="font-medium">Step 2: Duplicate to Your Workspace</h3>
           <p className="text-sm text-muted-foreground">
-            Click the &quot;Duplicate&quot; button at the top right of the Notion page to add it to
-            your workspace.
+            Click the &quot;Duplicate&quot; button at the top right of the
+            Notion page to add it to your workspace.
           </p>
         </div>
 
@@ -177,8 +190,8 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
         <div className="space-y-2">
           <h3 className="font-medium">Step 3: Make the Page Public</h3>
           <p className="text-sm text-muted-foreground">
-            Click &quot;Share&quot; → &quot;Publish to web&quot; → Enable &quot;Publish to web&quot;
-            → Copy the public link.
+            Click &quot;Share&quot; → &quot;Publish to web&quot; → Enable
+            &quot;Publish to web&quot; → Copy the public link.
           </p>
         </div>
 
@@ -232,7 +245,9 @@ export const TemplateInstallPage = ({ templateId }: TemplateInstallPageProps) =>
 
         {/* Error Message */}
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
         )}
 
         {/* Submit Button */}

@@ -21,7 +21,10 @@ export const SlugInput = ({
 }: SlugInputProps) => {
   return (
     <div className="w-full grid gap-2 ">
-      <Label className="capitalize flex items-center justify-between gap-2" htmlFor="slug">
+      <Label
+        className="capitalize flex items-center justify-between gap-2"
+        htmlFor="slug"
+      >
         <p>Slug</p>
         {showAvailablityIndicator !== undefined
           ? showAvailablityIndicator &&
@@ -51,7 +54,11 @@ export const SlugInput = ({
             ))}
       </Label>
 
-      <Input placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+      <Input
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </div>
   );
 };

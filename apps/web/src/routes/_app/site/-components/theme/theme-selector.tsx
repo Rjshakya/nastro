@@ -1,12 +1,21 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useThemeStore } from "@/stores/theme-store";
 import { useDeleteTheme } from "@/hooks/use-themes";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import { IconChevronDown, IconCircleCheckFilled, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconCircleCheckFilled,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { CreateThemeDialog } from "./create-theme-dialog";
 import { SaveThemeDialog } from "./save-theme-dialog";
 import type { Theme } from "@/types/theme";
@@ -95,7 +104,9 @@ export function ThemeSelector() {
                       isSelected && "bg-accent/50",
                       "rounded-2xl",
                     )}
-                    onClick={() => handleSelect(t.id === activeTheme?.id ? null : t)}
+                    onClick={() =>
+                      handleSelect(t.id === activeTheme?.id ? null : t)
+                    }
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       {isSelected && (
@@ -124,7 +135,11 @@ export function ThemeSelector() {
       </Popover>
 
       <CreateThemeDialog open={openCreate} onOpenChange={setOpenCreate} />
-      <SaveThemeDialog open={openSave} onOpenChange={setOpenSave} themeId={activeTheme?.id ?? ""} />
+      <SaveThemeDialog
+        open={openSave}
+        onOpenChange={setOpenSave}
+        themeId={activeTheme?.id ?? ""}
+      />
     </div>
   );
 }

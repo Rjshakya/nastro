@@ -96,7 +96,13 @@ export interface CodeBlockProps {
 }
 
 export const CodeBlock: FC<CodeBlockProps> = React.memo(
-  ({ children, language = "plaintext", filename, showLineNumbers = false, className }) => {
+  ({
+    children,
+    language = "plaintext",
+    filename,
+    showLineNumbers = false,
+    className,
+  }) => {
     const [copied, setCopied] = useState(false);
     const mappedLang = languageMap[language.toLowerCase()];
     const highlightedHtml = use(
@@ -128,8 +134,9 @@ export const CodeBlock: FC<CodeBlockProps> = React.memo(
       URL.revokeObjectURL(url);
     };
 
-    const lines = children.split("\n")
-    const deviconClass = deviconMap[language.toLowerCase()] || deviconMap[language];
+    const lines = children.split("\n");
+    const deviconClass =
+      deviconMap[language.toLowerCase()] || deviconMap[language];
 
     return (
       <div

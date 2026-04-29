@@ -34,7 +34,10 @@ interface GetTemplateInput {
 export const useTemplate = (input: GetTemplateInput) => {
   const fetcher = () => getTemplate(input);
 
-  const swr = useSWR(input.templateId ? `/templates/${input.templateId}` : null, fetcher);
+  const swr = useSWR(
+    input.templateId ? `/templates/${input.templateId}` : null,
+    fetcher,
+  );
 
   return {
     data: swr.data as Template,

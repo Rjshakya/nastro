@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Comparison, ComparisonHandle, ComparisonItem } from "@/components/kibo-ui/comparison";
+import {
+  Comparison,
+  ComparisonHandle,
+  ComparisonItem,
+} from "@/components/kibo-ui/comparison";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -33,12 +37,16 @@ export function HeroSection() {
             variants={fadeInUp}
             className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]"
           >
-            Turn your Notion pages into <span className="text-primary">beautiful websites</span>
+            Turn your Notion pages into{" "}
+            <span className="text-primary">beautiful websites</span>
           </motion.h1>
 
-          <motion.p variants={fadeInUp} className="text-sm  text-muted-foreground mb-12 max-w-md">
-            Publish your Notion content with custom domains, real-time sync, and zero code. Perfect
-            for creators, developers, and teams.
+          <motion.p
+            variants={fadeInUp}
+            className="text-sm  text-muted-foreground mb-12 max-w-md"
+          >
+            Publish your Notion content with custom domains, real-time sync, and
+            zero code. Perfect for creators, developers, and teams.
           </motion.p>
 
           <motion.div

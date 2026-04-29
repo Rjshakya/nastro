@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { ColorPicker } from "@/components/color-picker";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
 import type { ThemeConfig, NotionPaletteConfig } from "@/types/site.setting";
@@ -19,7 +23,8 @@ const paletteColors = [
 ] as const;
 
 export function ThemeTab() {
-  const { settings, updateTheme, updateDarkTheme, isDark } = useSiteSettingStore();
+  const { settings, updateTheme, updateDarkTheme, isDark } =
+    useSiteSettingStore();
   const theme = isDark ? settings.darkTheme : settings.theme;
 
   const update = (partial: Partial<ThemeConfig>) => {
@@ -34,17 +39,23 @@ export function ThemeTab() {
         <ColorPicker
           label="Background"
           value={theme.background.color}
-          onChange={(color) => update({ background: { ...theme.background, color } })}
+          onChange={(color) =>
+            update({ background: { ...theme.background, color } })
+          }
         />
         <ColorPicker
           label="Text"
           value={theme.foreground.color}
-          onChange={(color) => update({ foreground: { ...theme.foreground, color } })}
+          onChange={(color) =>
+            update({ foreground: { ...theme.foreground, color } })
+          }
         />
         <ColorPicker
           label="Checkbox"
           value={theme.checkbox.color}
-          onChange={(color) => update({ checkbox: { ...theme.checkbox, color } })}
+          onChange={(color) =>
+            update({ checkbox: { ...theme.checkbox, color } })
+          }
         />
       </ThemeSection>
 
@@ -57,7 +68,10 @@ export function ThemeTab() {
             value={theme.notionColors[color]}
             onChange={(c) =>
               update({
-                notionColors: { ...theme.notionColors, [color]: c } as NotionPaletteConfig,
+                notionColors: {
+                  ...theme.notionColors,
+                  [color]: c,
+                } as NotionPaletteConfig,
               })
             }
           />
@@ -107,17 +121,23 @@ export function ThemeTab() {
         <ColorPicker
           label="Background"
           value={theme.defaultButton.background}
-          onChange={(c) => update({ defaultButton: { ...theme.defaultButton, background: c } })}
+          onChange={(c) =>
+            update({ defaultButton: { ...theme.defaultButton, background: c } })
+          }
         />
         <ColorPicker
           label="Text"
           value={theme.defaultButton.foreground}
-          onChange={(c) => update({ defaultButton: { ...theme.defaultButton, foreground: c } })}
+          onChange={(c) =>
+            update({ defaultButton: { ...theme.defaultButton, foreground: c } })
+          }
         />
         <ColorPicker
           label="Hover"
           value={theme.defaultButton.hover}
-          onChange={(c) => update({ defaultButton: { ...theme.defaultButton, hover: c } })}
+          onChange={(c) =>
+            update({ defaultButton: { ...theme.defaultButton, hover: c } })
+          }
         />
       </ThemeSection>
 
@@ -140,12 +160,16 @@ export function ThemeTab() {
         <ColorPicker
           label="Background"
           value={theme.textSelection.background}
-          onChange={(c) => update({ textSelection: { ...theme.textSelection, background: c } })}
+          onChange={(c) =>
+            update({ textSelection: { ...theme.textSelection, background: c } })
+          }
         />
         <ColorPicker
           label="Text"
           value={theme.textSelection.foreground}
-          onChange={(c) => update({ textSelection: { ...theme.textSelection, foreground: c } })}
+          onChange={(c) =>
+            update({ textSelection: { ...theme.textSelection, foreground: c } })
+          }
         />
       </ThemeSection>
 
@@ -164,12 +188,21 @@ export function ThemeTab() {
   );
 }
 
-function ThemeSection({ title, children }: { title: string; children: React.ReactNode }) {
+function ThemeSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <Collapsible>
       <CollapsibleTrigger
         render={
-          <Button className="w-full flex items-center justify-between" variant="ghost">
+          <Button
+            className="w-full flex items-center justify-between"
+            variant="ghost"
+          >
             <p className="capitalize">{title}</p>
             <IconChevronDown className="h-4 w-4 transition-transform" />
           </Button>

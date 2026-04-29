@@ -31,7 +31,13 @@ export interface UpdateTemplateInput {
   tags: string[] | null;
 }
 
-export const getAllTemplates = async ({ limit, prev }: { limit: number; prev?: Date }) => {
+export const getAllTemplates = async ({
+  limit,
+  prev,
+}: {
+  limit: number;
+  prev?: Date;
+}) => {
   const res = await client.api.template.$get({
     query: {
       limit: limit.toString(),
@@ -67,7 +73,10 @@ export const getTemplate = async (input: GetTemplateInput) => {
   return json.data as Template;
 };
 
-export const createTemplate = async (_key: string, { arg }: { arg: TemplateInsert }) => {
+export const createTemplate = async (
+  _key: string,
+  { arg }: { arg: TemplateInsert },
+) => {
   const res = await client.api.template.$post({
     json: arg,
   });
@@ -99,7 +108,10 @@ export const updateTemplate = async (
   return res.json();
 };
 
-export const deleteTemplate = async (_key: string, { arg }: { arg: { templateId: string } }) => {
+export const deleteTemplate = async (
+  _key: string,
+  { arg }: { arg: { templateId: string } },
+) => {
   const res = await client.api.template[":id"].$delete({
     param: { id: arg.templateId },
   });

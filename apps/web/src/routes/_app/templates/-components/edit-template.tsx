@@ -124,7 +124,9 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
                 readOnly
                 className="bg-muted"
               />
-              <p className="text-xs text-muted-foreground">Template URL cannot be changed</p>
+              <p className="text-xs text-muted-foreground">
+                Template URL cannot be changed
+              </p>
             </div>
 
             {/* Notion Page URL */}
@@ -135,14 +137,18 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
                   id="notionPageUrl"
                   placeholder="https://notion.so/page-id"
                   value={input.notionPageUrl}
-                  onChange={(e) => setInput({ ...input, notionPageUrl: e.target.value })}
+                  onChange={(e) =>
+                    setInput({ ...input, notionPageUrl: e.target.value })
+                  }
                 />
               </div>
             </div>
 
             {/* Instructions page url */}
             <div className="mb-3 grid gap-2 px-2">
-              <Label htmlFor="instructionsPageUrl">Instructions page url </Label>
+              <Label htmlFor="instructionsPageUrl">
+                Instructions page url{" "}
+              </Label>
               <div className="my-2">
                 <Input
                   id="instructionsPageUrl"
@@ -193,12 +199,16 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             <div className="flex items-center justify-between rounded-lg border p-3 mx-2">
               <Label htmlFor="isPaid" className="grid gap-2 flex-1">
                 <span>Paid Template</span>
-                <span className="text-sm text-muted-foreground">Mark this as a paid template</span>
+                <span className="text-sm text-muted-foreground">
+                  Mark this as a paid template
+                </span>
               </Label>
               <Switch
                 id="isPaid"
                 checked={input.isPaid || false}
-                onCheckedChange={(checked) => setInput({ ...input, isPaid: checked })}
+                onCheckedChange={(checked) =>
+                  setInput({ ...input, isPaid: checked })
+                }
               />
             </div>
 
@@ -231,7 +241,9 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
                   id="paymentLink"
                   placeholder="https://stripe.com/pay/..."
                   value={input.paymentLink || ""}
-                  onChange={(e) => setInput({ ...input, paymentLink: e.target.value || null })}
+                  onChange={(e) =>
+                    setInput({ ...input, paymentLink: e.target.value || null })
+                  }
                 />
               </div>
             )}

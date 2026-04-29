@@ -73,14 +73,21 @@ function EmptyState({
       </EmptyHeader>
       {actions.length > 0 && (
         <EmptyContent
-          className={cn("flex-row justify-center gap-2", actions.length === 1 && "flex-col")}
+          className={cn(
+            "flex-row justify-center gap-2",
+            actions.length === 1 && "flex-col",
+          )}
         >
           {primaryAction && (
             <Button
               variant={primaryAction.variant || "default"}
               onClick={primaryAction.onClick}
               {...(primaryAction.href
-                ? { render: <a href={primaryAction.href}>{primaryAction.label}</a> }
+                ? {
+                    render: (
+                      <a href={primaryAction.href}>{primaryAction.label}</a>
+                    ),
+                  }
                 : {})}
             >
               {primaryAction.label}
@@ -91,7 +98,11 @@ function EmptyState({
               variant={secondaryAction.variant || "outline"}
               onClick={secondaryAction.onClick}
               {...(secondaryAction.href
-                ? { render: <a href={secondaryAction.href}>{secondaryAction.label}</a> }
+                ? {
+                    render: (
+                      <a href={secondaryAction.href}>{secondaryAction.label}</a>
+                    ),
+                  }
                 : {})}
             >
               {secondaryAction.label}
@@ -103,5 +114,13 @@ function EmptyState({
   );
 }
 
-export { EmptyState, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle };
+export {
+  EmptyState,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+};
 export type { EmptyStateProps, EmptyStateAction };

@@ -19,7 +19,6 @@ export function Navbar() {
   const navLinks = [
     { href: "#features", label: "Features" },
     { href: "#pricing", label: "Pricing" },
-    { href: "#", label: "Cms" },
   ];
 
   return (
@@ -29,12 +28,19 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled ? "bg-background/80 backdrop-blur-md border-b border-border/50" : "bg-transparent",
+        scrolled
+          ? "bg-background/80 backdrop-blur-md border-b border-border/50"
+          : "bg-transparent",
       )}
     >
       <nav className=" mx-auto py-2 px-4 flex items-center  justify-between border-b">
         {/* Logo */}
-        <motion.a href="/" className="" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <motion.a
+          href="/"
+          className=""
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <Logo />
         </motion.a>
 
@@ -71,7 +77,11 @@ export function Navbar() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? <IconX className="h-5 w-5" /> : <IconMenu className="h-5 w-5" />}
+          {mobileMenuOpen ? (
+            <IconX className="h-5 w-5" />
+          ) : (
+            <IconMenu className="h-5 w-5" />
+          )}
         </button>
       </nav>
 

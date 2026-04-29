@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { SliderInput } from "@/components/ui/slider-input";
 import { FontPicker } from "@/components/font-picker";
@@ -21,7 +25,10 @@ export function TypographyTab() {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className="w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className="w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Font Sizes</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>
@@ -75,7 +82,10 @@ export function TypographyTab() {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className="w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className="w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Fonts</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>
@@ -88,7 +98,9 @@ export function TypographyTab() {
             </Label>
             <FontPicker
               value={typography.font.primary}
-              onChange={(font) => update({ font: { ...typography.font, primary: font } })}
+              onChange={(font) =>
+                update({ font: { ...typography.font, primary: font } })
+              }
             />
           </div>
           <div className="space-y-2">
@@ -97,7 +109,9 @@ export function TypographyTab() {
             </Label>
             <FontPicker
               value={typography.font.secondary}
-              onChange={(font) => update({ font: { ...typography.font, secondary: font } })}
+              onChange={(font) =>
+                update({ font: { ...typography.font, secondary: font } })
+              }
             />
           </div>
         </CollapsibleContent>
@@ -107,7 +121,10 @@ export function TypographyTab() {
       <Collapsible>
         <CollapsibleTrigger
           render={
-            <Button className="w-full flex items-center justify-between" variant="ghost">
+            <Button
+              className="w-full flex items-center justify-between"
+              variant="ghost"
+            >
               <span>Letter Spacing</span>
               <IconChevronDown className="h-4 w-4 transition-transform" />
             </Button>
@@ -120,7 +137,11 @@ export function TypographyTab() {
             max={10}
             step={0.1}
             value={typography.letterSpacing.title}
-            onChange={(v) => update({ letterSpacing: { ...typography.letterSpacing, title: v } })}
+            onChange={(v) =>
+              update({
+                letterSpacing: { ...typography.letterSpacing, title: v },
+              })
+            }
             valueFormatter={(v) => `${v}px`}
           />
           <SliderInput
@@ -129,7 +150,11 @@ export function TypographyTab() {
             max={10}
             step={0.1}
             value={typography.letterSpacing.heading}
-            onChange={(v) => update({ letterSpacing: { ...typography.letterSpacing, heading: v } })}
+            onChange={(v) =>
+              update({
+                letterSpacing: { ...typography.letterSpacing, heading: v },
+              })
+            }
             valueFormatter={(v) => `${v}px`}
           />
           <SliderInput
@@ -138,7 +163,11 @@ export function TypographyTab() {
             max={10}
             step={0.1}
             value={typography.letterSpacing.base}
-            onChange={(v) => update({ letterSpacing: { ...typography.letterSpacing, base: v } })}
+            onChange={(v) =>
+              update({
+                letterSpacing: { ...typography.letterSpacing, base: v },
+              })
+            }
             valueFormatter={(v) => `${v}px`}
           />
         </CollapsibleContent>

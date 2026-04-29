@@ -12,7 +12,9 @@ import { getDefaultSettings } from "@/lib/default-settings";
 // Theme Styles
 // ═══════════════════════════════════════════════════════════════
 
-function computeThemeStyles(theme: PopulatedThemeConfig): Record<string, string> {
+function computeThemeStyles(
+  theme: PopulatedThemeConfig,
+): Record<string, string> {
   const styles: Record<string, string> = {};
 
   // ── Page ──
@@ -76,7 +78,9 @@ function computeThemeStyles(theme: PopulatedThemeConfig): Record<string, string>
 // Typography Styles
 // ═══════════════════════════════════════════════════════════════
 
-function computeTypographyStyles(typography: PopulatedTypographyConfig): Record<string, string> {
+function computeTypographyStyles(
+  typography: PopulatedTypographyConfig,
+): Record<string, string> {
   const styles: Record<string, string> = {};
 
   styles["--ns-font-primary"] = typography.font.primary;
@@ -99,7 +103,9 @@ function computeTypographyStyles(typography: PopulatedTypographyConfig): Record<
 // Layout Styles
 // ═══════════════════════════════════════════════════════════════
 
-function computeLayoutStyles(layout: PopulatedLayoutConfig): Record<string, string> {
+function computeLayoutStyles(
+  layout: PopulatedLayoutConfig,
+): Record<string, string> {
   const styles: Record<string, string> = {};
 
   styles["--ns-layout-header-display"] = layout.header ? "block" : "none";
@@ -112,7 +118,9 @@ function computeLayoutStyles(layout: PopulatedLayoutConfig): Record<string, stri
 // General Styles
 // ═══════════════════════════════════════════════════════════════
 
-function computeGeneralStyles(general: PopulatedGeneralConfig): Record<string, string> {
+function computeGeneralStyles(
+  general: PopulatedGeneralConfig,
+): Record<string, string> {
   const styles: Record<string, string> = {};
 
   styles["--ns-page-width"] = `${general.pageWidth}px`;

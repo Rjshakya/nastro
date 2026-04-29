@@ -3,7 +3,9 @@ import type { NavConfig } from "@/types/site.setting";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 
-const defaultAvatars = ["https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"];
+const defaultAvatars = [
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg",
+];
 
 export const SiteFooter = ({ footer }: { footer?: NavConfig }) => {
   const links = footer?.links ? Object.entries(footer.links) : [];
@@ -21,7 +23,10 @@ export const SiteFooter = ({ footer }: { footer?: NavConfig }) => {
 
         <div className="flex gap-2 items-center py-2">
           <Avatar className="size-5">
-            <AvatarImage className="rounded-sm" src={footer?.logo?.icon || defaultAvatars[0]} />
+            <AvatarImage
+              className="rounded-sm"
+              src={footer?.logo?.icon || defaultAvatars[0]}
+            />
             <AvatarFallback />
           </Avatar>
           <p>{footer?.logo?.text || "Footer"}</p>

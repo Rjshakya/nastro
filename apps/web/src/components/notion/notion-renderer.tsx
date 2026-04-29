@@ -19,7 +19,11 @@ interface NotionRendererProps {
   slug: string;
 }
 
-export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps) {
+export function NotionRenderer({
+  pageId,
+  recordMap,
+  slug,
+}: NotionRendererProps) {
   const { settings, styles } = useSiteSettingStore();
   const { pathname } = useLocation();
   const { origin } = useRouter();
@@ -73,7 +77,11 @@ export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps)
           Code,
         }}
         mapPageUrl={handlePageUrl}
-        header={showHeader ? <SiteHeader header={settings.layout?.headerConfig} /> : undefined}
+        header={
+          showHeader ? (
+            <SiteHeader header={settings.layout?.headerConfig} />
+          ) : undefined
+        }
         disableHeader
       />
       {showFooter && <SiteFooter footer={settings.layout?.footerConfig} />}

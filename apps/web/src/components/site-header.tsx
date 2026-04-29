@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
 
-const defaultAvatars = ["https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"];
+const defaultAvatars = [
+  "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg",
+];
 
 export const SiteHeader = ({ header }: { header?: NavConfig }) => {
   const { setIsDark } = useSiteSettingStore();
@@ -16,7 +18,10 @@ export const SiteHeader = ({ header }: { header?: NavConfig }) => {
       <div className="flex items-center justify-between gap-1">
         <div className="flex gap-1 items-center px-2">
           <Avatar className="size-5">
-            <AvatarImage className="rounded-sm" src={header?.logo?.icon || defaultAvatars[0]} />
+            <AvatarImage
+              className="rounded-sm"
+              src={header?.logo?.icon || defaultAvatars[0]}
+            />
             <AvatarFallback />
           </Avatar>
           <p>{header?.logo?.text || "Header"}</p>

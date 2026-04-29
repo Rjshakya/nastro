@@ -88,7 +88,9 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
       <DialogContent className="px-4 py-4 font-sans tracking-tighter max-w-lg">
         <DialogHeader className="px-0">
           <DialogTitle className="font-medium">Create New Template</DialogTitle>
-          <DialogDescription>Add a new template to your collection.</DialogDescription>
+          <DialogDescription>
+            Add a new template to your collection.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="">
@@ -136,19 +138,25 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
                   id="notionPageUrl"
                   placeholder="https://notion.so/page-id"
                   value={input.notionPageUrl}
-                  onChange={(e) => setInput({ ...input, notionPageUrl: e.target.value })}
+                  onChange={(e) =>
+                    setInput({ ...input, notionPageUrl: e.target.value })
+                  }
                 />
               </div>
             </div>
             {/* Instructions page url */}
             <div className="mb-3 grid gap-2 px-2">
-              <Label htmlFor="instructionsPageUrl">Instructions page url </Label>
+              <Label htmlFor="instructionsPageUrl">
+                Instructions page url{" "}
+              </Label>
               <div className="my-2">
                 <Input
                   id="instructionsPageUrl"
                   placeholder="https://notion.so/page-id"
                   value={input.instructionsPageUrl ?? ""}
-                  onChange={(e) => setInput({ ...input, instructionsPageUrl: e.target.value })}
+                  onChange={(e) =>
+                    setInput({ ...input, instructionsPageUrl: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -183,12 +191,16 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
             <div className="flex items-center justify-between rounded-lg border p-3 mb-3 mx-2">
               <Label htmlFor="isPaid" className=" grid flex-1">
                 <span>Paid Template</span>
-                <span className="text-sm text-muted-foreground">Mark this as a paid template</span>
+                <span className="text-sm text-muted-foreground">
+                  Mark this as a paid template
+                </span>
               </Label>
               <Switch
                 id="isPaid"
                 checked={input.isPaid || false}
-                onCheckedChange={(checked) => setInput({ ...input, isPaid: checked })}
+                onCheckedChange={(checked) =>
+                  setInput({ ...input, isPaid: checked })
+                }
               />
             </div>
             {/* Price (only if paid) */}
@@ -219,7 +231,9 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
                   id="paymentLink"
                   placeholder="https://stripe.com/pay/..."
                   value={input.paymentLink || ""}
-                  onChange={(e) => setInput({ ...input, paymentLink: e.target.value || null })}
+                  onChange={(e) =>
+                    setInput({ ...input, paymentLink: e.target.value || null })
+                  }
                 />
               </div>
             )}

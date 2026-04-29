@@ -21,17 +21,20 @@ const painPoints = [
   {
     icon: IconBrandNotion,
     title: "Notion sites look... like Notion",
-    description: "Generic styling. Zero personality. Everyone's site looks exactly the same.",
+    description:
+      "Generic styling. Zero personality. Everyone's site looks exactly the same.",
   },
   {
     icon: IconCurrencyDollar,
     title: "SEO & analytics cost extra",
-    description: "Want custom domains? SEO? Analytics? That'll be $8-16/month please.",
+    description:
+      "Want custom domains? SEO? Analytics? That'll be $8-16/month please.",
   },
   {
     icon: IconLock,
     title: "Zero customization control",
-    description: "Can't change colors, fonts, or layouts. What you see is what you're stuck with.",
+    description:
+      "Can't change colors, fonts, or layouts. What you see is what you're stuck with.",
   },
 ];
 
@@ -39,17 +42,20 @@ const solutions = [
   {
     icon: IconPalette,
     title: "Customize literally everything",
-    description: "Background colors, button styles, text selection, fonts, spacing — you name it.",
+    description:
+      "Background colors, button styles, text selection, fonts, spacing — you name it.",
   },
   {
     icon: IconSearch,
     title: "SEO & analytics, free",
-    description: "Custom meta tags, OG images, favicons, plus Google Analytics. No catches.",
+    description:
+      "Custom meta tags, OG images, favicons, plus Google Analytics. No catches.",
   },
   {
     icon: IconWorld,
     title: "Your own subdomain, instantly",
-    description: "Get yourname.nastro.xyz in seconds. Or bring your custom domain.",
+    description:
+      "Get yourname.nastro.xyz in seconds. Or bring your custom domain.",
   },
 ];
 
@@ -63,7 +69,8 @@ const useCases = [
   {
     icon: IconRocket,
     title: "Launch your first site",
-    description: "Perfect for your first website. No coding required, just your Notion content.",
+    description:
+      "Perfect for your first website. No coding required, just your Notion content.",
   },
   {
     icon: IconPencil,
@@ -131,10 +138,13 @@ export function WhyNastroSection() {
             but actually yours
           </motion.h1>
 
-          <motion.p variants={fadeInUp} className="text-sm  text-muted-foreground mb-12 max-w-md">
+          <motion.p
+            variants={fadeInUp}
+            className="text-sm  text-muted-foreground mb-12 max-w-md"
+          >
             Turn your Notion content into a beautiful website that reflects
-            <span className="text-foreground"> your taste</span>. No code. No expensive
-            subscriptions. Just sit back, relax, and make it yours.
+            <span className="text-foreground"> your taste</span>. No code. No
+            expensive subscriptions. Just sit back, relax, and make it yours.
           </motion.p>
         </motion.div>
 
@@ -148,7 +158,9 @@ export function WhyNastroSection() {
             viewport={{ margin: "-100px" }}
             className=" "
           >
-            <h3 className=" capitalize text-sm font-medium text-muted-foreground  mb-6">problem</h3>
+            <h3 className=" capitalize text-sm font-medium text-muted-foreground  mb-6">
+              problem
+            </h3>
             <div className="bg-[url(/cool-bg-2.png)] p-4">
               <div className=" bg-background p-4 ">
                 {painPoints.map((point) => (
@@ -158,13 +170,19 @@ export function WhyNastroSection() {
                     className="flex gap-4 p-4  bg-muted/50 border border-border/60"
                   >
                     <div className="flex items-start justify-between mb-4">
-                      <Button size={"icon"} variant={"outline"} className={"dark:border-border"}>
+                      <Button
+                        size={"icon"}
+                        variant={"outline"}
+                        className={"dark:border-border"}
+                      >
                         <point.icon className={`size-5`} stroke={1.5} />
                       </Button>
                     </div>
                     <div className="space-y-1">
                       <h4 className="">{point.title}</h4>
-                      <p className="text-xs text-muted-foreground">{point.description}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {point.description}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -192,13 +210,19 @@ export function WhyNastroSection() {
                     className="flex gap-4 p-4  bg-muted/50 border border-border/60"
                   >
                     <div className="flex items-start justify-between mb-4">
-                      <Button size={"icon"} variant={"outline"} className={"dark:border-border"}>
+                      <Button
+                        size={"icon"}
+                        variant={"outline"}
+                        className={"dark:border-border"}
+                      >
                         <point.icon className={`size-5`} stroke={1.5} />
                       </Button>
                     </div>
                     <div className="space-y-1">
                       <h4 className="">{point.title}</h4>
-                      <p className="text-xs text-muted-foreground">{point.description}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {point.description}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -217,7 +241,9 @@ export function WhyNastroSection() {
           viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h3 className=" text-4xl sm:text-4xl  tracking-[-0.06em]">Why Nastro exists</h3>
+          <h3 className=" text-4xl sm:text-4xl  tracking-[-0.06em]">
+            Why Nastro exists
+          </h3>
           <p className="text-sm  text-muted-foreground mb-12 ">
             We built this because we needed it ourselves
           </p>
@@ -232,16 +258,26 @@ export function WhyNastroSection() {
           viewport={{ margin: "-100px" }}
         >
           {useCases.map((useCase) => (
-            <motion.div key={useCase.title} variants={itemVariants} className={useCase.span}>
+            <motion.div
+              key={useCase.title}
+              variants={itemVariants}
+              className={useCase.span}
+            >
               <Card className=" group transition-all duration-300   hover:bg-muted/50 rounded-none">
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
-                    <Button size={"icon"} variant={"outline"} className={"dark:border-border"}>
+                    <Button
+                      size={"icon"}
+                      variant={"outline"}
+                      className={"dark:border-border"}
+                    >
                       <useCase.icon className={`size-5`} stroke={1.5} />
                     </Button>
                   </div>
                   <h4 className="text-lg mb-2">{useCase.title}</h4>
-                  <p className="text-xs text-muted-foreground max-w-xs">{useCase.description}</p>
+                  <p className="text-xs text-muted-foreground max-w-xs">
+                    {useCase.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>

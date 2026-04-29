@@ -28,15 +28,19 @@ export function AnalyticsTab() {
           value={analytics.trackingId}
           onChange={(e) => handleChange(e.target.value)}
           placeholder="G-XXXXXXXXXX"
-          className={!isValid ? "border-red-500 focus-visible:ring-red-500" : ""}
+          className={
+            !isValid ? "border-red-500 focus-visible:ring-red-500" : ""
+          }
         />
         {!isValid && (
           <p className="text-xs text-red-500">
-            Invalid format. Should be G- followed by 10 characters (e.g., G-ABC123DEF0)
+            Invalid format. Should be G- followed by 10 characters (e.g.,
+            G-ABC123DEF0)
           </p>
         )}
         <p className="text-xs text-muted-foreground">
-          Go to analytics.google.com &rarr; Admin &rarr; Data Streams &rarr; Web &rarr; Copy Measurement ID
+          Go to analytics.google.com &rarr; Admin &rarr; Data Streams &rarr; Web
+          &rarr; Copy Measurement ID
         </p>
       </div>
     </div>

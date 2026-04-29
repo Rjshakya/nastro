@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSiteSettingPanel, useSiteSettingStore } from "@/stores/site.setting.store";
+import {
+  useSiteSettingPanel,
+  useSiteSettingStore,
+} from "@/stores/site.setting.store";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { toast } from "sonner";
 import { GeneralTab } from "./setting-panel-tabs/general-tab";
@@ -61,11 +64,18 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
   };
 
   return (
-    <Sheet disablePointerDismissal={true} modal={false} open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      disablePointerDismissal={true}
+      modal={false}
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <SheetContent overlayClassName="hidden" className="w-full sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>Site Settings</SheetTitle>
-          <SheetDescription>Customize your site appearance and behavior</SheetDescription>
+          <SheetDescription>
+            Customize your site appearance and behavior
+          </SheetDescription>
         </SheetHeader>
 
         <ThemeSelector />

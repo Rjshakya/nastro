@@ -53,9 +53,10 @@ export function Error({ message, code: _code, onRetry }: ErrorProps) {
           {onRetry && (
             <Button
               variant="secondary"
-              className={"w-full shadow-none text-muted-foreground dark:bg-secondary/20 "}
+              className={
+                "w-full shadow-none text-muted-foreground dark:bg-secondary/20 "
+              }
               onClick={onRetry}
-              
             >
               Try Again
             </Button>

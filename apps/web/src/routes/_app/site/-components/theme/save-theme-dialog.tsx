@@ -23,7 +23,11 @@ interface SaveThemeDialogProps {
   themeId: string;
 }
 
-export function SaveThemeDialog({ open, onOpenChange, themeId }: SaveThemeDialogProps) {
+export function SaveThemeDialog({
+  open,
+  onOpenChange,
+  themeId,
+}: SaveThemeDialogProps) {
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const { updateTheme, isLoading } = useUpdateTheme();

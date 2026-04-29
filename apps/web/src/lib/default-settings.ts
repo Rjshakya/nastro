@@ -159,7 +159,10 @@ const defaultGeneral: Required<GeneralConfig> = {
 // Deep Merge Helper
 // ─────────────────────────────────────────────────────────────
 
-function deepMerge<T extends Record<string, any>>(base: T, override?: Partial<T>): T {
+function deepMerge<T extends Record<string, any>>(
+  base: T,
+  override?: Partial<T>,
+): T {
   if (!override) return base;
 
   const result = { ...base } as T;
@@ -189,9 +192,14 @@ function deepMerge<T extends Record<string, any>>(base: T, override?: Partial<T>
 // Public API
 // ─────────────────────────────────────────────────────────────
 
-export function getDefaultSettings(settings?: SiteSetting): PopulatedSiteSetting {
+export function getDefaultSettings(
+  settings?: SiteSetting,
+): PopulatedSiteSetting {
   return {
-    theme: deepMerge(defaultLightTheme, settings?.theme) as PopulatedSiteSetting["theme"],
+    theme: deepMerge(
+      defaultLightTheme,
+      settings?.theme,
+    ) as PopulatedSiteSetting["theme"],
     darkTheme: deepMerge(
       defaultDarkTheme,
       settings?.darkTheme,
@@ -200,8 +208,14 @@ export function getDefaultSettings(settings?: SiteSetting): PopulatedSiteSetting
       defaultTypography,
       settings?.typography,
     ) as PopulatedSiteSetting["typography"],
-    layout: deepMerge(defaultLayout, settings?.layout) as PopulatedSiteSetting["layout"],
-    general: deepMerge(defaultGeneral, settings?.general) as PopulatedSiteSetting["general"],
+    layout: deepMerge(
+      defaultLayout,
+      settings?.layout,
+    ) as PopulatedSiteSetting["layout"],
+    general: deepMerge(
+      defaultGeneral,
+      settings?.general,
+    ) as PopulatedSiteSetting["general"],
     seo: {
       title: "",
       description: "",

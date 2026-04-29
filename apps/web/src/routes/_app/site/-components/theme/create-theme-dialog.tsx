@@ -21,7 +21,10 @@ interface CreateThemeDialogProps {
   onOpenChange: (v: boolean) => void;
 }
 
-export function CreateThemeDialog({ open, onOpenChange }: CreateThemeDialogProps) {
+export function CreateThemeDialog({
+  open,
+  onOpenChange,
+}: CreateThemeDialogProps) {
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const { createTheme, isLoading } = useCreateTheme();
@@ -45,7 +48,9 @@ export function CreateThemeDialog({ open, onOpenChange }: CreateThemeDialogProps
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create theme</DialogTitle>
-          <DialogDescription>Create a theme preset from your current settings</DialogDescription>
+          <DialogDescription>
+            Create a theme preset from your current settings
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 mb-4">

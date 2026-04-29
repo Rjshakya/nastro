@@ -17,8 +17,17 @@ export function ThemeToggle({
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-      {theme === "dark" ? <IconMoon className="h-4 w-4" /> : <IconSun className="h-4 w-4" />}
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+    >
+      {theme === "dark" ? (
+        <IconMoon className="h-4 w-4" />
+      ) : (
+        <IconSun className="h-4 w-4" />
+      )}
     </Button>
   );
 }

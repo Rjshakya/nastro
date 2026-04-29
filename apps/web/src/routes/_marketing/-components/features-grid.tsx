@@ -24,7 +24,8 @@ const features = [
   },
   {
     title: "Custom domains",
-    description: "Connect your own domain with free SSL certificates automatically provisioned.",
+    description:
+      "Connect your own domain with free SSL certificates automatically provisioned.",
     icon: IconWorld,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -32,7 +33,8 @@ const features = [
   },
   {
     title: "Notion as CMS",
-    description: "Your content lives in Notion. Edit once, update everywhere automatically.",
+    description:
+      "Your content lives in Notion. Edit once, update everywhere automatically.",
     icon: IconBrandNotion,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -50,7 +52,8 @@ const features = [
   },
   {
     title: "Full SEO control",
-    description: "Custom titles, descriptions, OG images, favicons, and page URLs for every page.",
+    description:
+      "Custom titles, descriptions, OG images, favicons, and page URLs for every page.",
     icon: IconSearch,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -58,7 +61,8 @@ const features = [
   },
   {
     title: "Built-in analytics",
-    description: "Track visitors, page views, and traffic sources. Basic on free, advanced on Pro.",
+    description:
+      "Track visitors, page views, and traffic sources. Basic on free, advanced on Pro.",
     icon: IconBrandGoogleAnalytics,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -66,7 +70,8 @@ const features = [
   },
   {
     title: "Real-time preview",
-    description: "See changes instantly as you customize colors, fonts, and layouts in the editor.",
+    description:
+      "See changes instantly as you customize colors, fonts, and layouts in the editor.",
     icon: IconEye,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -74,7 +79,8 @@ const features = [
   },
   {
     title: "Developer API",
-    description: "RESTful API for fetching Notion content. Perfect for headless CMS use cases.",
+    description:
+      "RESTful API for fetching Notion content. Perfect for headless CMS use cases.",
     icon: IconCode,
     color: "text-foreground",
     bgColor: "bg-secondary",
@@ -118,9 +124,12 @@ export function FeaturesGrid() {
           viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h2 className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]">Everything you need</h2>
+          <h2 className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]">
+            Everything you need
+          </h2>
           <p className="text-sm  text-muted-foreground mb-12 max-w-md">
-            Powerful features for creators and developers. Build your site without writing code.
+            Powerful features for creators and developers. Build your site
+            without writing code.
           </p>
         </motion.div>
 
@@ -133,12 +142,23 @@ export function FeaturesGrid() {
           viewport={{ margin: "-100px" }}
         >
           {features.map((feature) => (
-            <motion.div key={feature.title} variants={itemVariants} className={feature.span}>
+            <motion.div
+              key={feature.title}
+              variants={itemVariants}
+              className={feature.span}
+            >
               <Card className=" group transition-all duration-300   hover:bg-muted/50 rounded-none">
                 <CardContent className="p-5 sm:p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <Button size={"icon"} variant={"outline"} className={`dark:border-border`}>
-                      <feature.icon className={`size-5 ${feature.color}`} stroke={1.5} />
+                    <Button
+                      size={"icon"}
+                      variant={"outline"}
+                      className={`dark:border-border`}
+                    >
+                      <feature.icon
+                        className={`size-5 ${feature.color}`}
+                        stroke={1.5}
+                      />
                     </Button>
                     {feature.badge && (
                       <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
@@ -147,7 +167,9 @@ export function FeaturesGrid() {
                     )}
                   </div>
                   <h4 className="text-lg mb-2">{feature.title}</h4>
-                  <p className="text-muted-foreground text-xs max-w-xs">{feature.description}</p>
+                  <p className="text-muted-foreground text-xs max-w-xs">
+                    {feature.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>

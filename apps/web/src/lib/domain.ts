@@ -8,5 +8,3 @@ export type {
   ThemeTableInsert,
   ThemeTableSelect,
 } from "server/domain";
-
-

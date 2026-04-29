@@ -4,7 +4,11 @@ import { Text } from "react-notion-x";
 import { CodeBlock as CodeBlockComp } from "@/components/ui/code-block";
 import React from "react";
 
-export function renderCodeBlock({ recordMap }: { recordMap: ExtendedRecordMap }) {
+export function renderCodeBlock({
+  recordMap,
+}: {
+  recordMap: ExtendedRecordMap;
+}) {
   function Code({
     block,
     defaultLanguage = "typescript",

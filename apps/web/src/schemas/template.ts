@@ -45,7 +45,9 @@ export type TemplateFormData = z.infer<typeof templateFormSchema>;
  */
 export const validateTemplateForm = (
   data: unknown,
-): { success: true; data: TemplateFormData } | { success: false; error: string } => {
+):
+  | { success: true; data: TemplateFormData }
+  | { success: false; error: string } => {
   const result = templateFormSchema.safeParse(data);
 
   if (result.success) {

@@ -17,11 +17,17 @@ interface GeneralTabProps {
   onSlugChange: (slug: string) => void;
 }
 
-export function GeneralTab({ siteName, slug, onSiteNameChange, onSlugChange }: GeneralTabProps) {
+export function GeneralTab({
+  siteName,
+  slug,
+  onSiteNameChange,
+  onSlugChange,
+}: GeneralTabProps) {
   const { settings, updateGeneral, setIsDark } = useSiteSettingStore();
   const general = settings.general;
 
-  const { isAvailable, isLoading, value, setValue } = useIsSiteSlugAvailable(slug);
+  const { isAvailable, isLoading, value, setValue } =
+    useIsSiteSlugAvailable(slug);
 
   const handleSlugChange = (newSlug: string) => {
     setValue(newSlug);

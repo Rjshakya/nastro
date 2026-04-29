@@ -7,7 +7,10 @@ export interface ThemeSetting {
   typography: TypographyConfig;
 }
 
-export type Theme = Omit<ThemeTableSelect, "createdAt" | "updatedAt" | "setting"> & {
+export type Theme = Omit<
+  ThemeTableSelect,
+  "createdAt" | "updatedAt" | "setting"
+> & {
   createdAt: string;
   updatedAt: string;
   setting: ThemeSetting;

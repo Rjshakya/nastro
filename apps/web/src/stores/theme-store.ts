@@ -23,7 +23,8 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
 
     console.log(JSON.stringify(theme, null, 2));
 
-    const { settings: currentSettings, setSettings } = useSiteSettingStore.getState();
+    const { settings: currentSettings, setSettings } =
+      useSiteSettingStore.getState();
 
     // Merge theme preset into current settings, preserving layout/general/seo/analytics
     const siteSettingWithDefaultsAndNewTheme = getDefaultSettings({
@@ -48,9 +49,13 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
 
     const { settings, setSettings } = useSiteSettingStore.getState();
     const { general, analytics, seo, layout } = settings;
-    const defaultSiteSetting = getDefaultSettings({ general, analytics, seo, layout });
+    const defaultSiteSetting = getDefaultSettings({
+      general,
+      analytics,
+      seo,
+      layout,
+    });
     setSettings(defaultSiteSetting);
     set({ theme: null });
   },
-  
 }));

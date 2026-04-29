@@ -42,7 +42,6 @@ export const liveSiteLoader = createServerFn()
       const { pageId, slug } = input;
       const resolvedSlug = resolveSlug(slug || "");
 
-
       const apiUrl = new URL("/api/site", Env.apiUrl);
       apiUrl.searchParams.set("slug", resolvedSlug);
       apiUrl.searchParams.set("rootPageId", pageId);

@@ -18,7 +18,13 @@ export interface UpdateThemeInput {
   isPublic?: boolean;
 }
 
-export const getAllThemes = async ({ limit, prev }: { limit: number; prev?: Date }) => {
+export const getAllThemes = async ({
+  limit,
+  prev,
+}: {
+  limit: number;
+  prev?: Date;
+}) => {
   const res = await client.api.theme.$get({
     query: {
       limit: limit.toString(),
@@ -54,7 +60,10 @@ export const getTheme = async (input: GetThemeInput) => {
   return json.data as unknown as Theme;
 };
 
-export const createTheme = async (_key: string, { arg }: { arg: CreateThemeInput }) => {
+export const createTheme = async (
+  _key: string,
+  { arg }: { arg: CreateThemeInput },
+) => {
   const res = await client.api.theme.$post({
     json: arg,
   });
@@ -86,7 +95,10 @@ export const updateTheme = async (
   return res.json();
 };
 
-export const deleteTheme = async (_key: string, { arg }: { arg: { themeId: string } }) => {
+export const deleteTheme = async (
+  _key: string,
+  { arg }: { arg: { themeId: string } },
+) => {
   const res = await client.api.theme[":id"].$delete({
     param: { id: arg.themeId },
   });

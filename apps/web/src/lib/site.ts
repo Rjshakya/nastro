@@ -71,7 +71,10 @@ export const getSite = async ({ rootPageId, slug, fresh }: GetSiteInput) => {
   };
 };
 
-export const createSite = async (_key: string, { arg }: { arg: SiteInsert }) => {
+export const createSite = async (
+  _key: string,
+  { arg }: { arg: SiteInsert },
+) => {
   const res = await client.api.site.$post({
     json: arg,
   });

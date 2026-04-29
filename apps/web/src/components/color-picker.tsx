@@ -1,6 +1,14 @@
-import { ColorPicker as ReactColorPicker, useColor, type IColor } from "react-color-palette";
+import {
+  ColorPicker as ReactColorPicker,
+  useColor,
+  type IColor,
+} from "react-color-palette";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 interface ColorPickerProps {
@@ -41,7 +49,12 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
         />
 
         <PopoverContent side="left" className="m-4">
-          <ReactColorPicker color={color} onChange={handleChange} height={100} hideAlpha={true} />
+          <ReactColorPicker
+            color={color}
+            onChange={handleChange}
+            height={100}
+            hideAlpha={true}
+          />
         </PopoverContent>
       </Popover>
     </div>

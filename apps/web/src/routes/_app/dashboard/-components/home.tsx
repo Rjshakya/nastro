@@ -10,7 +10,9 @@ export const DashboardHome = () => {
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-2xl tracking-tight">Dashboard</h1>
-              <p className="text-sm text-muted-foreground mt-1">Manage your sites</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Manage your sites
+              </p>
             </div>
             <div className="flex items-center ">
               <ThemeToggle />
