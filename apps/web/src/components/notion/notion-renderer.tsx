@@ -1,6 +1,6 @@
-import { NotionRenderer as NotionRendererLib, Button } from "react-notion-x";
+import { NotionRenderer as NotionRendererLib } from "react-notion-x";
 import { Card, CardContent } from "@/components/ui/card";
-import { Collection } from "react-notion-x/third-party/collection";
+import { Collection, Property } from "react-notion-x/third-party/collection";
 import { Code } from "react-notion-x/third-party/code";
 import { Equation } from "react-notion-x/third-party/equation";
 import { type CSSProperties } from "react";
@@ -8,22 +8,16 @@ import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
-import type { Block } from "notion-types";
-import { Button as ShadBtn } from "@/components/ui/button";
-import { IconFileDescription } from "@tabler/icons-react";
-import { renderCodeBlock } from "./code";
+import type { ExtendedRecordMap } from "notion-types";
+import { renderButtonBlock } from "./button";
 
 interface NotionRendererProps {
   pageId: string;
-  recordMap: any;
+  recordMap: ExtendedRecordMap;
   slug: string;
 }
 
-export function NotionRenderer({
-  pageId,
-  recordMap,
-  slug,
-}: NotionRendererProps) {
+export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps) {
   const { settings, styles } = useSiteSettingStore();
   const { pathname } = useLocation();
   const { origin } = useRouter();
@@ -51,7 +45,6 @@ export function NotionRenderer({
 
   const showHeader = settings.layout?.header ?? false;
   const showFooter = settings.layout?.footer ?? false;
-
   return (
     <div
       style={{ ...styles } as CSSProperties & Record<string, any>}
@@ -63,7 +56,7 @@ export function NotionRenderer({
         recordMap={recordMap}
         rootPageId={pageId}
         components={{
-          Button,
+          Button: renderButtonBlock(recordMap),
           Equation,
           Collection,
           PageLink: ({ href, children, ...props }: any) => {
@@ -75,13 +68,10 @@ export function NotionRenderer({
           },
           Header: SiteHeader,
           Code,
+          Property,
         }}
         mapPageUrl={handlePageUrl}
-        header={
-          showHeader ? (
-            <SiteHeader header={settings.layout?.headerConfig} />
-          ) : undefined
-        }
+        header={showHeader ? <SiteHeader header={settings.layout?.headerConfig} /> : undefined}
         disableHeader
       />
       {showFooter && <SiteFooter footer={settings.layout?.footerConfig} />}

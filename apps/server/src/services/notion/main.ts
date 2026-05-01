@@ -8,7 +8,7 @@ import type {
   PartialDataSourceObjectResponse,
   PartialPageObjectResponse,
 } from "@notionhq/client";
-import { NotionClient, NotionClientLive } from "@/lib/notion";
+import { NotionClient } from "@/lib/notion";
 import { ExtendedRecordMap } from "notion-types";
 import { type GetAccessTokenResult } from "@/lib/tokens";
 
@@ -110,6 +110,15 @@ export const NotionServiceLive = (accessToken?: string | GetAccessTokenResult) =
             },
             catch: (e) => {
               console.error(e);
+
+              if (e instanceof Error && e.message.includes("Notion page not found")) {
+                return new NotionError({
+                  message: "PAGE NOT FOUND",
+                  type: "PAGE_ERROR",
+                  code: 500,
+                });
+              }
+
               return new NotionError({
                 message: "NOTION PAGE ERROR",
                 type: "PAGE_ERROR",

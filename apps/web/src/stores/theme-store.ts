@@ -21,8 +21,6 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
       return;
     }
 
-    console.log(JSON.stringify(theme, null, 2));
-
     const { settings: currentSettings, setSettings } =
       useSiteSettingStore.getState();
 

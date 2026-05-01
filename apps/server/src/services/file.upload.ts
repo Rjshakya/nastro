@@ -72,7 +72,15 @@ export const FileUploadServiceLive = Layer.effect(FileUploadService)(
               expiresIn,
             });
 
-            return { uploadUrl, fileUrl: "string" };
+            let buckerUrl = env.SITE_ASSETS_BUCKET_PROD_URL;
+
+            if (storage.bucket === "nastro-templates-assets") {
+              buckerUrl = env.TEMPLATE_ASSETS_BUCKET_PROD_URL;
+            }
+
+            const fileUrl = new URL(`/${storage.bucket}/${key}`, buckerUrl).href;
+
+            return { uploadUrl, fileUrl };
           },
           catch: (e) => {
             console.error(e);

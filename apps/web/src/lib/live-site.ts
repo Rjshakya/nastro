@@ -28,7 +28,6 @@ export const liveSiteLoader = createServerFn()
     z.object({
       pageId: z.string(),
       slug: z.string().optional(),
-      // fresh: z.enum(["true", "false"]).optional(),
     }),
   )
   .handler(async ({ data: input }) => {

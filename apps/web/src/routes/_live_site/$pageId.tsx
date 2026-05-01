@@ -51,6 +51,13 @@ export const Route = createFileRoute("/_live_site/$pageId")({
       );
     }
 
+    if (site?.customScriptLink) {
+      scripts.push({
+        type: "script",
+        src: site.customScriptLink,
+      });
+    }
+
     return {
       meta: [
         { title: seo?.title || site?.name || "Nastro" },
@@ -64,6 +71,7 @@ export const Route = createFileRoute("/_live_site/$pageId")({
         { name: "twitter:image", content: seo?.ogImage },
       ],
       scripts,
+      links: site?.customCssLink ? [{ rel: "stylesheet", href: site.customCssLink }] : [],
     };
   },
 

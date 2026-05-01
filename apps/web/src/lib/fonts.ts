@@ -41,10 +41,7 @@ export function getFontUrl(font: GoogleFont, variant = "regular"): string {
 
 const loadedFont = new Set();
 
-export async function loadFont(
-  fontFamily: string,
-  variant = "regular",
-): Promise<void> {
+export async function loadFont(fontFamily: string, variant = "regular"): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!fontFamily) {
       return resolve();

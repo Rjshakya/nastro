@@ -14,6 +14,7 @@ import { TypographyTab } from "./setting-panel-tabs/typography-tab";
 import { LayoutTab } from "./setting-panel-tabs/layout-tab";
 import { SeoTab } from "./setting-panel-tabs/seo-tab";
 import { AnalyticsTab } from "./setting-panel-tabs/analytics-tab";
+import { CodeTab } from "./setting-panel-tabs/code-tab";
 import {
   Sheet,
   SheetClose,
@@ -92,6 +93,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
               <TabsTrigger value="layout">Layout</TabsTrigger>
               <TabsTrigger value="seo">SEO</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="code">Code</TabsTrigger>
             </TabsList>
 
             <TabsContent value="general">
@@ -116,6 +118,9 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
             </TabsContent>
             <TabsContent value="analytics">
               <AnalyticsTab />
+            </TabsContent>
+            <TabsContent value="code">
+              <CodeTab site={site} />
             </TabsContent>
           </Tabs>
         </div>
