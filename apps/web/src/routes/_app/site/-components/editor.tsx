@@ -59,6 +59,49 @@ export function SiteEditor() {
     };
   }, [previewCss]);
 
+  useEffect(() => {
+    async function handleLoadInitialCustomStyle() {
+      if (!site.customCssLink) {
+        return;
+      }
+
+      try {
+        const res = await fetch(site.customCssLink);
+        if (!res.ok) {
+          const err = await res.json();
+          console.error(err);
+          throw new Error("Failed to load custom CSS");
+        }
+
+        const css = await res.text();
+        useCodePreviewStore.setState({ previewCss: css });
+        console.log(css);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function handleLoadIntialCustomScript() {
+      if (!site.customScriptLink) {
+        return;
+      }
+
+      try {
+        const res = await fetch(site.customScriptLink);
+        if (!res.ok) {
+          throw new Error("Failed to load custom Script");
+        }
+
+        const js = await res.text();
+        // useCodePreviewStore.setState({ previewJs: js });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    handleLoadInitialCustomStyle();
+  }, []);
+
   if (!site) {
     return (
       <div className="flex items-center justify-center min-h-screen">
