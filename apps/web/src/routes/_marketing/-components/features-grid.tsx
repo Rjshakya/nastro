@@ -64,15 +64,7 @@ const features = [
     color: "text-foreground",
     bgColor: "bg-secondary",
     span: "md:col-span-2",
-  },
-  {
-    title: "Real-time preview",
-    description: "See changes instantly as you customize colors, fonts, and layouts in the editor.",
-    icon: IconEye,
-    color: "text-foreground",
-    bgColor: "bg-secondary",
-    span: "",
-  },
+  }
   
 ];
 

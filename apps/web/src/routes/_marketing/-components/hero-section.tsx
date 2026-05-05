@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { IconArrowDown, IconArrowRight, IconArrowUpRight } from "@tabler/icons-react";
+import { IconArrowDown, IconArrowRight } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Comparison, ComparisonHandle, ComparisonItem } from "@/components/kibo-ui/comparison";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -66,7 +65,7 @@ export function HeroSection() {
           className=" sm:p-12 lg:p-16 p-6 mb-16 relative"
         >
           <div className="absolute inset-0 size-full">
-            <img src="/compare-bg-3.webp" className="h-full w-full object-cover" />
+            <img src="/compare-bg.webp" className="h-full w-full object-cover" />
           </div>
 
           <div className="relative grid z-10 p-0 md:p-8">
