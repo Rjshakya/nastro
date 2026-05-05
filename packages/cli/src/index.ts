@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import pushCommand from "./push.js";
 import { loadEnvFile } from "node:process";
-loadEnvFile();
+loadEnvFile()
 
 const program = new Command()
   .name("notion-orm")

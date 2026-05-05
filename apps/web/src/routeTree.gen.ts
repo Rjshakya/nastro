@@ -15,6 +15,7 @@ import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as MarketingLoginRouteImport } from './routes/_marketing/login'
 import { Route as Live_sitePageIdRouteImport } from './routes/_live_site/$pageId'
 import { Route as AppTemplatesRouteRouteImport } from './routes/_app/templates/route'
+import { Route as AppDeveloperRouteRouteImport } from './routes/_app/developer/route'
 import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/route'
 import { Route as AppTemplatesIndexRouteImport } from './routes/_app/templates/index'
 import { Route as AppSitePageIdRouteImport } from './routes/_app/site/$pageId'
@@ -48,6 +49,11 @@ const AppTemplatesRouteRoute = AppTemplatesRouteRouteImport.update({
   path: '/templates',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppDeveloperRouteRoute = AppDeveloperRouteRouteImport.update({
+  id: '/developer',
+  path: '/developer',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppDashboardRouteRoute = AppDashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -73,6 +79,7 @@ const AppTemplatesInstallTemplateIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/developer': typeof AppDeveloperRouteRoute
   '/templates': typeof AppTemplatesRouteRouteWithChildren
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AppDashboardRouteRoute
+  '/developer': typeof AppDeveloperRouteRoute
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
   '/site/$pageId': typeof AppSitePageIdRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRouteRoute
+  '/_app/developer': typeof AppDeveloperRouteRoute
   '/_app/templates': typeof AppTemplatesRouteRouteWithChildren
   '/_live_site/$pageId': typeof Live_sitePageIdRoute
   '/_marketing/login': typeof MarketingLoginRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/developer'
     | '/templates'
     | '/$pageId'
     | '/login'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/developer'
     | '/$pageId'
     | '/login'
     | '/site/$pageId'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_marketing'
     | '/_app/dashboard'
+    | '/_app/developer'
     | '/_app/templates'
     | '/_live_site/$pageId'
     | '/_marketing/login'
@@ -186,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTemplatesRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/developer': {
+      id: '/_app/developer'
+      path: '/developer'
+      fullPath: '/developer'
+      preLoaderRoute: typeof AppDeveloperRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -232,12 +251,14 @@ const AppTemplatesRouteRouteWithChildren =
 
 interface AppRouteRouteChildren {
   AppDashboardRouteRoute: typeof AppDashboardRouteRoute
+  AppDeveloperRouteRoute: typeof AppDeveloperRouteRoute
   AppTemplatesRouteRoute: typeof AppTemplatesRouteRouteWithChildren
   AppSitePageIdRoute: typeof AppSitePageIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRouteRoute: AppDashboardRouteRoute,
+  AppDeveloperRouteRoute: AppDeveloperRouteRoute,
   AppTemplatesRouteRoute: AppTemplatesRouteRouteWithChildren,
   AppSitePageIdRoute: AppSitePageIdRoute,
 }

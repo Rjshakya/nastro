@@ -17,3 +17,20 @@ export const getNotionPages = async () => {
 
   return data;
 };
+
+export const getNotionToken = async () => {
+  const res = await client.api.notion.token.$get();
+  if (!res.ok) {
+    const error = await res.json();
+    handleHttpError()({
+      message: "Failed to fetch Notion token",
+      statusCode: res.status,
+      error,
+      throwError: true,
+      showToast: true,
+    });
+  }
+  const data = await res.json();
+
+  return data;
+};

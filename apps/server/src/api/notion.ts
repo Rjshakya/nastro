@@ -34,13 +34,24 @@ const notionApp = new Hono<{ Variables: Vars }>()
       const notion = yield* NotionService;
       return yield* notion.getNotionPages();
     }).pipe(
-      Effect.provide(NotionServiceLive(getAccessToken(userId as string, "notion"))),
+      Effect.provide(
+        NotionServiceLive(getAccessToken(userId as string, "notion")),
+      ),
       Effect.provide(NotionClientLive),
     );
 
     const pages = await Effect.runPromise(program);
 
     return c.json(ApiResponse({ data: pages, message: "success" }));
+  })
+  .get("/token", async (c) => {
+    const userId = c.get("user")?.id;
+    const tokenData = await Effect.runPromise(
+      getAccessToken(userId as string, "notion"),
+    );
+    return c.json(
+      ApiResponse({ data: tokenData.accessToken, message: "success" }),
+    );
   });
 
 export { notionApp };

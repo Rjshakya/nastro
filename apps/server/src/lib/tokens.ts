@@ -24,7 +24,9 @@ export const getAccessToken = (
       const [acc] = await db
         .select()
         .from(account)
-        .where(and(eq(account.userId, userId), eq(account.providerId, providerId)));
+        .where(
+          and(eq(account.userId, userId), eq(account.providerId, providerId)),
+        );
 
       return {
         accessToken: acc?.accessToken,
