@@ -1,17 +1,10 @@
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { IconAlertCircle } from "@tabler/icons-react";
 
 interface ErrorProps {
   /** Error message to display */
-  message: string;
+  error: Error;
   /** Optional error code (HTTP status or custom code) */
   code?: string | number;
   /** Optional retry handler */
@@ -31,7 +24,7 @@ interface ErrorProps {
  * />
  * ```
  */
-export function Error({ message, code: _code, onRetry }: ErrorProps) {
+export function Error({ error, code: _code, onRetry }: ErrorProps) {
   return (
     <main className="w-full min-h-screen flex   items-center justify-center px-4">
       <Empty className="max-w-4xl mx-auto rounded-lg p-8 mb-24">
@@ -44,7 +37,7 @@ export function Error({ message, code: _code, onRetry }: ErrorProps) {
             <EmptyDescription className="w-full px-2 ">
               <div className="rounded-sm p-0 border border-input/50 dark:border-secondary/50 ring ring-input dark:bg-secondary shadow-sm ">
                 <p className=" text-destructive text-pretty bg-background size-full p-2 rounded-sm ">
-                  {message}
+                  {error.message}
                 </p>
               </div>
             </EmptyDescription>
@@ -53,9 +46,7 @@ export function Error({ message, code: _code, onRetry }: ErrorProps) {
           {onRetry && (
             <Button
               variant="secondary"
-              className={
-                "w-full shadow-none text-muted-foreground dark:bg-secondary/20 "
-              }
+              className={"w-full shadow-none text-muted-foreground dark:bg-secondary/20 "}
               onClick={onRetry}
             >
               Try Again

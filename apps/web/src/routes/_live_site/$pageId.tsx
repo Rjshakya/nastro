@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { liveSiteLoader } from "@/lib/live-site";
 import { LiveSite } from "./-components/live-site";
+import { Error } from "@/components/error";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
@@ -76,6 +77,7 @@ export const Route = createFileRoute("/_live_site/$pageId")({
   },
 
   ssr: true,
+  errorComponent:Error
 });
 
 function LiveSitePage() {

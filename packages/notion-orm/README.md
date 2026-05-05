@@ -128,10 +128,10 @@ import {
   url,
   email,
   phoneNumber,
-  relation,     // { relatedTo: "otherTableName" }
-  formula,      // { expression: "..." }
-  rollup,       // { function, relation_property_name, rollup_property_name }
-  uniqueId,     // { prefix?: "..." }
+  relation,     // { relatedTo: "otherTableName" } not completely supported
+  formula,      // { expression: "..." } not completely supported
+  rollup,       // { function, relation_property_name, rollup_property_name } not completely supported
+  uniqueId,     // { prefix?: "..." } read-only
   createdTime,
   createdBy,
   lastEditedTime,

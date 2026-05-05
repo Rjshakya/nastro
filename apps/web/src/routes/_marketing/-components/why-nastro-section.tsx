@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
+  IconArrowRight,
   IconArrowUpRight,
   IconBrandNotion,
   IconBulb,
@@ -21,20 +22,17 @@ const painPoints = [
   {
     icon: IconBrandNotion,
     title: "Notion sites look... like Notion",
-    description:
-      "Generic styling. Zero personality. Everyone's site looks exactly the same.",
+    description: "Generic styling. Zero personality. Everyone's site looks exactly the same.",
   },
   {
     icon: IconCurrencyDollar,
     title: "SEO & analytics cost extra",
-    description:
-      "Want custom domains? SEO? Analytics? That'll be $8-16/month please.",
+    description: "Want custom domains? SEO? Analytics? That'll be $8-16/month please.",
   },
   {
     icon: IconLock,
     title: "Zero customization control",
-    description:
-      "Can't change colors, fonts, or layouts. What you see is what you're stuck with.",
+    description: "Can't change colors, fonts, or layouts. What you see is what you're stuck with.",
   },
 ];
 
@@ -42,20 +40,17 @@ const solutions = [
   {
     icon: IconPalette,
     title: "Customize literally everything",
-    description:
-      "Background colors, button styles, text selection, fonts, spacing — you name it.",
+    description: "Background colors, button styles, text selection, fonts, spacing — you name it.",
   },
   {
     icon: IconSearch,
     title: "SEO & analytics, free",
-    description:
-      "Custom meta tags, OG images, favicons, plus Google Analytics. No catches.",
+    description: "Custom meta tags, OG images, favicons, plus Google Analytics. No catches.",
   },
   {
     icon: IconWorld,
     title: "Your own subdomain, instantly",
-    description:
-      "Get yourname.nastro.xyz in seconds. Or bring your custom domain.",
+    description: "Get yourname.nastro.xyz in seconds. Or bring your custom domain.",
   },
 ];
 
@@ -69,8 +64,7 @@ const useCases = [
   {
     icon: IconRocket,
     title: "Launch your first site",
-    description:
-      "Perfect for your first website. No coding required, just your Notion content.",
+    description: "Perfect for your first website. No coding required, just your Notion content.",
   },
   {
     icon: IconPencil,
@@ -123,7 +117,7 @@ export function WhyNastroSection() {
       <div className="container mx-auto px-4 sm:px-6  relative ">
         {/* Hero Hook */}
         <motion.div
-          className="max-w-5xl mx-auto  mb-16 text-left grid gap-4"
+          className="  mb-16 text-left grid gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ margin: "-100px" }}
@@ -131,153 +125,135 @@ export function WhyNastroSection() {
         >
           <motion.h1
             variants={fadeInUp}
-            className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]"
+            className="max-w-lg text-4xl sm:text-4xl font-bold  tracking-[-0.06em] mb-2"
           >
-            <span className=" text-muted-foreground">Your Notion pages,</span>
+            <span className="">Your Notion pages,</span>
             <br />
             but actually yours
           </motion.h1>
 
           <motion.p
             variants={fadeInUp}
-            className="text-sm  text-muted-foreground mb-12 max-w-md"
+            className="text-sm font-semibold  text-muted-foreground mb-12 max-w-md"
           >
             Turn your Notion content into a beautiful website that reflects
-            <span className="text-foreground"> your taste</span>. No code. No
-            expensive subscriptions. Just sit back, relax, and make it yours.
+            <span className="text-foreground"> your taste</span>. No code. No expensive
+            subscriptions. Just sit back, relax, and make it yours.
           </motion.p>
         </motion.div>
 
         {/* Problem vs Solution Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-20 sm:mb-28 max-w-5xl mx-auto">
-          {/* The Problem */}
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ margin: "-100px" }}
-            className=" "
-          >
-            <h3 className=" capitalize text-sm font-medium text-muted-foreground  mb-6">
-              problem
-            </h3>
-            <div className="bg-[url(/cool-bg-2.png)] p-4">
-              <div className=" bg-background p-4 ">
+        <div className="relative mb-20 sm:mb-28 max-w-3xl mx-auto ">
+          <div className="absolute inset-0">
+            <img
+              src="/why-nastro.webp"
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </div>
+
+          <div className="relative z-10  px-6 py-18 sm:p-18 space-y-10">
+            {/* The Problem */}
+            <motion.div
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ margin: "-100px" }}
+              className="space-y-4"
+            >
+              <div className="inline-flex items-center rounded-lg bg-background px-4 py-2 shadow-sm">
+                <h3 className="text-sm font-semibold">Problem</h3>
+              </div>
+              <div className="grid gap-1">
                 {painPoints.map((point) => (
                   <motion.div
                     key={point.title}
                     variants={itemVariants}
-                    className="flex gap-4 p-4  bg-muted/50 border border-border/60"
+                    className="flex items-start gap-4 rounded-xl bg-background p-5 shadow-sm border border-border/30"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <Button
-                        size={"icon"}
-                        variant={"outline"}
-                        className={"dark:border-border"}
-                      >
-                        <point.icon className={`size-5`} stroke={1.5} />
-                      </Button>
-                    </div>
+                    <Button size="icon" variant="outline" className="shrink-0 dark:border-border">
+                      <point.icon className="size-5" stroke={1.5} />
+                    </Button>
                     <div className="space-y-1">
-                      <h4 className="">{point.title}</h4>
-                      <p className="text-xs text-muted-foreground">
+                      <h4 className="text-sm font-semibold">{point.title}</h4>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
                         {point.description}
                       </p>
                     </div>
                   </motion.div>
                 ))}
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* The Solution */}
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ margin: "-100px" }}
-            className=" "
-          >
-            <h3 className=" capitalize text-sm font-medium text-muted-foreground  mb-6">
-              Solution
-            </h3>
-            <div className="bg-[url(/cool-bg-3.png)] p-4">
-              <div className=" bg-background p-4 ">
+            {/* The Solution */}
+            <motion.div
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ margin: "-100px" }}
+              className="space-y-4"
+            >
+              <div className="inline-flex items-center rounded-lg bg-background px-4 py-2 shadow-sm">
+                <h3 className="text-sm font-semibold">Solution</h3>
+              </div>
+              <div className="grid gap-1">
                 {solutions.map((point) => (
                   <motion.div
                     key={point.title}
                     variants={itemVariants}
-                    className="flex gap-4 p-4  bg-muted/50 border border-border/60"
+                    className="flex items-start gap-4 rounded-xl bg-background p-5 shadow-sm border border-border/30"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <Button
-                        size={"icon"}
-                        variant={"outline"}
-                        className={"dark:border-border"}
-                      >
-                        <point.icon className={`size-5`} stroke={1.5} />
-                      </Button>
-                    </div>
+                    <Button size="icon" variant="outline" className="shrink-0 dark:border-border">
+                      <point.icon className="size-5" stroke={1.5} />
+                    </Button>
                     <div className="space-y-1">
-                      <h4 className="">{point.title}</h4>
-                      <p className="text-xs text-muted-foreground">
+                      <h4 className="text-sm font-semibold">{point.title}</h4>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
                         {point.description}
                       </p>
                     </div>
                   </motion.div>
                 ))}
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
 
         <div className=" h-40 w-full" />
 
         {/* Why Nastro Exists */}
         <motion.div
-          className="max-w-5xl mx-auto text-center mb-16 sm:mb-20 grid gap-4 "
+          className=" text-center mb-16 sm:mb-20 grid gap-4 "
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h3 className=" text-4xl sm:text-4xl  tracking-[-0.06em]">
-            Why Nastro exists
-          </h3>
-          <p className="text-sm  text-muted-foreground mb-12 ">
+          <h3 className="font-bold text-4xl sm:text-4xl  tracking-[-0.06em]">Why Nastro exists</h3>
+          <p className="font-semibold text-sm  text-muted-foreground mb-12 ">
             We built this because we needed it ourselves
           </p>
         </motion.div>
 
         {/* Use Cases Grid */}
         <motion.div
-          className="grid sm:grid-cols-2 lg:grid-cols-3  mb-30 max-w-5xl mx-auto"
+          className=" grid gap-2 sm:grid-cols-2 lg:grid-cols-3  mb-30"
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
           viewport={{ margin: "-100px" }}
         >
           {useCases.map((useCase) => (
-            <motion.div
-              key={useCase.title}
-              variants={itemVariants}
-              className={useCase.span}
-            >
-              <Card className=" group transition-all duration-300   hover:bg-muted/50 rounded-none">
+            <motion.div key={useCase.title} variants={itemVariants} className={useCase.span}>
+              <Card className=" border border-ring/50 ring ring-ring/30 h-full group transition-all duration-300   hover:bg-muted/50">
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
-                    <Button
-                      size={"icon"}
-                      variant={"outline"}
-                      className={"dark:border-border"}
-                    >
+                    <Button size={"icon"} variant={"outline"} className={"dark:border-border"}>
                       <useCase.icon className={`size-5`} stroke={1.5} />
                     </Button>
                   </div>
-                  <h4 className="text-lg mb-2">{useCase.title}</h4>
-                  <p className="text-xs text-muted-foreground max-w-xs">
-                    {useCase.description}
-                  </p>
+                  <h4 className="font-semibold text-lg mb-2">{useCase.title}</h4>
+                  <p className="text-xs text-muted-foreground max-w-xs">{useCase.description}</p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -286,7 +262,7 @@ export function WhyNastroSection() {
 
         {/* CTA */}
         <motion.div
-          className="text-center max-w-5xl mx-auto flex flex-col items-center "
+          className=" text-center  flex flex-col items-center "
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -297,9 +273,9 @@ export function WhyNastroSection() {
           }}
         >
           <Link to="/dashboard" className="">
-            <Button size="lg" className=" px-4 flex items-center gap-1">
+            <Button size="lg" className="font-bold px-4 flex items-center gap-1">
               <p>Start building for free</p>
-              <IconArrowUpRight />
+              <IconArrowRight stroke={3} />
             </Button>
           </Link>
           <p className="text-sm text-muted-foreground mt-4">

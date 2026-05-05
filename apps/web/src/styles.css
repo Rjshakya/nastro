@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/merriweather";
-@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/manrope/wght.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -136,4 +136,10 @@
     scrollbar-width: thin;
     scrollbar-color: gray transparent;
   }
+
+  
 }
+
+.container{
+    @apply w-full max-w-3xl ;
+  }

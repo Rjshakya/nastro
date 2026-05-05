@@ -68,14 +68,13 @@ export function SiteEditor() {
       try {
         const res = await fetch(site.customCssLink);
         if (!res.ok) {
-          const err = await res.json();
-          console.error(err);
           throw new Error("Failed to load custom CSS");
         }
 
         const css = await res.text();
-        useCodePreviewStore.setState({ previewCss: css });
-        console.log(css);
+        useCodePreviewStore.setState((state) => ({
+          previewCss: state.previewCss || css,
+        }));
       } catch (error) {
         console.log(error);
       }

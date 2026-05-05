@@ -2,11 +2,13 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { protectedLoader } from "@/lib/auth-client";
+import { Error } from "@/components/error";
 
 export const Route = createFileRoute("/_app")({
   component: AppLayout,
   beforeLoad: protectedLoader,
   ssr: false,
+  errorComponent: Error,
 });
 
 function AppLayout() {

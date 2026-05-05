@@ -1,12 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { IconArrowUpRight } from "@tabler/icons-react";
+import { IconArrowDown, IconArrowRight, IconArrowUpRight } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import {
-  Comparison,
-  ComparisonHandle,
-  ComparisonItem,
-} from "@/components/kibo-ui/comparison";
+import { Comparison, ComparisonHandle, ComparisonItem } from "@/components/kibo-ui/comparison";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -28,25 +24,24 @@ export function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6  relative">
         {/* Hero Content */}
         <motion.div
-          className="max-w-5xl mx-auto  mb-16 text-left grid gap-4"
+          className=" mb-16 text-left grid gap-4"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
         >
           <motion.h1
             variants={fadeInUp}
-            className="max-w-lg text-4xl sm:text-4xl  tracking-[-0.06em]"
+            className="max-w-lg text-4xl sm:text-4xl tracking-[-0.06em] font-bold mb-2"
           >
-            Turn your Notion pages into{" "}
-            <span className="text-primary">beautiful websites</span>
+            Turn your Notion pages into <span className="">beautiful websites</span>
           </motion.h1>
 
           <motion.p
             variants={fadeInUp}
-            className="text-sm  text-muted-foreground mb-12 max-w-md"
+            className="text-sm font-semibold  text-muted-foreground mb-4 max-w-md"
           >
-            Publish your Notion content with custom domains, real-time sync, and
-            zero code. Perfect for creators, developers, and teams.
+            Publish your Notion content with custom domains, real-time sync, and zero code. Perfect
+            for creators, developers, and teams.
           </motion.p>
 
           <motion.div
@@ -54,9 +49,9 @@ export function HeroSection() {
             className="md:px-.5 flex items-center justify-start gap-4 "
           >
             <Link to="/dashboard">
-              <Button size="lg" className=" px-4 flex items-center gap-1">
+              <Button size="lg" className="font-bold px-4 flex items-center gap-1">
                 <p>Get Started Free</p>
-                <IconArrowUpRight />
+                <IconArrowRight stroke={3} />
               </Button>
             </Link>
           </motion.div>
@@ -68,25 +63,28 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="max-w-5xl mx-auto bg-[url(/cool-bg-1.png)] sm:p-12 lg:p-16 p-6 mb-16"
+          className=" sm:p-12 lg:p-16 p-6 mb-16 relative"
         >
-          <Comparison className="aspect-square sm:aspect-video" mode="drag">
-            <ComparisonItem className="" position="left">
-              <img
-                alt="Placeholder 1"
-                className="h-full object-cover rounded-md"
-                src="/nastro.png"
-              />
-            </ComparisonItem>
-            <ComparisonItem className="" position="right">
-              <img
-                alt="Placeholder 2"
-                className="h-full object-cover rounded-md"
-                src="/nastro-demo-2.png"
-              />
-            </ComparisonItem>
-            <ComparisonHandle />
-          </Comparison>
+          <div className="absolute inset-0 size-full">
+            <img src="/compare-bg-3.webp" className="h-full w-full object-cover" />
+          </div>
+
+          <div className="relative grid z-10 p-0 md:p-8">
+            <div className="before  border-3 border-primary overflow-hidden rounded-2xl">
+              <img className="  size-full" src="/before.webp" />
+            </div>
+
+            <div className="flex items-center justify-center md:py-8 py-6 ">
+              <Button size={"icon-lg"}>
+                {" "}
+                <IconArrowDown className="size-6 " />
+              </Button>
+            </div>
+
+            <div className="before   border-3 border-primary overflow-hidden rounded-2xl">
+              <img src="/after.webp" className=" size-full" />
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

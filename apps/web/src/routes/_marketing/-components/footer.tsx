@@ -20,7 +20,7 @@ export function Footer() {
     <footer className="">
       <div className="container  mx-auto px-4 sm:px-6 py-16">
         <motion.div
-          className="max-w-5xl mx-auto border p-5 bg-muted"
+          className="  border-ring/50  border ring-ring/30 ring p-5 bg-background rounded-2xl "
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -30,9 +30,9 @@ export function Footer() {
             {/* Logo and tagline */}
             <div className="space-y-4">
               <Link to="/">
-                <Logo />
+                <Logo className=" "  />
               </Link>
-              <p className="text-sm text-muted-foreground max-w-xs">
+              <p className="text-sm text-muted-foreground max-w-3xs text-balance mt-2">
                 Turn your Notion pages into beautiful websites.
               </p>
             </div>
@@ -68,7 +68,7 @@ export function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className=" mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} Nastro. All rights reserved.
             </p>

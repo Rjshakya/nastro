@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
 import { authMiddleWare } from "@/middlewares/auth";
@@ -41,10 +41,7 @@ const uploadApp = new Hono<{ Variables: Vars }>()
         fileName: `${slug}/${fileName}`,
         expiresIn,
       });
-    }).pipe(
-      Effect.provide(FileUploadServiceLive),
-      Effect.provide(SiteAssetsBucketLive),
-    );
+    }).pipe(Effect.provide(FileUploadServiceLive), Effect.provide(SiteAssetsBucketLive));
 
     const data = await Effect.runPromise(program);
 
@@ -56,33 +53,46 @@ const uploadApp = new Hono<{ Variables: Vars }>()
       200,
     );
   })
-  .post(
-    "/template-asset",
-    zValidator("json", presignedUrlSchema),
-    async (c) => {
-      const { fileName, slug, expiresIn } = c.req.valid("json");
+  .post("/template-asset", zValidator("json", presignedUrlSchema), async (c) => {
+    const { fileName, slug, expiresIn } = c.req.valid("json");
 
-      const program = Effect.gen(function* () {
-        const fileService = yield* FileUploadService;
-        return yield* fileService.getPresignedUrl({
-          fileName: `${slug}/${fileName}`,
-          expiresIn,
-        });
-      }).pipe(
-        Effect.provide(FileUploadServiceLive),
-        Effect.provide(TemplateAssetsBucketLive),
-      );
+    const program = Effect.gen(function* () {
+      const fileService = yield* FileUploadService;
+      return yield* fileService.getPresignedUrl({
+        fileName: `${slug}/${fileName}`,
+        expiresIn,
+      });
+    }).pipe(Effect.provide(FileUploadServiceLive), Effect.provide(TemplateAssetsBucketLive));
 
-      const data = await Effect.runPromise(program);
+    const data = await Effect.runPromise(program);
 
-      return c.json(
-        ApiResponse({
-          data,
-          message: "Presigned URL generated successfully",
-        }),
-        200,
-      );
-    },
-  );
+    return c.json(
+      ApiResponse({
+        data,
+        message: "Presigned URL generated successfully",
+      }),
+      200,
+    );
+  })
+  .delete("/site-asset", zValidator("query", z.object({ key: z.string() })), async (c) => {
+    const { key } = c.req.valid("query");
+    const programLayers = Layer.mergeAll(
+      FileUploadServiceLive.pipe(Layer.provideMerge(SiteAssetsBucketLive)),
+    );
+    const program = Effect.gen(function* () {
+      const fileService = yield* FileUploadService;
+      return yield* fileService.deleteObject(key);
+    }).pipe(Effect.provide(programLayers));
+
+    const data = await Effect.runPromise(program);
+
+    return c.json(
+      ApiResponse({
+        data,
+        message: "Object deleted successfully",
+      }),
+      200,
+    );
+  });
 
 export { uploadApp };

@@ -16,10 +16,7 @@ export class SiteError extends Data.TaggedError("SiteError")<{
 }> {}
 
 // Notion Error Types
-export type NotionErrorType =
-  | "ACCESS_TOKEN_MISSING"
-  | "REQUEST_FAILED"
-  | "PAGE_ERROR";
+export type NotionErrorType = "ACCESS_TOKEN_MISSING" | "REQUEST_FAILED" | "PAGE_ERROR";
 
 export class NotionError extends Data.TaggedError("NotionError")<{
   message: string;
@@ -78,11 +75,11 @@ export class CacheError extends Data.TaggedError("CacheError")<{
   code?: number;
 }> {}
 
-export type FileUploadServiceErrorType = "PRESIGNED_URL_GENERATION_FAILED";
+export type FileUploadServiceErrorType =
+  | "PRESIGNED_URL_GENERATION_FAILED"
+  | "OBJECT_DELETION_FAILED";
 
-export class FileUploadServiceError extends Data.TaggedError(
-  "FileUploadServiceError",
-)<{
+export class FileUploadServiceError extends Data.TaggedError("FileUploadServiceError")<{
   message: string;
   type: FileUploadServiceErrorType;
   code?: number;

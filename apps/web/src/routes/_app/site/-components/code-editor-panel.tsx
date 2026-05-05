@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { client } from "@/lib/api-client";
+import { Env } from "@/lib/env";
 import { authClient } from "@/lib/auth-client";
 import { useCodePreviewStore } from "@/stores/code-preview.store";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
@@ -16,6 +17,8 @@ import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Toggle } from "@/components/ui/toggle";
+import { boolean } from "zod";
 
 interface CodeTabProps {
   site: Site;
@@ -61,24 +64,73 @@ async function uploadCodeFile({
   return fileUrl;
 }
 
+function extractR2Key(url: string): string {
+  const path = url.split(".xyz/")[1];
+  if (!path) return "";
+  const parts = path.split("/");
+  parts.shift();
+  return parts.join("/");
+}
+
 export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   const { theme } = useTheme();
-  const { updateSite, isLoading } = useUpdateSite();
+  const { updateSite, isLoading: isUpdating } = useUpdateSite();
   const { settings } = useSiteSettingStore();
-  const { previewCss, setPreviewCss } = useCodePreviewStore();
+  const { previewCss, setPreviewCss, previewScript, setPreviewScript } = useCodePreviewStore();
   const { data: session } = authClient.useSession();
   const userId = session?.user?.id || "";
 
-  const [jsCode, setJsCode] = useState("");
-
   const [savedCssLink, setSavedCssLink] = useState(site.customCssLink);
   const [savedScriptLink, setSavedScriptLink] = useState(site.customScriptLink);
+  const [toggleJs, setToggleJs] = useState(false);
+
+  const handleSaveJs = async () => {
+    try {
+      const oldUrl = savedScriptLink;
+      const fileName = `custom-${Date.now()}.js`;
+
+      const fileUrl = await uploadCodeFile({
+        slug: site.slug,
+        fileName,
+        content: "", // No editor yet; placeholder for future JS editor
+      });
+
+      await updateSite({
+        siteId: site.id,
+        input: {
+          userId,
+          rootPageId: site.rootPageId,
+          name: site.name,
+          slug: site.slug,
+          setting: settings,
+          themeId: site.themeId ?? null,
+          customCssLink: savedCssLink,
+          customScriptLink: fileUrl,
+        },
+      });
+
+      setSavedScriptLink(fileUrl);
+
+      if (oldUrl) {
+        const key = extractR2Key(oldUrl);
+        client.api.upload["site-asset"].$delete({ query: { key } });
+      }
+
+      toast.success("Script saved successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save script");
+    }
+  };
 
   const handleSaveCss = async () => {
     try {
+      const oldUrl = savedCssLink;
+      const fileName = `custom-${Date.now()}.css`;
+
       const fileUrl = await uploadCodeFile({
         slug: site.slug,
-        fileName: "custom.css",
+        fileName,
         content: previewCss,
       });
 
@@ -97,6 +149,12 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
       });
 
       setSavedCssLink(fileUrl);
+
+      if (oldUrl) {
+        const key = extractR2Key(oldUrl);
+        client.api.upload["site-asset"].$delete({ query: { key } });
+      }
+
       toast.success("CSS saved successfully");
     } catch (error) {
       console.error(error);
@@ -104,50 +162,39 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
     }
   };
 
-  const handleSaveJs = async () => {
-    try {
-      const fileUrl = await uploadCodeFile({
-        slug: site.slug,
-        fileName: "custom.js",
-        content: jsCode,
-      });
-
-      await updateSite({
-        siteId: site.id,
-        input: {
-          userId,
-          rootPageId: site.rootPageId,
-          name: site.name,
-          slug: site.slug,
-          setting: settings,
-          themeId: site.themeId ?? null,
-          customCssLink: savedCssLink,
-          customScriptLink: fileUrl,
-        },
-      });
-
-      setSavedScriptLink(fileUrl);
-      toast.success("Script saved successfully");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to save script");
+  const handleSave = () => {
+    if (toggleJs) {
+      return handleSaveJs();
     }
+    return handleSaveCss();
   };
+
   return (
     <Dialog modal={false}>
       <DialogTrigger render={<Button variant={"secondary"}>Code</Button>} />
       <DialogContent overlayClassName="hidden" className={"sm:max-w-3xl px-2 pt-2 pb-4"}>
+        <div className="py-4">
+          <Toggle className={"bg-secondary"} pressed={toggleJs} onPressedChange={setToggleJs}>
+            {toggleJs ? "JS" : "CSS"}
+          </Toggle>
+        </div>
         <Editor
           height={"70vh"}
-          defaultLanguage="css"
-          value={previewCss}
-          onChange={(code) => setPreviewCss(code ?? "")}
+          language={toggleJs ? "javascript" : "css"}
+          value={toggleJs ? previewScript : previewCss}
+          onChange={(code) => {
+            if (toggleJs) {
+              setPreviewScript(code || "");
+            } else {
+              setPreviewCss(code || "");
+            }
+          }}
           className="rounded-lg ring-ring/50 ring-2 overflow-hidden"
           theme={theme === "dark" ? "vs-dark" : "light"}
           keepCurrentModel={true}
         />
         <DialogFooter>
-          <Button className={"px-4"} onClick={handleSaveCss}>
+          <Button disabled={isUpdating} className={"px-4"} onClick={handleSave}>
             Save
           </Button>
           <DialogClose

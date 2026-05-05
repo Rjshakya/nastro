@@ -1,6 +1,8 @@
-export const Logo = () => {
+import { cn } from "@/lib/utils";
+
+export const Logo = ({className}:{className?:string}) => {
   return (
-    <div className="text-xl font-medium tracking-tighter">
+    <div className={cn("text-xl font-medium tracking-tighter font-bold" ,className)}>
       <p>Nastro</p>
     </div>
   );

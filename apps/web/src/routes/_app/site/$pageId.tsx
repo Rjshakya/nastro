@@ -5,6 +5,7 @@ import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 import { SiteEditor } from "./-components/editor";
 import { getAllThemes } from "@/lib/site.theme";
+import { Error } from "@/components/error";
 
 const siteSearchSchema = z.object({
   slug: z.string(),
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/_app/site/$pageId")({
     };
   },
   component: SiteEditorPage,
+  errorComponent: Error,
 });
 
 function SiteEditorPage() {

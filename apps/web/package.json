@@ -43,7 +43,6 @@
     "react-color-palette": "^7.3.1",
     "react-dom": "^19.2.4",
     "react-notion-x": "^7.10.0",
-    "react-simple-code-editor": "^0.14.1",
     "server": "workspace:*",
     "shadcn": "^4.5.0",
     "shiki": "^4.0.2",

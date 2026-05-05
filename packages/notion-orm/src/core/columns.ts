@@ -235,7 +235,7 @@ export function phoneNumber(params?: ColumnBase): PhoneNumberColumn {
  * Contains references to pages in another data source
  * The relatedTo field is the export name of the related schema (deferred resolution)
  *
- * @description Not supported for now;
+ * @description Not completely supported for now;
  */
 export function relation(params: ColumnBase & { relatedTo?: string }): RelationColumn {
   return {
@@ -253,7 +253,10 @@ export function relation(params: ColumnBase & { relatedTo?: string }): RelationC
  * Formula property (computed, read-only)
  * Contains values derived from a provided expression
  * See: https://www.notion.so/help/formulas
+ *
+ *  @description Not completely supported for now;
  */
+
 export function formula(params: ColumnBase & { expression: string }): FormulaColumn {
   return {
     name: params.name,
@@ -268,6 +271,8 @@ export function formula(params: ColumnBase & { expression: string }): FormulaCol
 /**
  * Rollup property (computed, read-only)
  * Contains values pulled from a related data source
+ *
+ *  @description Not completely supported for now;
  */
 export function rollup(
   params: ColumnBase & {
@@ -292,6 +297,8 @@ export function rollup(
  * Unique ID property (auto-generated, read-only)
  * Automatically incremented, unique across all pages
  * Useful for task/bug report IDs (e.g., "TASK-1234")
+ *
+ *  @description read-only
  */
 export function uniqueId(params?: ColumnBase & { prefix?: string }): UniqueIdColumn {
   return {

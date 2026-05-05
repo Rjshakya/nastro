@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import appCss from "../styles.css?url";
 import rcp from "react-color-palette/css?url";
 import { Toaster } from "sonner";
+import { Error } from "@/components/error";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,6 +38,7 @@ export const Route = createRootRoute({
     </main>
   ),
   shellComponent: RootDocument,
+  errorComponent: Error,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
