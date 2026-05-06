@@ -44,7 +44,10 @@ export class DB {
   constructor(
     token: string,
     public overrideMapping?: Record<string, string>,
-    private fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>,
+    private fetcher?: (
+      input: string | URL | Request,
+      init?: RequestInit,
+    ) => Promise<Response>,
   ) {
     this.notion = createNotionApi({ token });
   }
@@ -54,19 +57,19 @@ export class DB {
    * Returns an Insert builder with a `.values()` method.
    */
   insert<T extends NotionTable>(table: T): Insert<T> {
-    return new Insert({ notion: this.notion, table });
+    return new Insert({ notion: this.notion, table, mapping: this.overrideMapping });
   }
 
   update<T extends NotionTable>(table: T) {
-    return new Update({ notion: this.notion, table });
+    return new Update({ notion: this.notion, table, mapping: this.overrideMapping });
   }
 
   delete<T extends NotionTable>(table: T) {
-    return new Delete({ notion: this.notion, table });
+    return new Delete({ notion: this.notion, table, mapping: this.overrideMapping });
   }
 
   select() {
-    return new Select({ notion: this.notion });
+    return new Select({ notion: this.notion, mapping: this.overrideMapping });
   }
 }
 
@@ -77,7 +80,10 @@ export function createNotionDB({
 }: {
   token: string;
   overrideMapping?: Record<string, string>;
-  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+  fetcher?: (
+    input: string | URL | Request,
+    init?: RequestInit,
+  ) => Promise<Response>;
 }) {
   return new DB(token, overrideMapping, fetcher);
 }

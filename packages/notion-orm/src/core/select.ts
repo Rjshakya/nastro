@@ -1,5 +1,8 @@
 import { InferSelectType, NotionTable } from "./types.js";
-import { PageObjectResponse, QueryDataSourceParameters } from "@notionhq/client";
+import {
+  PageObjectResponse,
+  QueryDataSourceParameters,
+} from "@notionhq/client";
 import { Filter, FilterByID } from "./filters/types.js";
 import { NotionApi } from "@nastro-dev/notion-api";
 import { convertPageObjectToSelectType } from "./page-properties.js";
@@ -9,6 +12,7 @@ export class Select {
   constructor(
     private config: {
       notion: NotionApi;
+      mapping?: Record<string, string>;
     },
   ) {}
 
@@ -16,6 +20,7 @@ export class Select {
     return new QueryBuilder<T>({
       notion: this.config.notion,
       table,
+      mapping: this.config.mapping,
     });
   }
 }
@@ -28,6 +33,7 @@ export class QueryBuilder<T extends NotionTable> {
     private config: {
       table: T;
       notion: NotionApi;
+      mapping?: Record<string, string>;
     },
   ) {
     // it will provided in execute()
@@ -101,7 +107,12 @@ export class QueryBuilder<T extends NotionTable> {
         }
         return datasourceId;
       })
-      .then((dsId) => this.config.notion.queryDataBase({ ...this.query, data_source_id: dsId }))
+      .then((dsId) =>
+        this.config.notion.queryDataBase({
+          ...this.query,
+          data_source_id: dsId,
+        }),
+      )
       .then(({ pages, nextCursor }) => {
         const rows = pages.map((page) =>
           convertPageObjectToSelectType<T>(this.config.table.properties, page),
@@ -115,13 +126,15 @@ export class QueryBuilder<T extends NotionTable> {
   }
 
   private getDatabaseMapping() {
-    return getGeneratedDBMapping();
+    return getGeneratedDBMapping(this.config.mapping);
   }
 
   private getPage(pageId: string) {
     return this.config.notion
       .getPage(pageId)
       .then((page) => page as PageObjectResponse)
-      .then((page) => convertPageObjectToSelectType<T>(this.config.table.properties, page));
+      .then((page) =>
+        convertPageObjectToSelectType<T>(this.config.table.properties, page),
+      );
   }
 }

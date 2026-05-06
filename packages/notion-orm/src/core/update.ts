@@ -10,7 +10,7 @@ export class Update<T extends NotionTable> {
   private data: Partial<InferInsertType<T>> | undefined;
   private query: QueryDataSourceParameters;
   private pageId: string | undefined;
-  constructor(private config: { notion: NotionApi; table: T }) {
+  constructor(private config: { notion: NotionApi; table: T; mapping?: Record<string, string> }) {
     this.query = { data_source_id: "" };
   }
 
@@ -83,6 +83,6 @@ export class Update<T extends NotionTable> {
   }
 
   private getDatabaseMapping() {
-    return getGeneratedDBMapping();
+    return getGeneratedDBMapping(this.config.mapping);
   }
 }

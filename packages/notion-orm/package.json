@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "build": "tsup"
   },
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/node": "^25.6.0",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "vitest": "^3.2.4"
   }
 }

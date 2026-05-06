@@ -2,6 +2,10 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 export function getGeneratedDBMapping(override?: Record<string, string>) {
+  if (override) {
+    return Promise.resolve(override);
+  }
+
   const defaultPath = path.join(process.cwd(), "notion-orm.generated.ts");
   const fileUrl = pathToFileURL(defaultPath).href;
   const mapping = import(fileUrl)
@@ -16,5 +20,5 @@ export function getGeneratedDBMapping(override?: Record<string, string>) {
       );
       return {} as Record<string, string>;
     });
-  return override ? Promise.resolve(override) : mapping;
+  return mapping;
 }

@@ -8,7 +8,7 @@ import { FilterByID } from "./filters/types";
 export class Delete<T extends NotionTable> {
   private query: QueryDataSourceParameters;
   private pageId: string | undefined;
-  constructor(private config: { notion: NotionApi; table: T }) {
+  constructor(private config: { notion: NotionApi; table: T; mapping?: Record<string, string> }) {
     this.query = { data_source_id: "" };
   }
 
@@ -56,6 +56,6 @@ export class Delete<T extends NotionTable> {
   }
 
   private async getDatabaseMapping() {
-    return await getGeneratedDBMapping();
+    return await getGeneratedDBMapping(this.config.mapping);
   }
 }
