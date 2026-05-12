@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import pushCommand from "./push.js";
 import { loadEnvFile } from "node:process";
-loadEnvFile()
+loadEnvFile();
 
 const program = new Command()
   .name("notion-orm")
@@ -15,7 +15,10 @@ const program = new Command()
     "--root-page <id>",
     "Notion root page ID where databases will be created (overrides config)",
   )
-  .option("-s , --schema <path>", "Path to schema file(s) with glob support (overrides config)")
+  .option(
+    "-s , --schema <path>",
+    "Path to schema file(s) with glob support (overrides config)",
+  )
   .addCommand(pushCommand)
   .parse();
 

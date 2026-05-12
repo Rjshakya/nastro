@@ -1,10 +1,10 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-import { ThemeProvider } from "@/components/theme-provider";
+import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { ThemeProvider } from "@/components/theme-provider"
 
-import appCss from "../styles.css?url";
-import rcp from "react-color-palette/css?url";
-import { Toaster } from "sonner";
-import { Error } from "@/components/error";
+import appCss from "../styles.css?url"
+import rcp from "react-color-palette/css?url"
+import { Toaster } from "sonner"
+import { Error } from "@/components/error"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -19,8 +19,43 @@ export const Route = createRootRoute({
       {
         title: "Nastro",
       },
+      { content: "Turn your Notion pages into beautiful websites", name: "description" },
+      // Open Graph
+      { content: "Nastro", property: "og:title" },
+      {
+        content: "Turn your Notion pages into beautiful websites",
+        property: "og:description",
+      },
+      {
+        content: `https://nastro.xyz/og.png`,
+        property: "og:image",
+      },
+      { content: "website", property: "og:type" },
+      {
+        content: `https://nastro.xyz/og.png`,
+        property: "og:logo",
+      },
+      // Twitter Card
+      { content: "summary_large_image", name: "twitter:card" },
+      { content: "nastro.xyz", name: "twitter:title" },
+      {
+        content: "Turn your Notion pages into beautiful websites",
+        name: "twitter:description",
+      },
+      {
+        content: `https://nastro.xyz/og.png`,
+        name: "twitter:image",
+      },
     ],
     links: [
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
+      {
+        rel: "icon",
+        href: "/icon.webp",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -39,7 +74,7 @@ export const Route = createRootRoute({
   ),
   shellComponent: RootDocument,
   errorComponent: Error,
-});
+})
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -55,5 +90,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }

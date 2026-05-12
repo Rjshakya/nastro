@@ -312,7 +312,9 @@ export type Column =
  * Table definition structure
  * Represents a complete Notion database schema
  */
-export interface NotionTable<TProperties extends Record<string, Column> = Record<string, Column>> {
+export interface NotionTable<
+  TProperties extends Record<string, Column> = Record<string, Column>,
+> {
   _type: "table";
   title: string;
   properties: TProperties;
@@ -371,7 +373,9 @@ export type ColumnTypeMap = {
  * Maps Notion column types to TypeScript types for insertion
  */
 export type InferColumnInsertType<TColumn extends Column> =
-  TColumn["type"] extends keyof ColumnTypeMap ? ColumnTypeMap[TColumn["type"]] : never;
+  TColumn["type"] extends keyof ColumnTypeMap
+    ? ColumnTypeMap[TColumn["type"]]
+    : never;
 
 // ============== Select Types ==============
 
@@ -408,7 +412,9 @@ export type ColumnSelectTypeMap = {
  * Excludes formula and rollup (they return never and are filtered out).
  */
 export type InferColumnSelectType<TColumn extends Column> =
-  TColumn["type"] extends keyof ColumnSelectTypeMap ? ColumnSelectTypeMap[TColumn["type"]] : never;
+  TColumn["type"] extends keyof ColumnSelectTypeMap
+    ? ColumnSelectTypeMap[TColumn["type"]]
+    : never;
 
 /**
  * Infer the TypeScript type for select/query operations from a table definition.
@@ -426,7 +432,9 @@ export type InferColumnSelectType<TColumn extends Column> =
 export type InferSelectType<T extends NotionTable> = {
   id: string;
 } & {
-  [K in keyof T["properties"] as T["properties"][K] extends { type: "formula" } | { type: "rollup" }
+  [K in keyof T["properties"] as T["properties"][K] extends
+    | { type: "formula" }
+    | { type: "rollup" }
     ? never
     : K]: InferColumnSelectType<T["properties"][K]>;
 };
