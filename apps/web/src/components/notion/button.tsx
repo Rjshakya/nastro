@@ -62,7 +62,7 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
     const blockColor = block.format?.block_color || "default";
     const title = block.properties?.title;
 
-    console.log(block);
+   
 
     // If no automation, render a simple static button
     if (!automationId) {

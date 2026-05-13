@@ -29,11 +29,11 @@ export function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border/50"
+          ? "bg-background/80 backdrop-blur-md "
           : "bg-transparent",
       )}
     >
-      <nav className=" mx-auto py-2 px-4 flex items-center  justify-between border-b">
+      <nav className=" mx-auto py-2 px-4 flex items-center  justify-between ">
         {/* Logo */}
         <motion.a
           href="/"

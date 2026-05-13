@@ -15,8 +15,8 @@ export const DashboardHome = () => {
               </p>
             </div>
             <div className="flex items-center ">
-              <ThemeToggle />
               <SidebarTrigger />
+              <ThemeToggle />
             </div>
           </div>
 

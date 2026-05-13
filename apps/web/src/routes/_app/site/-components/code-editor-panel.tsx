@@ -3,7 +3,10 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useUpdateSite } from "@/hooks/use-sites";
@@ -172,12 +175,28 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   return (
     <Dialog modal={false}>
       <DialogTrigger render={<Button variant={"secondary"}>Code</Button>} />
-      <DialogContent overlayClassName="hidden" className={"sm:max-w-3xl px-2 pt-2 pb-4"}>
-        <div className="py-4">
-          <Toggle className={"bg-secondary"} pressed={toggleJs} onPressedChange={setToggleJs}>
-            {toggleJs ? "JS" : "CSS"}
+      <DialogContent
+        showCloseButton={false}
+        overlayClassName="hidden"
+        className={"sm:max-w-3xl p-3 rounded-md "}
+      >
+        <DialogHeader className="gap-1 flex flex-row items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <DialogTitle className={"flex justify-between items-center"}>Code editor</DialogTitle>
+            <DialogDescription className={""}>
+              Edit your custom CSS and JS here. Remember to save after making changes.
+            </DialogDescription>
+          </div>
+
+          <Toggle
+            size={"sm"}
+            className={"bg-secondary"}
+            pressed={toggleJs}
+            onPressedChange={setToggleJs}
+          >
+            {toggleJs ? "Javascript" : "CSS"}
           </Toggle>
-        </div>
+        </DialogHeader>
         <Editor
           height={"70vh"}
           language={toggleJs ? "javascript" : "css"}
@@ -189,11 +208,12 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
               setPreviewCss(code || "");
             }
           }}
-          className="rounded-lg ring-ring/50 ring-2 overflow-hidden"
+          className="rounded-sm ring-ring/40 ring overflow-hidden p-2"
           theme={theme === "dark" ? "vs-dark" : "light"}
           keepCurrentModel={true}
         />
-        <DialogFooter>
+
+        <DialogFooter className="">
           <Button disabled={isUpdating} className={"px-4"} onClick={handleSave}>
             Save
           </Button>

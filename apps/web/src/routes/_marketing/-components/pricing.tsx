@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   Card,
   CardContent,
@@ -6,12 +6,12 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { IconCheck } from "@tabler/icons-react";
-import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { IconCheck } from "@tabler/icons-react"
+import { motion } from "motion/react"
+import { Link } from "@tanstack/react-router"
 
 const plans = [
   {
@@ -44,7 +44,7 @@ const plans = [
     cta: "Upgrade to Pro",
     popular: true,
   },
-];
+]
 
 const staggerContainer = {
   animate: {
@@ -52,7 +52,7 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-};
+}
 
 const itemVariants = {
   initial: { opacity: 0, y: 16 },
@@ -61,41 +61,45 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const },
   },
-};
+}
 
 export function Pricing() {
-  const [isYearly, setIsYearly] = useState(false);
+  const [isYearly, setIsYearly] = useState(false)
 
   return (
     <section id="pricing" className="py-24 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <motion.div
-          className=" mb-16 text-left grid gap-4"
+          className="mb-16 grid gap-4 text-left"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h2 className="font-bold max-w-lg text-4xl tracking-[-0.06em]">
+          <h2 className="max-w-lg text-4xl font-medium tracking-[-0.06em]">
             Simple, transparent pricing
           </h2>
-          <p className="font-semibold text-sm text-muted-foreground max-w-md">
+          <p className="max-w-md text-sm font-medium text-muted-foreground">
             Start for just $1 , upgrade when you're ready
           </p>
 
           {/* Billing Toggle - Fixed Layout Shift */}
-          <div className="flex items-center gap-4 mt-4">
-            <span className={`text-sm ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+          <div className="mt-4 flex items-center gap-4">
+            <span
+              className={`text-sm ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}
+            >
               Monthly
             </span>
             <Switch checked={isYearly} onCheckedChange={setIsYearly} />
-            <span className={`text-sm ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+            <span
+              className={`text-sm ${isYearly ? "text-foreground" : "text-muted-foreground"}`}
+            >
               Yearly
             </span>
             {/* Always rendered badge with opacity transition - no layout shift */}
             <span
-              className={`text-xs font-medium text-green-600 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-full transition-opacity duration-200 ${isYearly ? "opacity-100" : "opacity-0"}`}
+              className={`rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-600 transition-opacity duration-200 dark:bg-green-900/30 ${isYearly ? "opacity-100" : "opacity-0"}`}
             >
               Save 17%
             </span>
@@ -104,7 +108,7 @@ export function Pricing() {
 
         {/* Pricing Cards */}
         <motion.div
-          className="font-medium grid grid-cols-1 md:grid-cols-2 gap-2 "
+          className="grid grid-cols-1 gap-2 font-medium md:grid-cols-2"
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
@@ -112,26 +116,33 @@ export function Pricing() {
         >
           {plans.map((plan) => (
             <motion.div key={plan.name} variants={itemVariants}>
-              <Card className="relative h-full  flex border border-ring/50 ring ring-ring/30">
+              <Card className="relative flex h-full border border-ring/40 ring ring-ring/30">
                 <CardHeader className={`pb-4`}>
                   <CardTitle className="">{plan.name}</CardTitle>
                   <CardDescription>{plan.description}</CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-6 flex-1">
+                <CardContent className="flex-1 space-y-6">
                   {/* Fixed-height price container - no layout shift */}
-                  <div className="h-16 flex items-baseline gap-1 font-bold">
+                  <div className="flex h-16 items-baseline gap-1 font-bold">
                     <span className="text-5xl">
                       ${isYearly ? plan.price.yearly : plan.price.monthly}
                     </span>
-                    <span className="text-muted-foreground">/{isYearly ? "year" : "month"}</span>
+                    <span className="text-muted-foreground">
+                      /{isYearly ? "year" : "month"}
+                    </span>
                   </div>
 
                   <ul className="space-y-3 font-semibold">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3">
-                        <IconCheck className="h-4 w-4 text-primary flex-shrink-0" stroke={2} />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
+                        <IconCheck
+                          className="h-4 w-4 flex-shrink-0 text-primary"
+                          stroke={2}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -140,7 +151,7 @@ export function Pricing() {
                 <CardFooter>
                   <Link to="/dashboard" className="w-full">
                     <Button
-                      className="w-full font-bold"
+                      className="w-full"
                       variant={plan.popular ? "default" : "outline"}
                       size="lg"
                     >
@@ -155,7 +166,7 @@ export function Pricing() {
 
         {/* Trust Badge */}
         <motion.div
-          className="text-center mt-12"
+          className="mt-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -171,5 +182,5 @@ export function Pricing() {
         </motion.div>
       </div>
     </section>
-  );
+  )
 }

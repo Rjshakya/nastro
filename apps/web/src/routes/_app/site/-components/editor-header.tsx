@@ -7,6 +7,8 @@ import { useSiteSettingPanel } from "@/stores/site.setting.store";
 import { CodeEditorPanel } from "./code-editor-panel";
 
 const siteRoute = getRouteApi("/_app/site/$pageId");
+
+
 export function SiteEditorHeader() {
   const { site } = siteRoute.useLoaderData();
   const { onOpenChange } = useSiteSettingPanel();

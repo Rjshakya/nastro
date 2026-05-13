@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IconCode, IconLayoutDashboardFilled, IconTemplate } from "@tabler/icons-react";
+import { IconCode, IconLayoutDashboardFilled, IconTemplate, IconTemplateFilled } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -31,7 +31,7 @@ const data = {
     {
       title: "Templates",
       url: "/templates",
-      icon: IconTemplate,
+      icon: IconTemplateFilled,
     },
     {
       title: "Developer",
@@ -51,8 +51,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link className="flex items-center gap-2" to="/">
-                <Avatar>
-                  <AvatarImage src="/favicon.png" />
+                <Avatar className={"size-5 "}>
+                  <AvatarImage src="/icon.png" className={" rounded-sm"} />
                 </Avatar>
                 <span className="text-base font-semibold">Nastro</span>
               </Link>

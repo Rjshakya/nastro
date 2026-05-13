@@ -27,6 +27,7 @@ export function NavMain({
   const { setOpenDialog } = useCreateSiteStore((s) => s);
   const location = useLocation();
   const navigate = useNavigate();
+  const path = location.pathname
 
   const handleOuickCreate = (pathName: string) => {
     if (!pathName.includes("site")) {
@@ -46,7 +47,7 @@ export function NavMain({
             <SidebarMenuButton
               onClick={() => handleOuickCreate(location.pathname)}
               tooltip="Quick Create"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+              className=" min-w-8 duration-200 ease-linear"
             >
               <IconPlus />
 
@@ -58,7 +59,7 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <Link to={item?.url}>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton className={path === item.url ?  "bg-sidebar-accent text-sidebar-accent-foreground" : ""} tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>

@@ -1,6 +1,5 @@
 import { IconTrash, IconSettings, IconArrowUpRight, IconDots, IconLink } from "@tabler/icons-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Site } from "@/types/site";
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { Item, ItemContent, ItemTitle, ItemActions } from "@/components/ui/item";
 
 interface SiteCardProps {
   site: Site;
@@ -40,103 +40,94 @@ export function SiteCard({ site, className }: SiteCardProps) {
   };
 
   return (
-    <Card className={cn("rounded-md p-3 ring-0", className)}>
-      <CardHeader className="px-0 flex items-center justify-between gap-2">
+    <Item
+      className={cn(
+        " border-0 border-b last:border-b-0 hover:bg-muted/40 transition-colors",
+        className,
+      )}
+    >
+      <ItemContent>
         <Link
           to="/site/$pageId"
           params={{ pageId: site.rootPageId || "" }}
           search={{ slug: site.slug }}
-          className="flex-1  "
+          className="w-full block"
         >
-          <CardTitle className="px-2   ">
-            <p className=" ">{site.name}</p>
-          </CardTitle>
+          <ItemTitle>{site.name}</ItemTitle>
         </Link>
-
-        <div className="">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              onClick={(e) => e.stopPropagation()}
-              render={
-                <Button size={"icon-sm"} variant={"ghost"}>
-                  <IconDots />
-                </Button>
-              }
-            />
-            <DropdownMenuContent>
-              <DropdownMenuGroup>
-                <Link
-                  to={url}
-                  params={{ pageId: site.rootPageId || "" }}
-                  search={{ slug: site.slug }}
-                  target="_blank"
-                  className="w-full flex items-center gap-2"
-                >
-                  <DropdownMenuItem className={"w-full"}>
-                    <IconArrowUpRight className="size-4" />
-                    <p>Link</p>
-                  </DropdownMenuItem>
-                </Link>
-
-                <DropdownMenuItem
-                  closeOnClick={false}
-                  onClick={() =>
-                    handleCopyLink({
-                      rootPageId: site.rootPageId as string,
-                      slug: site.slug,
-                    })
-                  }
-                  className={"w-full"}
-                >
-                  <IconLink className="size-4" />
-                  <p>Copy</p>
+      </ItemContent>
+      <ItemActions>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            onClick={(e) => e.stopPropagation()}
+            render={
+              <Button size={"icon-sm"} variant={"ghost"}>
+                <IconDots />
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end">
+            <DropdownMenuGroup>
+              <Link
+                to={url}
+                params={{ pageId: site.rootPageId || "" }}
+                search={{ slug: site.slug }}
+                target="_blank"
+                className="w-full flex items-center gap-2"
+              >
+                <DropdownMenuItem className={"w-full"}>
+                  <IconArrowUpRight className="size-4" />
+                  <p>Link</p>
                 </DropdownMenuItem>
+              </Link>
 
-                <Link
-                  to="/site/$pageId"
-                  params={{ pageId: site.rootPageId || "" }}
-                  search={{ slug: site.slug }}
-                  className="w-full flex items-center gap-2"
-                >
-                  <DropdownMenuItem className={"w-full"}>
-                    <IconSettings className="h-4 w-4" />
-                    <p>Edit</p>
-                  </DropdownMenuItem>
-                </Link>
+              <DropdownMenuItem
+                closeOnClick={false}
+                onClick={() =>
+                  handleCopyLink({
+                    rootPageId: site.rootPageId as string,
+                    slug: site.slug,
+                  })
+                }
+                className={"w-full"}
+              >
+                <IconLink className="size-4" />
+                <p>Copy</p>
+              </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() => _handleDelete()}
-                  disabled={isDeleting}
-                >
-                  <IconTrash className="h-4 w-4" />
-                  <p>Delete</p>
+              <Link
+                to="/site/$pageId"
+                params={{ pageId: site.rootPageId || "" }}
+                search={{ slug: site.slug }}
+                className="w-full flex items-center gap-2"
+              >
+                <DropdownMenuItem className={"w-full"}>
+                  <IconSettings className="h-4 w-4" />
+                  <p>Edit</p>
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
-    </Card>
+              </Link>
+
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => _handleDelete()}
+                disabled={isDeleting}
+              >
+                <IconTrash className="h-4 w-4" />
+                <p>Delete</p>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ItemActions>
+    </Item>
   );
 }
 
 export function SiteCardSkeleton() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <Skeleton className="h-5 w-3/4 mb-2" />
-        <Skeleton className="h-3 w-1/2" />
-      </CardHeader>
-      <CardContent className="pt-0">
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-3 w-1/4" />
-          <div className="flex gap-1">
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex items-center justify-between p-4 border-b last:border-b-0">
+      <Skeleton className="h-5 w-3/4" />
+      <Skeleton className="h-8 w-8" />
+    </div>
   );
 }

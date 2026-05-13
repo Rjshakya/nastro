@@ -62,6 +62,7 @@ export function SiteEditor() {
   useEffect(() => {
     async function handleLoadInitialCustomStyle() {
       if (!site.customCssLink) {
+        useCodePreviewStore.setState({ previewCss: "" });
         return;
       }
 
@@ -72,9 +73,7 @@ export function SiteEditor() {
         }
 
         const css = await res.text();
-        useCodePreviewStore.setState((state) => ({
-          previewCss: state.previewCss || css,
-        }));
+        useCodePreviewStore.setState({ previewCss: css });
       } catch (error) {
         console.log(error);
       }
