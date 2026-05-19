@@ -10,6 +10,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "./ui/input-group";
+import { CopyIcon } from "lucide-react";
+import { toast } from "sonner";
 
 interface ColorPickerProps {
   label: string;
@@ -18,13 +26,33 @@ interface ColorPickerProps {
 }
 
 export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
-  const normalizedValue = value || "#000000";
-  const [color, setColor] = useColor(normalizedValue);
+  const normalColorValue = value ?? "#000000";
+  const [color, setColor] = useColor(normalColorValue);
 
   const handleChange = (newColor: IColor) => {
     const hex = newColor.hex.slice(0, 7);
     setColor({ ...newColor, hex });
     onChange(hex);
+  };
+
+  const handleInputChange = (input: string) => {
+    if (!input.startsWith("#")) {
+      input = `#${input}`;
+    }
+
+    const hex = input.slice(0, 7);
+    setColor({
+      hex,
+      hsv: color.hsv,
+      rgb: color.rgb,
+    });
+
+    onChange(hex);
+  };
+
+  const handleCopy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    toast.success("copied");
   };
 
   return (
@@ -48,13 +76,26 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
           }
         />
 
-        <PopoverContent side="left" className="m-4">
+        <PopoverContent side="left" className="p-2">
           <ReactColorPicker
             color={color}
             onChange={handleChange}
-            height={100}
+            height={120}
             hideAlpha={true}
+            hideInput={true}
           />
+
+          <InputGroup>
+            <InputGroupInput
+              value={color.hex}
+              onChange={(e) => handleInputChange(e.target.value)}
+            />
+            <InputGroupAddon align={"inline-end"}>
+              <InputGroupButton onClick={() => handleCopy(color.hex)}>
+                <CopyIcon size={4} />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
         </PopoverContent>
       </Popover>
     </div>

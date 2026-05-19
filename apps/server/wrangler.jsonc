@@ -3,7 +3,9 @@
   "name": "nastro-api",
   "main": "src/app.ts",
   "compatibility_date": "2026-02-24",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   // "preview_urls": true,
   "kv_namespaces": [
     {
