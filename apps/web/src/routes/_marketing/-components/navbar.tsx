@@ -5,10 +5,13 @@ import { motion } from "motion/react";
 import { IconMenu, IconX } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/components/logo";
+import { authClient } from "@/lib/auth-client";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const session = authClient.useSession();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -28,9 +31,7 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-background/80 backdrop-blur-md "
-          : "bg-transparent",
+        scrolled ? "bg-background/80 backdrop-blur-md " : "bg-transparent",
       )}
     >
       <nav className=" mx-auto py-2 px-4 flex items-center  justify-between ">
@@ -66,7 +67,7 @@ export function Navbar() {
               Sign In
             </Button>
           </Link>
-          <Link to="/dashboard">
+          <Link to={session?.data?.session ? "/dashboard" : "/login"}>
             <Button size="sm">Get Started</Button>
           </Link>
         </div>
@@ -112,7 +113,10 @@ export function Navbar() {
                 Sign In
               </Button>
             </Link>
-            <Link className=" w-full" to="/dashboard">
+            <Link
+              className=" w-full"
+              to={session?.data?.session ? "/dashboard" : "/login"}
+            >
               <Button className={"w-full"}>Get Started</Button>
             </Link>
           </div>

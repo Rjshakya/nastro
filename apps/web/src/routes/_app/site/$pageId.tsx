@@ -32,6 +32,9 @@ export const Route = createFileRoute("/_app/site/$pageId")({
   },
   component: SiteEditorPage,
   errorComponent: Error,
+  pendingComponent: function PendingComponent() {
+    return <p>Loading...</p>;
+  },
 });
 
 function SiteEditorPage() {

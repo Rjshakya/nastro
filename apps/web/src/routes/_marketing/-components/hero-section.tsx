@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button"
-import { IconArrowDown, IconArrowRight } from "@tabler/icons-react"
-import { motion } from "motion/react"
-import { Link } from "@tanstack/react-router"
+import { Button } from "@/components/ui/button";
+import { IconArrowDown, IconArrowRight } from "@tabler/icons-react";
+import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -15,9 +16,11 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 export function HeroSection() {
+  const session = authClient.useSession();
+
   return (
     <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-32">
       <div className="relative container mx-auto px-4 sm:px-6">
@@ -48,11 +51,8 @@ export function HeroSection() {
             variants={fadeInUp}
             className="md:px-.5 flex items-center justify-start gap-4"
           >
-            <Link to="/dashboard">
-              <Button
-                size="lg"
-                className="flex items-center gap-1 px-4 "
-              >
+            <Link to={session?.data?.session ? "/dashboard" : "/login"}>
+              <Button size="lg" className="flex items-center gap-1 px-4 ">
                 <p>Get Started Free</p>
                 <IconArrowRight stroke={3} />
               </Button>
@@ -90,5 +90,5 @@ export function HeroSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { client } from "@/lib/api-client";
-import { Env } from "@/lib/env";
 import { authClient } from "@/lib/auth-client";
 import { useCodePreviewStore } from "@/stores/code-preview.store";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
@@ -21,7 +20,6 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toggle } from "@/components/ui/toggle";
-import { boolean } from "zod";
 
 interface CodeTabProps {
   site: Site;
@@ -56,7 +54,9 @@ async function uploadCodeFile({
     method: "PUT",
     body: content,
     headers: {
-      "Content-Type": fileName.endsWith(".css") ? "text/css" : "application/javascript",
+      "Content-Type": fileName.endsWith(".css")
+        ? "text/css"
+        : "application/javascript",
     },
   });
 
@@ -79,7 +79,8 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   const { theme } = useTheme();
   const { updateSite, isLoading: isUpdating } = useUpdateSite();
   const { settings } = useSiteSettingStore();
-  const { previewCss, setPreviewCss, previewScript, setPreviewScript } = useCodePreviewStore();
+  const { previewCss, setPreviewCss, previewScript, setPreviewScript } =
+    useCodePreviewStore();
   const { data: session } = authClient.useSession();
   const userId = session?.user?.id || "";
 
@@ -182,9 +183,12 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
       >
         <DialogHeader className="gap-1 flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1">
-            <DialogTitle className={"flex justify-between items-center"}>Code editor</DialogTitle>
+            <DialogTitle className={"flex justify-between items-center"}>
+              Code editor
+            </DialogTitle>
             <DialogDescription className={""}>
-              Edit your custom CSS and JS here. Remember to save after making changes.
+              Edit your custom CSS and JS here. Remember to save after making
+              changes.
             </DialogDescription>
           </div>
 
@@ -198,7 +202,7 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
           </Toggle>
         </DialogHeader>
         <Editor
-          height={"70vh"}
+          height={"50vh"}
           language={toggleJs ? "javascript" : "css"}
           value={toggleJs ? previewScript : previewCss}
           onChange={(code) => {

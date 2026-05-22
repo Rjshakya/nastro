@@ -4,11 +4,24 @@ import { cors } from "hono/cors";
 import { env } from "cloudflare:workers";
 import { api } from "./api";
 import { ApiResponse } from "./lib/api";
-import { SiteError, NotionError, SlugServiceError } from "@/errors/tagged.errors";
+import {
+  SiteError,
+  NotionError,
+  SlugServiceError,
+} from "@/errors/tagged.errors";
 import { ContentfulStatusCode } from "hono/utils/http-status";
+import { StreamableHTTPTransport } from "@hono/mcp";
+import { mcpServer } from "./mcp/server";
 
+const transport = new StreamableHTTPTransport();
 export const app = new Hono()
-
+  .all("/mcp", async (c) => {
+    if (!mcpServer.isConnected()) {
+      // Connecting the MCP server to the transport
+      await mcpServer.connect(transport);
+    }
+    return transport.handleRequest(c);
+  })
   .use(
     "*",
     cors({
@@ -29,6 +42,7 @@ export const app = new Hono()
     const auth = await getAuth();
     return auth.handler(c.req.raw);
   })
+
   .route("/api", api)
   .onError(async (e, c) => {
     console.log(e);

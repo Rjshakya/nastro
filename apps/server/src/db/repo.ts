@@ -14,7 +14,7 @@ export interface Repo<T extends Table<any>, ResultType extends InferSelectModel<
   updateById: (
     key: keyof InferSelectModel<T>,
     id: string,
-    data: InferInsertModel<T>,
+    data: Partial<InferInsertModel<T>>,
   ) => Effect.Effect<ResultType[], RepoError, never>;
   deleteById: (
     key: keyof InferSelectModel<T>,
@@ -91,7 +91,7 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
         }),
     });
 
-  const updateById = (key: keyof InferSelectModel<T>, id: string, data: InferInsertModel<T>) =>
+  const updateById = (key: keyof InferSelectModel<T>, id: string, data: Partial<InferInsertModel<T>>) =>
     Effect.tryPromise({
       try: async () => {
         return (await db

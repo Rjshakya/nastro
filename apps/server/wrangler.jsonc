@@ -3,9 +3,7 @@
   "name": "nastro-api",
   "main": "src/app.ts",
   "compatibility_date": "2026-02-24",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   // "preview_urls": true,
   "kv_namespaces": [
     {
@@ -72,12 +70,12 @@
     {
       "bucket_name": "nastro-templates-assets",
       "binding": "TEMPLATES_BUCKET",
-      "remote": true,
+      "remote": false,
     },
     {
       "bucket_name": "nastro-sites-assets",
       "binding": "SITES_BUCKET",
-      "remote": true,
+      "remote": false,
     },
   ],
 }
