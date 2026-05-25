@@ -3,14 +3,23 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Effect } from "effect";
 import { RepoError } from "@/errors/tagged.errors";
 
-export interface Repo<T extends Table<any>, ResultType extends InferSelectModel<T>> {
+export type RepoMethodResultType<T extends Table<any>> = InferSelectModel<T>;
+
+export interface Repo<
+  T extends Table<any>,
+  ResultType extends RepoMethodResultType<T>,
+> {
   findAll: (limit?: number) => Effect.Effect<ResultType[], RepoError, never>;
   findById: (
     key: keyof InferSelectModel<T>,
     id: string,
   ) => Effect.Effect<ResultType[], RepoError, never>;
-  insert: (data: InferInsertModel<T>) => Effect.Effect<ResultType[], RepoError, never>;
-  insertVoid: (data: InferInsertModel<T>) => Effect.Effect<void, RepoError, never>;
+  insert: (
+    data: InferInsertModel<T>,
+  ) => Effect.Effect<ResultType[], RepoError, never>;
+  insertVoid: (
+    data: InferInsertModel<T>,
+  ) => Effect.Effect<void, RepoError, never>;
   updateById: (
     key: keyof InferSelectModel<T>,
     id: string,
@@ -25,7 +34,10 @@ export interface Repo<T extends Table<any>, ResultType extends InferSelectModel<
   ) => Effect.Effect<R, E, never>;
 }
 
-export const makeRepo = <T extends Table<any>, ResultType extends InferSelectModel<T>>(
+export const makeRepo = <
+  T extends Table<any>,
+  ResultType extends InferSelectModel<T>,
+>(
   db: NodePgDatabase,
   table: T,
 ): Repo<T, ResultType> => {
@@ -91,7 +103,11 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
         }),
     });
 
-  const updateById = (key: keyof InferSelectModel<T>, id: string, data: Partial<InferInsertModel<T>>) =>
+  const updateById = (
+    key: keyof InferSelectModel<T>,
+    id: string,
+    data: Partial<InferInsertModel<T>>,
+  ) =>
     Effect.tryPromise({
       try: async () => {
         return (await db
@@ -127,7 +143,9 @@ export const makeRepo = <T extends Table<any>, ResultType extends InferSelectMod
         }),
     });
 
-  const execute = <R, E>(f: (db: NodePgDatabase, table: T) => Effect.Effect<R, E>) =>
+  const execute = <R, E>(
+    f: (db: NodePgDatabase, table: T) => Effect.Effect<R, E>,
+  ) =>
     Effect.tryPromise({
       try: async () => {
         return f(db, table);

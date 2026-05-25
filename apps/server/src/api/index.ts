@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { apikeyApp } from "./apikey";
 import { notionApp } from "./notion";
 import { sitesApp } from "./site";
 import { themeApp } from "./theme";
@@ -10,6 +11,7 @@ const api = new Hono()
   .route("/site", sitesApp)
   .route("/theme", themeApp)
   .route("/template", templateApp)
-  .route("/upload", uploadApp);
+  .route("/upload", uploadApp)
+  .route("/apikey", apikeyApp);
 
 export { api };

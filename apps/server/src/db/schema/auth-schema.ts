@@ -1,5 +1,17 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  integer,
+} from "drizzle-orm/pg-core";
+import {
+  createInsertSchema,
+  createSelectSchema,
+  createUpdateSchema,
+} from "drizzle-zod";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -73,6 +85,34 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const apikey = pgTable(
+  "apikey",
+  {
+    id: text("id").primaryKey().unique(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    configId: text("config_id").notNull(),
+    name: text("name"),
+    start: text("start"),
+    prefix: text("prefix"),
+    key: text("key").notNull(),
+    enabled: boolean("enabled"),
+    expiresAt: timestamp("expires_at", { precision: 6, withTimezone: true }),
+    createdAt: timestamp("created_at", {
+      precision: 6,
+      withTimezone: true,
+    }).notNull(),
+    updatedAt: timestamp("updated_at", {
+      precision: 6,
+      withTimezone: true,
+    }).notNull(),
+    permissions: text("permissions"),
+    metadata: text("metadata"),
+  },
+  (table) => [index("apikey_userId_idx").on(table.userId)],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -98,3 +138,10 @@ export type SessionInsert = typeof session.$inferInsert;
 export type SessionSelect = typeof session.$inferSelect;
 export type AccountInsert = typeof account.$inferInsert;
 export type AccountSelect = typeof account.$inferSelect;
+
+export type ApiKeyInsert = typeof apikey.$inferInsert;
+export type ApiKeySelect = typeof apikey.$inferSelect;
+
+export const apiKeyInsertSchema = createInsertSchema(apikey);
+export const apiKeySelectSchema = createSelectSchema(apikey);
+export const apiKeyUpdateSchema = createUpdateSchema(apikey);

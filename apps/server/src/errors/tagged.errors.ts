@@ -84,3 +84,19 @@ export class FileUploadServiceError extends Data.TaggedError("FileUploadServiceE
   type: FileUploadServiceErrorType;
   code?: number;
 }> {}
+
+// API Key Error Types
+export type ApiKeyErrorType =
+  | "KEY_NOT_FOUND"
+  | "KEY_REVOKED"
+  | "INVALID_FORMAT"
+  | "UNAUTHORIZED"
+  | "CREATE_FAILED"
+  | "DELETE_FAILED"
+  | "UPDATE_FAILED";
+
+export class ApiKeyError extends Data.TaggedError("ApiKeyError")<{
+  message: string;
+  type: ApiKeyErrorType;
+  code?: number;
+}> {}

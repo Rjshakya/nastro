@@ -8,18 +8,28 @@ import {
   SiteError,
   NotionError,
   SlugServiceError,
+  ApiKeyError,
 } from "@/errors/tagged.errors";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { StreamableHTTPTransport } from "@hono/mcp";
-import { mcpServer } from "./mcp/server";
+import { Vars } from "./lib/hono-types";
+import { verifyApiKeyMiddleware } from "./middlewares/auth";
+import { createMcpServer } from "./mcp/server";
 
-const transport = new StreamableHTTPTransport();
-export const app = new Hono()
-  .all("/mcp", async (c) => {
+export const app = new Hono<{ Variables: Vars }>()
+  .all("/mcp", verifyApiKeyMiddleware(), async (c) => {
+    const userId = c.get("userId");
+    const permission = c.get("permission");
+
+    console.log({ userId, permission });
+
+    const transport = new StreamableHTTPTransport({});
+    const mcpServer = createMcpServer({ userId, permission });
+
     if (!mcpServer.isConnected()) {
-      // Connecting the MCP server to the transport
       await mcpServer.connect(transport);
     }
+
     return transport.handleRequest(c);
   })
   .use(
@@ -75,6 +85,17 @@ export const app = new Hono()
     }
 
     if (e instanceof SlugServiceError) {
+      return c.json(
+        ApiResponse({
+          data: null,
+          error: e.type,
+          message: e.message,
+        }),
+        getCode(e.code),
+      );
+    }
+
+    if (e instanceof ApiKeyError) {
       return c.json(
         ApiResponse({
           data: null,

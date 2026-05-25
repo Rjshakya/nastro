@@ -6,6 +6,7 @@ import { v7 } from "uuid";
 import { nanoid } from "nanoid";
 import { themeTable } from "./theme";
 import { templateTable } from "./template";
+import { seoTable } from "./seo";
 
 export const sites = pgTable(
   "site",
@@ -25,6 +26,7 @@ export const sites = pgTable(
       .$defaultFn(() => nanoid(13)),
     name: text("site_name").notNull(),
     setting: jsonb("site_setting"),
+    seo: text().references(() => seoTable.id),
     thumbnail: text("site_thumbnail_url)"),
     themeId: text().references(() => themeTable.id),
     templateId: text().references(() => templateTable.id),
@@ -36,7 +38,10 @@ export const sites = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("site_slug_idx").on(table.slug), index("site_pageId_idx").on(table.rootPageId)],
+  (table) => [
+    index("site_slug_idx").on(table.slug),
+    index("site_pageId_idx").on(table.rootPageId),
+  ],
 );
 
 export const sitesRelations = relations(sites, ({ one }) => ({

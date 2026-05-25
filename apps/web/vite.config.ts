@@ -11,11 +11,11 @@ const config = defineConfig({
     devtools(),
 
     // this is the plugin that enables path aliases
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart(),
     viteReact(),
   ],

@@ -17,7 +17,6 @@ export function LiveSite() {
       return;
     }
 
-    console.log(JSON.stringify(data.site, null, 2));
     setSettings(data.site.setting);
   }, []);
 

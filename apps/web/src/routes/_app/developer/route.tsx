@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useNotionToken } from "@/hooks/use-notion";
 import { Error } from "@/components/error";
 import { CredentialCard } from "./-components/credential-card";
+import { ApiKeyCard } from "./-components/apikey-card";
 
 export const Route = createFileRoute("/_app/developer")({
   component: DeveloperPage,
@@ -19,6 +20,7 @@ function DeveloperPage() {
       </div>
 
       <CredentialCard token={token} isLoading={isLoading} />
+      <ApiKeyCard />
     </div>
   );
 }

@@ -1,9 +1,14 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDB } from "@/db"; // your drizzle instance
-import { account, user, session, verification } from "@/db/schema/auth-schema";
+import {
+  account,
+  user,
+  session,
+  verification,
+  apikey as apiKeyTable,
+} from "@/db/schema/auth-schema";
 import { env } from "cloudflare:workers";
-
 export const getAuth = async () => {
   const db = await getDB();
 
@@ -15,6 +20,7 @@ export const getAuth = async () => {
         user,
         session,
         verification,
+        apiKey: apiKeyTable,
       },
     }),
     socialProviders: {

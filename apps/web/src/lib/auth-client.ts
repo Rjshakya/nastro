@@ -40,3 +40,27 @@ export const handleConnectNotion = async () => {
     callbackURL: Env.clientUrl + "/dashboard",
   });
 };
+
+//export const createApiKey = async () => {
+//  const body = {
+//    name: "project-api-key",
+//    expiresIn: 60 * 60 * 24 * 7,
+//    prefix: "project-api-key",
+//  };
+//
+//  const res = await fetch(Env.apiUrl + "/api/auth/api-key/create", {
+//    method: "POST",
+//    body: JSON.stringify(body),
+//    credentials: "include",
+//    headers: {
+//      "Content-Type": "application/json",
+//    },
+//  });
+//
+//  if (!res.ok) {
+//    console.log("failed to create api key");
+//  }
+//
+//  const apikey = await res.json();
+//  return apikey;
+//};
