@@ -23,7 +23,10 @@ function extractSlugFromUrl(urlString: string): string | null {
   return slug || null;
 }
 
-function createMcpServer({ }: {
+function createMcpServer({
+  userId,
+  permission,
+}: {
   userId: string | null;
   permission: string | null;
 }) {
