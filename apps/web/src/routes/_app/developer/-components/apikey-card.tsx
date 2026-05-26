@@ -3,7 +3,12 @@ import { IconKey, IconAlertTriangle } from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -12,23 +17,39 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useApiKeys, useDeleteApiKey, useUpdateApiKey } from "@/hooks/use-apikeys";
+import {
+  useApiKeys,
+  useDeleteApiKey,
+  useUpdateApiKey,
+} from "@/hooks/use-apikeys";
 import { CreateApiKeyDialog } from "./create-apikey-dialog";
 import { ApiKeyItem } from "./apikey-item";
 import type { CreateApiKeyResult } from "@/types/apikey";
+import { ItemGroup } from "@/components/ui/item";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { updateApiKey } from "@/lib/apikey";
 
 export function ApiKeyCard() {
   const { data: apiKeys, isLoading, mutate } = useApiKeys();
   const { deleteApiKey, isLoading: isDeleting } = useDeleteApiKey();
-  const { updateApiKey } = useUpdateApiKey();
-  
+
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
   const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
 
   const handleCreateSuccess = (result: CreateApiKeyResult) => {
     setNewlyCreatedKey(result.key);
     mutate();
-    
+
     // Clear the newly created key highlight after 30 seconds
     setTimeout(() => {
       setNewlyCreatedKey(null);
@@ -37,12 +58,7 @@ export function ApiKeyCard() {
 
   const handleToggleEnabled = async (keyId: string, enabled: boolean) => {
     try {
-      await updateApiKey({
-        keyId,
-        input: { enabled },
-      });
-      toast.success(enabled ? "API key enabled" : "API key disabled");
-      mutate();
+      await updateApiKey({ keyId, input: { enabled } });
     } catch {
       // Error is handled by the mutation
     }
@@ -72,33 +88,35 @@ export function ApiKeyCard() {
   return (
     <>
       <div className="bg-accent rounded-2xl p-1">
-        <div className="mb-2 p-2">
-          <CardTitle>API Keys</CardTitle>
-          <CardDescription>Manage your API keys for MCP access and integrations.</CardDescription>
+        <div className="mb-2 p-2 flex items-center justify-between">
+          <div>
+            <CardTitle>API Keys</CardTitle>
+            <CardDescription>
+              Manage your API keys for MCP access and integrations.
+            </CardDescription>
+          </div>
+          <CreateApiKeyDialog onSuccess={handleCreateSuccess} />
         </div>
-        <Card className="px-4 py-6 rounded-xl">
-          <CardContent className="space-y-4 p-0">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                {apiKeys?.length || 0} key{apiKeys?.length !== 1 ? "s" : ""} created
-              </div>
-              <CreateApiKeyDialog onSuccess={handleCreateSuccess} />
-            </div>
-
+        <Card className="p-1 rounded-2xl bg-accent">
+          <CardContent className="p-0">
             {isLoading ? (
-              <div className="text-center py-8 text-muted-foreground">Loading API keys...</div>
+              <div className="text-center py-8 text-muted-foreground">
+                Loading API keys...
+              </div>
             ) : apiKeys && apiKeys.length > 0 ? (
-              <div className="space-y-3">
+              <ItemGroup className="gap-1 p-1">
                 {apiKeys.map((apiKey) => (
                   <ApiKeyItem
                     key={apiKey.id}
                     apiKey={apiKey}
-                    newlyCreatedKey={newlyCreatedKey === apiKey.id ? newlyCreatedKey : null}
+                    newlyCreatedKey={
+                      newlyCreatedKey === apiKey.id ? newlyCreatedKey : null
+                    }
                     onDelete={handleDeleteClick}
                     onToggleEnabled={handleToggleEnabled}
                   />
                 ))}
-              </div>
+              </ItemGroup>
             ) : (
               <div className="text-center py-8 space-y-3">
                 <div className="flex justify-center">
@@ -114,33 +132,34 @@ export function ApiKeyCard() {
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={!!keyToDelete} onOpenChange={(open) => !open && handleCancelDelete()}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-destructive">
-              <IconAlertTriangle className="h-5 w-5" />
-              Delete API Key
-            </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this API key? This action cannot be undone.
-              <br /><br />
-              Any applications or services using this key will immediately lose access.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={handleCancelDelete}>
+
+      <AlertDialog
+        open={!!keyToDelete}
+        onOpenChange={(open) => !open && handleCancelDelete()}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this API key? This action cannot
+              be undone. Any applications or services using this key will
+              immediately lose access.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
               Cancel
-            </Button>
-            <Button
-              variant="destructive"
+            </AlertDialogCancel>
+            <AlertDialogAction
+              //variant="destructive"
               onClick={handleConfirmDelete}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete Key"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              {isDeleting ? "Deleting..." : "Yes , delete it"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

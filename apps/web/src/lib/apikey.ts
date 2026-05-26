@@ -1,5 +1,10 @@
 import { client } from "./api-client";
-import type { ApiKey, CreateApiKeyInput, CreateApiKeyResult, UpdateApiKeyInput } from "@/types/apikey";
+import type {
+  ApiKey,
+  CreateApiKeyInput,
+  CreateApiKeyResult,
+  UpdateApiKeyInput,
+} from "@/types/apikey";
 import { handleHttpError } from "./error";
 
 export const getApiKeys = async () => {
@@ -20,7 +25,10 @@ export const getApiKeys = async () => {
   return data.data as ApiKey[];
 };
 
-export const createApiKey = async (_key: string, { arg }: { arg: CreateApiKeyInput }) => {
+export const createApiKey = async (
+  _key: string,
+  { arg }: { arg: CreateApiKeyInput },
+) => {
   const res = await client.api.apikey.$post({
     json: arg,
   });
@@ -40,13 +48,16 @@ export const createApiKey = async (_key: string, { arg }: { arg: CreateApiKeyInp
   return data.data as CreateApiKeyResult;
 };
 
-export const updateApiKey = async (
-  _key: string,
-  { arg }: { arg: { keyId: string; input: UpdateApiKeyInput } },
-) => {
+export const updateApiKey = async ({
+  keyId,
+  input,
+}: {
+  keyId: string;
+  input: UpdateApiKeyInput;
+}) => {
   const res = await client.api.apikey[":id"].$patch({
-    param: { id: arg.keyId },
-    json: arg.input,
+    param: { id: keyId },
+    json: input,
   });
 
   if (!res.ok) {
@@ -63,7 +74,10 @@ export const updateApiKey = async (
   return res.json();
 };
 
-export const deleteApiKey = async (_key: string, { arg }: { arg: { keyId: string } }) => {
+export const deleteApiKey = async (
+  _key: string,
+  { arg }: { arg: { keyId: string } },
+) => {
   const res = await client.api.apikey[":id"].$delete({
     param: { id: arg.keyId },
   });

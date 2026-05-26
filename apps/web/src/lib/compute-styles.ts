@@ -70,7 +70,7 @@ function computeThemeStyles(
 
   // ── Radius ──
   styles["--ns-radius"] = `${theme.roundness}px`;
-
+  styles["--ns-page-link-hover"] = `${theme.notionPageLinkHoverBg}`;
   return styles;
 }
 

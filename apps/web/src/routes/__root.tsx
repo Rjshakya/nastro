@@ -1,10 +1,11 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
-import { ThemeProvider } from "@/components/theme-provider"
+import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import { ThemeProvider } from "@/components/theme-provider";
 
-import appCss from "@/styles/styles.css?url"
-import rcp from "react-color-palette/css?url"
-import { Toaster } from "sonner"
-import { Error } from "@/components/error"
+import appCss from "@/styles/styles.css?url";
+import rcp from "react-color-palette/css?url";
+import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Error } from "@/components/error";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -64,7 +65,7 @@ export const Route = createRootRoute({
   ),
   shellComponent: RootDocument,
   errorComponent: Error,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -74,11 +75,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main>{children}</main>
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster />
         </ThemeProvider>
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

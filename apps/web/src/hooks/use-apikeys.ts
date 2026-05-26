@@ -3,7 +3,12 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "@tanstack/react-router";
 
 import type { CreateApiKeyInput, UpdateApiKeyInput } from "@/types/apikey";
-import { getApiKeys, createApiKey, updateApiKey, deleteApiKey } from "@/lib/apikey";
+import {
+  getApiKeys,
+  createApiKey,
+  updateApiKey,
+  deleteApiKey,
+} from "@/lib/apikey";
 
 export const API_KEYS_KEY = "/apikeys";
 
@@ -45,8 +50,11 @@ export const useUpdateApiKey = () => {
 
   const { trigger, isMutating, error, reset } = useSWRMutation(
     API_KEYS_KEY,
-    async (_key: string, { arg }: { arg: { keyId: string; input: UpdateApiKeyInput } }) => {
-      const result = await updateApiKey(_key, { arg });
+    async (
+      _key: string,
+      { arg }: { arg: { keyId: string; input: UpdateApiKeyInput } },
+    ) => {
+      const result = await updateApiKey({ keyId: arg.keyId, input: arg.input });
       await mutate(API_KEYS_KEY);
       await router.invalidate({ sync: true });
       return result;

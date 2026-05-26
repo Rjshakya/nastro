@@ -50,6 +50,7 @@ export interface ThemeConfig {
   tab?: TabConfig;
   textSelection?: TextSelectionConfig;
   roundness?: number;
+  notionPageLinkHoverBg?: string;
 }
 
 // Typography Configuration
@@ -147,6 +148,7 @@ export interface PopulatedThemeConfig {
   tab: Required<TabConfig>;
   textSelection: Required<TextSelectionConfig>;
   roundness: number;
+  notionPageLinkHoverBg: string;
 }
 
 export interface PopulatedTypographyConfig {

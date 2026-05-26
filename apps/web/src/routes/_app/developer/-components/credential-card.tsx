@@ -5,7 +5,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { handleConnectNotion } from "@/lib/auth-client";
 
 export function CredentialCard({
@@ -31,9 +37,17 @@ export function CredentialCard({
 
   return (
     <div className="bg-accent rounded-2xl p-1  ">
-      <div className="mb-2 p-2 ">
-        <CardTitle>Notion Integration</CardTitle>
-        <CardDescription>Connect your Notion account to access pages and content.</CardDescription>
+      <div className="mb-2 p-2 flex items-center justify-between ">
+        <div>
+          <CardTitle>Notion Integration</CardTitle>
+          <CardDescription>
+            Connect your Notion account to access pages and content.
+          </CardDescription>
+        </div>
+        <Button onClick={handleConnectNotion} className="gap-2">
+          <IconLink />
+          Connect with Notion
+        </Button>
       </div>
       <Card className="px-4 py-6 rounded-xl">
         <CardContent className="space-y-4 p-0">
@@ -67,11 +81,6 @@ export function CredentialCard({
               </Button>
             </div>
           </div>
-
-          <Button onClick={handleConnectNotion} className="gap-2">
-            <IconLink />
-            Connect with Notion
-          </Button>
         </CardContent>
       </Card>
     </div>

@@ -52,6 +52,11 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
         setCreatedKey(result);
         onSuccess?.(result);
       }
+
+      setTimeout(() => {
+        setOpen(false);
+        setCreatedKey(null);
+      }, 30000);
     } catch (error) {
       // Error is handled by the mutation
     }
@@ -85,21 +90,20 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button size="sm" variant="default" className="shadow-2xl">
-            <IconPlus className="mr-2 h-4 w-4" />
-            Create API Key
-          </Button>
-        }
-      />
+      <Button onClick={() => setOpen(true)}>
+        <IconPlus className="" />
+        Create API Key
+      </Button>
       <DialogContent className="px-4 py-4 font-sans tracking-tighter sm:max-w-md">
         {!createdKey ? (
           <>
             <DialogHeader className="px-0">
-              <DialogTitle className="font-medium">Create New API Key</DialogTitle>
+              <DialogTitle className="font-medium">
+                Create New API Key
+              </DialogTitle>
               <DialogDescription>
-                Create a new API key for MCP access. You can set permissions and name it for easy identification.
+                Create a new API key for MCP access. You can set permissions and
+                name it for easy identification.
               </DialogDescription>
             </DialogHeader>
 
@@ -130,7 +134,10 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
                         handlePermissionChange("read", checked as boolean)
                       }
                     />
-                    <Label htmlFor="permission-read" className="font-normal cursor-pointer">
+                    <Label
+                      htmlFor="permission-read"
+                      className="font-normal cursor-pointer"
+                    >
                       Read - Access to read site data and content
                     </Label>
                   </div>
@@ -142,13 +149,18 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
                         handlePermissionChange("write", checked as boolean)
                       }
                     />
-                    <Label htmlFor="permission-write" className="font-normal cursor-pointer">
+                    <Label
+                      htmlFor="permission-write"
+                      className="font-normal cursor-pointer"
+                    >
                       Write - Access to modify site settings and upload files
                     </Label>
                   </div>
                 </div>
                 {permissions.length === 0 && (
-                  <p className="text-sm text-red-500">At least one permission is required</p>
+                  <p className="text-sm text-red-500">
+                    At least one permission is required
+                  </p>
                 )}
               </div>
             </div>
@@ -187,7 +199,11 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
                     onClick={handleCopy}
                     className={copied ? "text-green-500" : ""}
                   >
-                    {copied ? <IconCheck className="h-4 w-4" /> : <IconCopy className="h-4 w-4" />}
+                    {copied ? (
+                      <IconCheck className="" />
+                    ) : (
+                      <IconCopy className="" />
+                    )}
                   </Button>
                 </div>
                 <p className="text-sm text-amber-600 font-medium">
@@ -202,7 +218,9 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Permissions:</span>
-                  <span className="font-medium capitalize">{createdKey.permissions.join(", ")}</span>
+                  <span className="font-medium capitalize">
+                    {createdKey.permissions.join(", ")}
+                  </span>
                 </div>
               </div>
             </div>

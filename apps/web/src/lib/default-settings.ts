@@ -56,6 +56,7 @@ const defaultLightTheme: Required<ThemeConfig> = {
     foreground: "oklch(0.405 0.101 131.063)",
   },
   roundness: 10,
+  notionPageLinkHoverBg: "#9ca3af",
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -107,6 +108,7 @@ const defaultDarkTheme: Required<ThemeConfig> = {
     foreground: "oklch(0.405 0.101 131.063)",
   },
   roundness: 10,
+  notionPageLinkHoverBg: "#27272a",
 };
 
 // ─────────────────────────────────────────────────────────────
