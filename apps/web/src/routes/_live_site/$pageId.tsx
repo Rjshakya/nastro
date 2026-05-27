@@ -7,10 +7,6 @@ import {
 } from "@/lib/live-site";
 import { LiveSite } from "./-components/live-site";
 import { Error } from "@/components/error";
-import { getFontUrl, type GoogleFont } from "@/lib/fonts";
-import { computeStyles } from "@/lib/compute-styles";
-import type { SiteSetting } from "@/types/site.setting";
-import { getDefaultSettings } from "@/lib/default-settings";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
