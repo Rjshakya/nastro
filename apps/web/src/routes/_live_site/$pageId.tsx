@@ -89,8 +89,7 @@ export const Route = createFileRoute("/_live_site/$pageId")({
     
            .notion {
 
-              --primary-font:${typography?.font?.primary};
-                           
+              --primary-font:${typography?.font?.primary ?? "Manrope Variable"};                    
 
               ${cssVariables}
         
