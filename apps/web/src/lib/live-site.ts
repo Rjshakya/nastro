@@ -5,6 +5,10 @@ import { Env } from "./env";
 import { getNotionPageSeo } from "./utils";
 import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
+import type { SiteSetting } from "@/types/site.setting";
+import { getFontUrl, type GoogleFont } from "./fonts";
+import { getDefaultSettings } from "./default-settings";
+import { computeStyles } from "./compute-styles";
 
 const resolveSlug = (baseSlug: string) => {
   if (baseSlug) {
@@ -78,3 +82,50 @@ export const liveSiteLoader = createServerFn()
       throw new Error(String(e));
     }
   });
+
+export const handleLiveSiteHtmlLinks = (site?: Site) => {
+  const typography = site?.setting?.typography;
+
+  const links: (
+    | React.DetailedHTMLProps<
+      React.LinkHTMLAttributes<HTMLLinkElement>,
+      HTMLLinkElement
+    >
+    | undefined
+  )[] = [];
+
+  if (site?.customCssLink) {
+    links.push({ rel: "stylesheet", href: site.customCssLink });
+  }
+
+  if (typography?.font?.primary) {
+    const href = getFontUrl({
+      family: typography?.font?.primary,
+    } as GoogleFont);
+
+    links.push({ rel: "stylesheet", href });
+  }
+
+  if (typography?.font?.secondary) {
+    const href = getFontUrl({
+      family: typography?.font?.secondary,
+    } as GoogleFont);
+
+    links.push({ rel: "stylesheet", href });
+  }
+  return links;
+};
+
+export const handleLiveSiteStyles = (site?: Site) => {
+  const isDark = !!site?.setting?.general?.isDark;
+  const withDefaults = getDefaultSettings(site?.setting as SiteSetting);
+  const cssVariables = computeStyles(withDefaults, isDark ? "dark" : "light");
+
+  const cssVarString = Object.entries(cssVariables)
+    .map(([k, v]) => {
+      return `${k}:${v}`;
+    })
+    .join(";");
+
+  return cssVarString;
+};

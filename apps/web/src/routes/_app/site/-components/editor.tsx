@@ -15,7 +15,7 @@ const PREVIEW_STYLE_ID = "nastro-live-preview-css";
 export function SiteEditor() {
   const { page, site, slug, themes } = siteRoute.useLoaderData();
   const { theme } = useTheme();
-  const { setIsDark, setSettings } = useSiteSettingStore();
+  const { setIsDark, setSettings, settings, styles } = useSiteSettingStore();
   const { setThemes } = useThemeStore();
   const previewCss = useCodePreviewStore((s) => s.previewCss);
 
@@ -41,7 +41,9 @@ export function SiteEditor() {
       return;
     }
 
-    let styleTag = document.getElementById(PREVIEW_STYLE_ID) as HTMLStyleElement | null;
+    let styleTag = document.getElementById(
+      PREVIEW_STYLE_ID,
+    ) as HTMLStyleElement | null;
     if (!styleTag) {
       styleTag = document.createElement("style");
       styleTag.id = PREVIEW_STYLE_ID;
@@ -52,7 +54,9 @@ export function SiteEditor() {
     return () => {
       // Only clear textContent on cleanup; don't remove the tag
       // so it can be reused across rapid updates
-      const existing = document.getElementById(PREVIEW_STYLE_ID) as HTMLStyleElement | null;
+      const existing = document.getElementById(
+        PREVIEW_STYLE_ID,
+      ) as HTMLStyleElement | null;
       if (existing) {
         existing.textContent = "";
       }
@@ -112,7 +116,13 @@ export function SiteEditor() {
     <main className="min-h-screen bg-background relative rounded-md">
       <SiteEditorHeader />
       <div contentEditable={false} className="z-0">
-        <NotionRenderer pageId={site.rootPageId} recordMap={page} slug={slug} />
+        <NotionRenderer
+          pageId={site.rootPageId}
+          recordMap={page}
+          slug={slug}
+          settings={settings}
+          styles={styles}
+        />
       </div>
       <SettingsPanel site={site} />
     </main>

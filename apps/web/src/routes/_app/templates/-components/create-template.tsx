@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { IconPlus } from "@tabler/icons-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +16,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { CreateTemplateInput } from "@/lib/site.template";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import InputWithTags from "@/components/comp-56";
-import { validateTemplateForm } from "@/schemas/template";
 import { authClient } from "@/lib/auth-client";
 
 interface CreateTemplateDialogProps {
@@ -125,7 +122,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               <Label htmlFor="templateUrl">Template URL</Label>
               <Input
                 id="templateUrl"
-                placeholder="https://your-site.nastro.xyz/123"
+                placeholder="https://your-site.nastro.site/123"
                 value={input.url}
                 onChange={(e) => setInput({ ...input, url: e.target.value })}
               />

@@ -3,22 +3,29 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Collection, Property } from "react-notion-x/third-party/collection";
 import { Code } from "react-notion-x/third-party/code";
 import { Equation } from "react-notion-x/third-party/equation";
-import { type CSSProperties } from "react";
+import React, { type CSSProperties } from "react";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { useSiteSettingStore } from "@/stores/site.setting.store";
 import type { ExtendedRecordMap } from "notion-types";
 import { renderButtonBlock } from "./button";
+import type { SiteSetting } from "@/types/site.setting";
 
 interface NotionRendererProps {
   pageId: string;
   recordMap: ExtendedRecordMap;
   slug: string;
+  styles: React.CSSProperties;
+  settings: SiteSetting;
 }
 
-export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps) {
-  const { settings, styles } = useSiteSettingStore();
+export function NotionRenderer({
+  pageId,
+  recordMap,
+  slug,
+  styles,
+  settings,
+}: NotionRendererProps) {
   const { pathname } = useLocation();
   const { origin } = useRouter();
   const host = new URL("/", origin).hostname;
@@ -71,10 +78,14 @@ export function NotionRenderer({ pageId, recordMap, slug }: NotionRendererProps)
           Property,
         }}
         mapPageUrl={handlePageUrl}
-        header={showHeader ? <SiteHeader header={settings.layout?.headerConfig} /> : undefined}
+        header={
+          showHeader ? (
+            <SiteHeader header={settings?.layout?.headerConfig} />
+          ) : undefined
+        }
         disableHeader
       />
-      {showFooter && <SiteFooter footer={settings.layout?.footerConfig} />}
+      {showFooter && <SiteFooter footer={settings?.layout?.footerConfig} />}
     </div>
   );
 }

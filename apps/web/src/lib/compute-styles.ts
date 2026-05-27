@@ -70,7 +70,7 @@ function computeThemeStyles(
 
   // ── Radius ──
   styles["--ns-radius"] = `${theme.roundness}px`;
-
+  styles["--ns-page-link-hover"] = `${theme.pageLink.hover}`;
   return styles;
 }
 
@@ -110,7 +110,9 @@ function computeLayoutStyles(
 
   styles["--ns-layout-header-display"] = layout.header ? "block" : "none";
   styles["--ns-layout-footer-display"] = layout.footer ? "block" : "none";
-
+  styles["--ns-layout-page-props-display"] = layout.pageProperties
+    ? "flex"
+    : "none";
   return styles;
 }
 

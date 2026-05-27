@@ -1,8 +1,8 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { NotionRenderer } from "@/components/notion/notion-renderer";
-import "@/styles/notion.css";
-import { useEffect } from "react";
-import { useSiteSettingStore } from "@/stores/site.setting.store";
+import { getDefaultSettings } from "@/lib/default-settings";
+import type { SiteSetting } from "@/types/site.setting";
+import { computeStyles } from "@/lib/compute-styles";
 
 const liveSiteRoute = getRouteApi("/_live_site/$pageId");
 
@@ -10,15 +10,12 @@ export function LiveSite() {
   const data = liveSiteRoute.useLoaderData();
   const { pageId } = liveSiteRoute.useParams();
   const { slug } = liveSiteRoute.useLoaderDeps();
-  const { setSettings } = useSiteSettingStore();
 
-  useEffect(() => {
-    if (!data?.site) {
-      return;
-    }
-
-    setSettings(data.site.setting);
-  }, []);
+  const site = data?.site;
+  const setting = site?.setting as SiteSetting;
+  const isDark = !!setting?.general?.isDark;
+  const withDefaults = getDefaultSettings(setting);
+  const styles = computeStyles(withDefaults, isDark ? "dark" : "light");
 
   if (!data.page || !data.site) {
     return (
@@ -30,7 +27,13 @@ export function LiveSite() {
 
   return (
     <main>
-      <NotionRenderer pageId={pageId} recordMap={data.page} slug={slug || ""} />
+      <NotionRenderer
+        pageId={pageId}
+        recordMap={data.page}
+        slug={slug || ""}
+        settings={setting}
+        styles={styles}
+      />
     </main>
   );
 }

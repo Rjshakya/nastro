@@ -56,6 +56,7 @@ const defaultLightTheme: Required<ThemeConfig> = {
     foreground: "oklch(0.405 0.101 131.063)",
   },
   roundness: 10,
+  pageLink: { hover: "#9b9a97" },
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -107,6 +108,7 @@ const defaultDarkTheme: Required<ThemeConfig> = {
     foreground: "oklch(0.405 0.101 131.063)",
   },
   roundness: 10,
+  pageLink: { hover: "#27272a" },
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -143,6 +145,7 @@ const defaultLayout: Required<LayoutConfig> = {
   headerConfig: {},
   footerConfig: {},
   sidebarConfig: {},
+  pageProperties: false,
 };
 
 // ─────────────────────────────────────────────────────────────

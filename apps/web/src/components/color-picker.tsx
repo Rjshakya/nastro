@@ -18,6 +18,7 @@ import {
 } from "./ui/input-group";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface ColorPickerProps {
   label: string;
@@ -28,10 +29,12 @@ interface ColorPickerProps {
 export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
   const normalColorValue = value ?? "#000000";
   const [color, setColor] = useColor(normalColorValue);
+  const [colorInput, setColorInput] = useState("");
 
   const handleChange = (newColor: IColor) => {
     const hex = newColor.hex.slice(0, 7);
     setColor({ ...newColor, hex });
+    setColorInput(hex);
     onChange(hex);
   };
 
@@ -47,6 +50,7 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
       rgb: color.rgb,
     });
 
+    setColorInput(hex);
     onChange(hex);
   };
 
@@ -87,7 +91,7 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
 
           <InputGroup>
             <InputGroupInput
-              value={color.hex}
+              value={colorInput}
               onChange={(e) => handleInputChange(e.target.value)}
             />
             <InputGroupAddon align={"inline-end"}>

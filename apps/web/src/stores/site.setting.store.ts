@@ -38,7 +38,10 @@ const defaultSettings = getDefaultSettings({});
 export const useSiteSettingStore = create<SiteSettingStore>((set, get) => ({
   settings: defaultSettings,
   isDark: defaultSettings.general.isDark,
-  styles: computeStyles(defaultSettings, defaultSettings.general.isDark ? "dark" : "light"),
+  styles: computeStyles(
+    defaultSettings,
+    defaultSettings.general.isDark ? "dark" : "light",
+  ),
 
   setSettings(settings) {
     const withDefaults = getDefaultSettings(settings);

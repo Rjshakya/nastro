@@ -78,7 +78,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger
         render={
-          <Button size={"sm"} variant={"default"} className={" shadow-2xl"}>
+          <Button variant={"default"}>
             <IconPlus className="mr-2 h-4 w-4" />
             New Site
           </Button>

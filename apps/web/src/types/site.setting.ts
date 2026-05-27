@@ -39,6 +39,10 @@ export interface TextSelectionConfig {
   foreground?: string;
 }
 
+export interface PageLinkConfig {
+  hover?: string;
+}
+
 export interface ThemeConfig {
   background?: ThemeColorConfig;
   foreground?: ThemeColorConfig;
@@ -50,6 +54,7 @@ export interface ThemeConfig {
   tab?: TabConfig;
   textSelection?: TextSelectionConfig;
   roundness?: number;
+  pageLink?: PageLinkConfig;
 }
 
 // Typography Configuration
@@ -105,6 +110,7 @@ export interface LayoutConfig {
   footerConfig?: NavConfig;
   sidebar?: boolean;
   sidebarConfig?: NavConfig;
+  pageProperties?: boolean;
 }
 
 // General Configuration
@@ -147,6 +153,7 @@ export interface PopulatedThemeConfig {
   tab: Required<TabConfig>;
   textSelection: Required<TextSelectionConfig>;
   roundness: number;
+  pageLink: Required<PageLinkConfig>;
 }
 
 export interface PopulatedTypographyConfig {
@@ -162,6 +169,7 @@ export interface PopulatedLayoutConfig {
   footerConfig: NavConfig;
   sidebar: boolean;
   sidebarConfig: NavConfig;
+  pageProperties?: boolean;
 }
 
 export interface PopulatedSeoConfig {
