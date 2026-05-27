@@ -32,7 +32,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
   const [input, setInput] = useState<UpdateTemplateInput>({
     name: template.name,
     url: template.url,
-    thumbnail: template.thumbnail,
+    thumbnail: template.thumbnail as string,
     description: template.description,
     instructionsPageUrl: template.instructionsPageUrl,
     notionPageUrl: template.notionPageUrl,

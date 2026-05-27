@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "@/styles/styles.css?url";
 import rcp from "react-color-palette/css?url";
+import notionCss from "@/styles/notion.css?url";
+
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Error } from "@/components/error";
@@ -39,21 +41,27 @@ export const Route = createRootRoute({
       { name: "twitter:image", content: "https://nastro.xyz/og.png" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
         href: appCss,
       },
       {
-        rel: "icon",
-        href: "/icon.png",
-      },
-      {
         rel: "stylesheet",
-        href: appCss,
+        href: notionCss,
       },
       {
         rel: "stylesheet",
         href: rcp,
+      },
+      {
+        rel: "icon",
+        href: "/icon.png",
       },
     ],
   }),

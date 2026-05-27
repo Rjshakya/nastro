@@ -1,8 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { liveSiteLoader } from "@/lib/live-site";
+import {
+  handleLiveSiteHtmlLinks,
+  handleLiveSiteStyles,
+  liveSiteLoader,
+} from "@/lib/live-site";
 import { LiveSite } from "./-components/live-site";
 import { Error } from "@/components/error";
+import { getFontUrl, type GoogleFont } from "@/lib/fonts";
+import { computeStyles } from "@/lib/compute-styles";
+import type { SiteSetting } from "@/types/site.setting";
+import { getDefaultSettings } from "@/lib/default-settings";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
@@ -22,6 +30,7 @@ export const Route = createFileRoute("/_live_site/$pageId")({
   head: ({ loaderData }) => {
     const seo = loaderData?.seo;
     const site = loaderData?.site;
+    const typography = site?.setting?.typography;
 
     const scripts: Array<{
       type: "script";
@@ -59,6 +68,10 @@ export const Route = createFileRoute("/_live_site/$pageId")({
       });
     }
 
+    const links = handleLiveSiteHtmlLinks(site);
+
+    const cssVariables = handleLiveSiteStyles(site);
+
     return {
       meta: [
         { title: seo?.title || site?.name || "Nastro" },
@@ -72,14 +85,51 @@ export const Route = createFileRoute("/_live_site/$pageId")({
         { name: "twitter:image", content: seo?.ogImage },
       ],
       scripts,
-      links: site?.customCssLink ? [{ rel: "stylesheet", href: site.customCssLink }] : [],
+      links,
+      styles: [
+        {
+          children: `
+
+    
+           .notion {
+
+              --primary-font:${typography?.font?.primary};
+                           
+
+              ${cssVariables}
+        
+
+              .notion-page-icon-hero.notion-page-icon-image {
+                width: 100%;
+                height: fit-content;
+                margin-left: 0;
+                display: flex;
+                justify-content: start;
+                padding-inline: 16px;
+              }
+
+              .notion-page-icon-hero.notion-page-icon-image .notion-page-icon {
+                    width: 124px;
+                    height: 124px;
+              }
+          }
+
+        
+
+      `,
+        },
+      ],
     };
   },
 
   ssr: true,
-  errorComponent:Error
+  errorComponent: Error,
 });
 
 function LiveSitePage() {
-  return <LiveSite />;
+  return (
+    <>
+      <LiveSite />
+    </>
+  );
 }

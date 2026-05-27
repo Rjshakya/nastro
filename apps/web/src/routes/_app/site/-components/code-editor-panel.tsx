@@ -1,18 +1,18 @@
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { client } from "@/lib/api-client";
 import { authClient } from "@/lib/auth-client";
 import { useCodePreviewStore } from "@/stores/code-preview.store";
+import { useCodeEditorPanelStore } from "@/stores/code-editor-panel.store";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
 import type { Site } from "@/types/site";
 import Editor from "@monaco-editor/react";
@@ -20,6 +20,7 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
 
 interface CodeTabProps {
   site: Site;
@@ -173,23 +174,28 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
     return handleSaveCss();
   };
 
+  const { open, onOpenChange } = useCodeEditorPanelStore();
+
   return (
-    <Dialog modal={false}>
-      <DialogTrigger render={<Button variant={"secondary"}>Code</Button>} />
-      <DialogContent
+    <Sheet
+      disablePointerDismissal={true}
+      modal={false}
+      open={open}
+      onOpenChange={onOpenChange}
+    >
+      <SheetContent
         showCloseButton={false}
         overlayClassName="hidden"
-        className={"sm:max-w-3xl p-3 rounded-md "}
+        side="right"
+        className={cn(" data-[side=right]:sm:max-w-xl w-full ")}
       >
-        <DialogHeader className="gap-1 flex flex-row items-center justify-between">
+        <SheetHeader className="gap-1 flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1">
-            <DialogTitle className={"flex justify-between items-center"}>
-              Code editor
-            </DialogTitle>
-            <DialogDescription className={""}>
+            <SheetTitle>Code editor</SheetTitle>
+            <SheetDescription>
               Edit your custom CSS and JS here. Remember to save after making
               changes.
-            </DialogDescription>
+            </SheetDescription>
           </div>
 
           <Toggle
@@ -200,36 +206,32 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
           >
             {toggleJs ? "Javascript" : "CSS"}
           </Toggle>
-        </DialogHeader>
-        <Editor
-          height={"50vh"}
-          language={toggleJs ? "javascript" : "css"}
-          value={toggleJs ? previewScript : previewCss}
-          onChange={(code) => {
-            if (toggleJs) {
-              setPreviewScript(code || "");
-            } else {
-              setPreviewCss(code || "");
-            }
-          }}
-          className="rounded-sm ring-ring/40 ring overflow-hidden p-2"
-          theme={theme === "dark" ? "vs-dark" : "light"}
-          keepCurrentModel={true}
-        />
+        </SheetHeader>
+        <div className="flex-1 min-h-0 px-4">
+          <Editor
+            height="100%"
+            language={toggleJs ? "javascript" : "css"}
+            value={toggleJs ? previewScript : previewCss}
+            onChange={(code) => {
+              if (toggleJs) {
+                setPreviewScript(code || "");
+              } else {
+                setPreviewCss(code || "");
+              }
+            }}
+            className="rounded-sm ring-ring/40 ring overflow-hidden p-2"
+            theme={theme === "dark" ? "vs-dark" : "light"}
+            keepCurrentModel={true}
+          />
+        </div>
 
-        <DialogFooter className="">
-          <Button disabled={isUpdating} className={"px-4"} onClick={handleSave}>
+        <SheetFooter className="sm:flex flex-row items-center gap-1 justify-end ">
+          <Button size={"lg"} disabled={isUpdating} onClick={handleSave}>
             Save
           </Button>
-          <DialogClose
-            className={
-              "hover:bg-secondary hover:transition-colors duration-300 ease-in-out px-4 py-2 rounded-full"
-            }
-          >
-            Close
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <SheetClose render={<Button variant="outline">Close</Button>} />
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };

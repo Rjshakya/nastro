@@ -145,6 +145,17 @@ export function LayoutTab() {
           onCheckedChange={(c) => update({ sidebar: c as boolean })}
         />
       </div>
+
+      <div className="flex items-center justify-between">
+        <Label htmlFor="page-props" className="flex-1">
+          Show Page Properties
+        </Label>
+        <Checkbox
+          id="page-props"
+          checked={!!layout.pageProperties}
+          onCheckedChange={(c) => update({ pageProperties: c as boolean })}
+        />
+      </div>
     </div>
   );
 }

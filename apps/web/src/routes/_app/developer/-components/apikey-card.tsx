@@ -97,7 +97,7 @@ export function ApiKeyCard() {
           </div>
           <CreateApiKeyDialog onSuccess={handleCreateSuccess} />
         </div>
-        <Card className="p-1 rounded-2xl bg-accent">
+        <Card className="p-1 rounded-2xl ">
           <CardContent className="p-0">
             {isLoading ? (
               <div className="text-center py-8 text-muted-foreground">

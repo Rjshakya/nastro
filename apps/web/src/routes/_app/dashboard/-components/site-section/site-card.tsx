@@ -1,4 +1,10 @@
-import { IconTrash, IconSettings, IconArrowUpRight, IconDots, IconLink } from "@tabler/icons-react";
+import {
+  IconTrash,
+  IconSettings,
+  IconArrowUpRight,
+  IconDots,
+  IconLink,
+} from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,7 +21,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Item, ItemContent, ItemTitle, ItemActions } from "@/components/ui/item";
+import {
+  Item,
+  ItemContent,
+  ItemTitle,
+  ItemActions,
+} from "@/components/ui/item";
 
 interface SiteCardProps {
   site: Site;
@@ -24,14 +35,24 @@ interface SiteCardProps {
 
 export function SiteCard({ site, className }: SiteCardProps) {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
-  const url = Env.isDev ? `/${site.rootPageId}` : createSlugUrl(site.slug) + site.rootPageId;
+  const url = Env.isDev
+    ? `/${site.rootPageId}`
+    : createSlugUrl(site.slug) + site.rootPageId;
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.rootPageId || "", siteId: site.id });
   };
 
-  const handleCopyLink = ({ rootPageId, slug }: { rootPageId: string; slug: string }) => {
+  const handleCopyLink = ({
+    rootPageId,
+    slug,
+  }: {
+    rootPageId: string;
+    slug: string;
+  }) => {
     if (import.meta.env.VITE_PUBLIC_ENVIRONMENT === "development") {
-      navigator.clipboard.writeText(`https://${window.location.origin}/${rootPageId}?slug=${slug}`);
+      navigator.clipboard.writeText(
+        `https://${window.location.origin}/${rootPageId}?slug=${slug}`,
+      );
     } else {
       navigator.clipboard.writeText(`https://${slug}.nastro.xyz/${rootPageId}`);
     }
@@ -40,12 +61,7 @@ export function SiteCard({ site, className }: SiteCardProps) {
   };
 
   return (
-    <Item
-      className={cn(
-        " border-0 border-b last:border-b-0 hover:bg-muted/40 transition-colors",
-        className,
-      )}
-    >
+    <Item className={cn(" rounded-xl bg-card hover:bg-accent", className)}>
       <ItemContent>
         <Link
           to="/site/$pageId"
@@ -53,7 +69,7 @@ export function SiteCard({ site, className }: SiteCardProps) {
           search={{ slug: site.slug }}
           className="w-full block"
         >
-          <ItemTitle>{site.name}</ItemTitle>
+          <ItemTitle className="text-base">{site.name}</ItemTitle>
         </Link>
       </ItemContent>
       <ItemActions>

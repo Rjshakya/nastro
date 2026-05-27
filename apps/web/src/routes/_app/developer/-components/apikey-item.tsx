@@ -1,5 +1,4 @@
 import { IconTrash } from "@tabler/icons-react";
-
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import type { ApiKey } from "@/types/apikey";
@@ -32,7 +31,7 @@ export function ApiKeyItem({
   const [enabled, setEnabled] = useState(apiKey.enabled);
 
   return (
-    <Item key={apiKey.id} variant={"outline"} className="rounded-xl bg-card">
+    <Item key={apiKey.id} className="rounded-xl bg-card hover:bg-accent">
       <ItemContent>
         <ItemTitle className="text-base ">{apiKey.name}</ItemTitle>
         <ItemDescription>

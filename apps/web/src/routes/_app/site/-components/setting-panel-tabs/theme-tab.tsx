@@ -173,13 +173,18 @@ export function ThemeTab() {
         />
       </ThemeSection>
 
+      <ThemeSection title="Page Link">
+        <ColorPicker
+          label="Hover"
+          value={theme.pageLink.hover}
+          onChange={(c) =>
+            update({ pageLink: { ...theme.pageLink, hover: c } })
+          }
+        />
+      </ThemeSection>
+
       {/* Roundness */}
       <div className="py-2 grid gap-4">
-        <ColorPicker
-          label="Notion Page Link Hover"
-          value={theme.notionPageLinkHoverBg}
-          onChange={(c) => update({ notionPageLinkHoverBg: c })}
-        />
         <SliderInput
           label="Roundness"
           min={0}
