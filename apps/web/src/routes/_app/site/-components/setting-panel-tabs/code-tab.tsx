@@ -3,10 +3,10 @@ import "prismjs/components/prism-javascript";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { Site } from "@/types/site";
-import { Button } from "@/components/ui/button";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { toast } from "sonner";
 import z from "zod";
+import { useParams } from "@tanstack/react-router";
 
 interface CodeTabProps {
   site: Site;
@@ -16,7 +16,7 @@ const urlSchema = z.url();
 
 export function CodeTab({ site }: CodeTabProps) {
   const { updateSite, isLoading } = useUpdateSite();
-
+  const params = useParams({ from: "/_app/site/$pageId" });
   const handleUpdateCustomCss = async (url: string) => {
     const { success, data } = urlSchema.safeParse(url);
 
@@ -27,13 +27,10 @@ export function CodeTab({ site }: CodeTabProps) {
     try {
       await updateSite({
         input: {
-          name: site.name,
-          rootPageId: site.rootPageId,
-          slug: site.slug,
-          userId: site.userId,
           customCssLink: data,
         },
         siteId: site.id,
+        pageId: params.pageId,
       });
 
       toast.success("CSS saved successfully");
@@ -52,13 +49,10 @@ export function CodeTab({ site }: CodeTabProps) {
     try {
       await updateSite({
         input: {
-          name: site.name,
-          rootPageId: site.rootPageId,
-          slug: site.slug,
-          userId: site.userId,
           customScriptLink: data,
         },
         siteId: site.id,
+        pageId: params.pageId,
       });
 
       toast.success("Script saved successfully");

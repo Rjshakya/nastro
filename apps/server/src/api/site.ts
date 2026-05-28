@@ -1,5 +1,5 @@
 import { DatabaseLive } from "@/db";
-import { sitesInsertSchema } from "@/db/schema/site";
+import { sitesInsertSchema, sitesUpdateSchema } from "@/db/schema/site";
 import { ApiResponse } from "@/lib/api";
 import { Vars } from "@/lib/hono-types";
 import { NotionClientLive } from "@/lib/notion";
@@ -7,7 +7,12 @@ import { authMiddleWare } from "@/middlewares/auth";
 import { SiteRepo } from "@/repo/site";
 import { KVStoreLive } from "@/services/kv-store";
 import { NotionServiceLive } from "@/services/notion/main";
-import { createSite, getSiteBySlugWithPage, isSlugAvailable } from "@/services/site";
+import {
+  createSite,
+  getSiteBySlugWithPage,
+  isSlugAvailable,
+  updateSite,
+} from "@/services/site";
 import { SlugService, SlugServiceLive } from "@/services/slug";
 
 import { zValidator } from "@hono/zod-validator";
@@ -20,6 +25,10 @@ import { BANNED_SUBDOMAINS, SLUG_REGEX } from "@/lib/utils";
 
 const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
+});
+
+const siteUpdateQuerySchema = z.object({
+  pageId: z.string().min(1, "notion pageId is required"),
 });
 
 const SlugSchema = z
@@ -57,9 +66,13 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       const programLayer = Layer.mergeAll(
         DatabaseLive(),
         KVStoreLive,
-        NotionServiceLive().pipe(Layer.provideMerge(Layer.mergeAll(NotionClientLive))),
+        NotionServiceLive().pipe(
+          Layer.provideMerge(Layer.mergeAll(NotionClientLive)),
+        ),
       );
-      const program = getSiteBySlugWithPage(slug, rootPageId).pipe(Effect.provide(programLayer));
+      const program = getSiteBySlugWithPage(slug, rootPageId).pipe(
+        Effect.provide(programLayer),
+      );
 
       const site = await Effect.runPromise(program);
       return c.json(
@@ -116,10 +129,14 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     const programLayer = Layer.mergeAll(
       DatabaseLive(),
-      NotionServiceLive().pipe(Layer.provideMerge(Layer.mergeAll(NotionClientLive))),
+      NotionServiceLive().pipe(
+        Layer.provideMerge(Layer.mergeAll(NotionClientLive)),
+      ),
       SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
     );
-    const program = createSite({ ...input, userId }).pipe(Effect.provide(programLayer));
+    const program = createSite({ ...input, userId }).pipe(
+      Effect.provide(programLayer),
+    );
 
     const site = await Effect.runPromise(program);
 
@@ -141,7 +158,9 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     async (c) => {
       const { slug } = c.req.valid("json");
 
-      const programLayer = Layer.mergeAll(SlugServiceLive.pipe(Layer.provideMerge(KVStoreLive)));
+      const programLayer = Layer.mergeAll(
+        SlugServiceLive.pipe(Layer.provideMerge(KVStoreLive)),
+      );
 
       const program = isSlugAvailable(slug).pipe(Effect.provide(programLayer));
 
@@ -152,34 +171,21 @@ const sitesApp = new Hono<{ Variables: Vars }>()
   .patch(
     "/:id",
     zValidator("param", siteParamsSchema),
-    zValidator("json", sitesInsertSchema),
+    zValidator("query", siteUpdateQuerySchema),
+    zValidator("json", sitesUpdateSchema),
     async (c) => {
-      const userId = c.get("user")?.id as string;
       const { id } = c.req.valid("param");
       const input = c.req.valid("json");
+      const { pageId } = c.req.valid("query");
 
       const programLayer = Layer.mergeAll(
         DatabaseLive(),
         SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
       );
 
-      const program = Effect.gen(function* () {
-        const repo = yield* SiteRepo;
-        const existing = yield* repo.findById("id", id);
-
-        if (!existing || !existing.length) {
-          return yield* Effect.fail("no site found with the provided id");
-        }
-
-        if (input.slug !== existing[0].slug) {
-          const slugService = yield* SlugService;
-          yield* slugService.storeSlug(input.slug);
-          yield* slugService.deleteSlug(existing[0].slug);
-        }
-
-        const site = yield* repo.updateById("id", id, { ...input, userId });
-        return site.length ? site[0] : null;
-      }).pipe(Effect.provide(programLayer));
+      const program = updateSite({ id, input, pageId }).pipe(
+        Effect.provide(programLayer),
+      );
 
       const site = await Effect.runPromise(program);
 

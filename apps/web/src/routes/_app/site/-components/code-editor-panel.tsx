@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import { useUpdateSite } from "@/hooks/use-sites";
 import { client } from "@/lib/api-client";
-import { authClient } from "@/lib/auth-client";
 import { useCodePreviewStore } from "@/stores/code-preview.store";
 import { useCodeEditorPanelStore } from "@/stores/code-editor-panel.store";
-import { useSiteSettingStore } from "@/stores/site.setting.store";
 import type { Site } from "@/types/site";
 import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
@@ -21,6 +19,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Toggle } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
+import { useParams } from "@tanstack/react-router";
 
 interface CodeTabProps {
   site: Site;
@@ -78,13 +77,12 @@ function extractR2Key(url: string): string {
 
 export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   const { theme } = useTheme();
+  const params = useParams({ from: "/_app/site/$pageId" });
   const { updateSite, isLoading: isUpdating } = useUpdateSite();
-  const { settings } = useSiteSettingStore();
   const { previewCss, setPreviewCss, previewScript, setPreviewScript } =
     useCodePreviewStore();
-  const { data: session } = authClient.useSession();
-  const userId = session?.user?.id || "";
 
+  const { open, onOpenChange } = useCodeEditorPanelStore();
   const [savedCssLink, setSavedCssLink] = useState(site.customCssLink);
   const [savedScriptLink, setSavedScriptLink] = useState(site.customScriptLink);
   const [toggleJs, setToggleJs] = useState(false);
@@ -103,15 +101,9 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
       await updateSite({
         siteId: site.id,
         input: {
-          userId,
-          rootPageId: site.rootPageId,
-          name: site.name,
-          slug: site.slug,
-          setting: settings,
-          themeId: site.themeId ?? null,
-          customCssLink: savedCssLink,
           customScriptLink: fileUrl,
         },
+        pageId: params.pageId,
       });
 
       setSavedScriptLink(fileUrl);
@@ -142,15 +134,9 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
       await updateSite({
         siteId: site.id,
         input: {
-          userId,
-          rootPageId: site.rootPageId,
-          name: site.name,
-          slug: site.slug,
-          setting: settings,
-          themeId: site.themeId ?? null,
           customCssLink: fileUrl,
-          customScriptLink: savedScriptLink,
         },
+        pageId: params.pageId,
       });
 
       setSavedCssLink(fileUrl);
@@ -173,8 +159,6 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
     }
     return handleSaveCss();
   };
-
-  const { open, onOpenChange } = useCodeEditorPanelStore();
 
   return (
     <Sheet

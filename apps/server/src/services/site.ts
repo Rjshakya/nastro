@@ -1,6 +1,6 @@
 import { SiteTableInsert, SiteTableSelect } from "@/db/schema/site";
 import { eq } from "drizzle-orm";
-import { Effect } from "effect";
+import { Cause, Effect, Schedule } from "effect";
 import { nanoid } from "nanoid";
 import { KeyManager, withCache } from "@/lib/cache";
 import { SiteRepo } from "@/repo/site";
@@ -10,7 +10,8 @@ import { SlugService } from "./slug";
 import { RepoError, SiteError } from "@/errors/tagged.errors";
 import { SeoRepo } from "@/repo/seo";
 import { SeoConfig, SiteSetting } from "@/types/site.setting";
-import { seoTable } from "@/db/schema/seo";
+import { seoTable, SeoTableInsert } from "@/db/schema/seo";
+import { PgTransaction } from "drizzle-orm/pg-core";
 
 export const getSiteBySlugWithPage = (slug: string, rootPageId: string) =>
   Effect.gen(function* () {
@@ -77,6 +78,7 @@ export const getSiteBySlugWithPage = (slug: string, rootPageId: string) =>
       key: KeyManager.getPageContentKey(rootPageId),
       ttl: 60 * 2,
     });
+
     return { site, page };
   });
 
@@ -108,7 +110,7 @@ export const createSite = Effect.fn("services/site/createSite")((
 
     const slug = yield* slugService.storeSlug(data.slug);
     const siteRecords = yield* siteRepo
-      .insert({ ...data, slug, seo: seoRecord.id })
+      .insert({ ...data, slug })
       .pipe(Effect.catch(onSiteInsertError));
 
     function onSiteInsertError(e: RepoError) {
@@ -120,6 +122,118 @@ export const createSite = Effect.fn("services/site/createSite")((
     }
 
     return siteRecords;
+  });
+});
+
+export const updateSite = Effect.fn("/services/site/updateSite")(({
+  id,
+  input,
+  pageId,
+}: {
+  id: string;
+  input: Partial<SiteTableInsert>;
+  pageId: string;
+}) => {
+  return Effect.gen(function* () {
+    const repo = yield* SiteRepo;
+    const existing = yield* repo.findById("id", id);
+    const slugService = yield* SlugService;
+
+    if (!existing || !existing.length) {
+      return yield* Effect.fail("no site found with the provided id");
+    }
+
+    const isSlugChanged = input?.slug && input?.slug !== existing[0].slug;
+
+    if (isSlugChanged) {
+      yield* slugService.storeSlug(input.slug as string);
+      yield* slugService.deleteSlug(existing[0].slug);
+    }
+
+    const siteSetting = input.setting as SiteSetting;
+    const seoInput = siteSetting.seo;
+
+    const handleSeoUpdate = async (
+      tx: PgTransaction<any>,
+      input: SeoTableInsert,
+      pageId: string,
+    ) => {
+      const existingRecords = await tx
+        .select({ id: seoTable.id })
+        .from(seoTable)
+        .where(eq(seoTable.pageId, pageId));
+
+      if (existingRecords?.length) {
+        const record = await tx
+          .update(seoTable)
+          .set(input)
+          .where(eq(seoTable.pageId, pageId))
+          .returning();
+        return record;
+      }
+
+      const record = await tx.insert(seoTable).values(input).returning();
+      return record;
+    };
+
+    const onUpdateSiteError = <T>(e: Cause.Cause<T>) =>
+      Effect.gen(function* () {
+        Cause.pretty(e);
+
+        if (!isSlugChanged) return;
+        yield* slugService.deleteSlug(input.slug as string);
+        yield* slugService.storeSlug(existing[0].slug);
+      }).pipe(
+        Effect.tapError((e) => {
+          console.error("failed to cleanup on UpdatedSite Record", e);
+          return Effect.succeed(null);
+        }),
+        Effect.retry(Schedule.recurs(2)),
+        Effect.ignore,
+      );
+
+    const updatedSite = yield* repo
+      .execute((db, table) => {
+        // updating both site and seo
+        const transaction = db.transaction(async (tx) => {
+          const [updatedSiteRecord] = await tx
+            .update(table)
+            .set({ ...input, setting: { ...siteSetting, seo: {} } })
+            .where(eq(table.id, id))
+            .returning();
+
+          await handleSeoUpdate(
+            tx as PgTransaction<any>,
+            {
+              title: seoInput?.title as string,
+              userId: updatedSiteRecord.userId,
+              pageId,
+              description: seoInput?.description,
+              ogImageLink: seoInput?.ogImage,
+              pageUrl: seoInput?.url,
+            },
+            pageId,
+          );
+
+          return updatedSiteRecord;
+        });
+
+        return Effect.tryPromise({
+          try: async () => {
+            return await transaction;
+          },
+          catch: (e) => {
+            console.error(e);
+            return new RepoError({
+              message: String(e),
+              type: "FAILED_TO_EXECUTE",
+            });
+          },
+        });
+      })
+      .pipe(Effect.onError(onUpdateSiteError));
+
+    return updatedSite;
   });
 });
 

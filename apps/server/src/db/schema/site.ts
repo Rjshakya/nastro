@@ -1,7 +1,11 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, jsonb, index } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import {
+  createInsertSchema,
+  createSelectSchema,
+  createUpdateSchema,
+} from "drizzle-zod";
 import { v7 } from "uuid";
 import { nanoid } from "nanoid";
 import { themeTable } from "./theme";
@@ -26,7 +30,7 @@ export const sites = pgTable(
       .$defaultFn(() => nanoid(13)),
     name: text("site_name").notNull(),
     setting: jsonb("site_setting"),
-    seo: text().references(() => seoTable.id),
+    //seo: text().references(() => seoTable.id),
     thumbnail: text("site_thumbnail_url)"),
     themeId: text().references(() => themeTable.id),
     templateId: text().references(() => templateTable.id),
@@ -53,6 +57,7 @@ export const sitesRelations = relations(sites, ({ one }) => ({
 
 export const sitesInsertSchema = createInsertSchema(sites);
 export const sitesSelectSchema = createSelectSchema(sites);
+export const sitesUpdateSchema = createUpdateSchema(sites);
 
 export type SiteTableSelect = typeof sites.$inferSelect;
 export type SiteTableInsert = typeof sites.$inferInsert;

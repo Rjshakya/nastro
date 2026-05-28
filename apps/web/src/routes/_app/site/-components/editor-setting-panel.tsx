@@ -25,9 +25,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { Site } from "@/types/site";
-import { authClient } from "@/lib/auth-client";
 import { ThemeSelector } from "./theme/theme-selector";
 import { useThemeStore } from "@/stores/theme-store";
+import { useParams } from "@tanstack/react-router";
 
 interface SettingsDrawerProps {
   site: Site;
@@ -36,10 +36,9 @@ interface SettingsDrawerProps {
 export function SettingsPanel({ site }: SettingsDrawerProps) {
   const { settings } = useSiteSettingStore((s) => s);
   const { theme } = useThemeStore();
+  const params = useParams({ from: "/_app/site/$pageId" });
   const { open, onOpenChange } = useSiteSettingPanel();
   const { updateSite, isLoading } = useUpdateSite();
-  const { data: session } = authClient.useSession();
-  const userId = session?.user?.id || "";
 
   const [siteName, setSiteName] = useState(site.name);
   const [slug, setSlug] = useState(site.slug);
@@ -49,13 +48,12 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
       await updateSite({
         siteId: site.id,
         input: {
-          userId,
-          rootPageId: site.rootPageId,
           name: siteName,
           slug,
           setting: settings,
           themeId: theme?.id ?? null,
         },
+        pageId: params.pageId,
       });
       toast.success("Settings saved");
     } catch {
