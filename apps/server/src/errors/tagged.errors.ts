@@ -100,3 +100,18 @@ export class ApiKeyError extends Data.TaggedError("ApiKeyError")<{
   type: ApiKeyErrorType;
   code?: number;
 }> {}
+
+// Custom Domain Error Types
+export type CustomDomainErrorType =
+  | "CF_ERROR"
+  | "NOT_FOUND"
+  | "INVALID_HOSTNAME"
+  | "ALREADY_EXISTS"
+  | "MISSING_CF_ID"
+  | "UNKNOWN";
+
+export class CustomDomainError extends Data.TaggedError("CustomDomainError")<{
+  message: string;
+  type: CustomDomainErrorType;
+  code?: number;
+}> {}

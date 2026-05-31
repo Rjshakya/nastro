@@ -1,5 +1,10 @@
 import * as React from "react";
-import { IconCode, IconLayoutDashboardFilled, IconTemplate, IconTemplateFilled } from "@tabler/icons-react";
+import {
+  IconCode,
+  IconLayoutDashboardFilled,
+  IconLink,
+  IconTemplateFilled,
+} from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -32,6 +37,11 @@ const data = {
       title: "Templates",
       url: "/templates",
       icon: IconTemplateFilled,
+    },
+    {
+      title: "Custom Domains",
+      url: "/custom-domain",
+      icon: IconLink,
     },
     {
       title: "Developer",

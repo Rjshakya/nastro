@@ -17,6 +17,7 @@ import { Route as Live_sitePageIdRouteImport } from './routes/_live_site/$pageId
 import { Route as AppTemplatesRouteRouteImport } from './routes/_app/templates/route'
 import { Route as AppDeveloperRouteRouteImport } from './routes/_app/developer/route'
 import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/route'
+import { Route as AppCustomDomainRouteRouteImport } from './routes/_app/custom-domain/route'
 import { Route as AppTemplatesIndexRouteImport } from './routes/_app/templates/index'
 import { Route as AppSitePageIdRouteImport } from './routes/_app/site/$pageId'
 import { Route as AppTemplatesInstallTemplateIdRouteImport } from './routes/_app/templates/install/$templateId'
@@ -59,6 +60,11 @@ const AppDashboardRouteRoute = AppDashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppCustomDomainRouteRoute = AppCustomDomainRouteRouteImport.update({
+  id: '/custom-domain',
+  path: '/custom-domain',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppTemplatesIndexRoute = AppTemplatesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -78,6 +84,7 @@ const AppTemplatesInstallTemplateIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
+  '/custom-domain': typeof AppCustomDomainRouteRoute
   '/dashboard': typeof AppDashboardRouteRoute
   '/developer': typeof AppDeveloperRouteRoute
   '/templates': typeof AppTemplatesRouteRouteWithChildren
@@ -89,6 +96,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
+  '/custom-domain': typeof AppCustomDomainRouteRoute
   '/dashboard': typeof AppDashboardRouteRoute
   '/developer': typeof AppDeveloperRouteRoute
   '/$pageId': typeof Live_sitePageIdRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/_app/custom-domain': typeof AppCustomDomainRouteRoute
   '/_app/dashboard': typeof AppDashboardRouteRoute
   '/_app/developer': typeof AppDeveloperRouteRoute
   '/_app/templates': typeof AppTemplatesRouteRouteWithChildren
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/custom-domain'
     | '/dashboard'
     | '/developer'
     | '/templates'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/custom-domain'
     | '/dashboard'
     | '/developer'
     | '/$pageId'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_marketing'
+    | '/_app/custom-domain'
     | '/_app/dashboard'
     | '/_app/developer'
     | '/_app/templates'
@@ -212,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/custom-domain': {
+      id: '/_app/custom-domain'
+      path: '/custom-domain'
+      fullPath: '/custom-domain'
+      preLoaderRoute: typeof AppCustomDomainRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/templates/': {
       id: '/_app/templates/'
       path: '/'
@@ -250,6 +269,7 @@ const AppTemplatesRouteRouteWithChildren =
   AppTemplatesRouteRoute._addFileChildren(AppTemplatesRouteRouteChildren)
 
 interface AppRouteRouteChildren {
+  AppCustomDomainRouteRoute: typeof AppCustomDomainRouteRoute
   AppDashboardRouteRoute: typeof AppDashboardRouteRoute
   AppDeveloperRouteRoute: typeof AppDeveloperRouteRoute
   AppTemplatesRouteRoute: typeof AppTemplatesRouteRouteWithChildren
@@ -257,6 +277,7 @@ interface AppRouteRouteChildren {
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppCustomDomainRouteRoute: AppCustomDomainRouteRoute,
   AppDashboardRouteRoute: AppDashboardRouteRoute,
   AppDeveloperRouteRoute: AppDeveloperRouteRoute,
   AppTemplatesRouteRoute: AppTemplatesRouteRouteWithChildren,

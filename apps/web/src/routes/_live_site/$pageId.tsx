@@ -123,22 +123,6 @@ export const Route = createFileRoute("/_live_site/$pageId")({
   errorComponent: Error,
 });
 
-/*
- *
- *  :root {
-              ${cssVariables}
-          
-           }
-
-          .dark {
-
-           ${darkCssVars}
-       
-          }
-
-           ${site?.setting?.general?.isDark ? darkCssVars : cssVariables}
- * **/
-
 function LiveSitePage() {
   return (
     <>

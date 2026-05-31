@@ -7,4 +7,6 @@ export type {
   TemplateTableSelect,
   ThemeTableInsert,
   ThemeTableSelect,
+  CustomDomainTableInsert,
+  CustomDomainTableSelect,
 } from "server/domain";
