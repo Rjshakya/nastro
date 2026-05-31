@@ -1,5 +1,5 @@
 import { NotionRenderer } from "@/components/notion/notion-renderer";
-import "@/styles/notion.css";
+// import "@/styles/notion.css";
 import { SiteEditorHeader } from "./editor-header";
 import { SettingsPanel } from "./editor-setting-panel";
 import { useTheme } from "next-themes";

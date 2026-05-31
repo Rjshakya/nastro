@@ -7,6 +7,7 @@ import {
 } from "@/lib/live-site";
 import { LiveSite } from "./-components/live-site";
 import { Error } from "@/components/error";
+import type { SiteSetting } from "@/types/site.setting";
 
 const siteSearchSchema = z.object({
   slug: z.string().optional(),
@@ -66,7 +67,10 @@ export const Route = createFileRoute("/_live_site/$pageId")({
 
     const links = handleLiveSiteHtmlLinks(site);
 
-    const cssVariables = handleLiveSiteStyles(site);
+    const cssVariables = handleLiveSiteStyles(
+      site?.setting as SiteSetting,
+      false,
+    );
 
     return {
       meta: [
@@ -84,14 +88,14 @@ export const Route = createFileRoute("/_live_site/$pageId")({
       links,
       styles: [
         {
+          id: "LIVE_SITE_STYLES",
           children: `
-
     
-           .notion {
+          .notion {
 
               --primary-font:${typography?.font?.primary ?? "Manrope Variable"};                    
 
-              ${cssVariables}
+              ${cssVariables};
         
 
               .notion-page-icon-hero.notion-page-icon-image {
@@ -109,8 +113,6 @@ export const Route = createFileRoute("/_live_site/$pageId")({
               }
           }
 
-        
-
       `,
         },
       ],
@@ -120,6 +122,22 @@ export const Route = createFileRoute("/_live_site/$pageId")({
   ssr: true,
   errorComponent: Error,
 });
+
+/*
+ *
+ *  :root {
+              ${cssVariables}
+          
+           }
+
+          .dark {
+
+           ${darkCssVars}
+       
+          }
+
+           ${site?.setting?.general?.isDark ? darkCssVars : cssVariables}
+ * **/
 
 function LiveSitePage() {
   return (

@@ -72,12 +72,12 @@
     {
       "bucket_name": "nastro-templates-assets",
       "binding": "TEMPLATES_BUCKET",
-      "remote": false,
+      "remote": true,
     },
     {
       "bucket_name": "nastro-sites-assets",
       "binding": "SITES_BUCKET",
-      "remote": false,
+      "remote": true,
     },
   ],
 }

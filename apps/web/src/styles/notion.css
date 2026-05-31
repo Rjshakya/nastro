@@ -109,9 +109,9 @@
 /* ═══════════════════════════════════════════════════════════════ */
 .notion-header {
   position: sticky;
-  top: 1;
+  top: 0;
   left: 0;
-  z-index: 50;
+  /* z-index: 10; */
   width: 100%;
   overflow: hidden;
   height: fit-content;
@@ -132,7 +132,7 @@
 /* ═══════════════════════════════════════════════════════════════ */
 .notion-collection-card {
   background-color: var(--ns-card-bg) !important;
-  border: 1px solid var(--border) !important;
+  border: 1px solid var(--ns-card-bg) !important;
   border-radius: var(--ns-radius) !important;
   color: var(--ns-card-text);
   box-shadow: none !important;

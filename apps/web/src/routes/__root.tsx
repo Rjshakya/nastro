@@ -2,9 +2,8 @@ import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "@/styles/styles.css?url";
-import rcp from "react-color-palette/css?url";
 import notionCss from "@/styles/notion.css?url";
-
+import rcp from "react-color-palette/css?url";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Error } from "@/components/error";

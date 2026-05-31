@@ -9,6 +9,7 @@ import type { SiteSetting } from "@/types/site.setting";
 import { getFontUrl, type GoogleFont } from "./fonts";
 import { getDefaultSettings } from "./default-settings";
 import { computeStyles } from "./compute-styles";
+import type { CSSProperties } from "react";
 
 const resolveSlug = (baseSlug: string) => {
   if (baseSlug) {
@@ -88,9 +89,9 @@ export const handleLiveSiteHtmlLinks = (site?: Site) => {
 
   const links: (
     | React.DetailedHTMLProps<
-      React.LinkHTMLAttributes<HTMLLinkElement>,
-      HTMLLinkElement
-    >
+        React.LinkHTMLAttributes<HTMLLinkElement>,
+        HTMLLinkElement
+      >
     | undefined
   )[] = [];
 
@@ -116,16 +117,27 @@ export const handleLiveSiteHtmlLinks = (site?: Site) => {
   return links;
 };
 
-export const handleLiveSiteStyles = (site?: Site) => {
-  const isDark = !!site?.setting?.general?.isDark;
-  const withDefaults = getDefaultSettings(site?.setting as SiteSetting);
-  const cssVariables = computeStyles(withDefaults, isDark ? "dark" : "light");
+export const handleLiveSiteStyles = (
+  settings?: SiteSetting,
+  isDark?: boolean,
+) => {
+  const _isDark = isDark || settings?.general?.isDark;
+  const withDefaults = getDefaultSettings(settings as SiteSetting);
+  const cssVariables = computeStyles(withDefaults, _isDark ? "dark" : "light");
 
+  const cssVarString = convertCssVarsRecordToStr(cssVariables);
+
+  return cssVarString;
+};
+
+export const convertCssVarsRecordToStr = (
+  cssVariables: Record<string, string> | CSSProperties,
+): string => {
   const cssVarString = Object.entries(cssVariables)
     .map(([k, v]) => {
       return `${k}:${v}`;
     })
-    .join(";");
+    .join(";\n");
 
   return cssVarString;
 };

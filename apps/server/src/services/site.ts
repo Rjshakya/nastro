@@ -14,7 +14,7 @@ import { seoTable, SeoTableInsert } from "@/db/schema/seo";
 import { PgTransaction } from "drizzle-orm/pg-core";
 
 export const getSiteBySlugWithPage = (slug: string, rootPageId: string) =>
-  Effect.gen(function* () {
+  Effect.gen(function*() {
     const siteRepo = yield* SiteRepo;
     const site = yield* siteRepo.execute<SiteTableSelect | null, SiteError>(
       (db, sites) =>
@@ -89,7 +89,7 @@ export const createUniqueSlug = (baseSlug: string) => {
 export const createSite = Effect.fn("services/site/createSite")((
   data: SiteTableInsert,
 ) => {
-  return Effect.gen(function* () {
+  return Effect.gen(function*() {
     const pageId = data.rootPageId;
     yield* checkIsPagePublic(pageId);
 
@@ -114,7 +114,7 @@ export const createSite = Effect.fn("services/site/createSite")((
       .pipe(Effect.catch(onSiteInsertError));
 
     function onSiteInsertError(e: RepoError) {
-      return Effect.gen(function* () {
+      return Effect.gen(function*() {
         yield* slugService.deleteSlug(slug);
         yield* seoRepo.deleteById("id", seoRecord.id);
         return yield* e;
@@ -134,7 +134,7 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
   input: Partial<SiteTableInsert>;
   pageId: string;
 }) => {
-  return Effect.gen(function* () {
+  return Effect.gen(function*() {
     const repo = yield* SiteRepo;
     const existing = yield* repo.findById("id", id);
     const slugService = yield* SlugService;
@@ -151,7 +151,7 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
     }
 
     const siteSetting = input.setting as SiteSetting;
-    const seoInput = siteSetting.seo;
+    const seoInput = siteSetting?.seo;
 
     const handleSeoUpdate = async (
       tx: PgTransaction<any>,
@@ -177,7 +177,7 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
     };
 
     const onUpdateSiteError = <T>(e: Cause.Cause<T>) =>
-      Effect.gen(function* () {
+      Effect.gen(function*() {
         Cause.pretty(e);
 
         if (!isSlugChanged) return;
@@ -205,7 +205,7 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
           await handleSeoUpdate(
             tx as PgTransaction<any>,
             {
-              title: seoInput?.title as string,
+              title: seoInput?.title ?? "",
               userId: updatedSiteRecord.userId,
               pageId,
               description: seoInput?.description,
@@ -238,7 +238,7 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
 });
 
 export const checkIsPagePublic = (pageId: string) =>
-  Effect.gen(function* () {
+  Effect.gen(function*() {
     const notion = yield* NotionService;
     const page = yield* notion.getPage(pageId);
     return { page, pageId, isPublic: !!page };
@@ -258,7 +258,7 @@ export const checkIsPagePublic = (pageId: string) =>
   );
 
 export const isSlugAvailable = (slug: string) =>
-  Effect.gen(function* () {
+  Effect.gen(function*() {
     const slugService = yield* SlugService;
     return yield* slugService.isAvailable(slug);
   });

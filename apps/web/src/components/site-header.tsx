@@ -2,8 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
 import type { NavConfig } from "@/types/site.setting";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const defaultAvatars = [
   "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg",
@@ -13,8 +14,16 @@ export const SiteHeader = ({ header }: { header?: NavConfig }) => {
   const { setIsDark } = useSiteSettingStore();
   const links = header?.links ? Object.entries(header.links) : [];
 
+  const location = useLocation();
+
   return (
-    <header className="notion-header">
+    <header
+      className={cn(
+        "notion-header",
+        `${location.pathname.includes("/site") ? "z-0" : "z-10"}`,
+      )}
+      style={{ zIndex: location.pathname.includes("/site") ? 0 : 10 }}
+    >
       <div className="flex items-center justify-between gap-1">
         <div className="flex gap-1 items-center px-2">
           <Avatar className="size-5">

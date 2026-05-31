@@ -13,6 +13,7 @@ import type { CSSProperties } from "react";
 import { computeStyles } from "../lib/compute-styles";
 import { getDefaultSettings } from "@/lib/default-settings";
 import { loadSiteFonts } from "@/lib/fonts";
+import { convertCssVarsRecordToStr } from "@/lib/live-site";
 
 interface SiteSettingStore {
   settings: PopulatedSiteSetting;
@@ -29,7 +30,7 @@ interface SiteSettingStore {
   updateAnalytics: (analytics: AnalyticsConfig) => void;
   updateGeneral: (general: GeneralConfig) => void;
 
-  setIsDark: (isDark: boolean) => void;
+  setIsDark: (isDark: boolean, settings?: SiteSetting) => void;
 
   reset: (currentSettings?: SiteSetting) => void;
 }
@@ -79,13 +80,52 @@ export const useSiteSettingStore = create<SiteSettingStore>((set, get) => ({
     get().setSettings({ ...get().settings, general });
   },
 
-  setIsDark(isDark) {
-    const settings = {
+  setIsDark(isDark, defaultSettings) {
+    const settings = defaultSettings ?? {
       ...get().settings,
       general: { ...get().settings.general, isDark },
     };
+
     const styles = computeStyles(settings, isDark ? "dark" : "light");
     set({ isDark, settings: getDefaultSettings(settings), styles });
+
+    const typography = get().settings.typography;
+    const liveSiteStyleElem = document.getElementById("LIVE_SITE_STYLES");
+
+    if (!liveSiteStyleElem) return;
+
+    const cssVariables = convertCssVarsRecordToStr(styles);
+    const styleContext = `
+
+    
+           .notion {
+
+              --primary-font:${typography?.font?.primary ?? "Manrope Variable"};                    
+
+              ${cssVariables};
+        
+
+              .notion-page-icon-hero.notion-page-icon-image {
+                width: 100%;
+                height: fit-content;
+                margin-left: 0;
+                display: flex;
+                justify-content: start;
+                padding-inline: 16px;
+              }
+
+              .notion-page-icon-hero.notion-page-icon-image .notion-page-icon {
+                    width: 124px;
+                    height: 124px;
+              }
+          }
+
+        
+
+      `;
+
+    liveSiteStyleElem.textContent = "";
+    liveSiteStyleElem.textContent = styleContext;
   },
 
   reset() {

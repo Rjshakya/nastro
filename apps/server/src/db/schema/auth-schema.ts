@@ -88,7 +88,7 @@ export const verification = pgTable(
 export const apikey = pgTable(
   "apikey",
   {
-    id: text("id").primaryKey().unique(),
+    id: text("id").primaryKey(),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),

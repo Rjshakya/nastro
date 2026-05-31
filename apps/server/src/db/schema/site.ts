@@ -10,7 +10,6 @@ import { v7 } from "uuid";
 import { nanoid } from "nanoid";
 import { themeTable } from "./theme";
 import { templateTable } from "./template";
-import { seoTable } from "./seo";
 
 export const sites = pgTable(
   "site",
