@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
-import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingChar123PageIdChar125RouteImport } from './routes/_marketing/{-$pageId}'
 import { Route as MarketingLoginRouteImport } from './routes/_marketing/login'
 import { Route as Live_sitePageIdRouteImport } from './routes/_live_site/$pageId'
 import { Route as AppTemplatesRouteRouteImport } from './routes/_app/templates/route'
@@ -30,11 +30,12 @@ const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketingIndexRoute = MarketingIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
+const MarketingChar123PageIdChar125Route =
+  MarketingChar123PageIdChar125RouteImport.update({
+    id: '/{-$pageId}',
+    path: '/{-$pageId}',
+    getParentRoute: () => MarketingRouteRoute,
+  } as any)
 const MarketingLoginRoute = MarketingLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -83,24 +84,26 @@ const AppTemplatesInstallTemplateIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof MarketingIndexRoute
+  '/': typeof MarketingRouteRouteWithChildren
   '/custom-domain': typeof AppCustomDomainRouteRoute
   '/dashboard': typeof AppDashboardRouteRoute
   '/developer': typeof AppDeveloperRouteRoute
   '/templates': typeof AppTemplatesRouteRouteWithChildren
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
+  '/{-$pageId}': typeof MarketingChar123PageIdChar125Route
   '/site/$pageId': typeof AppSitePageIdRoute
   '/templates/': typeof AppTemplatesIndexRoute
   '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof MarketingIndexRoute
+  '/': typeof MarketingRouteRouteWithChildren
   '/custom-domain': typeof AppCustomDomainRouteRoute
   '/dashboard': typeof AppDashboardRouteRoute
   '/developer': typeof AppDeveloperRouteRoute
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
+  '/{-$pageId}': typeof MarketingChar123PageIdChar125Route
   '/site/$pageId': typeof AppSitePageIdRoute
   '/templates': typeof AppTemplatesIndexRoute
   '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
@@ -115,7 +118,7 @@ export interface FileRoutesById {
   '/_app/templates': typeof AppTemplatesRouteRouteWithChildren
   '/_live_site/$pageId': typeof Live_sitePageIdRoute
   '/_marketing/login': typeof MarketingLoginRoute
-  '/_marketing/': typeof MarketingIndexRoute
+  '/_marketing/{-$pageId}': typeof MarketingChar123PageIdChar125Route
   '/_app/site/$pageId': typeof AppSitePageIdRoute
   '/_app/templates/': typeof AppTemplatesIndexRoute
   '/_app/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
@@ -130,6 +133,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/$pageId'
     | '/login'
+    | '/{-$pageId}'
     | '/site/$pageId'
     | '/templates/'
     | '/templates/install/$templateId'
@@ -141,6 +145,7 @@ export interface FileRouteTypes {
     | '/developer'
     | '/$pageId'
     | '/login'
+    | '/{-$pageId}'
     | '/site/$pageId'
     | '/templates'
     | '/templates/install/$templateId'
@@ -154,7 +159,7 @@ export interface FileRouteTypes {
     | '/_app/templates'
     | '/_live_site/$pageId'
     | '/_marketing/login'
-    | '/_marketing/'
+    | '/_marketing/{-$pageId}'
     | '/_app/site/$pageId'
     | '/_app/templates/'
     | '/_app/templates/install/$templateId'
@@ -182,11 +187,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_marketing/': {
-      id: '/_marketing/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof MarketingIndexRouteImport
+    '/_marketing/{-$pageId}': {
+      id: '/_marketing/{-$pageId}'
+      path: '/{-$pageId}'
+      fullPath: '/{-$pageId}'
+      preLoaderRoute: typeof MarketingChar123PageIdChar125RouteImport
       parentRoute: typeof MarketingRouteRoute
     }
     '/_marketing/login': {
@@ -290,12 +295,12 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 
 interface MarketingRouteRouteChildren {
   MarketingLoginRoute: typeof MarketingLoginRoute
-  MarketingIndexRoute: typeof MarketingIndexRoute
+  MarketingChar123PageIdChar125Route: typeof MarketingChar123PageIdChar125Route
 }
 
 const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
   MarketingLoginRoute: MarketingLoginRoute,
-  MarketingIndexRoute: MarketingIndexRoute,
+  MarketingChar123PageIdChar125Route: MarketingChar123PageIdChar125Route,
 }
 
 const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(

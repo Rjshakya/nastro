@@ -44,6 +44,7 @@ export const sites = pgTable(
   (table) => [
     index("site_slug_idx").on(table.slug),
     index("site_pageId_idx").on(table.rootPageId),
+    index("site_userId_idx").on(table.userId),
   ],
 );
 

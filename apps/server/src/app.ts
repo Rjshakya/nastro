@@ -36,7 +36,13 @@ export const app = new Hono<{ Variables: Vars }>()
   .use(
     "*",
     cors({
-      origin: (origin) => {
+      origin: (origin, c) => {
+        const path = c.req.path;
+
+        if (path === "/api/site") {
+          return origin || "*";
+        }
+
         if (origin.includes(".nastro.xyz") || origin.includes("nastro.site")) {
           return origin;
         }
@@ -60,6 +66,7 @@ export const app = new Hono<{ Variables: Vars }>()
 
     const getCode = (code: number | undefined) => {
       if (!code) return 500;
+      if (code > 500) return 500;
       return code as ContentfulStatusCode;
     };
 

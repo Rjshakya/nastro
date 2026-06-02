@@ -1,6 +1,7 @@
 import { DatabaseLive } from "@/db";
 import { ApiResponse } from "@/lib/api";
 import { Vars } from "@/lib/hono-types";
+import { NotionClientLive } from "@/lib/notion";
 import { authMiddleWare } from "@/middlewares/auth";
 import { CustomDomainRepo } from "@/repo/custom-domain";
 import {
@@ -8,17 +9,71 @@ import {
   CustomDomainService,
   CustomDomainServiceLive,
 } from "@/services/custom-domain";
+import { KVStoreLive } from "@/services/kv-store";
+import { NotionServiceLive } from "@/services/notion/main";
 import { zValidator } from "@hono/zod-validator";
 import { Effect, Layer } from "effect";
 import { Hono } from "hono";
 import { z } from "zod";
+import { rateLimiter } from "hono-rate-limiter";
+import { env } from "cloudflare:workers";
+import { getConnInfo } from "hono/cloudflare-workers";
 
 const createCustomDomainSchema = z.object({
   siteId: z.string().min(1, "Site ID is required"),
   hostName: z.string().min(1, "Hostname is required"),
 });
 
+const getSiteQuerySchema = z.object({
+  hostname: z.string().min(1, "Hostname is required"),
+  pageId: z.string().optional(),
+});
+
 const customDomainApp = new Hono<{ Variables: Vars }>()
+  .get(
+    "/site",
+    rateLimiter({
+      binding: env.SITE_READ_LIMITER,
+      keyGenerator(c) {
+        const info = getConnInfo(c);
+        return info.remote.address ?? c.req.path;
+      },
+      message: "Rate limit exceeded",
+    }),
+    zValidator("query", getSiteQuerySchema),
+    async (c) => {
+      const { hostname, pageId } = c.req.valid("query");
+
+      const programLayer = Layer.mergeAll(
+        KVStoreLive,
+        NotionServiceLive().pipe(
+          Layer.provideMerge(Layer.mergeAll(NotionClientLive)),
+        ),
+        CustomDomainServiceLive.pipe(
+          Layer.provideMerge(
+            Layer.mergeAll(ClouflareConfigLive, DatabaseLive()),
+          ),
+        ),
+      );
+
+      const program = Effect.gen(function* () {
+        const service = yield* CustomDomainService;
+        return yield* service.getSiteByCustomDomain({
+          hostname,
+          pageId,
+        });
+      }).pipe(Effect.provide(programLayer));
+
+      const result = await Effect.runPromise(program);
+
+      return c.json(
+        ApiResponse({
+          data: result,
+          message: "Custom domain site retrieved successfully",
+        }),
+      );
+    },
+  )
   .use(authMiddleWare())
   .get("/", async (c) => {
     const userId = c.get("user")?.id as string;

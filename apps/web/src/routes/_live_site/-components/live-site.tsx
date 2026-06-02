@@ -1,23 +1,36 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { NotionRenderer } from "@/components/notion/notion-renderer";
 import type { SiteSetting } from "@/types/site.setting";
+import type { Site } from "@/types/site";
+import type { ExtendedRecordMap } from "notion-types";
 import { useEffect } from "react";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
 
 const liveSiteRoute = getRouteApi("/_live_site/$pageId");
 
-export function LiveSite() {
-  const data = liveSiteRoute.useLoaderData();
-  const { pageId } = liveSiteRoute.useParams();
-  const { slug } = liveSiteRoute.useLoaderDeps();
+export interface LiveSiteContentProps {
+  data: {
+    site?: Site;
+    page?: ExtendedRecordMap;
+    seo?: {
+      title?: string;
+      description?: string;
+      pageUrl?: string;
+      ogImage?: string;
+    };
+  };
+  pageId: string;
+  slug: string;
+}
 
+export function LiveSiteContent({ data, pageId, slug }: LiveSiteContentProps) {
   const site = data?.site;
   const settings = site?.setting as SiteSetting;
   const { setSettings } = useSiteSettingStore();
 
   useEffect(() => {
     setSettings(settings);
-  }, []);
+  }, [settings]);
 
   if (!data.page || !data.site) {
     return (
@@ -32,10 +45,18 @@ export function LiveSite() {
       <NotionRenderer
         pageId={pageId}
         recordMap={data.page}
-        slug={slug || ""}
+        slug={slug}
         settings={settings}
         styles={{}}
       />
     </main>
   );
+}
+
+export function LiveSite() {
+  const data = liveSiteRoute.useLoaderData();
+  const { pageId } = liveSiteRoute.useParams();
+  const { slug } = liveSiteRoute.useLoaderDeps();
+
+  return <LiveSiteContent data={data} pageId={pageId} slug={slug || ""} />;
 }

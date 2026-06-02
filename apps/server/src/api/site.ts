@@ -22,6 +22,7 @@ import { z } from "zod";
 import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
 import { BANNED_SUBDOMAINS, SLUG_REGEX } from "@/lib/utils";
+import { getConnInfo } from "hono/cloudflare-workers";
 
 const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
@@ -55,7 +56,8 @@ const sitesApp = new Hono<{ Variables: Vars }>()
     rateLimiter({
       binding: env.SITE_READ_LIMITER,
       keyGenerator(c) {
-        return c.req.path;
+        const info = getConnInfo(c);
+        return info.remote.address ?? c.req.path;
       },
       message: "Rate limit exceeded",
     }),
