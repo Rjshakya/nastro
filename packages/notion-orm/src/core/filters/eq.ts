@@ -1,4 +1,9 @@
-import { EqColumnType, Filter, FilterByID, FilterColumnTypeMap } from "./types.js";
+import {
+  EqColumnType,
+  Filter,
+  FilterByID,
+  FilterColumnTypeMap,
+} from "./types.js";
 import type { Column } from "../types.js";
 
 export function eq(column: "id", value: string): FilterByID;

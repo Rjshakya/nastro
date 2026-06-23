@@ -213,7 +213,8 @@
   }
 }
 
-.notion-collection-view-tabs-row .notion-collection-view-tabs-content-item:hover {
+.notion-collection-view-tabs-row
+  .notion-collection-view-tabs-content-item:hover {
   background-color: var(--ns-tab-active);
   border-radius: var(--ns-radius);
 
@@ -222,7 +223,8 @@
   }
 }
 
-.notion-collection-view-tabs-row .notion-collection-view-tabs-content-item-active {
+.notion-collection-view-tabs-row
+  .notion-collection-view-tabs-content-item-active {
   border-bottom: 0;
   background-color: var(--ns-tab-active);
   border-radius: var(--ns-radius);

@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 import {
   IconWorld,
   IconBrandNotion,
@@ -8,10 +8,10 @@ import {
   IconSearch,
   IconEye,
   IconBrandGoogleAnalytics,
-} from "@tabler/icons-react"
-import { motion } from "motion/react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+} from "@tabler/icons-react";
+import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const features = [
   {
@@ -69,7 +69,7 @@ const features = [
     bgColor: "bg-secondary",
     span: "md:col-span-2",
   },
-]
+];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -80,7 +80,7 @@ const containerVariants = {
       delayChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -92,7 +92,7 @@ const itemVariants = {
       ease: [0.4, 0, 0.2, 1] as const,
     },
   },
-}
+};
 
 export function FeaturesGrid() {
   return (
@@ -106,7 +106,7 @@ export function FeaturesGrid() {
           viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h2 className="max-w-lg text-4xl font-medium tracking-[-0.06em] sm:text-4xl">
+          <h2 className="max-w-lg text-4xl font-semibold tracking-[-0.06em] sm:text-4xl">
             Everything you need
           </h2>
           <p className="mb-12 max-w-md text-sm font-medium text-muted-foreground">
@@ -156,5 +156,5 @@ export function FeaturesGrid() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

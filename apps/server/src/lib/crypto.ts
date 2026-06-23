@@ -9,7 +9,7 @@ export const generateApiKey = (): Effect.Effect<{
   rawKey: string;
   keyHash: string;
 }> => {
-  return Effect.gen(function*() {
+  return Effect.gen(function* () {
     const keyId = v7();
     const keyPart = nanoid(32);
     const rawKey = `${API_KEY_PREFIX}_${keyPart}`;

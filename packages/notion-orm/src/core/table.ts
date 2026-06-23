@@ -4,7 +4,9 @@ import type { Column } from "./types.ts";
  * Table definition structure
  * Represents a complete Notion database schema
  */
-export interface NotionTable<TProperties extends Record<string, Column> = Record<string, Column>> {
+export interface NotionTable<
+  TProperties extends Record<string, Column> = Record<string, Column>,
+> {
   _type: "table";
   title: string;
   properties: TProperties;

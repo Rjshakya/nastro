@@ -172,7 +172,10 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
   ): NotionApi<NextOutput> {
     const newSource = new NotionApi<NextOutput>({ token: this.options.token });
     newSource.result = this.result as Promise<NextOutput> | null;
-    newSource.plugins = [...this.plugins, plugin as (input: unknown) => unknown];
+    newSource.plugins = [
+      ...this.plugins,
+      plugin as (input: unknown) => unknown,
+    ];
 
     return newSource;
   }
@@ -186,7 +189,9 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
    */
   fetch(pageId: string, options?: { startCursor?: string }): this {
     // Fetch raw content from Notion
-    this.result = runPage({ token: this.options.token, ...options })(pageId) as Promise<Output>;
+    this.result = runPage({ token: this.options.token, ...options })(
+      pageId,
+    ) as Promise<Output>;
     return this;
   }
 
@@ -217,7 +222,9 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
     return this.getDataBase(id)
       .then((db) => {
         if (!db) {
-          throw new Error(`Database with id ${id} not found or has no data sources`);
+          throw new Error(
+            `Database with id ${id} not found or has no data sources`,
+          );
         }
 
         const datasource = db.data_sources[0].id;
@@ -238,7 +245,10 @@ export class NotionApi<Output = Page> extends BaseNotionApi {
  */
 export function createNotionApi(options: {
   token: string;
-  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+  fetcher?: (
+    input: string | URL | Request,
+    init?: RequestInit,
+  ) => Promise<Response>;
 }): NotionApi<Page> {
   return new NotionApi(options);
 }

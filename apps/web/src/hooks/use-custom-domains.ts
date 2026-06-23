@@ -29,28 +29,24 @@ export const useCustomDomains = () => {
 
 export const useDomainStatus = (id: string | null) => {
   const fetcher = (key: string) => getDomainStatus(key.split("/").pop()!);
-  const swr = useSWR(
-    id ? DOMAIN_STATUS_KEY(id) : null,
-    fetcher,
-    {
-      refreshInterval: (data) => {
-        if (!data || !data.status) return 0;
-        const status = data.status;
+  const swr = useSWR(id ? DOMAIN_STATUS_KEY(id) : null, fetcher, {
+    refreshInterval: (data) => {
+      if (!data || !data.status) return 0;
+      const status = data.status;
 
-        if (
-          status === "deleted" ||
-          status === "active" ||
-          status === "blocked" ||
-          status === "moved"
-        ) {
-          return 0;
-        }
+      if (
+        status === "deleted" ||
+        status === "active" ||
+        status === "blocked" ||
+        status === "moved"
+      ) {
+        return 0;
+      }
 
-        return 10000;
-      },
-      errorRetryCount: 1,
+      return 10000;
     },
-  );
+    errorRetryCount: 1,
+  });
 
   return {
     status: swr.data,

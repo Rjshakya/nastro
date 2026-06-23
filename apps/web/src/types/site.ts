@@ -16,4 +16,4 @@ export type SiteInsert = Omit<SiteTableInsert, "setting"> & {
 
 export type SiteUpdate = Partial<SiteInsert>;
 
-export interface Header { }
+export interface Header {}

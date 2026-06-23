@@ -28,7 +28,13 @@ import { getGeneratedDBMapping } from "./utils.js";
 export class Insert<T extends NotionTable> {
   private data: InferInsertType<T> | undefined;
   private content: BlockObjectRequest[] | undefined;
-  constructor(private config: { table: T; notion: NotionApi; mapping?: Record<string, string> }) {}
+  constructor(
+    private config: {
+      table: T;
+      notion: NotionApi;
+      mapping?: Record<string, string>;
+    },
+  ) {}
 
   values(data: InferInsertType<T>, content?: BlockObjectRequest[]): this {
     this.data = data;

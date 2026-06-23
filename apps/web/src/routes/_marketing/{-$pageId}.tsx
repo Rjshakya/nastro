@@ -49,15 +49,15 @@ function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
+    <div className="min-h-screen bg-background px-2">
+      <main className=" max-w-3xl mx-auto border">
+        <Navbar />
         <HeroSection />
         <WhyNastroSection />
         <FeaturesGrid />
         <Pricing />
+        <Footer />
       </main>
-      <Footer />
     </div>
   );
 }

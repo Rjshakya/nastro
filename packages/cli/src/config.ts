@@ -34,10 +34,14 @@ export function findConfigFile(cwd: string = process.cwd()): string | null {
  * @param configPath - Path to config file
  * @returns Loaded config object
  */
-export async function loadConfigFile(configPath: string): Promise<NotionOrmConfig> {
+export async function loadConfigFile(
+  configPath: string,
+): Promise<NotionOrmConfig> {
   try {
     if (!(configPath?.endsWith(".ts") || configPath?.endsWith(".js"))) {
-      throw new Error("Invalid config file extension. Supported extensions are .ts and .js");
+      throw new Error(
+        "Invalid config file extension. Supported extensions are .ts and .js",
+      );
     }
 
     // Convert to file URL for proper ESM imports
@@ -47,13 +51,17 @@ export async function loadConfigFile(configPath: string): Promise<NotionOrmConfi
     const config = configModule.default || configModule;
 
     if (!config || typeof config !== "object") {
-      throw new Error(`Config file at ${configPath} must export a valid object`);
+      throw new Error(
+        `Config file at ${configPath} must export a valid object`,
+      );
     }
 
     return config as NotionOrmConfig;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Failed to load config file at ${configPath}: ${error.message}`);
+      throw new Error(
+        `Failed to load config file at ${configPath}: ${error.message}`,
+      );
     }
     throw error;
   }
@@ -67,7 +75,9 @@ export async function loadConfigFile(configPath: string): Promise<NotionOrmConfi
  * @param configFilePath - Path to config file (optional, will auto-discover if not provided)
  * @returns Resolved configuration
  */
-export async function resolveConfig(cliOptions: CliOptions): Promise<NotionOrmConfig> {
+export async function resolveConfig(
+  cliOptions: CliOptions,
+): Promise<NotionOrmConfig> {
   // Load config from file if path provided, otherwise auto-discover
   let config: Partial<NotionOrmConfig> | undefined;
 

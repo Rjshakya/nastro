@@ -34,7 +34,7 @@ const apikeyApp = new Hono<{ Variables: Vars }>()
       Layer.provideMerge(DatabaseLive()),
     );
 
-    const program = Effect.gen(function*() {
+    const program = Effect.gen(function* () {
       const apiKeyService = yield* ApiKeyService;
       return yield* apiKeyService.listApiKeys(userId);
     }).pipe(Effect.provide(programLayer));
@@ -68,7 +68,7 @@ const apikeyApp = new Hono<{ Variables: Vars }>()
       Layer.provideMerge(DatabaseLive()),
     );
 
-    const program = Effect.gen(function*() {
+    const program = Effect.gen(function* () {
       const apiKeyService = yield* ApiKeyService;
       return yield* apiKeyService.createApiKey({
         userId,
@@ -97,7 +97,7 @@ const apikeyApp = new Hono<{ Variables: Vars }>()
       Layer.provideMerge(DatabaseLive()),
     );
 
-    const program = Effect.gen(function*() {
+    const program = Effect.gen(function* () {
       const apiKeyService = yield* ApiKeyService;
       yield* apiKeyService.updateApiKey(keyId, userId, input);
     }).pipe(Effect.provide(programLayer));
@@ -119,7 +119,7 @@ const apikeyApp = new Hono<{ Variables: Vars }>()
       Layer.provideMerge(DatabaseLive()),
     );
 
-    const program = Effect.gen(function*() {
+    const program = Effect.gen(function* () {
       const apiKeyService = yield* ApiKeyService;
       yield* apiKeyService.deleteApiKey(keyId, userId);
     }).pipe(Effect.provide(programLayer));

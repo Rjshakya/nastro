@@ -93,7 +93,9 @@ const _request = <T>({
     },
   });
 
-export const NotionServiceLive = (accessToken?: string | GetAccessTokenResult) =>
+export const NotionServiceLive = (
+  accessToken?: string | GetAccessTokenResult,
+) =>
   Layer.effect(
     NotionService,
     Effect.gen(function* () {
@@ -105,13 +107,19 @@ export const NotionServiceLive = (accessToken?: string | GetAccessTokenResult) =
         getPage: (pageId, options) =>
           Effect.tryPromise({
             try: async () => {
-              const page = await notionClient.getPage(pageId, options ? { ...options } : undefined);
+              const page = await notionClient.getPage(
+                pageId,
+                options ? { ...options } : undefined,
+              );
               return page;
             },
             catch: (e) => {
               console.error(e);
 
-              if (e instanceof Error && e.message.includes("Notion page not found")) {
+              if (
+                e instanceof Error &&
+                e.message.includes("Notion page not found")
+              ) {
                 return new NotionError({
                   message: "PAGE NOT FOUND",
                   type: "PAGE_ERROR",

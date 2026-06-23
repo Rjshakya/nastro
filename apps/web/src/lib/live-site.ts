@@ -139,12 +139,14 @@ export const customDomainSiteLoader = createServerFn()
       const page = data?.page;
 
       if (!site || !page) {
+        console.log("site || page not found ");
         throw new Error("Site or page not found");
       }
 
       const resolvedPageId = pageId || site.rootPageId;
       const seo = getNotionPageSeo({ page, site, pageId: resolvedPageId });
 
+      console.log("Complete custom domain site fetching.....");
       return {
         site,
         page,
@@ -165,9 +167,9 @@ export const handleLiveSiteHtmlLinks = (site?: Site) => {
 
   const links: (
     | React.DetailedHTMLProps<
-      React.LinkHTMLAttributes<HTMLLinkElement>,
-      HTMLLinkElement
-    >
+        React.LinkHTMLAttributes<HTMLLinkElement>,
+        HTMLLinkElement
+      >
     | undefined
   )[] = [];
 
@@ -269,6 +271,9 @@ export const buildLiveSiteHead = (loaderData?: {
     site?.setting as SiteSetting,
     false,
   );
+
+  console.log("loader-data", loaderData?.site?.setting?.seo);
+  console.log("seo-ogimage", seo?.ogImage);
 
   return {
     meta: [

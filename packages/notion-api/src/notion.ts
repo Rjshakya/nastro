@@ -7,7 +7,10 @@ import {
 
 export function getNotionClient(
   token: string,
-  fetcher?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>,
+  fetcher?: (
+    input: string | URL | Request,
+    init?: RequestInit,
+  ) => Promise<Response>,
 ) {
   return new Client({
     auth: token,
@@ -75,7 +78,11 @@ export function getRawPage(pageId: string) {
   };
 }
 
-export function getBlocks(blockId: string, pageSize?: number, startCursor?: string) {
+export function getBlocks(
+  blockId: string,
+  pageSize?: number,
+  startCursor?: string,
+) {
   return (f: () => Client) => {
     return f().blocks.children.list({
       block_id: blockId,

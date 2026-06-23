@@ -156,7 +156,11 @@ export const getProjects = createServerFn().handler(async () => {
 export const getProject = createServerFn()
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data: { id } }) => {
-    const { rows } = await db.select().from(projectsTable).where(eq("id", id)).execute();
+    const { rows } = await db
+      .select()
+      .from(projectsTable)
+      .where(eq("id", id))
+      .execute();
     return rows[0];
   });
 ```
@@ -172,7 +176,14 @@ export const getProject = createServerFn()
 Defines a Notion database schema.
 
 ```typescript
-import { table, title, richText, select, date, url } from "@nastro-dev/notion-orm";
+import {
+  table,
+  title,
+  richText,
+  select,
+  date,
+  url,
+} from "@nastro-dev/notion-orm";
 
 const postsTable = table("Posts", {
   title: title(),
@@ -251,7 +262,11 @@ import { eq, gt, and } from "@nastro-dev/notion-orm";
 const { rows, nextCursor } = await db.select().from(postsTable).execute();
 
 // By ID (fetches the page directly)
-const { rows } = await db.select().from(postsTable).where(eq("id", "page-id-here")).execute();
+const { rows } = await db
+  .select()
+  .from(postsTable)
+  .where(eq("id", "page-id-here"))
+  .execute();
 
 // Filtered
 const { rows } = await db

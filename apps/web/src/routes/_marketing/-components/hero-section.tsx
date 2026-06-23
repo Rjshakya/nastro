@@ -33,9 +33,9 @@ export function HeroSection() {
         >
           <motion.h1
             variants={fadeInUp}
-            className="mb-2 max-w-lg text-4xl font-medium tracking-[-0.06em] sm:text-4xl"
+            className="mb-2 max-w-lg text-4xl font-semibold tracking-[-0.06em] sm:text-4xl"
           >
-            Turn your Notion pages into{" "}
+            Convert your Notion pages into{" "}
             <span className="">beautiful websites</span>
           </motion.h1>
 
@@ -43,7 +43,7 @@ export function HeroSection() {
             variants={fadeInUp}
             className="mb-4 max-w-md text-sm font-medium text-muted-foreground"
           >
-            Publish your Notion content with custom domains, real-time sync, and
+            Publish your Notion content with custom domains, and
             zero code. Perfect for creators, developers, and teams.
           </motion.p>
 
@@ -52,7 +52,7 @@ export function HeroSection() {
             className="md:px-.5 flex items-center justify-start gap-4"
           >
             <Link to={session?.data?.session ? "/dashboard" : "/login"}>
-              <Button size="lg" className="flex items-center gap-1 px-4 ">
+              <Button size="lg" className="flex items-center gap-1 px-8 py-6 ">
                 <p>Get Started Free</p>
                 <IconArrowRight stroke={3} />
               </Button>

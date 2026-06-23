@@ -9,7 +9,9 @@ import type {
   ChildDatabaseContentWithBlockMap,
 } from "../types";
 
-function convertPageToBlockMapInDatabase(page: Page): PageWithBlockMapInDatabase {
+function convertPageToBlockMapInDatabase(
+  page: Page,
+): PageWithBlockMapInDatabase {
   return {
     ...page,
     blocks: convertToBlockMap(page.blocks),

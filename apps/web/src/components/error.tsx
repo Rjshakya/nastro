@@ -1,4 +1,9 @@
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+} from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { IconAlertCircle } from "@tabler/icons-react";
 
@@ -46,7 +51,9 @@ export function Error({ error, code: _code, onRetry }: ErrorProps) {
           {onRetry && (
             <Button
               variant="secondary"
-              className={"w-full shadow-none text-muted-foreground dark:bg-secondary/20 "}
+              className={
+                "w-full shadow-none text-muted-foreground dark:bg-secondary/20 "
+              }
               onClick={onRetry}
             >
               Try Again

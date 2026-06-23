@@ -27,7 +27,7 @@ export function NavMain({
   const { setOpenDialog } = useCreateSiteStore((s) => s);
   const location = useLocation();
   const navigate = useNavigate();
-  const path = location.pathname
+  const path = location.pathname;
 
   const handleOuickCreate = (pathName: string) => {
     if (!pathName.includes("site")) {
@@ -43,13 +43,13 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2 ">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
+          <SidebarMenuItem className="flex items-center gap-2 font-semibold">
             <SidebarMenuButton
               onClick={() => handleOuickCreate(location.pathname)}
               tooltip="Quick Create"
               className=" min-w-8 duration-200 ease-linear"
             >
-              <IconPlus />
+              <IconPlus strokeWidth={2.2} />
 
               <span>Quick Create</span>
             </SidebarMenuButton>
@@ -57,10 +57,17 @@ export function NavMain({
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem className="font-semibold" key={item.title}>
               <Link to={item?.url}>
-                <SidebarMenuButton className={path === item.url ?  "bg-sidebar-accent text-sidebar-accent-foreground" : ""} tooltip={item.title}>
-                  {item.icon && <item.icon />}
+                <SidebarMenuButton
+                  className={
+                    path === item.url
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : ""
+                  }
+                  tooltip={item.title}
+                >
+                  {item.icon && <item.icon className="" strokeWidth={2.2} />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
               </Link>

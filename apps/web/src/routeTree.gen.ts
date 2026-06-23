@@ -20,6 +20,7 @@ import { Route as AppDashboardRouteRouteImport } from './routes/_app/dashboard/r
 import { Route as AppCustomDomainRouteRouteImport } from './routes/_app/custom-domain/route'
 import { Route as AppTemplatesIndexRouteImport } from './routes/_app/templates/index'
 import { Route as AppSitePageIdRouteImport } from './routes/_app/site/$pageId'
+import { Route as AppAnalyticsSlugRouteImport } from './routes/_app/analytics/$slug'
 import { Route as AppTemplatesInstallTemplateIdRouteImport } from './routes/_app/templates/install/$templateId'
 
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
@@ -76,6 +77,11 @@ const AppSitePageIdRoute = AppSitePageIdRouteImport.update({
   path: '/site/$pageId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppAnalyticsSlugRoute = AppAnalyticsSlugRouteImport.update({
+  id: '/analytics/$slug',
+  path: '/analytics/$slug',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppTemplatesInstallTemplateIdRoute =
   AppTemplatesInstallTemplateIdRouteImport.update({
     id: '/install/$templateId',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
   '/{-$pageId}': typeof MarketingChar123PageIdChar125Route
+  '/analytics/$slug': typeof AppAnalyticsSlugRoute
   '/site/$pageId': typeof AppSitePageIdRoute
   '/templates/': typeof AppTemplatesIndexRoute
   '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/$pageId': typeof Live_sitePageIdRoute
   '/login': typeof MarketingLoginRoute
   '/{-$pageId}': typeof MarketingChar123PageIdChar125Route
+  '/analytics/$slug': typeof AppAnalyticsSlugRoute
   '/site/$pageId': typeof AppSitePageIdRoute
   '/templates': typeof AppTemplatesIndexRoute
   '/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_live_site/$pageId': typeof Live_sitePageIdRoute
   '/_marketing/login': typeof MarketingLoginRoute
   '/_marketing/{-$pageId}': typeof MarketingChar123PageIdChar125Route
+  '/_app/analytics/$slug': typeof AppAnalyticsSlugRoute
   '/_app/site/$pageId': typeof AppSitePageIdRoute
   '/_app/templates/': typeof AppTemplatesIndexRoute
   '/_app/templates/install/$templateId': typeof AppTemplatesInstallTemplateIdRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/$pageId'
     | '/login'
     | '/{-$pageId}'
+    | '/analytics/$slug'
     | '/site/$pageId'
     | '/templates/'
     | '/templates/install/$templateId'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/$pageId'
     | '/login'
     | '/{-$pageId}'
+    | '/analytics/$slug'
     | '/site/$pageId'
     | '/templates'
     | '/templates/install/$templateId'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/_live_site/$pageId'
     | '/_marketing/login'
     | '/_marketing/{-$pageId}'
+    | '/_app/analytics/$slug'
     | '/_app/site/$pageId'
     | '/_app/templates/'
     | '/_app/templates/install/$templateId'
@@ -250,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSitePageIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/analytics/$slug': {
+      id: '/_app/analytics/$slug'
+      path: '/analytics/$slug'
+      fullPath: '/analytics/$slug'
+      preLoaderRoute: typeof AppAnalyticsSlugRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/templates/install/$templateId': {
       id: '/_app/templates/install/$templateId'
       path: '/install/$templateId'
@@ -278,6 +297,7 @@ interface AppRouteRouteChildren {
   AppDashboardRouteRoute: typeof AppDashboardRouteRoute
   AppDeveloperRouteRoute: typeof AppDeveloperRouteRoute
   AppTemplatesRouteRoute: typeof AppTemplatesRouteRouteWithChildren
+  AppAnalyticsSlugRoute: typeof AppAnalyticsSlugRoute
   AppSitePageIdRoute: typeof AppSitePageIdRoute
 }
 
@@ -286,6 +306,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRouteRoute: AppDashboardRouteRoute,
   AppDeveloperRouteRoute: AppDeveloperRouteRoute,
   AppTemplatesRouteRoute: AppTemplatesRouteRouteWithChildren,
+  AppAnalyticsSlugRoute: AppAnalyticsSlugRoute,
   AppSitePageIdRoute: AppSitePageIdRoute,
 }
 

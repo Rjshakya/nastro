@@ -102,11 +102,11 @@ interface CustomHostnameResult {
 type CfApiResponse<T> =
   | { success: true; result: T; errors: ApiMessage[]; messages: ApiMessage[] }
   | {
-    success: false;
-    result: undefined;
-    errors: ApiMessage[];
-    messages: ApiMessage[];
-  };
+      success: false;
+      result: undefined;
+      errors: ApiMessage[];
+      messages: ApiMessage[];
+    };
 
 export type {
   SSLStatus,

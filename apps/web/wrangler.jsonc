@@ -23,6 +23,11 @@
       "pattern": "nastro.xyz",
       "zone_name": "nastro.xyz",
     },
+     {
+      "custom_domain": false,
+      "pattern": "*/*",
+      "zone_name": "nastro.xyz",
+    },
     {
       "custom_domain": false,
       "pattern": "*.nastro.site/*",

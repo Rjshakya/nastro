@@ -25,7 +25,7 @@ export const DashboardSitesSection = () => {
         <CreateSiteDialog />
       </div>
 
-      <Card className="rounded-xl p-1">
+      <Card className="rounded-xl p-1 bg-background">
         <CardContent className="p-0">
           {sites && sites.length > 0 ? (
             <ItemGroup className="gap-0">

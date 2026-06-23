@@ -1,4 +1,8 @@
-import { BlockObjectResponse, Client, PageObjectResponse } from "@notionhq/client";
+import {
+  BlockObjectResponse,
+  Client,
+  PageObjectResponse,
+} from "@notionhq/client";
 import { Page, PageBlock } from "./types";
 import { extractPageMetaData } from "./utils";
 import { getBlocks, getNotionClient, getRawPage } from "./notion";
@@ -84,6 +88,8 @@ export function runPage({
 }): (pageId: string) => Promise<Page> {
   return (pageId: string) => {
     const client = getNotionClient(token);
-    return getPagePaginated({ pageId, pageSize, startCursor })(() => client) as Promise<Page>;
+    return getPagePaginated({ pageId, pageSize, startCursor })(
+      () => client,
+    ) as Promise<Page>;
   };
 }

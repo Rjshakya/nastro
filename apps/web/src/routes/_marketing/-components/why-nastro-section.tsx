@@ -1,8 +1,7 @@
-import { motion } from "motion/react"
-import { Button } from "@/components/ui/button"
+import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
 import {
   IconArrowRight,
-  IconArrowUpRight,
   IconBrandNotion,
   IconBulb,
   IconCurrencyDollar,
@@ -14,9 +13,9 @@ import {
   IconSearch,
   IconSparkles,
   IconWorld,
-} from "@tabler/icons-react"
-import { Link } from "@tanstack/react-router"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@tabler/icons-react";
+import { Link } from "@tanstack/react-router";
+import { Card, CardContent } from "@/components/ui/card";
 
 const painPoints = [
   {
@@ -37,7 +36,7 @@ const painPoints = [
     description:
       "Can't change colors, fonts, or layouts. What you see is what you're stuck with.",
   },
-]
+];
 
 const solutions = [
   {
@@ -58,7 +57,7 @@ const solutions = [
     description:
       "Get yourname.nastro.xyz in seconds. Or bring your custom domain.",
   },
-]
+];
 
 const useCases = [
   {
@@ -93,7 +92,7 @@ const useCases = [
       "Make your Notion journal feel good to use. Colors, fonts, layouts — exactly how you want.",
     span: "sm:col-span-2 lg:col-span-2",
   },
-]
+];
 
 const staggerContainer = {
   animate: {
@@ -101,7 +100,7 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants = {
   initial: { opacity: 0, y: 16 },
@@ -110,13 +109,13 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const },
   },
-}
+};
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-}
+};
 
 export function WhyNastroSection() {
   return (
@@ -132,7 +131,7 @@ export function WhyNastroSection() {
         >
           <motion.h1
             variants={fadeInUp}
-            className="mb-2 max-w-lg text-4xl font-medium tracking-[-0.06em] sm:text-4xl"
+            className="mb-2 max-w-lg text-4xl font-semibold tracking-[-0.06em] sm:text-4xl"
           >
             <span className="">Your Notion pages,</span>
             <br />
@@ -151,15 +150,15 @@ export function WhyNastroSection() {
 
         {/* Problem vs Solution Grid */}
         <div className="relative mx-auto mb-20 max-w-3xl sm:mb-28">
-          <div className="absolute inset-0">
+        {/* <div className="absolute inset-0">
             <img
               src="/why-nastro.webp"
               alt=""
               className="h-full w-full object-cover"
             />
-          </div>
+          </div> */}
 
-          <div className="relative z-10 space-y-10 px-6 py-18 sm:p-18">
+          <div className="bg-card relative z-10 space-y-10 px-6 py-18 sm:p-18">
             {/* The Problem */}
             <motion.div
               variants={staggerContainer}
@@ -244,7 +243,7 @@ export function WhyNastroSection() {
           viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h3 className="text-4xl font-medium tracking-[-0.06em] sm:text-4xl">
+          <h3 className="text-4xl font-semibold tracking-[-0.06em] sm:text-4xl">
             Why Nastro exists
           </h3>
           <p className="mb-12 text-sm font-medium text-muted-foreground">
@@ -302,7 +301,7 @@ export function WhyNastroSection() {
           }}
         >
           <Link to="/dashboard" className="">
-            <Button size="lg" className="flex items-center gap-1 px-4">
+            <Button size="lg" className="flex items-center gap-1 px-8 py-6">
               <p>Start building for free</p>
               <IconArrowRight stroke={3} />
             </Button>
@@ -313,5 +312,5 @@ export function WhyNastroSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

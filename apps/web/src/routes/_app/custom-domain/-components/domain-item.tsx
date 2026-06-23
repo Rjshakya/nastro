@@ -1,4 +1,10 @@
-import { IconTrash, IconWorld, IconLoader2, IconCheck, IconX } from "@tabler/icons-react";
+import {
+  IconTrash,
+  IconWorld,
+  IconLoader2,
+  IconCheck,
+  IconX,
+} from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
   Item,

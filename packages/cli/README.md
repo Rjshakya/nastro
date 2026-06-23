@@ -24,9 +24,9 @@ Create `notion-orm.config.ts` in your project root:
 
 ```typescript
 export default {
-  token: process.env.NOTION_TOKEN!,     // Notion integration token
-  rootPage: "your-root-page-id",        // Notion page where databases live
-  schema: "src/schemas/**/*.ts",        // glob pattern for schema files
+  token: process.env.NOTION_TOKEN!, // Notion integration token
+  rootPage: "your-root-page-id", // Notion page where databases live
+  schema: "src/schemas/**/*.ts", // glob pattern for schema files
 };
 ```
 
@@ -35,7 +35,14 @@ export default {
 Create `src/schemas/tasks.ts`:
 
 ```typescript
-import { table, title, richText, select, date, checkbox } from "@nastro-dev/notion-orm";
+import {
+  table,
+  title,
+  richText,
+  select,
+  date,
+  checkbox,
+} from "@nastro-dev/notion-orm";
 
 export const tasksTable = table("Tasks", {
   name: title(),
@@ -55,6 +62,7 @@ notion-orm push
 ```
 
 This will:
+
 - Load all schema files matching your glob pattern
 - Compare each table against the existing Notion database
 - Create new databases for tables that don't exist
@@ -75,14 +83,14 @@ notion-orm push --rename "oldName=newName" # rename properties
 
 #### Options
 
-| Flag | Description |
-|------|-------------|
-| `-f, --force` | Force push even if properties would be deleted |
+| Flag                        | Description                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------- |
+| `-f, --force`               | Force push even if properties would be deleted                               |
 | `-r, --rename <renames...>` | Rename properties in format `"oldName=newName"`. Can be used multiple times. |
-| `-c, --config <path>` | Path to config file |
-| `-t, --token <token>` | Notion integration token (overrides config) |
-| `--root-page <id>` | Notion root page ID (overrides config) |
-| `-s, --schema <path>` | Schema file glob pattern (overrides config) |
+| `-c, --config <path>`       | Path to config file                                                          |
+| `-t, --token <token>`       | Notion integration token (overrides config)                                  |
+| `--root-page <id>`          | Notion root page ID (overrides config)                                       |
+| `-s, --schema <path>`       | Schema file glob pattern (overrides config)                                  |
 
 #### Change Detection
 
@@ -105,14 +113,14 @@ This converts a `remove` + `add` pair into a `rename` operation, preserving exis
 
 ### Global Options
 
-| Flag | Description |
-|------|-------------|
+| Flag                  | Description                |
+| --------------------- | -------------------------- |
 | `-c, --config <path>` | Path to configuration file |
-| `-t, --token <token>` | Notion integration token |
-| `--root-page <id>` | Notion root page ID |
-| `-s, --schema <path>` | Schema file glob pattern |
-| `-v, --version` | Show version number |
-| `-h, --help` | Show help |
+| `-t, --token <token>` | Notion integration token   |
+| `--root-page <id>`    | Notion root page ID        |
+| `-s, --schema <path>` | Schema file glob pattern   |
+| `-v, --version`       | Show version number        |
+| `-h, --help`          | Show help                  |
 
 ## Configuration
 
@@ -122,9 +130,9 @@ The CLI looks for `notion-orm.config.ts`, `notion-orm.config.js`, or `notion-orm
 
 ```typescript
 export interface NotionOrmConfig {
-  token: string;      // Notion integration token
-  rootPage: string;   // Root Notion page ID
-  schema: string;     // Glob pattern for schema files
+  token: string; // Notion integration token
+  rootPage: string; // Root Notion page ID
+  schema: string; // Glob pattern for schema files
 }
 ```
 
@@ -153,8 +161,8 @@ After a successful push, the CLI creates `notion-orm.generated.ts`:
 // Do not edit manually
 
 export const databaseMapping = {
-  "Tasks": "database-id-1",
-  "Projects": "database-id-2",
+  Tasks: "database-id-1",
+  Projects: "database-id-2",
   // table title → database ID
   // database ID → data source ID
 } as const;

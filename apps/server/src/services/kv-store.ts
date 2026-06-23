@@ -9,7 +9,11 @@ export class KVStore extends ServiceMap.Service<
   KVStore,
   {
     get: <T>(key: string) => Effect.Effect<T | null, KVStoreError, never>;
-    set: (key: string, value: string, ttl?: number) => Effect.Effect<void, KVStoreError, never>;
+    set: (
+      key: string,
+      value: string,
+      ttl?: number,
+    ) => Effect.Effect<void, KVStoreError, never>;
     deleteKey: (key: string) => Effect.Effect<void, KVStoreError, never>;
   }
 >()("services/kv-store") {}
@@ -37,7 +41,7 @@ export const KVStoreLive = Layer.effect(
     const set = (key: string, value: string, ttl?: number) =>
       Effect.tryPromise({
         try: async () => {
-          return await kv.put(key, value , {expirationTtl:ttl});
+          return await kv.put(key, value, { expirationTtl: ttl });
         },
         catch: (e) => {
           console.error(e);

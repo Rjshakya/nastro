@@ -62,13 +62,14 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
     const blockColor = block.format?.block_color || "default";
     const title = block.properties?.title;
 
-   
-
     // If no automation, render a simple static button
     if (!automationId) {
       return (
         <div className={cs("notion-button-block", blockId)}>
-          <button type="button" className={cs("notion-button", `notion-${blockColor}`, className)}>
+          <button
+            type="button"
+            className={cs("notion-button", `notion-${blockColor}`, className)}
+          >
             {title ? <Text value={title} block={block} /> : "Button"}
           </button>
         </div>
@@ -85,7 +86,10 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
       const buttonText = title ? getTextContent(title) : "Button";
       return (
         <div className={cs("notion-button-block", blockId)}>
-          <button type="button" className={cs("notion-button", `notion-${blockColor}`, className)}>
+          <button
+            type="button"
+            className={cs("notion-button", `notion-${blockColor}`, className)}
+          >
             {buttonText}
           </button>
         </div>
@@ -93,7 +97,8 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
     }
 
     // Get button text from automation properties or fall back to title
-    const buttonText = automation.properties?.name || (title ? getTextContent(title) : "Button");
+    const buttonText =
+      automation.properties?.name || (title ? getTextContent(title) : "Button");
 
     // Handle button click - execute the first action
     const handleClick = async (e: React.MouseEvent) => {
@@ -119,9 +124,8 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
         return;
       }
 
-      const actionData = (recordMap as any).automation_action?.[firstActionId]?.value as
-        | AutomationActionValue
-        | undefined;
+      const actionData = (recordMap as any).automation_action?.[firstActionId]
+        ?.value as AutomationActionValue | undefined;
       if (!actionData) {
         console.warn("No action data found for ID:", firstActionId);
         return;
@@ -153,11 +157,15 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
             try {
               // Try to use webhook proxy if available
               if (typeof window !== "undefined" && "/api/webhook-proxy") {
-                const pageBlockId = Object.keys(recordMap.block || {}).find((id) => {
-                  const b = recordMap.block[id]?.value;
-                  return b && "type" in b && b.type === "page";
-                });
-                const pageBlock = pageBlockId ? (recordMap.block[pageBlockId]?.value as any) : null;
+                const pageBlockId = Object.keys(recordMap.block || {}).find(
+                  (id) => {
+                    const b = recordMap.block[id]?.value;
+                    return b && "type" in b && b.type === "page";
+                  },
+                );
+                const pageBlock = pageBlockId
+                  ? (recordMap.block[pageBlockId]?.value as any)
+                  : null;
 
                 if (!pageBlock) {
                   console.warn("No page block found for webhook payload");
@@ -177,8 +185,12 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
                   data: {
                     object: "page",
                     id: pageBlock.id,
-                    created_time: new Date(pageBlock.created_time).toISOString(),
-                    last_edited_time: new Date(pageBlock.last_edited_time).toISOString(),
+                    created_time: new Date(
+                      pageBlock.created_time,
+                    ).toISOString(),
+                    last_edited_time: new Date(
+                      pageBlock.last_edited_time,
+                    ).toISOString(),
                     created_by: {
                       object: "user",
                       id: pageBlock.created_by_id || "unknown",
@@ -216,7 +228,8 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
                         type: "title",
                         title: pageBlock.properties?.title
                           ? pageBlock.properties.title.map((t: any) => {
-                              const text = typeof t === "string" ? t : t[0] || "";
+                              const text =
+                                typeof t === "string" ? t : t[0] || "";
                               return {
                                 type: "text",
                                 text: { content: text, link: null },
@@ -276,7 +289,9 @@ export function renderButtonBlock(recordMap: types.ExtendedRecordMap) {
                   setTimeout(() => setIsSuccess(false), 2000);
                 }
               } else {
-                console.warn("Webhook functionality requires /api/webhook-proxy endpoint");
+                console.warn(
+                  "Webhook functionality requires /api/webhook-proxy endpoint",
+                );
               }
             } catch (err) {
               console.error("Error sending webhook:", err);

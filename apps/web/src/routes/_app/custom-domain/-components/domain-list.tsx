@@ -33,11 +33,7 @@ export function DomainList({ domains, isLoading, onDelete }: DomainListProps) {
   return (
     <ItemGroup className="gap-1 p-1">
       {domains.map((domain) => (
-        <DomainItem
-          key={domain.id}
-          domain={domain}
-          onDelete={onDelete}
-        />
+        <DomainItem key={domain.id} domain={domain} onDelete={onDelete} />
       ))}
     </ItemGroup>
   );

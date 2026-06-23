@@ -13,7 +13,9 @@ export class SlugService extends ServiceMap.Service<
      * @param slug
      * @returns slug
      */
-    storeSlug: (slug: string) => Effect.Effect<string, KVStoreError | SlugServiceError, never>;
+    storeSlug: (
+      slug: string,
+    ) => Effect.Effect<string, KVStoreError | SlugServiceError, never>;
     deleteSlug: (slug: string) => Effect.Effect<string, KVStoreError, never>;
   }
 >()("services/slug") {}

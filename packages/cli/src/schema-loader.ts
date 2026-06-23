@@ -103,7 +103,9 @@ export async function loadSchemasFromGlob(
   });
 
   if (!files.length) {
-    throw new Error(`No schema files found matching pattern: ${pattern} (cwd: ${cwd})`);
+    throw new Error(
+      `No schema files found matching pattern: ${pattern} (cwd: ${cwd})`,
+    );
   }
 
   // Load all schema files in parallel
@@ -137,7 +139,9 @@ export async function loadSchemasFromGlob(
  * Group loaded schemas by their source file
  * Useful for displaying organized output during push operations
  */
-export function groupSchemasByFile(schemas: LoadedSchema[]): Map<string, LoadedSchema[]> {
+export function groupSchemasByFile(
+  schemas: LoadedSchema[],
+): Map<string, LoadedSchema[]> {
   const grouped = new Map<string, LoadedSchema[]>();
 
   for (const schema of schemas) {
@@ -165,7 +169,9 @@ export function getTableTitles(schemas: LoadedSchema[]): string[] {
  * Find duplicate table titles in the loaded schemas
  * Returns a map of duplicate titles to the files they appear in
  */
-export function findDuplicateTableTitles(schemas: LoadedSchema[]): Map<string, string[]> {
+export function findDuplicateTableTitles(
+  schemas: LoadedSchema[],
+): Map<string, string[]> {
   const titleToFiles = new Map<string, Set<string>>();
 
   for (const schema of schemas) {
@@ -189,7 +195,9 @@ export function findDuplicateTableTitles(schemas: LoadedSchema[]): Map<string, s
  * Build a mapping of export names to table titles
  * Useful for resolving relations during push
  */
-export function buildExportNameToTitleMap(schemas: LoadedSchema[]): Map<string, string> {
+export function buildExportNameToTitleMap(
+  schemas: LoadedSchema[],
+): Map<string, string> {
   const map = new Map<string, string>();
   for (const schema of schemas) {
     map.set(schema.name, schema.table.title);

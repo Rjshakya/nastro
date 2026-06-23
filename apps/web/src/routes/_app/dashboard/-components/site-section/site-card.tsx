@@ -4,6 +4,8 @@ import {
   IconArrowUpRight,
   IconDots,
   IconLink,
+  IconChartBar,
+  IconBrandGoogleAnalytics,
 } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
@@ -61,7 +63,7 @@ export function SiteCard({ site, className }: SiteCardProps) {
   };
 
   return (
-    <Item className={cn(" rounded-xl bg-card hover:bg-accent", className)}>
+    <Item className={cn(" rounded-xl hover:bg-accent", className)}>
       <ItemContent>
         <Link
           to="/site/$pageId"
@@ -120,6 +122,18 @@ export function SiteCard({ site, className }: SiteCardProps) {
                 <DropdownMenuItem className={"w-full"}>
                   <IconSettings className="h-4 w-4" />
                   <p>Edit</p>
+                </DropdownMenuItem>
+              </Link>
+
+              <Link
+                to="/analytics/$slug"
+                params={{ slug: site.slug }}
+                search={{ name: site.name, pageId: site.rootPageId }}
+                className="w-full flex items-center gap-2"
+              >
+                <DropdownMenuItem className={"w-full"}>
+                  <IconBrandGoogleAnalytics className="h-4 w-4" />
+                  <p>Analytics</p>
                 </DropdownMenuItem>
               </Link>
 

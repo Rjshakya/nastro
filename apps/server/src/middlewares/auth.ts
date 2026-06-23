@@ -51,7 +51,7 @@ export const verifyApiKeyMiddleware: () => MiddlewareHandler = () => {
       ),
     );
 
-    const program = Effect.gen(function*() {
+    const program = Effect.gen(function* () {
       const service = yield* ApiKeyService;
 
       const verified = yield* service.verifyApiKey(rawKey);

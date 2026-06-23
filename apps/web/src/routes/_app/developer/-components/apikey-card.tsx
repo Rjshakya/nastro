@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { IconKey, IconAlertTriangle } from "@tabler/icons-react";
+import { IconKey,  } from "@tabler/icons-react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,17 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   useApiKeys,
   useDeleteApiKey,
-  useUpdateApiKey,
 } from "@/hooks/use-apikeys";
 import { CreateApiKeyDialog } from "./create-apikey-dialog";
 import { ApiKeyItem } from "./apikey-item";
@@ -35,7 +25,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  
 } from "@/components/ui/alert-dialog";
 import { updateApiKey } from "@/lib/apikey";
 
@@ -97,7 +87,7 @@ export function ApiKeyCard() {
           </div>
           <CreateApiKeyDialog onSuccess={handleCreateSuccess} />
         </div>
-        <Card className="p-1 rounded-2xl ">
+        <Card className=" bg-background p-1 rounded-2xl ">
           <CardContent className="p-0">
             {isLoading ? (
               <div className="text-center py-8 text-muted-foreground">

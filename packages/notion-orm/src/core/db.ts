@@ -57,15 +57,27 @@ export class DB {
    * Returns an Insert builder with a `.values()` method.
    */
   insert<T extends NotionTable>(table: T): Insert<T> {
-    return new Insert({ notion: this.notion, table, mapping: this.overrideMapping });
+    return new Insert({
+      notion: this.notion,
+      table,
+      mapping: this.overrideMapping,
+    });
   }
 
   update<T extends NotionTable>(table: T) {
-    return new Update({ notion: this.notion, table, mapping: this.overrideMapping });
+    return new Update({
+      notion: this.notion,
+      table,
+      mapping: this.overrideMapping,
+    });
   }
 
   delete<T extends NotionTable>(table: T) {
-    return new Delete({ notion: this.notion, table, mapping: this.overrideMapping });
+    return new Delete({
+      notion: this.notion,
+      table,
+      mapping: this.overrideMapping,
+    });
   }
 
   select() {

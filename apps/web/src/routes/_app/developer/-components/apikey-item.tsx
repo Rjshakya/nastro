@@ -31,7 +31,7 @@ export function ApiKeyItem({
   const [enabled, setEnabled] = useState(apiKey.enabled);
 
   return (
-    <Item key={apiKey.id} className="rounded-xl bg-card hover:bg-accent">
+    <Item key={apiKey.id} className="rounded-xl hover:bg-accent">
       <ItemContent>
         <ItemTitle className="text-base ">{apiKey.name}</ItemTitle>
         <ItemDescription>

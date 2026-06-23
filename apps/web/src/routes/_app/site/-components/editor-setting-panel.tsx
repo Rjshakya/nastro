@@ -114,7 +114,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
               <LayoutTab />
             </TabsContent>
             <TabsContent value="seo">
-              <SeoTab />
+              <SeoTab site={site} pageId={params.pageId} />
             </TabsContent>
             <TabsContent value="analytics">
               <AnalyticsTab />

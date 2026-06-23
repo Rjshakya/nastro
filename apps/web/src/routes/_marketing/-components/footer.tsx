@@ -30,7 +30,7 @@ export function Footer() {
             {/* Logo and tagline */}
             <div className="space-y-4">
               <Link to="/">
-                <Logo className=" "  />
+                <Logo className=" " />
               </Link>
               <p className="text-sm text-muted-foreground max-w-3xs text-balance mt-2">
                 Turn your Notion pages into beautiful websites.

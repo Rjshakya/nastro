@@ -29,7 +29,9 @@ export function mappingFileExists(cwd: string = process.cwd()): boolean {
  * @param cwd - Current working directory
  * @returns Record mapping table titles to database IDs
  */
-export async function loadMapping(cwd: string = process.cwd()): Promise<Record<string, string>> {
+export async function loadMapping(
+  cwd: string = process.cwd(),
+): Promise<Record<string, string>> {
   const filePath = getMappingFilePath(cwd);
 
   if (!existsSync(filePath)) {

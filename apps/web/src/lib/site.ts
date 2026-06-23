@@ -1,4 +1,5 @@
 import { client } from "./api-client";
+import { deleteSiteAsset } from "./upload";
 import type { Site, SiteInsert, SiteUpdate } from "@/types/site";
 import type { SiteSetting } from "@/types/site.setting";
 import type { ExtendedRecordMap } from "notion-types";
@@ -115,6 +116,50 @@ export const updateSite = async (
   }
 
   return res.json();
+};
+
+export interface SaveOgImageInput {
+  siteId: string;
+  pageId: string;
+  setting: SiteSetting;
+  ogImageUrl: string;
+}
+
+export const saveOgImage = async ({
+  siteId,
+  pageId,
+  setting,
+  ogImageUrl,
+}: SaveOgImageInput): Promise<void> => {
+  try {
+    const res = await client.api.site[":id"].$patch({
+      param: { id: siteId },
+      json: {
+        setting: {
+          ...setting,
+          seo: {
+            ...setting.seo,
+            ogImage: ogImageUrl,
+          },
+        },
+      },
+      query: { pageId },
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      handleHttpError()({
+        message: error?.message || "Failed to save OG image",
+        statusCode: res.status,
+        error,
+        throwError: true,
+        showToast: true,
+      });
+    }
+  } catch (error) {
+    await deleteSiteAsset(ogImageUrl).catch(() => {});
+    throw error;
+  }
 };
 
 export const deleteSite = async (

@@ -77,6 +77,7 @@ const sitesApp = new Hono<{ Variables: Vars }>()
       );
 
       const site = await Effect.runPromise(program);
+
       return c.json(
         ApiResponse({
           data: { ...site },

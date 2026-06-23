@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { handleConnectNotion } from "@/lib/auth-client";
@@ -49,9 +48,9 @@ export function CredentialCard({
           Connect with Notion
         </Button>
       </div>
-      <Card className="px-4 py-6 rounded-xl">
+      <Card className="bg-background px-4 py-6 rounded-xl">
         <CardContent className="space-y-4 p-0">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label htmlFor="notion-token">Notion Access Token</Label>
             <div className="flex items-center gap-2">
               <Input

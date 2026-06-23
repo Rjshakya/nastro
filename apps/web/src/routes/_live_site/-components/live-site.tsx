@@ -5,6 +5,7 @@ import type { Site } from "@/types/site";
 import type { ExtendedRecordMap } from "notion-types";
 import { useEffect } from "react";
 import { useSiteSettingStore } from "@/stores/site.setting.store";
+import { trackPageView } from "@/lib/analytics-tracker";
 
 const liveSiteRoute = getRouteApi("/_live_site/$pageId");
 
@@ -31,6 +32,13 @@ export function LiveSiteContent({ data, pageId, slug }: LiveSiteContentProps) {
   useEffect(() => {
     setSettings(settings);
   }, [settings]);
+
+  useEffect(() => {
+    if (!data.site?.slug || !pageId) {
+      return;
+    }
+    trackPageView({ pageId, slug: data.site.slug });
+  }, [data.site?.slug, pageId]);
 
   if (!data.page || !data.site) {
     return (

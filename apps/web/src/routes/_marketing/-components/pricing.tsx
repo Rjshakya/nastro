@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -6,12 +6,12 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { IconCheck } from "@tabler/icons-react"
-import { motion } from "motion/react"
-import { Link } from "@tanstack/react-router"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { IconCheck } from "@tabler/icons-react";
+import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 
 const plans = [
   {
@@ -44,7 +44,7 @@ const plans = [
     cta: "Upgrade to Pro",
     popular: true,
   },
-]
+];
 
 const staggerContainer = {
   animate: {
@@ -52,7 +52,7 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants = {
   initial: { opacity: 0, y: 16 },
@@ -61,10 +61,10 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const },
   },
-}
+};
 
 export function Pricing() {
-  const [isYearly, setIsYearly] = useState(false)
+  const [isYearly, setIsYearly] = useState(false);
 
   return (
     <section id="pricing" className="py-24 sm:py-32">
@@ -77,7 +77,7 @@ export function Pricing() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }}
         >
-          <h2 className="max-w-lg text-4xl font-medium tracking-[-0.06em]">
+          <h2 className="max-w-lg text-4xl font-semibold tracking-[-0.06em]">
             Simple, transparent pricing
           </h2>
           <p className="max-w-md text-sm font-medium text-muted-foreground">
@@ -182,5 +182,5 @@ export function Pricing() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

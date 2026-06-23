@@ -10,8 +10,17 @@ import type {
   Client,
   PageObjectResponse,
 } from "@notionhq/client";
-import type { ChildDatabaseContent, ChildPageContent, LinkToPageContent } from "../types";
-import { getDatabasePagesPaginated, getDataSource, getRawDatabase, getRawPage } from "../notion";
+import type {
+  ChildDatabaseContent,
+  ChildPageContent,
+  LinkToPageContent,
+} from "../types";
+import {
+  getDatabasePagesPaginated,
+  getDataSource,
+  getRawDatabase,
+  getRawPage,
+} from "../notion";
 import { getPagePaginated } from "../page";
 import { extractPageMetaData } from "../utils";
 
@@ -38,7 +47,10 @@ export const handleChildPage =
  * Handle child database block
  */
 export const handleChildDatabase =
-  <T extends boolean = false>(block: () => ChildDatabaseBlockObjectResponse, contentOnly?: T) =>
+  <T extends boolean = false>(
+    block: () => ChildDatabaseBlockObjectResponse,
+    contentOnly?: T,
+  ) =>
   async (f: () => Client): Promise<ChildDatabaseContent> => {
     const b = block();
 
@@ -47,8 +59,11 @@ export const handleChildDatabase =
       return { pages: [], properties: {} };
     }
 
-    const properties = (await getDataSource(rawDb.data_sources[0].id)(f)).properties;
-    const databasePages = await getDatabasePagesPaginated({ dsId: rawDb.data_sources[0].id })(f);
+    const properties = (await getDataSource(rawDb.data_sources[0].id)(f))
+      .properties;
+    const databasePages = await getDatabasePagesPaginated({
+      dsId: rawDb.data_sources[0].id,
+    })(f);
     const pages = await Promise.all(
       databasePages.results.map((page) => {
         return getPagePaginated({ pageId: page.id })(f);

@@ -8,7 +8,13 @@ import { FilterByID } from "./filters/types";
 export class Delete<T extends NotionTable> {
   private query: QueryDataSourceParameters;
   private pageId: string | undefined;
-  constructor(private config: { notion: NotionApi; table: T; mapping?: Record<string, string> }) {
+  constructor(
+    private config: {
+      notion: NotionApi;
+      table: T;
+      mapping?: Record<string, string>;
+    },
+  ) {
     this.query = { data_source_id: "" };
   }
 
@@ -26,7 +32,9 @@ export class Delete<T extends NotionTable> {
   execute() {
     if (this.pageId) {
       // Update page by ID
-      return Promise.all([this.config.notion.updatePage({ page_id: this.pageId, in_trash: true })]);
+      return Promise.all([
+        this.config.notion.updatePage({ page_id: this.pageId, in_trash: true }),
+      ]);
     }
 
     return this.getDatabaseMapping()
@@ -39,9 +47,15 @@ export class Delete<T extends NotionTable> {
         }
         return { databaseId, mapping };
       })
-      .then(({ databaseId, mapping }) => ({ databaseId, datasourceId: mapping[databaseId] }))
+      .then(({ databaseId, mapping }) => ({
+        databaseId,
+        datasourceId: mapping[databaseId],
+      }))
       .then(({ datasourceId }) =>
-        this.config.notion.queryDataBase({ ...this.query, data_source_id: datasourceId }),
+        this.config.notion.queryDataBase({
+          ...this.query,
+          data_source_id: datasourceId,
+        }),
       )
       .then(({ pages }) => {
         return {
@@ -50,7 +64,9 @@ export class Delete<T extends NotionTable> {
       })
       .then(({ pages }) => {
         return Promise.all(
-          pages.map((id) => this.config.notion.updatePage({ page_id: id, in_trash: true })),
+          pages.map((id) =>
+            this.config.notion.updatePage({ page_id: id, in_trash: true }),
+          ),
         );
       });
   }

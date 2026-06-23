@@ -6,6 +6,6 @@ export default defineConfig({
   },
   rules: {
     "eslint/no-unused-vars": "warn",
-    "unicorn/no-empty-file":"off"
+    "unicorn/no-empty-file": "off",
   },
 });

@@ -41,12 +41,16 @@ export function convertPageObjectToSelectType<T extends NotionTable>(
     switch (column.type) {
       case "title": {
         const items = v.title as Array<{ plain_text: string }>;
-        (result as Record<string, unknown>)[key] = items.map((t) => t.plain_text).join("");
+        (result as Record<string, unknown>)[key] = items
+          .map((t) => t.plain_text)
+          .join("");
         break;
       }
       case "rich_text": {
         const items = v.rich_text as Array<{ plain_text: string }>;
-        (result as Record<string, unknown>)[key] = items.map((t) => t.plain_text).join("");
+        (result as Record<string, unknown>)[key] = items
+          .map((t) => t.plain_text)
+          .join("");
         break;
       }
       case "number": {
@@ -60,7 +64,9 @@ export function convertPageObjectToSelectType<T extends NotionTable>(
       }
       case "multi_select": {
         const items = (v.multi_select as Array<{ name: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((x) => ({ name: x.name }));
+        (result as Record<string, unknown>)[key] = items.map((x) => ({
+          name: x.name,
+        }));
         break;
       }
       case "status": {
@@ -75,7 +81,9 @@ export function convertPageObjectToSelectType<T extends NotionTable>(
       }
       case "people": {
         const items = (v.people as Array<{ id: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((p) => ({ id: p.id }));
+        (result as Record<string, unknown>)[key] = items.map((p) => ({
+          id: p.id,
+        }));
         break;
       }
       case "files": {
@@ -98,31 +106,40 @@ export function convertPageObjectToSelectType<T extends NotionTable>(
         break;
       }
       case "url": {
-        (result as Record<string, unknown>)[key] = (v.url as string | null) ?? null;
+        (result as Record<string, unknown>)[key] =
+          (v.url as string | null) ?? null;
         break;
       }
       case "email": {
-        (result as Record<string, unknown>)[key] = (v.email as string | null) ?? null;
+        (result as Record<string, unknown>)[key] =
+          (v.email as string | null) ?? null;
         break;
       }
       case "phone_number": {
-        (result as Record<string, unknown>)[key] = (v.phone_number as string | null) ?? null;
+        (result as Record<string, unknown>)[key] =
+          (v.phone_number as string | null) ?? null;
         break;
       }
       case "relation": {
         const items = (v.relation as Array<{ id: string }>) ?? [];
-        (result as Record<string, unknown>)[key] = items.map((r) => ({ id: r.id }));
+        (result as Record<string, unknown>)[key] = items.map((r) => ({
+          id: r.id,
+        }));
         break;
       }
       case "unique_id": {
-        const uid = v.unique_id as { prefix: string | null; number: number | null } | null;
+        const uid = v.unique_id as {
+          prefix: string | null;
+          number: number | null;
+        } | null;
         (result as Record<string, unknown>)[key] = uid?.number
           ? `${uid?.prefix}${uid?.number}`
           : null;
         break;
       }
       case "created_time": {
-        (result as Record<string, unknown>)[key] = (v.created_time as string) ?? "";
+        (result as Record<string, unknown>)[key] =
+          (v.created_time as string) ?? "";
         break;
       }
       case "created_by": {
@@ -131,7 +148,8 @@ export function convertPageObjectToSelectType<T extends NotionTable>(
         break;
       }
       case "last_edited_time": {
-        (result as Record<string, unknown>)[key] = (v.last_edited_time as string) ?? "";
+        (result as Record<string, unknown>)[key] =
+          (v.last_edited_time as string) ?? "";
         break;
       }
       case "last_edited_by": {
@@ -236,7 +254,9 @@ export function convertToPageProperties<T extends NotionTable>(
   return props;
 }
 
-export function handleTitle(value: ColumnTypeMap["title"]): TitlePropertyRequest {
+export function handleTitle(
+  value: ColumnTypeMap["title"],
+): TitlePropertyRequest {
   return {
     type: "title",
     title: [
@@ -250,14 +270,18 @@ export function handleTitle(value: ColumnTypeMap["title"]): TitlePropertyRequest
   };
 }
 
-export function handleCheckbox(value: ColumnTypeMap["checkbox"]): CheckboxPropertyRequest {
+export function handleCheckbox(
+  value: ColumnTypeMap["checkbox"],
+): CheckboxPropertyRequest {
   return {
     type: "checkbox",
     checkbox: value,
   };
 }
 
-export function handleRichText(value: ColumnTypeMap["rich_text"]): RichTextPropertyRequest {
+export function handleRichText(
+  value: ColumnTypeMap["rich_text"],
+): RichTextPropertyRequest {
   return {
     type: "rich_text",
     rich_text: [
@@ -279,14 +303,18 @@ export function handleRichText(value: ColumnTypeMap["rich_text"]): RichTextPrope
   };
 }
 
-export function handleNumber(value: ColumnTypeMap["number"]): NumberPropertyRequest {
+export function handleNumber(
+  value: ColumnTypeMap["number"],
+): NumberPropertyRequest {
   return {
     type: "number",
     number: value,
   };
 }
 
-export function handleSelect(value: ColumnTypeMap["select"]): SelectPropertyRequest {
+export function handleSelect(
+  value: ColumnTypeMap["select"],
+): SelectPropertyRequest {
   return {
     type: "select",
     select: {
@@ -304,7 +332,9 @@ export function handleMultiSelect(
   };
 }
 
-export function handleStatus(value: ColumnTypeMap["status"]): StatusPropertyRequest {
+export function handleStatus(
+  value: ColumnTypeMap["status"],
+): StatusPropertyRequest {
   return {
     type: "status",
     status: {
@@ -322,7 +352,9 @@ export function handleDate(value: ColumnTypeMap["date"]): DatePropertyRequest {
   };
 }
 
-export function handlePeople(value: ColumnTypeMap["people"]): PeoplePropertyRequest {
+export function handlePeople(
+  value: ColumnTypeMap["people"],
+): PeoplePropertyRequest {
   return {
     type: "people",
     people: value.map((v) => ({
@@ -332,7 +364,9 @@ export function handlePeople(value: ColumnTypeMap["people"]): PeoplePropertyRequ
   };
 }
 
-export function handleFiles(value: ColumnTypeMap["files"]): FilesPropertyRequest {
+export function handleFiles(
+  value: ColumnTypeMap["files"],
+): FilesPropertyRequest {
   return {
     type: "files",
     files: value.map((v) => ({
@@ -351,7 +385,9 @@ export function handleUrl(value: ColumnTypeMap["url"]): UrlPropertyRequest {
   };
 }
 
-export function handleEmail(value: ColumnTypeMap["email"]): EmailPropertyRequest {
+export function handleEmail(
+  value: ColumnTypeMap["email"],
+): EmailPropertyRequest {
   return {
     type: "email",
     email: value,

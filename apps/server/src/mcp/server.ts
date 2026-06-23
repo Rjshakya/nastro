@@ -69,7 +69,7 @@ function createMcpServer({
           ),
         );
 
-        const program = Effect.gen(function*() {
+        const program = Effect.gen(function* () {
           const fileService = yield* FileUploadService;
           return yield* fileService.getPresignedUrl({
             fileName: `${slug}/${fileName}`,
@@ -150,7 +150,7 @@ function createMcpServer({
           };
         }
 
-        const program = Effect.gen(function*() {
+        const program = Effect.gen(function* () {
           const repo = yield* SiteRepo;
           const sites = yield* repo.findById("slug", slug);
           if (sites.length === 0) {

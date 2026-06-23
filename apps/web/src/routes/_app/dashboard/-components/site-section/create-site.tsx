@@ -78,8 +78,8 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger
         render={
-          <Button variant={"default"}>
-            <IconPlus className="mr-2 h-4 w-4" />
+          <Button size={"sm"} className={""} >
+            <IconPlus className="size-4 mr-1" />
             New Site
           </Button>
         }

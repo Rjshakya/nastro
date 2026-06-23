@@ -1,4 +1,14 @@
-import { table, title, richText, select, date, number, multiSelect, InferInsertType, InferSelectType } from "@nastro/notion-orm";
+import {
+  table,
+  title,
+  richText,
+  select,
+  date,
+  number,
+  multiSelect,
+  InferInsertType,
+  InferSelectType,
+} from "@nastro/notion-orm";
 
 export const projectsTable = table("Projects", {
   name: title(),
@@ -13,8 +23,6 @@ export const projectsTable = table("Projects", {
   startDate: date(),
   endDate: date(),
 });
-
-
 
 export type InsertProjectType = InferInsertType<typeof projectsTable>;
 export type SelectProjectType = InferSelectType<typeof projectsTable>;

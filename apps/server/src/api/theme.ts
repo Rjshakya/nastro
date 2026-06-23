@@ -49,7 +49,10 @@ const themeApp = new Hono<{ Variables: Vars }>()
                 .where(prev ? lt(table.createdAt, prev) : undefined)
                 .limit(limit);
 
-              const prevToken = result.length > 0 ? result[result.length - 1].createdAt : undefined;
+              const prevToken =
+                result.length > 0
+                  ? result[result.length - 1].createdAt
+                  : undefined;
 
               return { result, prevToken };
             },
@@ -116,30 +119,37 @@ const themeApp = new Hono<{ Variables: Vars }>()
       message: "Rate limit exceeded",
     }),
   )
-  .post("/", zValidator("json", themeTableInsertSchema.omit({ createdBy: true })), async (c) => {
-    const userId = c.get("user")?.id as string;
-    const input = c.req.valid("json");
+  .post(
+    "/",
+    zValidator("json", themeTableInsertSchema.omit({ createdBy: true })),
+    async (c) => {
+      const userId = c.get("user")?.id as string;
+      const input = c.req.valid("json");
 
-    const program = Effect.gen(function* () {
-      const repo = yield* ThemeRepo;
-      const themes = yield* repo.insert({ ...input, createdBy: userId });
-      return themes.length ? themes[0] : null;
-    }).pipe(Effect.provide(DatabaseLive()));
+      const program = Effect.gen(function* () {
+        const repo = yield* ThemeRepo;
+        const themes = yield* repo.insert({ ...input, createdBy: userId });
+        return themes.length ? themes[0] : null;
+      }).pipe(Effect.provide(DatabaseLive()));
 
-    const theme = await Effect.runPromise(program);
+      const theme = await Effect.runPromise(program);
 
-    return c.json(
-      ApiResponse({
-        data: theme,
-        message: "Theme created successfully",
-      }),
-      201,
-    );
-  })
+      return c.json(
+        ApiResponse({
+          data: theme,
+          message: "Theme created successfully",
+        }),
+        201,
+      );
+    },
+  )
   .patch(
     "/:id",
     zValidator("param", themeParamsSchema),
-    zValidator("json", themeTableInsertSchema.omit({ createdBy: true }).partial()),
+    zValidator(
+      "json",
+      themeTableInsertSchema.omit({ createdBy: true }).partial(),
+    ),
     async (c) => {
       const { id } = c.req.valid("param");
       const input = c.req.valid("json");
@@ -150,7 +160,11 @@ const themeApp = new Hono<{ Variables: Vars }>()
         const themes = yield* repo.execute((db, table) =>
           Effect.tryPromise({
             try: async () => {
-              return await db.update(table).set(input).where(eq(table.id, id)).returning();
+              return await db
+                .update(table)
+                .set(input)
+                .where(eq(table.id, id))
+                .returning();
             },
             catch: (error) => error,
           }),

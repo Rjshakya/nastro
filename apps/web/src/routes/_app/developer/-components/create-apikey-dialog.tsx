@@ -90,8 +90,8 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button onClick={() => setOpen(true)}>
-        <IconPlus className="" />
+      <Button size={"sm"} onClick={() => setOpen(true)}>
+        <IconPlus className="size-4 mr-1" />
         Create API Key
       </Button>
       <DialogContent className="px-4 py-4 font-sans tracking-tighter sm:max-w-md">

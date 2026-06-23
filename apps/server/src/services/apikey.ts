@@ -62,11 +62,11 @@ export class ApiKeyService extends ServiceMap.Service<
       userId: string,
     ) => Effect.Effect<ApiKeySelect[], DatabaseError | RepoError>;
   }
->()("services/apikey") { }
+>()("services/apikey") {}
 
 export const ApiKeyServiceLive = Layer.effect(
   ApiKeyService,
-  Effect.gen(function*() {
+  Effect.gen(function* () {
     const repo = yield* ApiKeyRepo;
 
     const createApiKey = (
@@ -75,7 +75,7 @@ export const ApiKeyServiceLive = Layer.effect(
       CreateApiKeyResult,
       ApiKeyError | DatabaseError | RepoError
     > =>
-      Effect.gen(function*() {
+      Effect.gen(function* () {
         const { keyId, rawKey, keyHash } = yield* generateApiKey();
 
         const now = new Date();
@@ -120,7 +120,7 @@ export const ApiKeyServiceLive = Layer.effect(
       VerifyApiKeyResult,
       ApiKeyError | DatabaseError | RepoError
     > =>
-      Effect.gen(function*() {
+      Effect.gen(function* () {
         if (!validateApiKeyFormat(rawKey)) {
           return yield* new ApiKeyError({
             message: "Invalid API key format",
@@ -184,7 +184,7 @@ export const ApiKeyServiceLive = Layer.effect(
       keyId: string,
       userId: string,
     ): Effect.Effect<void, ApiKeyError | DatabaseError | RepoError> =>
-      Effect.gen(function*() {
+      Effect.gen(function* () {
         const keys = yield* repo.findById("id", keyId);
 
         if (!keys || keys.length === 0) {
@@ -213,7 +213,7 @@ export const ApiKeyServiceLive = Layer.effect(
       userId: string,
       input: UpdateApiKeyInput,
     ): Effect.Effect<void, ApiKeyError | DatabaseError | RepoError> =>
-      Effect.gen(function*() {
+      Effect.gen(function* () {
         const keys = yield* repo.findById("id", keyId);
 
         if (!keys || keys.length === 0) {
@@ -256,7 +256,7 @@ export const ApiKeyServiceLive = Layer.effect(
     const listApiKeys = (
       userId: string,
     ): Effect.Effect<ApiKeySelect[], DatabaseError | RepoError> =>
-      Effect.gen(function*() {
+      Effect.gen(function* () {
         return yield* repo.findById("userId", userId);
       });
 

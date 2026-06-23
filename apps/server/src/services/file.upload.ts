@@ -5,7 +5,11 @@
  */
 
 import { Effect, Layer, ServiceMap } from "effect";
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { FileUploadServiceError } from "@/errors/tagged.errors";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "cloudflare:workers";
@@ -50,8 +54,14 @@ export class FileUploadService extends ServiceMap.Service<
     getPresignedUrl: (fileMetadata: {
       fileName: string;
       expiresIn: number;
-    }) => Effect.Effect<{ uploadUrl: string; fileUrl: string }, FileUploadServiceError, never>;
-    deleteObject: (key: string) => Effect.Effect<void, FileUploadServiceError, never>;
+    }) => Effect.Effect<
+      { uploadUrl: string; fileUrl: string },
+      FileUploadServiceError,
+      never
+    >;
+    deleteObject: (
+      key: string,
+    ) => Effect.Effect<void, FileUploadServiceError, never>;
   }
 >()("/file.upload.ts/FileUploadService") {}
 
@@ -79,7 +89,8 @@ export const FileUploadServiceLive = Layer.effect(FileUploadService)(
               buckerUrl = env.TEMPLATE_ASSETS_BUCKET_PROD_URL;
             }
 
-            const fileUrl = new URL(`/${storage.bucket}/${key}`, buckerUrl).href;
+            const fileUrl = new URL(`/${storage.bucket}/${key}`, buckerUrl)
+              .href;
 
             return { uploadUrl, fileUrl };
           },
@@ -96,7 +107,10 @@ export const FileUploadServiceLive = Layer.effect(FileUploadService)(
       deleteObject(Key) {
         return Effect.tryPromise({
           try: async () => {
-            const command = new DeleteObjectCommand({ Bucket: storage.bucket, Key });
+            const command = new DeleteObjectCommand({
+              Bucket: storage.bucket,
+              Key,
+            });
             await storage.client.send(command);
           },
           catch: (e) => {

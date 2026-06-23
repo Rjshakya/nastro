@@ -52,7 +52,9 @@ const { db, ds } = await notion.getDataBaseWithDataSource("database-id");
 // Query a data source (database rows)
 const { pages, nextCursor } = await notion.queryDataBase({
   data_source_id: "datasource-id",
-  filter: { /* ... */ },
+  filter: {
+    /* ... */
+  },
 });
 
 // Get rows with pagination
@@ -96,35 +98,31 @@ const ds = await notion.createDataSource(params);
 Transform fetched content using the chainable `.use()` method.
 
 ```typescript
-import { createNotionApi, toHTML, toMarkdown, toBlockMap } from "@nastro/notion-api";
+import {
+  createNotionApi,
+  toHTML,
+  toMarkdown,
+  toBlockMap,
+} from "@nastro/notion-api";
 
 const notion = createNotionApi({ token: "..." });
 
 // Convert page to HTML
-const html = await notion
-  .fetch("page-id")
-  .use(toHTML())
-  .run();
+const html = await notion.fetch("page-id").use(toHTML()).run();
 
 // Convert page to Markdown
-const markdown = await notion
-  .fetch("page-id")
-  .use(toMarkdown())
-  .run();
+const markdown = await notion.fetch("page-id").use(toMarkdown()).run();
 
 // Convert page to a block map
-const blockMap = await notion
-  .fetch("page-id")
-  .use(toBlockMap())
-  .run();
+const blockMap = await notion.fetch("page-id").use(toBlockMap()).run();
 ```
 
 ### Available Plugins
 
-| Plugin | Description | Output Type |
-|--------|-------------|-------------|
-| `toHTML()` | Converts Notion blocks to HTML string | `string` |
-| `toMarkdown()` | Converts Notion blocks to Markdown string | `string` |
+| Plugin         | Description                                | Output Type             |
+| -------------- | ------------------------------------------ | ----------------------- |
+| `toHTML()`     | Converts Notion blocks to HTML string      | `string`                |
+| `toMarkdown()` | Converts Notion blocks to Markdown string  | `string`                |
 | `toBlockMap()` | Converts Notion blocks to a flat block map | `Record<string, Block>` |
 
 ### Custom Plugins
@@ -139,10 +137,7 @@ const myPlugin = (page) => {
   };
 };
 
-const result = await notion
-  .fetch("page-id")
-  .use(myPlugin)
-  .run();
+const result = await notion.fetch("page-id").use(myPlugin).run();
 // result: { title: string, wordCount: number }
 ```
 
@@ -152,7 +147,10 @@ const result = await notion
 import { getPagePaginated, getPageBlocksPaginated } from "@nastro/notion-api";
 
 // Paginate through all page blocks
-for await (const blocks of getPageBlocksPaginated({ token: "...", pageId: "..." })) {
+for await (const blocks of getPageBlocksPaginated({
+  token: "...",
+  pageId: "...",
+})) {
   console.log(blocks);
 }
 
@@ -167,10 +165,16 @@ for await (const page of getPagePaginated({ token: "...", pageId: "..." })) {
 For direct block content extraction:
 
 ```typescript
-import { getBlockContent, getBlockContentRecursively } from "@nastro/notion-api";
+import {
+  getBlockContent,
+  getBlockContentRecursively,
+} from "@nastro/notion-api";
 
 const content = await getBlockContent({ token: "...", blockId: "..." });
-const allContent = await getBlockContentRecursively({ token: "...", blockId: "..." });
+const allContent = await getBlockContentRecursively({
+  token: "...",
+  blockId: "...",
+});
 ```
 
 ## Types

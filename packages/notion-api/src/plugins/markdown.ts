@@ -81,7 +81,9 @@ function isYouTubeUrl(url: string): boolean {
  * Render rich text array to markdown
  * Handles links by converting to markdown format
  */
-function renderRichText(texts: Array<{ text: string; href: string | null }> | undefined): string {
+function renderRichText(
+  texts: Array<{ text: string; href: string | null }> | undefined,
+): string {
   if (!texts?.length) return "";
 
   return texts
@@ -111,7 +113,9 @@ function getListType(type: string): "ul" | "ol" {
 /**
  * Render icon to markdown string
  */
-function renderIcon(icon: { type: string; value: string; name?: string } | null): string {
+function renderIcon(
+  icon: { type: string; value: string; name?: string } | null,
+): string {
   if (!icon) return "";
 
   if (icon.type === "emoji") {
@@ -261,7 +265,9 @@ function renderBlock(block: PageBlockContentOnly, depth: number = 0): string {
   // Table blocks
   else if (type === "table") {
     const content = block.content as TableContent;
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks, depth, true) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks, depth, true)
+      : "";
     markdown = children ? `${children}\n` : "";
   } else if (type === "table_row") {
     const content = block.content as TableRowContent;
@@ -285,7 +291,9 @@ function renderBlock(block: PageBlockContentOnly, depth: number = 0): string {
       const columnContents: string[] = [];
       for (const columnBlock of block.childBlocks || []) {
         // Render column children
-        const colContent = renderColumnContent(columnBlock as PageBlockContentOnly);
+        const colContent = renderColumnContent(
+          columnBlock as PageBlockContentOnly,
+        );
         columnContents.push(colContent);
       }
 
@@ -360,7 +368,9 @@ function renderBlock(block: PageBlockContentOnly, depth: number = 0): string {
   else if (type === "template") {
     markdown = "";
   } else if (type === "synced_block") {
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks, depth) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks, depth)
+      : "";
     markdown = children;
   } else if (type === "unsupported") {
     markdown = "";
@@ -425,13 +435,17 @@ function renderBlocks(
         // For numbered lists, we need to track the actual number
         const content = block.content as ListItemContent;
         const indent = "  ".repeat(depth);
-        currentList.items.push(`${indent}${listIndex}. ${renderRichText(content.text)}\n`);
+        currentList.items.push(
+          `${indent}${listIndex}. ${renderRichText(content.text)}\n`,
+        );
         listIndex++;
       } else if (block.type === "to_do") {
         const content = block.content as ToDoContent;
         const checkbox = content.checked ? "[x]" : "[ ]";
         const indent = "  ".repeat(depth);
-        currentList.items.push(`${indent}- ${checkbox} ${renderRichText(content.text)}\n`);
+        currentList.items.push(
+          `${indent}- ${checkbox} ${renderRichText(content.text)}\n`,
+        );
       } else {
         currentList.items.push(renderBlock(block, depth));
       }
@@ -447,7 +461,9 @@ function renderBlocks(
       // Handle table rows specially
       if (isTable && block.type === "table_row") {
         const content = block.content as TableRowContent;
-        const cells = content.cells.map((cell) => renderRichText(cell)).join(" | ");
+        const cells = content.cells
+          .map((cell) => renderRichText(cell))
+          .join(" | ");
         const indent = "  ".repeat(depth);
         result.push(`${indent}| ${cells} |\n`);
 

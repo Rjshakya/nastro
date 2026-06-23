@@ -2,17 +2,30 @@ import { Command } from "commander";
 import { resolveConfig } from "./config.js";
 import { loadSchemasFromGlob } from "./schema-loader.js";
 import type { NotionOrmConfig } from "./types.js";
-import { convertSchemeToDataBaseParams, createDatabase, buildUpdateProperty } from "./utils.js";
+import {
+  convertSchemeToDataBaseParams,
+  createDatabase,
+  buildUpdateProperty,
+} from "./utils.js";
 import { createNotionApi } from "@nastro-dev/notion-api";
 import { loadMapping, writeMapping } from "./mapping.js";
-import { compareProperties, hasDeletions, formatDiffs, type PropertyDiff } from "./compare.js";
+import {
+  compareProperties,
+  hasDeletions,
+  formatDiffs,
+  type PropertyDiff,
+} from "./compare.js";
 import type { NotionTable } from "@nastro-dev/notion-orm";
 import type { UpdateDataSourceParameters } from "@notionhq/client";
 
 const pushCommand = new Command()
   .name("push")
   .description("Push the schema to Notion and create/update databases")
-  .option("-f, --force", "Force push even if properties would be deleted", false)
+  .option(
+    "-f, --force",
+    "Force push even if properties would be deleted",
+    false,
+  )
   .option(
     "-r, --rename <renames...>",
     'Rename properties in format "oldName=newName". Can be used multiple times.',
@@ -57,7 +70,9 @@ function parseRenames(flags: string[] | undefined): Map<string, string> {
     if (oldName && newName) {
       renames.set(oldName, newName);
     } else {
-      console.warn(`  ⚠ Invalid rename format: "${flag}". Expected "oldName=newName".`);
+      console.warn(
+        `  ⚠ Invalid rename format: "${flag}". Expected "oldName=newName".`,
+      );
     }
   }
   return renames;
@@ -65,14 +80,19 @@ function parseRenames(flags: string[] | undefined): Map<string, string> {
 
 // ==================== Apply Renames to Diffs ====================
 
-function applyRenames(diffs: PropertyDiff[], renames: Map<string, string>): PropertyDiff[] {
+function applyRenames(
+  diffs: PropertyDiff[],
+  renames: Map<string, string>,
+): PropertyDiff[] {
   const result: PropertyDiff[] = [];
   const handledNewNames = new Set<string>();
 
   for (const diff of diffs) {
     if (diff.type === "removed" && renames.has(diff.property)) {
       const newName = renames.get(diff.property)!;
-      const addedDiff = diffs.find((d) => d.type === "added" && d.property === newName);
+      const addedDiff = diffs.find(
+        (d) => d.type === "added" && d.property === newName,
+      );
 
       if (addedDiff) {
         result.push({
@@ -170,7 +190,13 @@ async function classifyTables(
         continue;
       }
 
-      toUpdate.push({ table, title, databaseId: existingId, dataSourceId, diffs });
+      toUpdate.push({
+        table,
+        title,
+        databaseId: existingId,
+        dataSourceId,
+        diffs,
+      });
       console.log(`  Will update\n`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -199,7 +225,12 @@ async function createDatabases(
     try {
       const params = convertSchemeToDataBaseParams(table, rootPage);
       const { id, dataSourceId } = await createDatabase(notion, params);
-      results.push({ tableTitle: title, status: "created", databaseId: id, dataSourceId });
+      results.push({
+        tableTitle: title,
+        status: "created",
+        databaseId: id,
+        dataSourceId,
+      });
       console.log(`  ✓ Created "${title}": ${id}`);
       return { success: true as const };
     } catch (error) {
@@ -237,7 +268,12 @@ async function updateDatabases(
         });
       }
 
-      results.push({ tableTitle: title, status: "updated", databaseId: databaseId, dataSourceId });
+      results.push({
+        tableTitle: title,
+        status: "updated",
+        databaseId: databaseId,
+        dataSourceId,
+      });
       console.log(`  ✓ Updated "${title}"`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -255,7 +291,9 @@ function buildUpdateProperties(
   table: NotionTable,
   diffs: PropertyDiff[],
 ): NonNullable<UpdateDataSourceParameters["properties"]> {
-  const properties = {} as NonNullable<UpdateDataSourceParameters["properties"]>;
+  const properties = {} as NonNullable<
+    UpdateDataSourceParameters["properties"]
+  >;
 
   for (const diff of diffs) {
     switch (diff.type) {
@@ -270,7 +308,9 @@ function buildUpdateProperties(
           if (payload) {
             properties[diff.property] = payload;
           } else {
-            console.warn(`  ⚠ Skipping unsupported property "${diff.property}" (${column.type})`);
+            console.warn(
+              `  ⚠ Skipping unsupported property "${diff.property}" (${column.type})`,
+            );
           }
         }
         break;
@@ -282,7 +322,9 @@ function buildUpdateProperties(
           if (payload) {
             properties[diff.property] = payload;
           } else {
-            console.warn(`  ⚠ Skipping unsupported property "${diff.property}" (${column.type})`);
+            console.warn(
+              `  ⚠ Skipping unsupported property "${diff.property}" (${column.type})`,
+            );
           }
         }
         break;
@@ -318,10 +360,16 @@ function printSummary(
   console.log("\n" + "=".repeat(50));
   console.log("Push Summary");
   console.log("=".repeat(50));
-  console.log(`  Created: ${results.filter((r) => r.status === "created").length}`);
-  console.log(`  Updated: ${results.filter((r) => r.status === "updated").length}`);
+  console.log(
+    `  Created: ${results.filter((r) => r.status === "created").length}`,
+  );
+  console.log(
+    `  Updated: ${results.filter((r) => r.status === "updated").length}`,
+  );
   console.log(`  Skipped: ${skippedTables.length}`);
-  console.log(`  Errors:  ${results.filter((r) => r.status === "error").length}`);
+  console.log(
+    `  Errors:  ${results.filter((r) => r.status === "error").length}`,
+  );
 
   if (skippedTables.length > 0) {
     console.log("\nSkipped tables:");

@@ -10,6 +10,7 @@ import {
   SlugServiceError,
   ApiKeyError,
   CustomDomainError,
+  AnalyticsError,
 } from "@/errors/tagged.errors";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { StreamableHTTPTransport } from "@hono/mcp";
@@ -115,6 +116,17 @@ export const app = new Hono<{ Variables: Vars }>()
     }
 
     if (e instanceof CustomDomainError) {
+      return c.json(
+        ApiResponse({
+          data: null,
+          error: e.type,
+          message: e.message,
+        }),
+        getCode(e.code),
+      );
+    }
+
+    if (e instanceof AnalyticsError) {
       return c.json(
         ApiResponse({
           data: null,

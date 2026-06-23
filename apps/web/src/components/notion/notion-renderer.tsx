@@ -1,7 +1,6 @@
 import { NotionRenderer as NotionRendererLib } from "react-notion-x";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collection, Property } from "react-notion-x/third-party/collection";
-import { Code } from "react-notion-x/third-party/code";
 import { Equation } from "react-notion-x/third-party/equation";
 import React, { type CSSProperties } from "react";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
@@ -10,6 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import type { ExtendedRecordMap } from "notion-types";
 import { renderButtonBlock } from "./button";
 import type { SiteSetting } from "@/types/site.setting";
+import { Code } from "./code";
 
 interface NotionRendererProps {
   pageId: string;
@@ -74,7 +74,7 @@ export function NotionRenderer({
             );
           },
           Header: SiteHeader,
-          Code,
+          Code: Code({ recordMap }),
           Property,
         }}
         mapPageUrl={handlePageUrl}

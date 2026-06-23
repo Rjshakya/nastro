@@ -43,7 +43,7 @@ export const templateTableRelations = relations(templateTable, ({ one }) => ({
   }),
 }));
 
-export const templateTableInsetSchema = createInsertSchema(templateTable)
+export const templateTableInsetSchema = createInsertSchema(templateTable);
 export const templateTableSelectSchema = createSelectSchema(templateTable);
 
 export type TemplateTableSelect = typeof templateTable.$inferSelect;

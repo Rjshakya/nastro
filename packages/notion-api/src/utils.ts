@@ -13,14 +13,18 @@ import type { PageHeader, PageIcon, PageTitle, RichText } from "./types.js";
  * Extract rich text content from a rich_text array
  * Returns plain text with href only (no annotations)
  */
-export const extractRichText = (richText: RichTextItemResponse[]): RichText[] => {
+export const extractRichText = (
+  richText: RichTextItemResponse[],
+): RichText[] => {
   return richText.map((rt) => ({
     text: rt.plain_text,
     href: rt.href,
   }));
 };
 
-export const mapRichTextToFullText = (richText: RichTextItemResponse[]): string => {
+export const mapRichTextToFullText = (
+  richText: RichTextItemResponse[],
+): string => {
   return richText
     .map((rt) => {
       if (rt.href) {
@@ -39,7 +43,9 @@ export const hasChildren = (block: BlockObjectResponse): boolean => {
   return block.has_children;
 };
 
-export function extractCoverUrl(cover: PageObjectResponse["cover"]): string | null {
+export function extractCoverUrl(
+  cover: PageObjectResponse["cover"],
+): string | null {
   let url = null;
 
   if (cover?.type === "external") {
@@ -88,7 +94,9 @@ export function extractPageIcon(icon: PageObjectResponse["icon"]): PageIcon {
   return obj;
 }
 
-export function extractPageTitle(props: PageObjectResponse["properties"]): PageTitle {
+export function extractPageTitle(
+  props: PageObjectResponse["properties"],
+): PageTitle {
   const title = {} as PageTitle;
 
   const getTitleProp = (props: PageObjectResponse["properties"]) => {

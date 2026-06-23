@@ -59,7 +59,9 @@ export function richText(params?: ColumnBase): RichTextColumn {
  * Number property
  * Contains numeric values with optional format
  */
-export function number(params?: ColumnBase & { format?: NumberFormat }): NumberColumn {
+export function number(
+  params?: ColumnBase & { format?: NumberFormat },
+): NumberColumn {
   return {
     name: params?.name,
     description: params?.description,
@@ -74,7 +76,9 @@ export function number(params?: ColumnBase & { format?: NumberFormat }): NumberC
  * Select property
  * Contains values from a selection of options (single choice)
  */
-export function select(params: ColumnBase & { options: (string | SelectOption)[] }): SelectColumn {
+export function select(
+  params: ColumnBase & { options: (string | SelectOption)[] },
+): SelectColumn {
   const options: SelectOption[] = params.options.map((opt) => {
     if (typeof opt === "string") {
       return { name: opt, color: "default" };
@@ -123,7 +127,9 @@ export function multiSelect(
  * Note: If no options specified, Notion creates defaults:
  * "Not started", "In progress", "Done"
  */
-export function status(params: ColumnBase & { options: (string | StatusOption)[] }): StatusColumn {
+export function status(
+  params: ColumnBase & { options: (string | StatusOption)[] },
+): StatusColumn {
   const options: StatusOption[] = params.options.map((opt) => {
     if (typeof opt === "string") {
       return { name: opt, color: "default" };
@@ -237,7 +243,9 @@ export function phoneNumber(params?: ColumnBase): PhoneNumberColumn {
  *
  * @description Not completely supported for now;
  */
-export function relation(params: ColumnBase & { relatedTo?: string }): RelationColumn {
+export function relation(
+  params: ColumnBase & { relatedTo?: string },
+): RelationColumn {
   return {
     name: params.name,
     description: params.description,
@@ -257,7 +265,9 @@ export function relation(params: ColumnBase & { relatedTo?: string }): RelationC
  *  @description Not completely supported for now;
  */
 
-export function formula(params: ColumnBase & { expression: string }): FormulaColumn {
+export function formula(
+  params: ColumnBase & { expression: string },
+): FormulaColumn {
   return {
     name: params.name,
     description: params.description,
@@ -300,7 +310,9 @@ export function rollup(
  *
  *  @description read-only
  */
-export function uniqueId(params?: ColumnBase & { prefix?: string }): UniqueIdColumn {
+export function uniqueId(
+  params?: ColumnBase & { prefix?: string },
+): UniqueIdColumn {
   return {
     name: params?.name,
     description: params?.description,

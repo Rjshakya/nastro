@@ -115,7 +115,7 @@ export function CustomDomainPage() {
             </div>
             <CreateDomainDialog sites={sites || []} />
           </div>
-          <Card className="p-1 rounded-2xl">
+          <Card className="p-1 bg-background rounded-2xl">
             <CardContent className="p-0">
               <DomainList
                 domains={domains || []}

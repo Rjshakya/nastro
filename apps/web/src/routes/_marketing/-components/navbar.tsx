@@ -34,7 +34,7 @@ export function Navbar() {
         scrolled ? "bg-background/80 backdrop-blur-md " : "bg-transparent",
       )}
     >
-      <nav className=" mx-auto py-2 px-4 flex items-center  justify-between ">
+      <nav className="max-w-3xl mx-auto py-2 px-4 flex items-center  justify-between ">
         {/* Logo */}
         <motion.a
           href="/"
@@ -46,19 +46,6 @@ export function Navbar() {
         </motion.a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex  items-center gap-8">
-          {navLinks.map((link) => (
-            <motion.a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors overflow-hidden"
-              whileHover={{ y: -1 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              {link.label}
-            </motion.a>
-          ))}
-        </div>
 
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-4">

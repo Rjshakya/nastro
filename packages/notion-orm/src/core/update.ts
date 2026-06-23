@@ -10,7 +10,13 @@ export class Update<T extends NotionTable> {
   private data: Partial<InferInsertType<T>> | undefined;
   private query: QueryDataSourceParameters;
   private pageId: string | undefined;
-  constructor(private config: { notion: NotionApi; table: T; mapping?: Record<string, string> }) {
+  constructor(
+    private config: {
+      notion: NotionApi;
+      table: T;
+      mapping?: Record<string, string>;
+    },
+  ) {
     this.query = { data_source_id: "" };
   }
 
@@ -46,7 +52,10 @@ export class Update<T extends NotionTable> {
             throw new Error("Page ID is required for update");
           }
           return Promise.all([
-            this.config.notion.updatePage({ page_id: this.pageId, properties: props }),
+            this.config.notion.updatePage({
+              page_id: this.pageId,
+              properties: props,
+            }),
           ]);
         });
     }
@@ -61,9 +70,15 @@ export class Update<T extends NotionTable> {
         }
         return { databaseId, mapping };
       })
-      .then(({ databaseId, mapping }) => ({ databaseId, datasourceId: mapping[databaseId] }))
+      .then(({ databaseId, mapping }) => ({
+        databaseId,
+        datasourceId: mapping[databaseId],
+      }))
       .then(({ datasourceId }) =>
-        this.config.notion.queryDataBase({ ...this.query, data_source_id: datasourceId }),
+        this.config.notion.queryDataBase({
+          ...this.query,
+          data_source_id: datasourceId,
+        }),
       )
       .then(({ pages }) => {
         if (!this.data) {
@@ -77,7 +92,9 @@ export class Update<T extends NotionTable> {
       })
       .then(({ pages, props }) => {
         return Promise.all(
-          pages.map((id) => this.config.notion.updatePage({ page_id: id, properties: props })),
+          pages.map((id) =>
+            this.config.notion.updatePage({ page_id: id, properties: props }),
+          ),
         );
       });
   }

@@ -55,8 +55,5 @@ export type ComparableColumnType =
 export type ComparableColumn = Extract<Column, { type: ComparableColumnType }>;
 
 /** Infer the value type for a comparable column */
-export type ComparableColumnValue<T extends ComparableColumn> = T["type"] extends
-  | "number"
-  | "unique_id"
-  ? number
-  : string;
+export type ComparableColumnValue<T extends ComparableColumn> =
+  T["type"] extends "number" | "unique_id" ? number : string;

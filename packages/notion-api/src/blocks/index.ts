@@ -23,9 +23,19 @@ import {
   handleToggle,
 } from "./list-blocks.js";
 
-import { handleImage, handleVideo, handleAudio, handlePdf, handleFile } from "./media-blocks.js";
+import {
+  handleImage,
+  handleVideo,
+  handleAudio,
+  handlePdf,
+  handleFile,
+} from "./media-blocks.js";
 
-import { handleEmbed, handleBookmark, handleLinkPreview } from "./embed-blocks.js";
+import {
+  handleEmbed,
+  handleBookmark,
+  handleLinkPreview,
+} from "./embed-blocks.js";
 
 import { handleTable, handleTableRow } from "./table-blocks.js";
 
@@ -37,7 +47,11 @@ import {
   handleTableOfContents,
 } from "./structure-blocks.js";
 
-import { handleChildPage, handleChildDatabase, handleLinkToPage } from "./nav-blocks.js";
+import {
+  handleChildPage,
+  handleChildDatabase,
+  handleLinkToPage,
+} from "./nav-blocks.js";
 
 import {
   handleCode,
@@ -51,7 +65,9 @@ import { getPageBlocksPaginated } from "../page.js";
 /**
  * Type for function that fetches child blocks
  */
-export type FetchChildrenFn = (blockId: string) => Promise<BlockObjectResponse[]>;
+export type FetchChildrenFn = (
+  blockId: string,
+) => Promise<BlockObjectResponse[]>;
 
 /**
  * Error type for block processing failures
@@ -81,16 +97,24 @@ export const getBlockContent =
     // Route to appropriate handler based on block type
     switch (blockType) {
       case "paragraph":
-        return handleParagraph(() => b as Extract<typeof b, { type: "paragraph" }>)();
+        return handleParagraph(
+          () => b as Extract<typeof b, { type: "paragraph" }>,
+        )();
 
       case "heading_1":
-        return handleHeading1(() => b as Extract<typeof b, { type: "heading_1" }>)();
+        return handleHeading1(
+          () => b as Extract<typeof b, { type: "heading_1" }>,
+        )();
 
       case "heading_2":
-        return handleHeading2(() => b as Extract<typeof b, { type: "heading_2" }>)();
+        return handleHeading2(
+          () => b as Extract<typeof b, { type: "heading_2" }>,
+        )();
 
       case "heading_3":
-        return handleHeading3(() => b as Extract<typeof b, { type: "heading_3" }>)();
+        return handleHeading3(
+          () => b as Extract<typeof b, { type: "heading_3" }>,
+        )();
 
       case "bulleted_list_item":
         return handleBulletedListItem(
@@ -112,7 +136,9 @@ export const getBlockContent =
         return handleToggle(() => b as Extract<typeof b, { type: "toggle" }>)();
 
       case "callout":
-        return handleCallout(() => b as Extract<typeof b, { type: "callout" }>)();
+        return handleCallout(
+          () => b as Extract<typeof b, { type: "callout" }>,
+        )();
 
       case "image":
         return handleImage(() => b as Extract<typeof b, { type: "image" }>)();
@@ -133,40 +159,58 @@ export const getBlockContent =
         return handleEmbed(() => b as Extract<typeof b, { type: "embed" }>)();
 
       case "bookmark":
-        return handleBookmark(() => b as Extract<typeof b, { type: "bookmark" }>)();
+        return handleBookmark(
+          () => b as Extract<typeof b, { type: "bookmark" }>,
+        )();
 
       case "link_preview":
-        return handleLinkPreview(() => b as Extract<typeof b, { type: "link_preview" }>)();
+        return handleLinkPreview(
+          () => b as Extract<typeof b, { type: "link_preview" }>,
+        )();
 
       case "code":
         return handleCode(() => b as Extract<typeof b, { type: "code" }>)();
 
       case "equation":
-        return handleEquation(() => b as Extract<typeof b, { type: "equation" }>)();
+        return handleEquation(
+          () => b as Extract<typeof b, { type: "equation" }>,
+        )();
 
       case "table":
         return handleTable(() => b as Extract<typeof b, { type: "table" }>)();
 
       case "table_row":
-        return handleTableRow(() => b as Extract<typeof b, { type: "table_row" }>)();
+        return handleTableRow(
+          () => b as Extract<typeof b, { type: "table_row" }>,
+        )();
 
       case "column_list":
-        return handleColumnList(() => b as Extract<typeof b, { type: "column_list" }>)();
+        return handleColumnList(
+          () => b as Extract<typeof b, { type: "column_list" }>,
+        )();
 
       case "column":
         return handleColumn(() => b as Extract<typeof b, { type: "column" }>)();
 
       case "divider":
-        return handleDivider(() => b as Extract<typeof b, { type: "divider" }>)();
+        return handleDivider(
+          () => b as Extract<typeof b, { type: "divider" }>,
+        )();
 
       case "breadcrumb":
-        return handleBreadcrumb(() => b as Extract<typeof b, { type: "breadcrumb" }>)();
+        return handleBreadcrumb(
+          () => b as Extract<typeof b, { type: "breadcrumb" }>,
+        )();
 
       case "table_of_contents":
-        return handleTableOfContents(() => b as Extract<typeof b, { type: "table_of_contents" }>)();
+        return handleTableOfContents(
+          () => b as Extract<typeof b, { type: "table_of_contents" }>,
+        )();
 
       case "child_page":
-        return await handleChildPage(() => b as Extract<typeof b, { type: "child_page" }>)(f);
+        return await handleChildPage(
+          () => b as Extract<typeof b, { type: "child_page" }>,
+        )(f);
 
       case "child_database":
         return await handleChildDatabase(
@@ -175,16 +219,24 @@ export const getBlockContent =
         )(f);
 
       case "link_to_page":
-        return handleLinkToPage(() => b as Extract<typeof b, { type: "link_to_page" }>)();
+        return handleLinkToPage(
+          () => b as Extract<typeof b, { type: "link_to_page" }>,
+        )();
 
       case "template":
-        return handleTemplate(() => b as Extract<typeof b, { type: "template" }>)();
+        return handleTemplate(
+          () => b as Extract<typeof b, { type: "template" }>,
+        )();
 
       case "synced_block":
-        return handleSyncedBlock(() => b as Extract<typeof b, { type: "synced_block" }>)();
+        return handleSyncedBlock(
+          () => b as Extract<typeof b, { type: "synced_block" }>,
+        )();
 
       case "unsupported":
-        return handleUnsupported(() => b as Extract<typeof b, { type: "unsupported" }>)();
+        return handleUnsupported(
+          () => b as Extract<typeof b, { type: "unsupported" }>,
+        )();
 
       default:
         // Exhaustive check - if we reach here, Notion added a new block type

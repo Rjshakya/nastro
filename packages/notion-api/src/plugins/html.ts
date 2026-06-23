@@ -91,7 +91,9 @@ function isYouTubeUrl(url: string): boolean {
  * Render rich text array to HTML
  * Handles links by converting href to <a> tags
  */
-function renderRichText(texts: Array<{ text: string; href: string | null }> | undefined): string {
+function renderRichText(
+  texts: Array<{ text: string; href: string | null }> | undefined,
+): string {
   if (!texts?.length) return "";
 
   return texts
@@ -122,7 +124,9 @@ function getListType(type: string): "ul" | "ol" {
 /**
  * Render icon to HTML
  */
-function renderIcon(icon: { type: string; value: string; name?: string } | null): string {
+function renderIcon(
+  icon: { type: string; value: string; name?: string } | null,
+): string {
   if (!icon) return "";
 
   if (icon.type === "emoji") {
@@ -140,7 +144,9 @@ function renderIcon(icon: { type: string; value: string; name?: string } | null)
 /**
  * Render caption text
  */
-function renderCaption(caption: Array<{ text: string; href: string | null }> | undefined): string {
+function renderCaption(
+  caption: Array<{ text: string; href: string | null }> | undefined,
+): string {
   if (!caption?.length) return "";
   return caption.map((c) => c.text).join("");
 }
@@ -177,7 +183,8 @@ function renderBlock(block: PageBlockContentOnly): string {
       ? `<span class="notion-callout-icon">${renderIcon(content.icon)}</span>`
       : "";
 
-    const iconName = content.icon?.type === "custom_emoji" ? content.icon.name : "";
+    const iconName =
+      content.icon?.type === "custom_emoji" ? content.icon.name : "";
 
     html = `
     <div data-callout-icon="${iconName}" class="notion-callout">
@@ -201,7 +208,9 @@ function renderBlock(block: PageBlockContentOnly): string {
     </div>`;
   } else if (type === "toggle") {
     const content = block.content as ToggleContent;
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks)
+      : "";
     html = `
     <details class="notion-toggle">
       <summary class="notion-toggle-summary">${renderRichText(content.text)}</summary>
@@ -269,7 +278,9 @@ function renderBlock(block: PageBlockContentOnly): string {
   // Table blocks
   else if (type === "table") {
     const content = block.content as TableContent;
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks)
+      : "";
     html = `
     <table class="notion-table" data-width="${content.width}" data-has-column-header="${content.hasColumnHeader}" data-has-row-header="${content.hasRowHeader}">
 
@@ -279,17 +290,23 @@ function renderBlock(block: PageBlockContentOnly): string {
   } else if (type === "table_row") {
     const content = block.content as TableRowContent;
     const cells = content.cells
-      .map((cell) => `<td class="notion-table-cell">${renderRichText(cell)}</td>`)
+      .map(
+        (cell) => `<td class="notion-table-cell">${renderRichText(cell)}</td>`,
+      )
       .join("");
     html = `<tr class="notion-table-row">${cells}</tr>`;
   }
 
   // Structure blocks
   else if (type === "column_list") {
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks)
+      : "";
     html = `<div class="notion-column-list">${children}</div>`;
   } else if (type === "column") {
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks)
+      : "";
     html = `<div class="notion-column">${children}</div>`;
   } else if (type === "divider") {
     html = `<hr class="notion-divider" />`;
@@ -369,7 +386,9 @@ function renderBlock(block: PageBlockContentOnly): string {
   else if (type === "template") {
     html = `<div class="notion-template"></div>`;
   } else if (type === "synced_block") {
-    const children = block.childBlocks?.length ? renderBlocks(block.childBlocks) : "";
+    const children = block.childBlocks?.length
+      ? renderBlocks(block.childBlocks)
+      : "";
     html = `<div class="notion-synced-block">${children}</div>`;
   } else if (type === "unsupported") {
     html = `<p class="notion-unknown"></p>`;
@@ -395,14 +414,20 @@ function renderBlock(block: PageBlockContentOnly): string {
     const childrenHtml = renderBlocks(block.childBlocks);
     // Insert children before closing tag for container elements
     if (html.includes("</div>")) {
-      html = html.replace(/<\/div>$/, `<div class="notion-children">${childrenHtml}</div></div>`);
+      html = html.replace(
+        /<\/div>$/,
+        `<div class="notion-children">${childrenHtml}</div></div>`,
+      );
     } else if (html.includes("</blockquote>")) {
       html = html.replace(
         /<\/blockquote>$/,
         `<div class="notion-children">${childrenHtml}</div></blockquote>`,
       );
     } else if (html.includes("</li>")) {
-      html = html.replace(/<\/li>$/, `<div class="notion-children">${childrenHtml}</div></li>`);
+      html = html.replace(
+        /<\/li>$/,
+        `<div class="notion-children">${childrenHtml}</div></li>`,
+      );
     } else {
       // For other elements, append after
       html = `${html}<div class="notion-children">${childrenHtml}</div>`;
@@ -482,7 +507,9 @@ function renderDatabasePage(page: Page): string {
 /**
  * Extract first paragraph for meta description
  */
-function extractFirstParagraph(blocks: PageBlockContentOnly[] | PageBlock[]): string {
+function extractFirstParagraph(
+  blocks: PageBlockContentOnly[] | PageBlock[],
+): string {
   const para = blocks.find(
     (b) =>
       b.type === "paragraph" &&
@@ -500,7 +527,7 @@ function extractFirstParagraph(blocks: PageBlockContentOnly[] | PageBlock[]): st
 /**
  * Wrap content with SEO-friendly container
  */
-function wrapWithContainer(content: string, page: Page ): string {
+function wrapWithContainer(content: string, page: Page): string {
   const title = page.title?.fullText || "Untitled";
 
   return `

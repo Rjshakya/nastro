@@ -46,16 +46,19 @@ export function getNotionPageSeo({
   page: ExtendedRecordMap;
   pageId: string;
 }) {
-  const ogImgUrl = defaultNotionOgImage(page, pageId);
-  const pageTitle = getNotionPageTitle(page);
-  const pageIcon = getNotionPageIcon(page, site.rootPageId);
+  const siteSeo = site?.setting?.seo;
+
+  const title = siteSeo?.title ?? getNotionPageTitle(page) ?? "";
+  const description = siteSeo?.description ?? site.name ?? "";
+  const ogImage = siteSeo?.ogImage ?? defaultNotionOgImage(page, pageId);
+  const pageIcon = getNotionPageIcon(page, site.rootPageId) ?? "";
 
   return {
-    title: pageTitle || "",
-    description: site.name,
-    ogImage: ogImgUrl,
-    pageUrl: `${Env.clientUrl}/${site.id}?pageId=${pageId}`,
-    pageIcon: pageIcon || "",
+    title,
+    description,
+    ogImage,
+    pageUrl: `${Env.clientUrl}/${pageId}?slug=${site.slug}`,
+    pageIcon,
     type: "seo",
   };
 }

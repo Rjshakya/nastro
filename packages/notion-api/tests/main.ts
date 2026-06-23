@@ -17,7 +17,10 @@ new NotionApi({
   });
 
 function writeLocalFile(fileName: string, ext: "json"): (data: unknown) => void;
-function writeLocalFile(fileName: string, ext: "html" | "md"): (data: string) => void;
+function writeLocalFile(
+  fileName: string,
+  ext: "html" | "md",
+): (data: string) => void;
 function writeLocalFile(fileName: string, ext: "json" | "html" | "md") {
   return (data: unknown) => {
     let filePath = path.join("./", `${fileName}.${ext}`);

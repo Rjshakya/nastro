@@ -6,7 +6,9 @@ import type {
   UpdateDataSourceParameters,
 } from "@notionhq/client";
 
-type UpdatePropertyPayload = NonNullable<UpdateDataSourceParameters["properties"]>;
+type UpdatePropertyPayload = NonNullable<
+  UpdateDataSourceParameters["properties"]
+>;
 
 export const convertSchemeToDataSourceProperties = (
   table: NotionTable,
@@ -35,7 +37,9 @@ export const convertSchemeToDataBaseParams = (
   parentId: string,
 ): CreateDatabaseParameters => {
   const properties = convertSchemeToDataSourceProperties(table);
-  const intialDataSource = {} as NonNullable<CreateDatabaseParameters["initial_data_source"]>;
+  const intialDataSource = {} as NonNullable<
+    CreateDatabaseParameters["initial_data_source"]
+  >;
 
   intialDataSource.properties = properties;
 
@@ -47,7 +51,10 @@ export const convertSchemeToDataBaseParams = (
   return params;
 };
 
-export const createDatabase = async (notion: NotionApi, params: CreateDatabaseParameters) => {
+export const createDatabase = async (
+  notion: NotionApi,
+  params: CreateDatabaseParameters,
+) => {
   return notion.createDatabase(params).then((db) => ({
     id: db.id,
     dataSourceId: db.data_sources[0].id,
@@ -58,7 +65,9 @@ export const createDatabase = async (notion: NotionApi, params: CreateDatabasePa
  * Convert a notion-orm Column to Notion API update property payload
  * Returns null for unsupported types (formula, relation, rollup)
  */
-export function buildUpdateProperty(column: Column): UpdatePropertyPayload[string] | null {
+export function buildUpdateProperty(
+  column: Column,
+): UpdatePropertyPayload[string] | null {
   switch (column.type) {
     case "formula":
     case "relation":
