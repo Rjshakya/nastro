@@ -150,15 +150,15 @@ export function WhyNastroSection() {
 
         {/* Problem vs Solution Grid */}
         <div className="relative mx-auto mb-20 max-w-3xl sm:mb-28">
-        {/* <div className="absolute inset-0">
+          <div className="absolute inset-0">
             <img
-              src="/why-nastro.webp"
+              src="/ai-bg-17.png"
               alt=""
               className="h-full w-full object-cover"
             />
-          </div> */}
+          </div>
 
-          <div className="bg-card relative z-10 space-y-10 px-6 py-18 sm:p-18">
+          <div className=" relative z-10 space-y-10 px-6 py-18 sm:p-18">
             {/* The Problem */}
             <motion.div
               variants={staggerContainer}

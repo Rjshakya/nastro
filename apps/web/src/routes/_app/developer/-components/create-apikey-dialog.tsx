@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -94,76 +95,78 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
         <IconPlus className="size-4 mr-1" />
         Create API Key
       </Button>
-      <DialogContent className="px-4 py-4 font-sans tracking-tighter sm:max-w-md">
+      <DialogContent className="font-sans tracking-tighter sm:max-w-md">
         {!createdKey ? (
           <>
-            <DialogHeader className="px-0">
-              <DialogTitle className="font-medium">
-                Create New API Key
-              </DialogTitle>
-              <DialogDescription>
-                Create a new API key for MCP access. You can set permissions and
-                name it for easy identification.
-              </DialogDescription>
-            </DialogHeader>
+            <DialogBody>
+              <DialogHeader>
+                <DialogTitle className="font-medium">
+                  Create New API Key
+                </DialogTitle>
+                <DialogDescription>
+                  Create a new API key for MCP access. You can set permissions
+                  and name it for easy identification.
+                </DialogDescription>
+              </DialogHeader>
 
-            <div className="py-4 space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="keyName">
-                  Name <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="keyName"
-                  placeholder="e.g., Production Key, Development Key"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={100}
-                />
-              </div>
-
-              <div className="space-y-3">
-                <Label>
-                  Permissions <span className="text-red-500">*</span>
-                </Label>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="permission-read"
-                      checked={permissions.includes("read")}
-                      onCheckedChange={(checked) =>
-                        handlePermissionChange("read", checked as boolean)
-                      }
-                    />
-                    <Label
-                      htmlFor="permission-read"
-                      className="font-normal cursor-pointer"
-                    >
-                      Read - Access to read site data and content
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="permission-write"
-                      checked={permissions.includes("write")}
-                      onCheckedChange={(checked) =>
-                        handlePermissionChange("write", checked as boolean)
-                      }
-                    />
-                    <Label
-                      htmlFor="permission-write"
-                      className="font-normal cursor-pointer"
-                    >
-                      Write - Access to modify site settings and upload files
-                    </Label>
-                  </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="keyName">
+                    Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="keyName"
+                    placeholder="e.g., Production Key, Development Key"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    maxLength={100}
+                  />
                 </div>
-                {permissions.length === 0 && (
-                  <p className="text-sm text-red-500">
-                    At least one permission is required
-                  </p>
-                )}
+
+                <div className="space-y-3">
+                  <Label>
+                    Permissions <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="permission-read"
+                        checked={permissions.includes("read")}
+                        onCheckedChange={(checked) =>
+                          handlePermissionChange("read", checked as boolean)
+                        }
+                      />
+                      <Label
+                        htmlFor="permission-read"
+                        className="font-normal cursor-pointer"
+                      >
+                        Read - Access to read site data and content
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="permission-write"
+                        checked={permissions.includes("write")}
+                        onCheckedChange={(checked) =>
+                          handlePermissionChange("write", checked as boolean)
+                        }
+                      />
+                      <Label
+                        htmlFor="permission-write"
+                        className="font-normal cursor-pointer"
+                      >
+                        Write - Access to modify site settings and upload files
+                      </Label>
+                    </div>
+                  </div>
+                  {permissions.length === 0 && (
+                    <p className="text-sm text-red-500">
+                      At least one permission is required
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            </DialogBody>
 
             <DialogFooter className="gap-2">
               <Button variant="outline" onClick={() => setOpen(false)}>
@@ -176,54 +179,56 @@ export function CreateApiKeyDialog({ onSuccess }: CreateApiKeyDialogProps) {
           </>
         ) : (
           <>
-            <DialogHeader className="px-0">
-              <DialogTitle className="font-medium flex items-center gap-2">
-                <IconCheck className="h-5 w-5 text-green-500" />
-                API Key Created
-              </DialogTitle>
-              <DialogDescription>
-                Your new API key has been created successfully.
-              </DialogDescription>
-            </DialogHeader>
+            <DialogBody>
+              <DialogHeader>
+                <DialogTitle className="font-medium flex items-center gap-2">
+                  <IconCheck className="h-5 w-5 text-green-500" />
+                  API Key Created
+                </DialogTitle>
+                <DialogDescription>
+                  Your new API key has been created successfully.
+                </DialogDescription>
+              </DialogHeader>
 
-            <div className="py-4 space-y-4">
-              <div className="space-y-2">
-                <Label>Your API Key</Label>
-                <div className="flex items-center gap-2">
-                  <code className="flex-1 px-3 py-2 text-sm font-mono bg-muted rounded-md break-all">
-                    {createdKey.key}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleCopy}
-                    className={copied ? "text-green-500" : ""}
-                  >
-                    {copied ? (
-                      <IconCheck className="" />
-                    ) : (
-                      <IconCopy className="" />
-                    )}
-                  </Button>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Your API Key</Label>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 px-3 py-2 text-sm font-mono bg-muted rounded-md break-all">
+                      {createdKey.key}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handleCopy}
+                      className={copied ? "text-green-500" : ""}
+                    >
+                      {copied ? (
+                        <IconCheck className="" />
+                      ) : (
+                        <IconCopy className="" />
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-sm text-amber-600 font-medium">
+                    ⚠️ Copy this key now - it won&apos;t be shown again!
+                  </p>
                 </div>
-                <p className="text-sm text-amber-600 font-medium">
-                  ⚠️ Copy this key now - it won&apos;t be shown again!
-                </p>
-              </div>
 
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name:</span>
-                  <span className="font-medium">{createdKey.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Permissions:</span>
-                  <span className="font-medium capitalize">
-                    {createdKey.permissions.join(", ")}
-                  </span>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Name:</span>
+                    <span className="font-medium">{createdKey.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Permissions:</span>
+                    <span className="font-medium capitalize">
+                      {createdKey.permissions.join(", ")}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </DialogBody>
 
             <DialogFooter>
               <Button onClick={handleClose} className="w-full">

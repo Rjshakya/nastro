@@ -8,7 +8,7 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 import { getRouteApi, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import AreaChart, { Area } from "@/components/charts/area-chart";
 import Grid from "@/components/charts/grid";
@@ -27,9 +27,11 @@ import {
   formatPresetLabel,
   getDefaultRange,
   getPresetRange,
+  type AnalyticsInterval,
 } from "@/lib/analytics-dates";
 import { Env } from "@/lib/env";
 import { cn, createSlugUrl } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
 
 const routeApi = getRouteApi("/_app/analytics/$slug");
 
@@ -66,6 +68,7 @@ interface AnalyticsChartProps {
   dataKey: string;
   label: string;
   isLoading: boolean;
+  interval: AnalyticsInterval;
 }
 
 function AnalyticsChart({
@@ -74,6 +77,7 @@ function AnalyticsChart({
   dataKey,
   label,
   isLoading,
+  interval,
 }: AnalyticsChartProps) {
   return (
     <Card className="bg-muted dark:bg-card p-2 gap-2">
@@ -93,14 +97,45 @@ function AnalyticsChart({
             <Area dataKey={dataKey} fill="var(--chart-line-primary)" />
             <XAxis numTicks={10} />
             <ChartTooltip
-              showDatePill={true}
-              rows={(point) => [
-                {
-                  color: "var(--chart-line-primary)",
-                  label,
-                  value: (point[dataKey] as number) ?? 0,
-                },
-              ]}
+              rows={(point) => {
+                return [
+                  {
+                    color: "var(--chart-line-primary)",
+                    label,
+                    value: (point[dataKey] as number) ?? 0,
+                  },
+                ];
+              }}
+              content={({ point }) => {
+                return (
+                  <div className="flex flex-col gap-2 p-3">
+                    <div className="text-sm font-medium grid gap-2">
+                      <span>
+                        {(point?.date as Date)?.toLocaleDateString("en-us", {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+
+                      <span className="text-zinc-400">
+                        {(point?.date as Date)?.toLocaleTimeString()}
+                      </span>
+                      <span className="text-zinc-400">
+                        {formatDistanceToNow(point?.date as Date, {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                      <span className="">{label}</span>
+                      <span className="font-mono">
+                        {(point[dataKey] as number).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }}
             />
           </AreaChart>
         )}
@@ -224,6 +259,16 @@ export function AnalyticsPage() {
       : `${createSlugUrl(slug)}${pageId}`;
   }, [pageId, slug]);
 
+  useEffect(() => {
+    console.log("data", {
+      uniqueData,
+      viewsData,
+      totalViews,
+      totalUnique,
+      topCountry,
+    });
+  }, [uniqueData, viewsData, totalViews, totalUnique, topCountry]);
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -290,6 +335,7 @@ export function AnalyticsPage() {
           isLoading={isLoading}
           label="Views"
           title="Views over time"
+          interval={range.interval}
         />
         <AnalyticsChart
           data={uniqueData}
@@ -297,6 +343,7 @@ export function AnalyticsPage() {
           isLoading={isLoading}
           label="Unique visitors"
           title="Unique visitors over time"
+          interval={range.interval}
         />
       </div>
 

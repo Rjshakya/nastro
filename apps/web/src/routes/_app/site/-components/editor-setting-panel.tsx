@@ -28,6 +28,7 @@ import type { Site } from "@/types/site";
 import { ThemeSelector } from "./theme/theme-selector";
 import { useThemeStore } from "@/stores/theme-store";
 import { useParams } from "@tanstack/react-router";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SettingsDrawerProps {
   site: Site;
@@ -40,6 +41,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
   const { open, onOpenChange } = useSiteSettingPanel();
   const { updateSite, isLoading } = useUpdateSite();
 
+  const isMobile = useIsMobile();
   const [siteName, setSiteName] = useState(site.name);
   const [slug, setSlug] = useState(site.slug);
 
@@ -64,15 +66,17 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
   return (
     <Sheet
       disablePointerDismissal={true}
-      modal={false}
+      modal={isMobile ? true : false}
       open={open}
       onOpenChange={onOpenChange}
     >
       <SheetContent
+        showCloseButton={false}
+        side={isMobile ? "bottom" : "right"}
         overlayClassName="hidden"
-        className="w-full  data-[side=right]:sm:max-w-lg "
+        className=" gap-2 data-[side=bottom]:h-full data-[side=right]:sm:max-w-lg py-4"
       >
-        <SheetHeader>
+        <SheetHeader className="py-0">
           <SheetTitle>Site Settings</SheetTitle>
           <SheetDescription>
             Customize your site appearance and behavior
@@ -81,7 +85,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
 
         <ThemeSelector />
 
-        <div className="px-4 overflow-y-auto flex-1">
+        <div className="h-full px-4 overflow-y-auto flex-1">
           <Tabs defaultValue="general" className="w-full">
             <TabsList
               className="w-full justify-start overflow-x-auto scrollable"
@@ -125,7 +129,7 @@ export function SettingsPanel({ site }: SettingsDrawerProps) {
           </Tabs>
         </div>
 
-        <SheetFooter>
+        <SheetFooter className="py-0">
           <Button size={"lg"} onClick={handleSave} disabled={isLoading}>
             {isLoading ? "Saving..." : "Save Changes"}
           </Button>

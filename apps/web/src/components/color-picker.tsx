@@ -29,7 +29,7 @@ interface ColorPickerProps {
 export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
   const normalColorValue = value ?? "#000000";
   const [color, setColor] = useColor(normalColorValue);
-  const [colorInput, setColorInput] = useState("");
+  const [colorInput, setColorInput] = useState(normalColorValue);
 
   const handleChange = (newColor: IColor) => {
     const hex = newColor.hex.slice(0, 7);

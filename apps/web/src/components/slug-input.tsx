@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -9,6 +10,7 @@ type SlugInputProps = {
   showAvailablityIndicator?: boolean;
   placeholder?: string;
   onChange: (value: string) => void;
+  className?: string;
 };
 
 export const SlugInput = ({
@@ -18,11 +20,12 @@ export const SlugInput = ({
   value,
   showAvailablityIndicator,
   placeholder,
+  className,
 }: SlugInputProps) => {
   return (
-    <div className="w-full grid gap-2 ">
+    <div className={cn("w-full grid gap-2", className)}>
       <Label
-        className="capitalize flex items-center justify-between gap-2"
+        className="pl-1 capitalize flex items-center justify-between gap-2"
         htmlFor="slug"
       >
         <p>Slug</p>

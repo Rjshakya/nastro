@@ -30,6 +30,9 @@ import {
   ItemActions,
 } from "@/components/ui/item";
 
+import { motion } from "motion/react";
+import { useState } from "react";
+
 interface SiteCardProps {
   site: Site;
   className?: string;
@@ -37,9 +40,13 @@ interface SiteCardProps {
 
 export function SiteCard({ site, className }: SiteCardProps) {
   const { deleteSite, isLoading: isDeleting } = useDeleteSite();
+
+  const [hovered, setHovered] = useState(false);
+
   const url = Env.isDev
     ? `/${site.rootPageId}`
     : createSlugUrl(site.slug) + site.rootPageId;
+
   const _handleDelete = async () => {
     await deleteSite({ pageId: site.rootPageId || "", siteId: site.id });
   };
@@ -63,7 +70,18 @@ export function SiteCard({ site, className }: SiteCardProps) {
   };
 
   return (
-    <Item className={cn(" rounded-xl hover:bg-accent", className)}>
+    <Item
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={cn(" rounded-xl relative z-1  ", className)}
+    >
+      {hovered && (
+        <motion.span
+          layoutId="hover-bg"
+          transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+          className={" absolute inset-0 rounded-md bg-muted -z-10"}
+        ></motion.span>
+      )}
       <ItemContent>
         <Link
           to="/site/$pageId"

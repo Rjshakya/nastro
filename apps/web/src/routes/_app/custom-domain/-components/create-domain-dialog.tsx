@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -68,53 +69,59 @@ export function CreateDomainDialog({ sites }: CreateDomainDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Add Custom Domain</DialogTitle>
-          <DialogDescription>
-            Connect a custom domain to one of your sites.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="site">Site</Label>
-            <Select
-              value={siteId}
-              onValueChange={(siteId) => setSiteId(siteId ?? "")}
-            >
-              <SelectTrigger id="site" className="w-full">
-                <SelectValue placeholder="Select a site" />
-              </SelectTrigger>
-              <SelectContent>
-                {sites.map((site) => (
-                  <SelectItem key={site.id} value={site.id}>
-                    {site.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+      <DialogContent showCloseButton={false} className="sm:max-w-md">
+        <DialogBody>
+          <DialogHeader>
+            <DialogTitle>Add Custom Domain</DialogTitle>
+            <DialogDescription>
+              Connect a custom domain to one of your sites.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            id="create-domain-form"
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="site">Site</Label>
+              <Select
+                value={siteId}
+                onValueChange={(siteId) => setSiteId(siteId ?? "")}
+              >
+                <SelectTrigger id="site" className="w-full">
+                  <SelectValue placeholder="Select a site" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sites.map((site) => (
+                    <SelectItem key={site.id} value={site.id}>
+                      {site.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="hostname">Domain Name</Label>
-            <Input
-              id="hostname"
-              placeholder="www.example.com"
-              value={hostName}
-              onChange={(e) => setHostName(e.target.value)}
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter the full domain name you want to connect (e.g.,
-              www.example.com).
-            </p>
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="hostname">Domain Name</Label>
+              <Input
+                id="hostname"
+                placeholder="www.example.com"
+                value={hostName}
+                onChange={(e) => setHostName(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter the full domain name you want to connect (e.g.,
+                www.example.com).
+              </p>
+            </div>
+          </form>
+        </DialogBody>
 
-          <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Creating..." : "Add Domain"}
-            </Button>
-          </DialogFooter>
-        </form>
+        <DialogFooter>
+          <Button type="submit" form="create-domain-form" disabled={isLoading}>
+            {isLoading ? "Creating..." : "Add Domain"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

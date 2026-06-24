@@ -63,26 +63,18 @@ const parseInterval = (interval: string): Date => {
 
 export const getPresetRange = (preset: DateRangePreset): AnalyticsDateRange => {
   const interval: AnalyticsInterval = preset === "24h" ? "hour" : "day";
-  const now = new Date();
-  const to = floorToInterval[interval](now).getTime();
+  const to = Date.now();
   const from =
     interval === "hour"
       ? subHours(new Date(to), 24).getTime()
-      : subDays(
-          new Date(to),
-          PRESET_DURATIONS[preset] / MS_PER_DAY,
-        ).getTime();
+      : subDays(new Date(to), PRESET_DURATIONS[preset] / MS_PER_DAY).getTime();
 
   return { from, to, interval, label: preset };
 };
 
-export const getDefaultRange = (): AnalyticsDateRange =>
-  getPresetRange("24h");
+export const getDefaultRange = (): AnalyticsDateRange => getPresetRange("24h");
 
-export const fillBuckets = <
-  T extends { interval: string },
-  K extends keyof T,
->(
+export const fillBuckets = <T extends { interval: string }, K extends keyof T>(
   data: T[],
   from: number,
   to: number,

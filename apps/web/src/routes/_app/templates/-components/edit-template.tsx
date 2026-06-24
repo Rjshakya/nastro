@@ -11,6 +11,7 @@ import { useUpdateTemplate } from "@/hooks/use-templates";
 import type { Template } from "@/types/template";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -79,16 +80,16 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="px-4 py-4 font-sans tracking-tighter max-w-lg">
-        <DialogHeader className="px-0">
-          <DialogTitle className="font-medium">Edit Template</DialogTitle>
-          <DialogDescription>Update your template details.</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="font-sans tracking-tighter max-w-lg">
+        <DialogBody className="grid-rows-[auto_1fr] overflow-hidden p-0">
+          <DialogHeader className="px-5 pt-5">
+            <DialogTitle className="font-medium">Edit Template</DialogTitle>
+            <DialogDescription>Update your template details.</DialogDescription>
+          </DialogHeader>
 
-        <div className="">
-          <ScrollArea className={"h-70 grid gap-2"}>
+          <ScrollArea className="h-70 px-5 pb-5">
             {/* Template Name */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="templateName">Template Name</Label>
               <Input
                 id="templateName"
@@ -99,7 +100,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Description */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Input
                 id="description"
@@ -115,7 +116,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Template URL - Read Only */}
-            <div className="mb-4 grid gap-2 px-2">
+            <div className="mb-4 grid gap-2">
               <Label htmlFor="templateUrl">Template URL</Label>
               <Input
                 id="templateUrl"
@@ -130,7 +131,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Notion Page URL */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="notionPageUrl">Notion Page URL</Label>
               <div className="my-2">
                 <Input
@@ -145,7 +146,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Instructions page url */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="instructionsPageUrl">
                 Instructions page url{" "}
               </Label>
@@ -165,7 +166,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Thumbnail URL */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="thumbnailUrl">Thumbnail URL</Label>
               <Input
                 id="thumbnailUrl"
@@ -181,7 +182,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Tags */}
-            <div className="mb-4 px-2">
+            <div className="mb-4">
               <InputWithTags
                 label="Tags"
                 placeholder="Add a tag (press Enter)"
@@ -196,7 +197,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
             </div>
 
             {/* Is Paid Toggle */}
-            <div className="flex items-center justify-between rounded-lg border p-3 mx-2">
+            <div className="flex items-center justify-between rounded-lg border p-3">
               <Label htmlFor="isPaid" className="grid gap-2 flex-1">
                 <span>Paid Template</span>
                 <span className="text-sm text-muted-foreground">
@@ -214,7 +215,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
 
             {/* Price (only if paid) */}
             {input.isPaid && (
-              <div className="grid gap-2 mt-3 px-2">
+              <div className="grid gap-2 mt-3">
                 <Label htmlFor="price">Price ($)</Label>
                 <Input
                   id="price"
@@ -235,7 +236,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
 
             {/* Payment Link (only if paid) */}
             {input.isPaid && (
-              <div className="grid gap-2 mt-3 mb-3 px-2">
+              <div className="grid gap-2 mt-3 mb-3">
                 <Label htmlFor="paymentLink">Payment Link</Label>
                 <Input
                   id="paymentLink"
@@ -248,7 +249,7 @@ export function EditTemplateDialog({ template }: EditTemplateDialogProps) {
               </div>
             )}
           </ScrollArea>
-        </div>
+        </DialogBody>
 
         <DialogFooter>
           <Button onClick={handleUpdate} disabled={isLoading}>

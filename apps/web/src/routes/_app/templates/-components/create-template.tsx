@@ -9,6 +9,7 @@ import { useCreateTemplate } from "@/hooks/use-templates";
 import type { Template, TemplateInsert } from "@/types/template";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -82,18 +83,23 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="px-4 py-4 font-sans tracking-tighter max-w-lg">
-        <DialogHeader className="px-0">
-          <DialogTitle className="font-medium">Create New Template</DialogTitle>
-          <DialogDescription>
-            Add a new template to your collection.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent
+        showCloseButton={false}
+        className="font-sans tracking-tighter max-w-lg"
+      >
+        <DialogBody className="grid-rows-[auto_1fr] overflow-hidden p-0">
+          <DialogHeader className="px-5 pt-5">
+            <DialogTitle className="font-medium">
+              Create New Template
+            </DialogTitle>
+            <DialogDescription>
+              Add a new template to your collection.
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="">
-          <ScrollArea className={"h-70 grid gap-2"}>
+          <ScrollArea className="h-70 px-5 pb-5">
             {/* Template Name */}
-            <div className="mb-3 grid gap-2 px-2 ">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="templateName">Template Name</Label>
               <Input
                 id="templateName"
@@ -103,7 +109,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               />
             </div>
             {/* Description */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Input
                 id="description"
@@ -118,7 +124,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               />
             </div>
             {/* Template URL */}
-            <div className="mb-4 grid gap-2 px-2">
+            <div className="mb-4 grid gap-2">
               <Label htmlFor="templateUrl">Template URL</Label>
               <Input
                 id="templateUrl"
@@ -128,7 +134,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               />
             </div>
             {/* Notion Page URL */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="notionPageUrl">Notion Page URL</Label>
               <div className="my-2">
                 <Input
@@ -142,7 +148,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               </div>
             </div>
             {/* Instructions page url */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="instructionsPageUrl">
                 Instructions page url{" "}
               </Label>
@@ -158,7 +164,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               </div>
             </div>
             {/* Thumbnail URL */}
-            <div className="mb-3 grid gap-2 px-2">
+            <div className="mb-3 grid gap-2">
               <Label htmlFor="thumbnailUrl">Thumbnail URL</Label>
               <Input
                 id="thumbnailUrl"
@@ -173,7 +179,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               />
             </div>
             {/* Tags */}
-            <div className="mb-4 grid gap-2 px-2">
+            <div className="mb-4 grid gap-2">
               <InputWithTags
                 label="Tags"
                 onChange={(tags) => {
@@ -185,8 +191,8 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               />
             </div>
             {/* Is Paid Toggle */}
-            <div className="flex items-center justify-between rounded-lg border p-3 mb-3 mx-2">
-              <Label htmlFor="isPaid" className=" grid flex-1">
+            <div className="flex items-center justify-between rounded-lg border p-3 mb-3">
+              <Label htmlFor="isPaid" className="grid flex-1">
                 <span>Paid Template</span>
                 <span className="text-sm text-muted-foreground">
                   Mark this as a paid template
@@ -202,7 +208,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
             </div>
             {/* Price (only if paid) */}
             {input.isPaid && (
-              <div className="grid gap-2 mb-3 px-2">
+              <div className="grid gap-2 mb-3">
                 <Label htmlFor="price">Price ($)</Label>
                 <Input
                   id="price"
@@ -222,7 +228,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
             )}
             {/* Payment Link (only if paid) */}
             {input.isPaid && (
-              <div className="grid gap-2 mb-3 px-2">
+              <div className="grid gap-2 mb-3">
                 <Label htmlFor="paymentLink">Payment Link</Label>
                 <Input
                   id="paymentLink"
@@ -235,7 +241,7 @@ export function CreateTemplateDialog({ onSuccess }: CreateTemplateDialogProps) {
               </div>
             )}
           </ScrollArea>
-        </div>
+        </DialogBody>
 
         <DialogFooter>
           <Button onClick={handleCreate} disabled={isLoading}>

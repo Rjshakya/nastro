@@ -41,18 +41,25 @@ function DialogContent({
   overlayClassName,
   className,
   children,
-  showCloseButton = true,
+  showCloseButton = false,
+  variant = "card",
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
-} & { overlayClassName?: string }) {
+  overlayClassName?: string;
+  variant?: "default" | "card";
+}) {
   return (
     <DialogPortal>
       <DialogOverlay className={cn(overlayClassName)} />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
+        data-variant={variant}
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-background p-6 text-sm ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 text-sm duration-100 outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          variant === "card"
+            ? "gap-2 rounded-xl bg-muted p-1.5 dark:bg-card"
+            : "gap-6 rounded-xl bg-background p-6 ring-1 ring-foreground/10",
           className,
         )}
         {...props}
@@ -83,6 +90,19 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-header"
       className={cn("flex flex-col gap-2", className)}
+      {...props}
+    />
+  );
+}
+
+function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn(
+        "grid w-full gap-4 rounded-2xl bg-background p-5",
+        className,
+      )}
       {...props}
     />
   );
@@ -143,6 +163,7 @@ function DialogDescription({
 
 export {
   Dialog,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogDescription,

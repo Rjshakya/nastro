@@ -12,6 +12,7 @@ import type { Template } from "@/types/template";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -73,13 +74,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
         </Card>
       </DialogTrigger>
 
-      <DialogContent
-        showCloseButton={true}
-        className="max-w-lg px-0 py-0 gap-0"
-      >
+      <DialogContent showCloseButton className="max-w-lg">
         <div className="space-y-4 overflow-hidden">
           {/* Large Thumbnail */}
-          <div className="p-1 relative aspect-video overflow-hidden rounded-lg ">
+          <div className="relative aspect-video overflow-hidden rounded-lg p-1">
             {template.thumbnail ? (
               <img
                 src={template.thumbnail}
@@ -92,9 +90,9 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
               </div>
             )}
 
-            <div className="absolute bottom-1 inset-x-0  w-full z-20 flex justify-end p-2">
+            <div className="absolute inset-x-0 bottom-1 z-20 flex w-full justify-end p-2">
               <Link to={template.url} target="_blank">
-                <Button size={"xs"} variant={"secondary"}>
+                <Button size="xs" variant="secondary">
                   <p>Preview</p>
                   <IconArrowUpRight />
                 </Button>
@@ -102,11 +100,9 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
             </div>
           </div>
 
-          <div className="px-2">
+          <DialogBody>
             <DialogHeader className="mb-4">
-              <DialogTitle
-                className={"text-2xl flex items-center justify-between gap-1 "}
-              >
+              <DialogTitle className="text-2xl flex items-center justify-between gap-1">
                 {template.name}
               </DialogTitle>
 
@@ -125,11 +121,10 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
                 ))}
               </div>
             )}
-          </div>
-          {/* Price */}
+          </DialogBody>
         </div>
 
-        <DialogFooter className="p-2 mt-4">
+        <DialogFooter>
           <Link
             to="/templates/install/$templateId"
             params={{ templateId: template.id }}
@@ -144,7 +139,7 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
             <>
               <EditTemplateDialog template={template} />
               <Button
-                variant={"destructive"}
+                variant="destructive"
                 onClick={() => {
                   setIsOpen(false);
                   setIsDeleteDialogOpen(true);
@@ -160,29 +155,31 @@ export function TemplateCard({ template, className }: TemplateCardProps) {
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete template</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this template. This action cannot
-              be undone
-            </DialogDescription>
+          <DialogBody>
+            <DialogHeader>
+              <DialogTitle>Delete template</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this template. This action
+                cannot be undone
+              </DialogDescription>
+            </DialogHeader>
+          </DialogBody>
 
-            <DialogFooter>
-              <Button
-                onClick={() => deleteTemplate({ templateId: template.id })}
-                disabled={isDeleting}
-                variant={"destructive"}
-              >
-                Confirm
-              </Button>
-              <Button
-                onClick={() => setIsDeleteDialogOpen(false)}
-                variant={"secondary"}
-              >
-                Cancel
-              </Button>
-            </DialogFooter>
-          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={() => deleteTemplate({ templateId: template.id })}
+              disabled={isDeleting}
+              variant="destructive"
+            >
+              Confirm
+            </Button>
+            <Button
+              onClick={() => setIsDeleteDialogOpen(false)}
+              variant="secondary"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </Dialog>

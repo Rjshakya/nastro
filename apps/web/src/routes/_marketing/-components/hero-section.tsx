@@ -43,8 +43,8 @@ export function HeroSection() {
             variants={fadeInUp}
             className="mb-4 max-w-md text-sm font-medium text-muted-foreground"
           >
-            Publish your Notion content with custom domains, and
-            zero code. Perfect for creators, developers, and teams.
+            Publish your Notion content with custom domains, and zero code.
+            Perfect for creators, developers, and teams.
           </motion.p>
 
           <motion.div
@@ -68,9 +68,9 @@ export function HeroSection() {
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="relative mb-16 p-6 sm:p-12 lg:p-16 bg-accent"
         >
-          {/* <div className="absolute inset-0 size-full">
-            <img src="/hero.png" className="h-full w-full object-cover" />
-          </div> */}
+          <div className="absolute inset-0 size-full">
+            <img src="/Image.png" className="h-full w-full object-cover" />
+          </div>
 
           <div className="relative z-10 grid p-0 md:p-8">
             <div className="p-1 before overflow-hidden rounded-2xl border border-border/20 ring ring-ring/40 drop-shadow-2xl">
@@ -83,7 +83,7 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <div className="p-1 after overflow-hidden rounded-2xl border border-border/20 ring ring-ring/40 drop-shadow-2xl">
+            <div className=" p-1 after overflow-hidden rounded-2xl border border-border/20 ring ring-ring/40 drop-shadow-2xl">
               <img src="/after.webp" className="size-full" />
             </div>
           </div>

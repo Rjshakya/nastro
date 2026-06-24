@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -58,35 +59,37 @@ export function SaveThemeDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Save theme</DialogTitle>
-          <DialogDescription>
-            Update the theme preset with your current settings
-          </DialogDescription>
-        </DialogHeader>
+        <DialogBody>
+          <DialogHeader>
+            <DialogTitle>Save theme</DialogTitle>
+            <DialogDescription>
+              Update the theme preset with your current settings
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="grid gap-4 mb-4">
-          <div className="grid gap-2">
-            <Label htmlFor="save-theme-name">Name</Label>
-            <Input
-              id="save-theme-name"
-              placeholder="my-theme"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="save-theme-name">Name</Label>
+              <Input
+                id="save-theme-name"
+                placeholder="my-theme"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-          <div className="flex items-center gap-2">
-            <Label className="flex-1" htmlFor="save-public-checkbox">
-              Public
-            </Label>
-            <Checkbox
-              id="save-public-checkbox"
-              checked={isPublic}
-              onCheckedChange={(c) => setIsPublic(!!c)}
-            />
+            <div className="flex items-center gap-2">
+              <Label className="flex-1" htmlFor="save-public-checkbox">
+                Public
+              </Label>
+              <Checkbox
+                id="save-public-checkbox"
+                checked={isPublic}
+                onCheckedChange={(c) => setIsPublic(!!c)}
+              />
+            </div>
           </div>
-        </div>
+        </DialogBody>
 
         <DialogFooter>
           <Button onClick={handleSave} disabled={isLoading}>

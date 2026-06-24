@@ -160,13 +160,9 @@ const VirtualizedCommandBox = ({
                   key={font}
                   disabled={isKeyboardNavActive}
                   className={cn(
-                    "data-selected:bg-transparent",
-                    "absolute left-0 top-0 w-full bg-transparent",
-                    isKeyboardNavActive &&
-                      focusedIndex !== virtualOption.index &&
-                      "aria-selected:bg-transparent aria-selected:text-primary",
+                    "absolute left-0 top-0 w-full",
                     focusedIndex === virtualOption.index &&
-                      "bg-primary text-accent-foreground",
+                      "bg-secondary text-accent-foreground",
                   )}
                   style={{
                     height: `${virtualOption.size}px`,
@@ -188,7 +184,7 @@ const VirtualizedCommandBox = ({
                 >
                   <IconCheck
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "mr-2 size-4",
                       selectedOption ===
                         filteredOptions[virtualOption.index].family
                         ? "opacity-100"
@@ -220,16 +216,18 @@ export const FontPicker: FC<FontPickerProps> = ({ onChange, value }) => {
         render={
           <Button
             ref={triggerBtnRef}
-            variant="secondary"
             role="combobox"
-            className="justify-between w-full ring ring-muted-foreground"
+            variant={"secondary"}
+            className="justify-between w-full "
           >
             {value}
             <IconSelector className="ml-auto" />
           </Button>
         }
       />
-      <PopoverContent className="p-0">
+      <PopoverContent
+        style={{ width: triggerBtnRef.current?.getBoundingClientRect().width }}
+      >
         <VirtualizedCommandBox
           height="400px"
           options={data}

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -201,57 +202,59 @@ export function SeoTab({ site, pageId }: SeoTabProps) {
               }
             />
             <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Upload OG Image</DialogTitle>
-                <DialogDescription>
-                  Drag and drop an image, or click to browse.
-                </DialogDescription>
-              </DialogHeader>
+              <DialogBody>
+                <DialogHeader>
+                  <DialogTitle>Upload OG Image</DialogTitle>
+                  <DialogDescription>
+                    Drag and drop an image, or click to browse.
+                  </DialogDescription>
+                </DialogHeader>
 
-              {previewUrl ? (
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl border">
-                  <img
-                    src={previewUrl}
-                    alt="OG image preview"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={cn(
-                    "flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-8 transition-colors cursor-pointer",
-                    isDragging
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50",
-                    isUploading && "pointer-events-none opacity-60",
-                  )}
-                >
-                  <IconUpload className="size-8 text-muted-foreground" />
-                  <div className="text-center text-sm text-muted-foreground">
-                    <p>Drag & drop an image here</p>
-                    <p>or click to browse</p>
-                    <p className="text-xs mt-2">PNG, JPG, WebP up to 5 MB</p>
+                {previewUrl ? (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-xl border">
+                    <img
+                      src={previewUrl}
+                      alt="OG image preview"
+                      className="h-full w-full object-cover"
+                    />
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-8 transition-colors cursor-pointer",
+                      isDragging
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50",
+                      isUploading && "pointer-events-none opacity-60",
+                    )}
+                  >
+                    <IconUpload className="size-8 text-muted-foreground" />
+                    <div className="text-center text-sm text-muted-foreground">
+                      <p>Drag & drop an image here</p>
+                      <p>or click to browse</p>
+                      <p className="text-xs mt-2">PNG, JPG, WebP up to 5 MB</p>
+                    </div>
+                  </div>
+                )}
 
-              <Input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleInputChange}
-              />
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleInputChange}
+                />
 
-              {isUploading && (
-                <p className="text-center text-sm text-muted-foreground">
-                  Uploading...
-                </p>
-              )}
+                {isUploading && (
+                  <p className="text-center text-sm text-muted-foreground">
+                    Uploading...
+                  </p>
+                )}
+              </DialogBody>
 
               <DialogFooter>
                 <Button

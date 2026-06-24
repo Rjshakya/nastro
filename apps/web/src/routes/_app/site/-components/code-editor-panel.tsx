@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { Toggle } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
 import { useParams } from "@tanstack/react-router";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CodeTabProps {
   site: Site;
@@ -86,6 +87,8 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   const [savedCssLink, setSavedCssLink] = useState(site.customCssLink);
   const [savedScriptLink, setSavedScriptLink] = useState(site.customScriptLink);
   const [toggleJs, setToggleJs] = useState(false);
+
+  const isMobile = useIsMobile();
 
   const handleSaveJs = async () => {
     try {
@@ -163,15 +166,17 @@ export const CodeEditorPanel = ({ site }: CodeTabProps) => {
   return (
     <Sheet
       disablePointerDismissal={true}
-      modal={false}
+      modal={isMobile ? true : false}
       open={open}
       onOpenChange={onOpenChange}
     >
       <SheetContent
         showCloseButton={false}
         overlayClassName="hidden"
-        side="right"
-        className={cn(" data-[side=right]:sm:max-w-xl w-full ")}
+        side={isMobile ? "bottom" : "right"}
+        className={cn(
+          " data-[side=bottom]:h-full data-[side=right]:sm:max-w-xl w-full ",
+        )}
       >
         <SheetHeader className="gap-1 flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1">

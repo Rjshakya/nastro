@@ -9,6 +9,7 @@ import { useCreateSite, useIsSiteSlugAvailable } from "@/hooks/use-sites";
 import type { Site } from "@/types/site";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -78,23 +79,28 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger
         render={
-          <Button size={"sm"} className={""} >
+          <Button size={"sm"} className={""}>
             <IconPlus className="size-4 mr-1" />
             New Site
           </Button>
         }
       />
-      <DialogContent className=" px-4 py-4 font-sans tracking-tighter">
-        <DialogHeader className="px-0">
-          <DialogTitle className="font-medium">Create New Site</DialogTitle>
-          <DialogDescription>
-            Select a Notion page to create your site from.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent
+        showCloseButton={false}
+        className="font-sans tracking-tighter"
+      >
+        <DialogBody>
+          <DialogHeader className="mb-1">
+            <DialogTitle className="font-medium">Create New Site</DialogTitle>
+            <DialogDescription>
+              Select a Notion page to create your site from.
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="py-4 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="siteName">Site Name</Label>
+          <div className="grid gap-3">
+            <Label className="pl-1" htmlFor="siteName">
+              Site Name
+            </Label>
             <Input
               id="siteName"
               placeholder="My Awesome Site"
@@ -103,20 +109,21 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
             />
           </div>
 
-          <div className="py-4 space-y-4">
+          <div>
             <SlugInput
               isAvailable={isAvailable}
               isLoading={isLoading}
               value={value}
               onChange={setValue}
               placeholder="my-site"
+              className="grid gap-3"
             />
           </div>
 
-          <div className=" space-y-3">
+          <div className="grid gap-3">
             <div className="flex items-center">
-              <Label className=" flex-1">Notion Page</Label>
-              <Button onClick={handleConnectNotion} className={""} size={"xs"}>
+              <Label className="pl-1 flex-1">Notion Page</Label>
+              <Button onClick={handleConnectNotion} size="xs">
                 <IconLink />
                 connect notion
               </Button>
@@ -139,6 +146,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
                   const idFromUrl = parsePageId(val);
                   if (idFromUrl) setSelectedPageId(idFromUrl);
                 }}
+                className="rounded-full"
               />
               <ComboboxContent>
                 <ComboboxList>
@@ -151,7 +159,7 @@ export function CreateSiteDialog({ onSuccess }: CreateSiteDialogProps) {
               </ComboboxContent>
             </Combobox>
           </div>
-        </div>
+        </DialogBody>
 
         <DialogFooter>
           <Button onClick={handleCreate} disabled={!isValid || isCreating}>
