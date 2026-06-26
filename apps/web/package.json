@@ -21,6 +21,7 @@
     "@fontsource-variable/merriweather": "^5.2.6",
     "@monaco-editor/react": "^4.7.0",
     "@number-flow/react": "^0.6.0",
+    "@polar-sh/better-auth": "^1.8.4",
     "@tabler/icons-react": "^3.37.1",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-router": "^1.170.10",

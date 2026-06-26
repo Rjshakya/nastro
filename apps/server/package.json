@@ -33,6 +33,8 @@
     "@hono/zod-validator": "^0.7.6",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@notionhq/client": "^5.11.0",
+    "@polar-sh/better-auth": "^1.8.4",
+    "@polar-sh/sdk": "^0.48.1",
     "better-auth": "^1.4.19",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",

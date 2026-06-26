@@ -4,6 +4,8 @@ import { Vars } from "@/lib/hono-types";
 import { trackPageView } from "@/lib/analytics";
 import { authMiddleWare } from "@/middlewares/auth";
 import { AnalyticsService, AnalyticsServiceLive } from "@/services/analytics";
+import { BillingService, BillingServiceLive } from "@/services/billing";
+import { KVStoreLive } from "@/services/kv-store";
 import { zValidator } from "@hono/zod-validator";
 import { Effect, Layer } from "effect";
 import { Hono } from "hono";
@@ -11,6 +13,8 @@ import { z } from "zod";
 import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
 import { getConnInfo } from "hono/cloudflare-workers";
+import { BillingClientLive } from "@/services/billing-client";
+import { CacheServiceLive } from "@/services/cache";
 
 const intervalSchema = z.enum(["hour", "day", "week", "month"]);
 
@@ -34,8 +38,13 @@ const trackSchema = z.object({
   referrer: z.string().optional(),
 });
 
-const programLayer = AnalyticsServiceLive.pipe(
-  Layer.provideMerge(Layer.mergeAll(DatabaseLive())),
+const programLayer = Layer.mergeAll(
+  AnalyticsServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(DatabaseLive()))),
+  BillingServiceLive.pipe(
+    Layer.provide(BillingClientLive),
+    Layer.provide(CacheServiceLive),
+    Layer.provide(KVStoreLive),
+  ),
 );
 
 const analyticsApp = new Hono<{ Variables: Vars }>()
@@ -80,11 +89,14 @@ const analyticsApp = new Hono<{ Variables: Vars }>()
 
     const program = Effect.gen(function* () {
       const service = yield* AnalyticsService;
+      const billing = yield* BillingService;
 
       const isOwner = yield* service.checkSiteOwnership(slug, userId);
       if (!isOwner) {
         return yield* Effect.fail("Not Allowed");
       }
+
+      yield* billing.canViewAdvancedAnalytics(userId);
 
       return yield* service.getVisitorsMetrics({
         slug,
@@ -112,11 +124,14 @@ const analyticsApp = new Hono<{ Variables: Vars }>()
 
       const program = Effect.gen(function* () {
         const service = yield* AnalyticsService;
+        const billing = yield* BillingService;
 
         const isOwner = yield* service.checkSiteOwnership(slug, userId);
         if (!isOwner) {
           return yield* Effect.fail("Not Allowed");
         }
+
+        yield* billing.canViewAdvancedAnalytics(userId);
 
         return yield* service.getUniqueVisitorsMetrics({
           slug,
@@ -142,11 +157,14 @@ const analyticsApp = new Hono<{ Variables: Vars }>()
 
     const program = Effect.gen(function* () {
       const service = yield* AnalyticsService;
+      const billing = yield* BillingService;
 
       const isOwner = yield* service.checkSiteOwnership(slug, userId);
       if (!isOwner) {
         return yield* Effect.fail("Not Allowed");
       }
+
+      yield* billing.canViewAdvancedAnalytics(userId);
 
       return yield* service.getVisitorsCountryWiseMetrics({
         slug,

@@ -129,3 +129,24 @@ export class AnalyticsError extends Data.TaggedError("AnalyticsError")<{
   type: AnalyticsErrorType;
   code?: number;
 }> {}
+
+// Billing Error Types
+export type BillingErrorType =
+  | "SITE_LIMIT_REACHED"
+  | "PRO_FEATURE_REQUIRED"
+  | "CUSTOM_DOMAIN_LIMIT_REACHED"
+  | "CUSTOMER_STATE_FAILED";
+
+export class BillingError extends Data.TaggedError("BillingError")<{
+  message: string;
+  type: BillingErrorType;
+  code?: number;
+}> {}
+
+export type JSONErrorType = "JSONStringify" | "JSONParsing";
+
+export class JSONError extends Data.TaggedError("JSONError")<{
+  message: string;
+  type: JSONErrorType;
+  code?: number;
+}> {}

@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/react";
+import { polarClient } from "@polar-sh/better-auth/client";
 import { Env } from "@/lib/env";
 import { redirect } from "@tanstack/react-router";
 import { getRouter } from "@/router";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 
 export const authClient = createAuthClient({
   baseURL: Env.apiUrl,
+  plugins: [polarClient()],
 });
 
 export const login = async () => {

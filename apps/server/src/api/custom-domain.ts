@@ -11,6 +11,7 @@ import {
 } from "@/services/custom-domain";
 import { KVStoreLive } from "@/services/kv-store";
 import { NotionServiceLive } from "@/services/notion/main";
+import { BillingServiceLive } from "@/services/billing";
 import { zValidator } from "@hono/zod-validator";
 import { Effect, Layer } from "effect";
 import { Hono } from "hono";
@@ -18,6 +19,8 @@ import { z } from "zod";
 import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
 import { getConnInfo } from "hono/cloudflare-workers";
+import { BillingClientLive } from "@/services/billing-client";
+import { CacheServiceLive } from "@/services/cache";
 
 const createCustomDomainSchema = z.object({
   siteId: z.string().min(1, "Site ID is required"),
@@ -96,8 +99,15 @@ const customDomainApp = new Hono<{ Variables: Vars }>()
     const userId = c.get("user")?.id as string;
     const input = c.req.valid("json");
 
-    const programLayer = CustomDomainServiceLive.pipe(
-      Layer.provideMerge(Layer.mergeAll(ClouflareConfigLive, DatabaseLive())),
+    const programLayer = Layer.merge(
+      CustomDomainServiceLive.pipe(
+        Layer.provideMerge(Layer.merge(ClouflareConfigLive, DatabaseLive())),
+      ),
+      BillingServiceLive.pipe(
+        Layer.provide(BillingClientLive),
+        Layer.provide(CacheServiceLive),
+        Layer.provide(KVStoreLive),
+      ),
     );
 
     const program = Effect.gen(function* () {

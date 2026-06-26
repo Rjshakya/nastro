@@ -2,16 +2,20 @@ import { env } from "cloudflare:workers";
 import { Effect, Layer, ServiceMap } from "effect";
 import { CustomDomainRepo } from "@/repo/custom-domain";
 import { customDomainTableSelect } from "@/db/schema/custom-domain";
-import { CustomDomainError, RepoError } from "@/errors/tagged.errors";
+import {
+  BillingError,
+  CustomDomainError,
+  RepoError,
+} from "@/errors/tagged.errors";
 import type {
   HostnameStatus,
   CfApiResponse,
   CustomHostnameResult,
 } from "@/types/cloudflare";
 import { eq } from "drizzle-orm";
-import { sites, SiteTableSelect } from "@/db/schema/site";
+import { sites } from "@/db/schema/site";
 import { getSiteBySlugWithPage } from "./site";
-import { ExtendedRecordMap } from "notion-types";
+import { BillingService } from "@/services/billing";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -189,14 +193,24 @@ const CustomDomainServiceMake = Effect.gen(function* () {
   const zoneId = yield* config.zoneId();
   const apiToken = yield* config.apiKey();
 
-  const createCustomDomain = (
-    input: CreateCustomDomainInput,
-  ): Effect.Effect<
-    customDomainTableSelect,
-    CustomDomainError | RepoError,
-    never
-  > => {
+  const createCustomDomain = (input: CreateCustomDomainInput) => {
     return Effect.gen(function* () {
+      const billingService = yield* BillingService;
+
+      const existingDomains = yield* repo.findById("userId", input.userId);
+      const canAdd = yield* billingService.canAddCustomDomain(
+        input.userId,
+        existingDomains.length,
+      );
+
+      if (!canAdd) {
+        return yield* new BillingError({
+          message: "This feature require Pro plan",
+          type: "PRO_FEATURE_REQUIRED",
+          code: 403,
+        });
+      }
+
       // 1. Create the hostname in Cloudflare
       const hostnameResult = yield* createCustomHostname({
         hostName: input.hostName,

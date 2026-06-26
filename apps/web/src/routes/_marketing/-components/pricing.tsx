@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { IconCheck } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
+import { useCheckout } from "@/hooks/use-checkout";
 
 const plans = [
   {
@@ -65,6 +66,7 @@ const itemVariants = {
 
 export function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
+  const { checkout, isLoading } = useCheckout();
 
   return (
     <section id="pricing" className="py-24 sm:py-32">
@@ -149,15 +151,27 @@ export function Pricing() {
                 </CardContent>
 
                 <CardFooter>
-                  <Link to="/dashboard" className="w-full">
+                  {plan.popular ? (
                     <Button
                       className="w-full"
-                      variant={plan.popular ? "default" : "outline"}
+                      variant="default"
                       size="lg"
+                      onClick={checkout}
+                      disabled={isLoading}
                     >
-                      {plan.cta}
+                      {isLoading ? "Loading..." : plan.cta}
                     </Button>
-                  </Link>
+                  ) : (
+                    <Link to="/dashboard" className="w-full">
+                      <Button
+                        className="w-full"
+                        variant="outline"
+                        size="lg"
+                      >
+                        {plan.cta}
+                      </Button>
+                    </Link>
+                  )}
                 </CardFooter>
               </Card>
             </motion.div>

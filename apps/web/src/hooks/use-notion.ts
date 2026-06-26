@@ -4,7 +4,9 @@ import useSWR from "swr";
 
 export const useNotionPages = () => {
   const fetcher = () => getNotionPages();
-  const swr = useSWR("/notion/pages", fetcher);
+  const swr = useSWR("/notion/pages", fetcher, {
+    errorRetryCount: 1,
+  });
 
   return {
     data: swr.data?.data as NotionPages,
@@ -16,7 +18,7 @@ export const useNotionPages = () => {
 
 export const useNotionToken = () => {
   const fetcher = () => getNotionToken();
-  const swr = useSWR("/notion/token", fetcher);
+  const swr = useSWR("/notion/token", fetcher, { errorRetryCount: 1 });
 
   return {
     data: swr.data?.data as string | undefined,

@@ -10,7 +10,7 @@ export const getNotionPages = async () => {
       statusCode: res.status,
       error,
       throwError: true,
-      showToast: true,
+      showToast: false,
     });
   }
   const data = await res.json();
@@ -27,7 +27,7 @@ export const getNotionToken = async () => {
       statusCode: res.status,
       error,
       throwError: true,
-      showToast: true,
+      showToast: false,
     });
   }
   const data = await res.json();

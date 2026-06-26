@@ -14,6 +14,7 @@ import {
   updateSite,
 } from "@/services/site";
 import { SlugService, SlugServiceLive } from "@/services/slug";
+import { BillingServiceLive } from "@/services/billing";
 
 import { zValidator } from "@hono/zod-validator";
 import { Effect, Layer } from "effect";
@@ -23,6 +24,8 @@ import { rateLimiter } from "hono-rate-limiter";
 import { env } from "cloudflare:workers";
 import { BANNED_SUBDOMAINS, SLUG_REGEX } from "@/lib/utils";
 import { getConnInfo } from "hono/cloudflare-workers";
+import { BillingClientLive } from "@/services/billing-client";
+import { CacheServiceLive } from "@/services/cache";
 
 const siteParamsSchema = z.object({
   id: z.string().min(1, "Site ID is required"),
@@ -132,11 +135,15 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
     const programLayer = Layer.mergeAll(
       DatabaseLive(),
-      NotionServiceLive().pipe(
-        Layer.provideMerge(Layer.mergeAll(NotionClientLive)),
+      BillingServiceLive.pipe(
+        Layer.provide(BillingClientLive),
+        Layer.provide(CacheServiceLive),
+        Layer.provide(KVStoreLive),
       ),
-      SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
+      NotionServiceLive().pipe(Layer.provide(NotionClientLive)),
+      SlugServiceLive.pipe(Layer.provide(KVStoreLive)),
     );
+
     const program = createSite({ ...input, userId }).pipe(
       Effect.provide(programLayer),
     );
@@ -183,7 +190,12 @@ const sitesApp = new Hono<{ Variables: Vars }>()
 
       const programLayer = Layer.mergeAll(
         DatabaseLive(),
-        SlugServiceLive.pipe(Layer.provideMerge(Layer.mergeAll(KVStoreLive))),
+        BillingServiceLive.pipe(
+          Layer.provide(BillingClientLive),
+          Layer.provide(CacheServiceLive),
+          Layer.provide(KVStoreLive),
+        ),
+        SlugServiceLive.pipe(Layer.provide(KVStoreLive)),
       );
 
       const program = updateSite({ id, input, pageId }).pipe(

@@ -6,12 +6,35 @@ import { KeyManager, withCache } from "@/lib/cache";
 import { SiteRepo } from "@/repo/site";
 import { NotionService } from "./notion/main";
 import { SlugService } from "./slug";
+import { BillingService } from "@/services/billing";
+import type { ProFeature } from "@/services/billing";
 
-import { RepoError, SiteError } from "@/errors/tagged.errors";
+import { BillingError, RepoError, SiteError } from "@/errors/tagged.errors";
 import { SeoRepo } from "@/repo/seo";
 import { SeoConfig, SiteSetting } from "@/types/site.setting";
 import { seoTable, SeoTableInsert } from "@/db/schema/seo";
 import { PgTransaction } from "drizzle-orm/pg-core";
+
+const collectRequestedProFeatures = (
+  input: Partial<SiteTableInsert>,
+): ProFeature[] => {
+  const features: ProFeature[] = [];
+  const setting = input.setting as SiteSetting | undefined;
+
+  if (input.customCssLink) {
+    features.push("custom_css");
+  }
+
+  if (input.customScriptLink) {
+    features.push("custom_script");
+  }
+
+  if (setting?.analytics?.trackingId) {
+    features.push("google_analytics");
+  }
+
+  return features;
+};
 
 export const getSiteBySlugWithPage = (slug: string, rootPageId: string) =>
   Effect.gen(function* () {
@@ -94,9 +117,23 @@ export const createSite = Effect.fn("services/site/createSite")((
     yield* checkIsPagePublic(pageId);
 
     const slugService = yield* SlugService;
-
     const siteRepo = yield* SiteRepo;
     const seoRepo = yield* SeoRepo;
+    const billingService = yield* BillingService;
+
+    const existingSites = yield* siteRepo.findById("userId", data.userId);
+    const canCreate = yield* billingService.canCreateSite(
+      data.userId,
+      existingSites.length,
+    );
+
+    if (!canCreate) {
+      return yield* new BillingError({
+        message: "Requires Pro Plan to create site",
+        type: "SITE_LIMIT_REACHED",
+        code: 403,
+      });
+    }
 
     const siteSetting = data.setting as SiteSetting;
     const seoSetting = siteSetting.seo as SeoConfig;
@@ -108,18 +145,18 @@ export const createSite = Effect.fn("services/site/createSite")((
       pageId,
     });
 
-    const slug = yield* slugService.storeSlug(data.slug);
-    const siteRecords = yield* siteRepo
-      .insert({ ...data, slug })
-      .pipe(Effect.catch(onSiteInsertError));
-
-    function onSiteInsertError(e: RepoError) {
+    const onSiteInsertError = (e: RepoError) => {
       return Effect.gen(function* () {
         yield* slugService.deleteSlug(slug);
         yield* seoRepo.deleteById("id", seoRecord.id);
         return yield* e;
       });
-    }
+    };
+
+    const slug = yield* slugService.storeSlug(data.slug);
+    const siteRecords = yield* siteRepo
+      .insert({ ...data, slug })
+      .pipe(Effect.catch(onSiteInsertError));
 
     return siteRecords;
   });
@@ -138,9 +175,25 @@ export const updateSite = Effect.fn("/services/site/updateSite")(({
     const repo = yield* SiteRepo;
     const existing = yield* repo.findById("id", id);
     const slugService = yield* SlugService;
+    const billingService = yield* BillingService;
 
     if (!existing || !existing.length) {
       return yield* Effect.fail("no site found with the provided id");
+    }
+
+    const requestedFeatures = collectRequestedProFeatures(input);
+    const canUpdate = yield* billingService.canUpdateSite(
+      existing[0].userId,
+      requestedFeatures,
+    );
+
+    if (!canUpdate) {
+      const featureList = requestedFeatures.join(", ");
+      return yield* new BillingError({
+        message: `The following features require Pro: ${featureList}.`,
+        type: "PRO_FEATURE_REQUIRED",
+        code: 403,
+      });
     }
 
     const isSlugChanged = input?.slug && input?.slug !== existing[0].slug;
